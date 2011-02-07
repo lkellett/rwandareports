@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.0">
+
+	<!-- HIV ART Register Module Properties -->
+	<id>rwandareports</id>
+	<name>Rwanda Reports</name>
+	<version>0.0.2</version>
+	<package>org.openmrs.module.@MODULE_ID@</package>
+	<author>PIH</author>
+	<description>Module to register reports for IMB Rwanda</description>
+	<activator>@MODULE_PACKAGE@.RwandaReportsModuleActivator</activator>
+	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
+	<require_version>1.4.0</require_version>
+	
+
+	<require_modules>
+		<require_module>org.openmrs.module.reporting</require_module>
+	</require_modules>
+
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>@MODULE_PACKAGE@.extension.html.ManageAdminListExt</class>
+	</extension>
+
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+
+	<mappingFiles>
+	</mappingFiles>
+	
+	<globalProperty>
+		<property>reports.hivprogramname</property>
+		<defaultValue>HIV PROGRAM</defaultValue>
+		<description>
+			The name of the HIV PROGRAM to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivworkflowstatus</property>
+		<defaultValue>TX STATUS</defaultValue>
+		<description>
+			The workflow status that is used to determine if patients are on ART
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivonartstate</property>
+		<defaultValue>ON ANTIRETROVIRALS</defaultValue>
+		<description>
+			The current state that signifies a patient is on ART's
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.weightConcept</property>
+		<defaultValue>5089</defaultValue>
+		<description>
+			The concept id of the weight concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4Concept</property>
+		<defaultValue>5497</defaultValue>
+		<description>
+			The concept id of the cd4 count concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pedihivprogramname</property>
+		<defaultValue>PEDIATRIC HIV PROGRAM</defaultValue>
+		<description>
+			The program name for the pediatric hiv program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctprogramname</property>
+		<defaultValue>PMTCT PROGRAM</defaultValue>
+		<description>
+			The program name for the pmtct program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivpreartstate</property>
+		<defaultValue>FOLLOWING</defaultValue>
+		<description>
+			The current state that signifies a patient is pre ART's 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivencountertypes</property>
+		<defaultValue>ADULT INITIAL VISIT:ADULT RETURN VISIT:PEDIATRIC INITIAL VISIT:PEDIATRIC RETURN VISIT:ADULT HIV FLOWSHEET</defaultValue>
+		<description>
+			All of the encounter types that signify a HIV visit
+		</description>
+	</globalProperty>
+	
+	<!-- /Rwanda Report Module Properties -->
+	
+</module>
