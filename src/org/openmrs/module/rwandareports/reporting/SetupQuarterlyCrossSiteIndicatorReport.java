@@ -234,6 +234,13 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		inAnyHIVProgram.setPrograms(hivPrograms);
 		h.replaceCohortDefinition(inAnyHIVProgram);
 		
+		InProgramCohortDefinition inAnyHIVAfterStartDate = new InProgramCohortDefinition();
+		inAnyHIVAfterStartDate.setName("hiv: new Patients enrolled in HIV Program during period");
+		inAnyHIVAfterStartDate.addParameter(new Parameter("onOrBefore", "endDate", Date.class));
+		inAnyHIVAfterStartDate.addParameter(new Parameter("onOrAfter", "startDate", Date.class));
+		inAnyHIVAfterStartDate.setPrograms(hivPrograms);
+		h.replaceCohortDefinition(inAnyHIVAfterStartDate);
+		
 		InProgramCohortDefinition inAdultOrPediHIVProgram = new InProgramCohortDefinition();
 		inAdultOrPediHIVProgram.setName("hiv: In AdultOrPedi HIV Programs");
 		inAdultOrPediHIVProgram.addParameter(new Parameter("onOrBefore", "endDate", Date.class));
@@ -248,13 +255,6 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		}
 		inAdultOrPediHIVProgram.setPrograms(hivPrograms);
 		h.replaceCohortDefinition(inAdultOrPediHIVProgram);
-		
-		InProgramCohortDefinition inAnyHIVAfterStartDate = new InProgramCohortDefinition();
-		inAnyHIVAfterStartDate.setName("hiv: new Patients enrolled in HIV Program during period");
-		inAnyHIVAfterStartDate.addParameter(new Parameter("onOrBefore", "endDate", Date.class));
-		inAnyHIVAfterStartDate.addParameter(new Parameter("onOrAfter", "startDate", Date.class));
-		inAnyHIVAfterStartDate.setPrograms(hivPrograms);
-		h.replaceCohortDefinition(inAnyHIVAfterStartDate);
 		
 		AgeCohortDefinition over15Cohort = new AgeCohortDefinition();
 		over15Cohort.setName("age: Over 15");
