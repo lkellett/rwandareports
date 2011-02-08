@@ -137,13 +137,13 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		rd.removeParameter(ReportingConstants.LOCATION_PARAMETER);
 		rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		rd.addParameter(new Parameter("endDate", "End Date", Date.class));
-		rd.addParameter(new Parameter("location", "Location", Location.class));
+		//rd.addParameter(new Parameter("location", "Location", Location.class));
 		
 		rd.setName("PIH_Quarterly_Cross_Site_Indicator");
 		
 		rd.setupDataSetDefinition();
 		
-		rd.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		//rd.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		rd.addIndicator("1", "In All HIV Programs Over 15", h.cohortIndicator("hiv: In all programs over 15_"));
 		rd.addIndicator("2", "In All HIV Programs Under 15", h.cohortIndicator("hiv: In all programs under 15_"));
@@ -376,7 +376,10 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		newInHIVUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: new Patients enrolled in HIV Program during period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
-		newInHIVUnder15.setCompositionString("NOT 1 AND 2");
+		newInHIVUnder15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In All HIV Programs"), h.parameterMap("onOrBefore", "${startDate-1d}")));
+		newInHIVUnder15.setCompositionString("NOT 1 AND 2 AND NOT 3");
 		h.replaceCohortDefinition(newInHIVUnder15);
 		
 		CompositionCohortDefinition newInHIVOver15 = new CompositionCohortDefinition();
@@ -388,7 +391,10 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		newInHIVOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: new Patients enrolled in HIV Program during period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
-		newInHIVOver15.setCompositionString("1 AND 2");
+		newInHIVOver15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In All HIV Programs"), h.parameterMap("onOrBefore", "${startDate-1d}")));
+		newInHIVOver15.setCompositionString("1 AND 2 AND NOT 3");
 		h.replaceCohortDefinition(newInHIVOver15);
 
 		CompositionCohortDefinition followingUnder15 = new CompositionCohortDefinition();
@@ -550,7 +556,10 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		startedArtOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: started on ART"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
-		startedArtOver15.setCompositionString("1 AND 2");
+		startedArtOver15.getSearches().put(
+		    "3",
+		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${startDate-1d}")));
+		startedArtOver15.setCompositionString("1 AND 2 AND NOT 3");
 		h.replaceCohortDefinition(startedArtOver15);
 		
 		CompositionCohortDefinition startedArtUnder15 = new CompositionCohortDefinition();
@@ -562,7 +571,10 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		startedArtUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: started on ART"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
-		startedArtUnder15.setCompositionString("NOT 1 AND 2");
+		startedArtUnder15.getSearches().put(
+		    "3",
+		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${startDate-1d}")));
+		startedArtUnder15.setCompositionString("NOT 1 AND 2 AND NOT 3");
 		h.replaceCohortDefinition(startedArtUnder15);
 		
 		CompositionCohortDefinition preArtWithACD4Under15 = new CompositionCohortDefinition();
