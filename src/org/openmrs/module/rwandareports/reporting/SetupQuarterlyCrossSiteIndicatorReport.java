@@ -87,12 +87,13 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		h.purgeDefinition(CohortIndicator.class, "hiv: on Art in Hiv program with a CD4 count in period -3 months and under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hiv: weight recorded in period over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hiv: weight recorded in period under 15_");
-		h.purgeDefinition(CohortIndicator.class, "hiv: HIV Adult or Pedi and over 15_");
-		h.purgeDefinition(CohortIndicator.class, "hiv: HIV Adult or Pedi and under 15_");
+		h.purgeDefinition(CohortIndicator.class, "hiv: HIV visit and over 15_");
+		h.purgeDefinition(CohortIndicator.class, "hiv: HIV visit and under 15_");
 		
 		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
 		h.purgeDefinition(CohortDefinition.class, "hiv: In All HIV Programs");
 		h.purgeDefinition(CohortDefinition.class, "hiv: In AdultOrPedi HIV Programs");
+		h.purgeDefinition(CohortDefinition.class, "hiv: In AdultOrPedi HIV Programs On Date");
 		h.purgeDefinition(CohortDefinition.class, "hiv: new Patients enrolled in HIV Program during period");
 		h.purgeDefinition(CohortDefinition.class, "age: Over 15");
 		h.purgeDefinition(CohortDefinition.class, "hiv: preArt");
@@ -125,6 +126,8 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		h.purgeDefinition(CohortDefinition.class, "hiv: weight recorded in period over 15");
 		h.purgeDefinition(CohortDefinition.class, "hiv: HIV Adult or Pedi and over 15");
 		h.purgeDefinition(CohortDefinition.class, "hiv: HIV Adult or Pedi and under 15");
+		h.purgeDefinition(CohortDefinition.class, "hiv: in Hiv program with a visit in period and under 15");
+		h.purgeDefinition(CohortDefinition.class, "hiv: in Hiv program with a visit in period and over 15");
 	}
 	
 	
@@ -167,8 +170,8 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		rd.addIndicator("20", "ART and had a cd4 recorded in last 2 quarters and Under 15", h.cohortIndicator("hiv: on Art in Hiv program with a CD4 count in period -3 months and under 15_"));
 		rd.addIndicator("21", "HIV and had a weight recorded in last quarters and Over 15", h.cohortIndicator("hiv: weight recorded in period over 15_"));
 		rd.addIndicator("22", "HIV and had a weight recorded in last quarters and Under 15", h.cohortIndicator("hiv: weight recorded in period under 15_"));
-		rd.addIndicator("23", "HIV and Over 15", h.cohortIndicator("hiv: HIV Adult or Pedi and over 15_"));
-		rd.addIndicator("24", "HIV and Under 15", h.cohortIndicator("hiv: HIV Adult or Pedi and under 15_"));
+		rd.addIndicator("23", "HIV visit and Over 15", h.cohortIndicator("hiv: HIV visit and over 15_"));
+		rd.addIndicator("24", "HIV and Under 15", h.cohortIndicator("hiv: HIV visit and under 15_"));
 		
 		h.replaceReportDefinition(rd);
 		
@@ -199,8 +202,8 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		h.newCountIndicator("hiv: on Art in Hiv program with a CD4 count in period -3 months and under 15_", "hiv: on Art in Hiv program with a CD4 count in period - 3 months and under 15", "endDate=${endDate},startDate=${startDate}");
 		h.newCountIndicator("hiv: weight recorded in period over 15_", "hiv: weight recorded in period over 15", "endDate=${endDate},startDate=${startDate}");
 		h.newCountIndicator("hiv: weight recorded in period under 15_", "hiv: weight recorded in period under 15", "endDate=${endDate},startDate=${startDate}");
-		h.newCountIndicator("hiv: HIV Adult or Pedi and over 15_", "hiv: HIV Adult or Pedi and over 15", "endDate=${endDate}");
-		h.newCountIndicator("hiv: HIV Adult or Pedi and under 15_", "hiv: HIV Adult or Pedi and under 15", "endDate=${endDate}");
+		h.newCountIndicator("hiv: HIV visit and over 15_", "hiv: in Hiv program with a visit in period and over 15", "endDate=${endDate},startDate=${startDate}");
+		h.newCountIndicator("hiv: HIV visit and under 15_", "hiv: in Hiv program with a visit in period and under 15", "endDate=${endDate},startDate=${startDate}");
 	}
 	
 	private void createCohortDefinitions() {
@@ -255,10 +258,26 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		}
 		inAdultOrPediHIVProgram.setPrograms(hivPrograms);
 		h.replaceCohortDefinition(inAdultOrPediHIVProgram);
+
+		InProgramCohortDefinition inAdultOrPediHIVOnDateProgram = new InProgramCohortDefinition();
+		inAdultOrPediHIVOnDateProgram.setName("hiv: In AdultOrPedi HIV Programs on Date");
+		inAdultOrPediHIVOnDateProgram.addParameter(new Parameter("onDate", "endDate", Date.class));
+		hivPrograms = new ArrayList<Program>();
+		if(adult != null)
+		{
+			hivPrograms.add(adult);
+		}
+		if(pedi != null)
+		{
+			hivPrograms.add(pedi);
+		}
+		inAdultOrPediHIVOnDateProgram.setPrograms(hivPrograms);
+		h.replaceCohortDefinition(inAdultOrPediHIVOnDateProgram);
 		
 		AgeCohortDefinition over15Cohort = new AgeCohortDefinition();
 		over15Cohort.setName("age: Over 15");
 		over15Cohort.setMinAge(new Integer(15));
+		over15Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
 		h.replaceCohortDefinition(over15Cohort);
 		
 		InStateCohortDefinition preArt = new InStateCohortDefinition();
@@ -349,7 +368,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		inHIVUnder15.setName("hiv: In all programs under 15");
 		inHIVUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		inHIVUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		inHIVUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In All HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
@@ -360,7 +379,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		inHIVOver15.setName("hiv: In all programs over 15");
 		inHIVOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		inHIVOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		inHIVOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In All HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
@@ -372,7 +391,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		newInHIVUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		newInHIVUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		newInHIVUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		newInHIVUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: new Patients enrolled in HIV Program during period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
@@ -387,7 +406,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		newInHIVOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		newInHIVOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		newInHIVOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		newInHIVOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: new Patients enrolled in HIV Program during period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
@@ -401,22 +420,28 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		followingUnder15.setName("hiv: preArt in Hiv program in period under 15");
 		followingUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		followingUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		followingUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
-		followingUnder15.setCompositionString("NOT 1 AND 2");
+		followingUnder15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs on Date"), h.parameterMap("onDate", "${endDate}")));
+		followingUnder15.setCompositionString("NOT 1 AND 2 AND 3");
 		h.replaceCohortDefinition(followingUnder15);
 		
 		CompositionCohortDefinition followingOver15 = new CompositionCohortDefinition();
 		followingOver15.setName("hiv: preArt in Hiv program in period over 15");
 		followingOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		followingOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		followingOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
-		followingOver15.setCompositionString("1 AND 2");
+		followingOver15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs on Date"), h.parameterMap("onDate", "${endDate}")));
+		followingOver15.setCompositionString("1 AND 2 AND 3");
 		h.replaceCohortDefinition(followingOver15);
 		
 		CompositionCohortDefinition preArtWithAVisitUnder15 = new CompositionCohortDefinition();
@@ -424,7 +449,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		preArtWithAVisitUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		preArtWithAVisitUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		preArtWithAVisitUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		preArtWithAVisitUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
@@ -432,12 +457,12 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		    "3",
 		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
 		preArtWithAVisitUnder15.getSearches().put(
-		    "4",
-		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs on Date"), h.parameterMap("onDate", "${endDate}")));
 		preArtWithAVisitUnder15.getSearches().put(
 		    "5",
 		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		preArtWithAVisitUnder15.setCompositionString("NOT 1 AND 2 AND(3 OR 4 OR 5)");
+		preArtWithAVisitUnder15.setCompositionString("NOT 1 AND 2 AND 4 AND(3 OR 5)");
 		h.replaceCohortDefinition(preArtWithAVisitUnder15);
 		
 		CompositionCohortDefinition preArtWithAVisitOver15 = new CompositionCohortDefinition();
@@ -445,7 +470,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		preArtWithAVisitOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		preArtWithAVisitOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		preArtWithAVisitOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		preArtWithAVisitOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
@@ -453,56 +478,68 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		    "3",
 		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
 		preArtWithAVisitOver15.getSearches().put(
-		    "4",
-		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs on Date"), h.parameterMap("onDate", "${endDate}")));
 		preArtWithAVisitOver15.getSearches().put(
 		    "5",
 		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		preArtWithAVisitOver15.setCompositionString("1 AND 2 AND(3 OR 4 OR 5)");
+		preArtWithAVisitOver15.setCompositionString("1 AND 2 AND 4 AND(3 OR 5)");
 		h.replaceCohortDefinition(preArtWithAVisitOver15);
 		
 		CompositionCohortDefinition artUnder15 = new CompositionCohortDefinition();
 		artUnder15.setName("hiv: ever taking ART before end date and under 15");
 		artUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: ever on ART"), h.parameterMap("onOrBefore", "${endDate}")));
-		artUnder15.setCompositionString("NOT 1 AND 2");
+		artUnder15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		artUnder15.setCompositionString("NOT 1 AND 2 AND 3");
 		h.replaceCohortDefinition(artUnder15);
 		
 		CompositionCohortDefinition artOver15 = new CompositionCohortDefinition();
 		artOver15.setName("hiv: ever taking ART before end date and over 15");
 		artOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: ever on ART"), h.parameterMap("onOrBefore", "${endDate}")));
-		artOver15.setCompositionString("1 AND 2");
+		artOver15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		artOver15.setCompositionString("1 AND 2 AND 3");
 		h.replaceCohortDefinition(artOver15);
 		
 		CompositionCohortDefinition currentArtUnder15 = new CompositionCohortDefinition();
 		currentArtUnder15.setName("hiv: currently taking ART before end date and under 15");
 		currentArtUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		currentArtUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		currentArtUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
-		currentArtUnder15.setCompositionString("NOT 1 AND 2");
+		currentArtUnder15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		currentArtUnder15.setCompositionString("NOT 1 AND 2 AND 3");
 		h.replaceCohortDefinition(currentArtUnder15);
 		
 		CompositionCohortDefinition currentArtOver15 = new CompositionCohortDefinition();
 		currentArtOver15.setName("hiv: currently taking ART before end date and over 15");
 		currentArtOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		currentArtOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		currentArtOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
-		currentArtOver15.setCompositionString("1 AND 2");
+		currentArtOver15.getSearches().put(
+			"3",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		currentArtOver15.setCompositionString("1 AND 2 AND 3");
 		h.replaceCohortDefinition(currentArtOver15);
 		
 		CompositionCohortDefinition artWithAVisitUnder15 = new CompositionCohortDefinition();
@@ -510,20 +547,20 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		artWithAVisitUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artWithAVisitUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		artWithAVisitUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artWithAVisitUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
 		artWithAVisitUnder15.getSearches().put(
 		    "3",
-		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
+		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
 		artWithAVisitUnder15.getSearches().put(
-		    "4",
-		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
 		artWithAVisitUnder15.getSearches().put(
 		    "5",
-		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		artWithAVisitUnder15.setCompositionString("NOT 1 AND 2 AND(3 OR 4 OR 5)");
+		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		artWithAVisitUnder15.setCompositionString("NOT 1 AND 2 AND 4 AND(3 OR 5)");
 		h.replaceCohortDefinition(artWithAVisitUnder15);
 		
 		CompositionCohortDefinition artWithAVisitOver15 = new CompositionCohortDefinition();
@@ -531,20 +568,20 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		artWithAVisitOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artWithAVisitOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		artWithAVisitOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artWithAVisitOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
 		artWithAVisitOver15.getSearches().put(
 		    "3",
-		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		artWithAVisitOver15.getSearches().put(
-		    "4",
-		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
+		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
 		artWithAVisitOver15.getSearches().put(
 		    "5",
-		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		artWithAVisitOver15.setCompositionString("1 AND 2 AND(3 OR 4 OR 5)");
+		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		artWithAVisitOver15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		artWithAVisitOver15.setCompositionString("1 AND 2 AND 4 AND(3 OR 5)");
 		h.replaceCohortDefinition(artWithAVisitOver15);
 		
 		CompositionCohortDefinition startedArtOver15 = new CompositionCohortDefinition();
@@ -552,14 +589,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		startedArtOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		startedArtOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		startedArtOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		startedArtOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: started on ART"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
 		startedArtOver15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${startDate-1d}")));
-		startedArtOver15.setCompositionString("1 AND 2 AND NOT 3");
+		startedArtOver15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		startedArtOver15.setCompositionString("1 AND 2 AND NOT 3 AND 4");
 		h.replaceCohortDefinition(startedArtOver15);
 		
 		CompositionCohortDefinition startedArtUnder15 = new CompositionCohortDefinition();
@@ -567,14 +607,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		startedArtUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		startedArtUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		startedArtUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		startedArtUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: started on ART"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
 		startedArtUnder15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${startDate-1d}")));
-		startedArtUnder15.setCompositionString("NOT 1 AND 2 AND NOT 3");
+		startedArtUnder15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		startedArtUnder15.setCompositionString("NOT 1 AND 2 AND NOT 3 AND 4");
 		h.replaceCohortDefinition(startedArtUnder15);
 		
 		CompositionCohortDefinition preArtWithACD4Under15 = new CompositionCohortDefinition();
@@ -582,14 +625,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		preArtWithACD4Under15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		preArtWithACD4Under15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		preArtWithACD4Under15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		preArtWithACD4Under15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
 		preArtWithACD4Under15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		preArtWithACD4Under15.setCompositionString("NOT 1 AND 2 AND 3");
+		preArtWithACD4Under15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		preArtWithACD4Under15.setCompositionString("NOT 1 AND 2 AND 3 AND 4");
 		h.replaceCohortDefinition(preArtWithACD4Under15);
 		
 		CompositionCohortDefinition preArtWithACD4Over15 = new CompositionCohortDefinition();
@@ -597,14 +643,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		preArtWithACD4Over15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		preArtWithACD4Over15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		preArtWithACD4Over15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		preArtWithACD4Over15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: preArt"), h.parameterMap("onDate", "${endDate}")));
 		preArtWithACD4Over15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		preArtWithACD4Over15.setCompositionString("1 AND 2 AND 3");
+		preArtWithACD4Over15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		preArtWithACD4Over15.setCompositionString("1 AND 2 AND 3 AND 4");
 		h.replaceCohortDefinition(preArtWithACD4Over15);
 		
 		CompositionCohortDefinition artWithACD4Over15 = new CompositionCohortDefinition();
@@ -612,14 +661,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		artWithACD4Over15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artWithACD4Over15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		artWithACD4Over15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artWithACD4Over15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
 		artWithACD4Over15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		artWithACD4Over15.setCompositionString("1 AND 2 AND 3");
+		artWithACD4Over15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		artWithACD4Over15.setCompositionString("1 AND 2 AND 3 AND 4");
 		h.replaceCohortDefinition(artWithACD4Over15);
 		
 		CompositionCohortDefinition artWithACD4Under15 = new CompositionCohortDefinition();
@@ -627,14 +679,17 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		artWithACD4Under15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		artWithACD4Under15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		artWithACD4Under15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		artWithACD4Under15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: currently on ART"), h.parameterMap("onDate", "${endDate}")));
 		artWithACD4Under15.getSearches().put(
 		    "3",
 		    new Mapped(h.cohortDefinition("obs: CD4 count recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate-3m}")));
-		artWithACD4Under15.setCompositionString("NOT 1 AND 2 AND 3");
+		artWithACD4Under15.getSearches().put(
+			"4",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs On Date"), h.parameterMap("onDate", "${endDate}")));
+		artWithACD4Under15.setCompositionString("NOT 1 AND 2 AND 3 AND 4");
 		h.replaceCohortDefinition(artWithACD4Under15);
 		
 		CompositionCohortDefinition hivWithAWeightUnder15 = new CompositionCohortDefinition();
@@ -642,7 +697,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		hivWithAWeightUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		hivWithAWeightUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		hivWithAWeightUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		hivWithAWeightUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
@@ -657,7 +712,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		hivWithAWeightOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		hivWithAWeightOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
 		hivWithAWeightOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		hivWithAWeightOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
@@ -671,7 +726,7 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		hivOver15.setName("hiv: HIV Adult or Pedi and over 15");
 		hivOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		hivOver15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		hivOver15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
@@ -682,12 +737,48 @@ public class SetupQuarterlyCrossSiteIndicatorReport {
 		hivUnder15.setName("hiv: HIV Adult or Pedi and under 15");
 		hivUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		hivUnder15.getSearches().put(
-		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap()));
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
 		hivUnder15.getSearches().put(
 		    "2",
 		    new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
 		hivUnder15.setCompositionString("NOT 1 AND 2");
 		h.replaceCohortDefinition(hivUnder15);
+		
+		CompositionCohortDefinition hivVisitOver15 = new CompositionCohortDefinition();
+		hivVisitOver15.setName("hiv: in Hiv program with a visit in period and over 15");
+		hivVisitOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
+		hivVisitOver15.addParameter(new Parameter("startDate", "startDate", Date.class));
+		hivVisitOver15.getSearches().put(
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
+		hivVisitOver15.getSearches().put(
+		    "3",
+		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		hivVisitOver15.getSearches().put(
+			"2",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		hivVisitOver15.getSearches().put(
+		    "4",
+		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		hivVisitOver15.setCompositionString("1 AND 2 AND (3 OR 4)");
+		h.replaceCohortDefinition(hivVisitOver15);
+		
+		CompositionCohortDefinition hivVisitUnder15 = new CompositionCohortDefinition();
+		hivVisitUnder15.setName("hiv: in Hiv program with a visit in period and under 15");
+		hivVisitUnder15.addParameter(new Parameter("endDate", "endDate", Date.class));
+		hivVisitUnder15.addParameter(new Parameter("startDate", "startDate", Date.class));
+		hivVisitUnder15.getSearches().put(
+		    "1",new Mapped(h.cohortDefinition("age: Over 15"), h.parameterMap("effectiveDate", "${endDate}")));
+		hivVisitUnder15.getSearches().put(
+		    "3",
+		    new Mapped(h.cohortDefinition("encounter: visit in period"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		hivVisitUnder15.getSearches().put(
+			"2",
+			new Mapped(h.cohortDefinition("hiv: In AdultOrPedi HIV Programs"), h.parameterMap("onOrBefore", "${endDate}")));
+		hivVisitUnder15.getSearches().put(
+		    "4",
+		    new Mapped(h.cohortDefinition("obs: weight recorded"), h.parameterMap("onOrBefore", "${endDate}", "onOrAfter", "${startDate}")));
+		hivVisitUnder15.setCompositionString("NOT 1 AND 2 AND (3 OR 4)");
+		h.replaceCohortDefinition(hivVisitUnder15);
 	}
 	
 	private void setUpGlobalProperties()
