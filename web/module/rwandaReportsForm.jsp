@@ -8,6 +8,8 @@
 PIH Quarterly Cross Site Indicator Report: 
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossSiteIndicator.form">(Re) register</a>
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossSiteIndicator.form">Remove</a>
-
-
+	<br>
+HIV Art Register report:	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_hivartregister.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_hivartregister.form">Remove</a>
 <%@ include file="/WEB-INF/template/footer.jsp"%>

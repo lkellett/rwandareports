@@ -1,6 +1,7 @@
 package org.openmrs.module.rwandareports.web.controller;
 
 import org.openmrs.module.rwandareports.reporting.Helper;
+import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +23,16 @@ public class RwandaSetupReportsFormController {
 		new SetupQuarterlyCrossSiteIndicatorReport(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+
+	@RequestMapping("/module/rwandareports/register_hivartregister")
+	public ModelAndView registerHivArtRegiser() throws Exception {
+		new SetupHivArtRegisterReport(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 	
+	@RequestMapping("/module/rwandareports/remove_hivartregister")
+	public ModelAndView removeHivArtRegister() throws Exception {
+		new SetupHivArtRegisterReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 }
