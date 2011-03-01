@@ -14,18 +14,22 @@ PIH Quarterly Cross for individual Site Indicator Report:
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossRegionIndicator.form">Remove</a>
 <hr></hr>	
 <h3>Register Reports</h3>
-HIV Art Register report:	
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_hivartregister.form">(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_hivartregister.form">Remove</a>
+Adult HIV Art Register report:	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_adulthivartregister.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_adulthivartregister.form">Remove</a>
+<br></br>
+Pedi HIV Art Register report:	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pedihivartregister.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pedihivartregister.form">Remove</a>
 <hr></hr>
 <h3>PMTCT Reports</h3>
 Combined HFCSP Consultation Sheet:
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation.form">(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_combinedHSCSPConsultation.form">Remove</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_combinedHSCSPConsultation">Remove</a>
 <br></br>	
 Food Distribution:
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistribution.form">(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistribution.form">Remove</a>	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistribution">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistribution">Remove</a>	
 <hr></hr>
 <h3>Late Visit And CD4</h3>
 Adult Late Visit And CD4:

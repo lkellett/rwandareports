@@ -1,6 +1,7 @@
 package org.openmrs.module.rwandareports.web.controller;
 
 import org.openmrs.module.rwandareports.reporting.Helper;
+import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
@@ -40,15 +41,27 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 
-	@RequestMapping("/module/rwandareports/register_hivartregister")
-	public ModelAndView registerHivArtRegiser() throws Exception {
-		new SetupHivArtRegisterReport(new Helper()).setup();
+	@RequestMapping("/module/rwandareports/register_adulthivartregister")
+	public ModelAndView registerAdultHivArtRegiser() throws Exception {
+		new SetupHivArtRegisterReport(new Helper(), false).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	@RequestMapping("/module/rwandareports/remove_hivartregister")
-	public ModelAndView removeHivArtRegister() throws Exception {
-		new SetupHivArtRegisterReport(new Helper()).delete();
+	@RequestMapping("/module/rwandareports/remove_adulthivartregister")
+	public ModelAndView removeAdultHivArtRegister() throws Exception {
+		new SetupHivArtRegisterReport(new Helper(), false).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_pedihivartregister")
+	public ModelAndView registerPediHivArtRegiser() throws Exception {
+		new SetupHivArtRegisterReport(new Helper(), true).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_pedihivartregister")
+	public ModelAndView removePediHivArtRegister() throws Exception {
+		new SetupHivArtRegisterReport(new Helper(), true).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
@@ -89,9 +102,4 @@ public class RwandaSetupReportsFormController {
 		new SetupAdultLateVisitAndCD4Report(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
-	
-	
-	
-	
-	
 }

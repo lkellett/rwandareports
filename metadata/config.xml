@@ -127,6 +127,78 @@
 		</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.tbTestConcept</property>
+		<defaultValue>2136</defaultValue>
+		<description>
+			The concept id of the TB test concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allSecondLineArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all Second Line ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allFirstLineArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all First Line ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pregnancyDeliveryDateConcept</property>
+		<defaultValue>6188</defaultValue>
+		<description>
+			The concept id of pregnancy due date concept 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ctxTreatmentConcept</property>
+		<defaultValue>916</defaultValue>
+		<description>
+			The concept id of the CTX Treatment drug concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tbTreatmentConcept</property>
+		<defaultValue>3014</defaultValue>
+		<description>
+			The concept id of all the TB Treatment drug concept set 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4PercentageConcept</property>
+		<defaultValue>730</defaultValue>
+		<description>
+			The concept id of the cd4 percentage concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.stageConcept</property>
+		<defaultValue>1480</defaultValue>
+		<description>
+			The concept id of the stage concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all ART drugs
+		</description>
+	</globalProperty>
+	
 	<!-- Late Visit And CD$ Global Property -->
 	<globalProperty>
 		<property>ClinicalencounterTypeIds.labTestExcl</property>
@@ -146,8 +218,6 @@
 		<defaultValue>10</defaultValue>
 		<description>Id for Pediatric HIV program</description>
 	</globalProperty>
-	
-	
 	<!-- /Rwanda Report Module Properties -->
 	
 </module>

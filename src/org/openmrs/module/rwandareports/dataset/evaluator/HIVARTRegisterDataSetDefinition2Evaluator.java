@@ -44,14 +44,15 @@ import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationRes
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 import org.openmrs.module.rowperpatientreports.patientdata.service.PatientDataService;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
 import org.openmrs.module.rwandareports.dataset.HIVRegisterDataSetRowComparator;
 
 /**
  * The logic that evaluates a {@link PatientDataSetDefinition} and produces an {@link DataSet}
  * @see PatientDataSetDefinition
  */
-@Handler(supports={HIVARTRegisterDataSetDefinition.class})
-public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluator {
+@Handler(supports={HIVARTRegisterDataSetDefinition2.class})
+public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluator {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
@@ -82,7 +83,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 	/**
 	 * Public constructor
 	 */
-	public HIVARTRegisterDataSetDefinitionEvaluator() { }
+	public HIVARTRegisterDataSetDefinition2Evaluator() { }
 	
 	/**
 	 * @see DataSetEvaluator#evaluate(DataSetDefinition, EvaluationContext)
@@ -91,7 +92,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) {
 		
 		SimpleDataSet dataSet = new SimpleDataSet(dataSetDefinition, context);
-		HIVARTRegisterDataSetDefinition definition = (HIVARTRegisterDataSetDefinition) dataSetDefinition;
+		HIVARTRegisterDataSetDefinition2 definition = (HIVARTRegisterDataSetDefinition2) dataSetDefinition;
 		
 		context = ObjectUtil.nvl(context, new EvaluationContext());
 		Cohort cohort = context.getBaseCohort();
@@ -116,7 +117,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 			
 //			i++;
 //			
-//			if(i > 15)
+//			if(i > 20)
 //			{
 //				break;
 //			}
@@ -190,178 +191,178 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 	        String firstLineChangeStr = getDiscontinuedReasons(firstLineChange);
 	        String secondLineChangeStr = getDiscontinuedReasons(secondLineChange);
 	        
-	        addPatientRow(rowNumber, startingMonth, sheetNumber, row, rr, dataset, firstLineChangeStr, secondLineChangeStr, drugsValue, cd4Value, stageValue, tbValue);
+	        String colName = "No";
+			DataSetColumn one = new DataSetColumn(colName, colName, Integer.class);
+			rr.addColumnValue(one, rowNumber);
+			
+			DataSetColumn two = new DataSetColumn("Date of Debut of ARV/ART", "Date of Debut of ARV/ART", Date.class);
+			rr.addColumnValue(two, startingDate);
+			
+			String id = (String)((PatientDataResult)row.getColumnValue(columnList.get(TRACNET_ID))).getValue();
+			if(id == null)
+			{
+				id = " / " + (String)((PatientDataResult)row.getColumnValue(columnList.get(IMB_ID))).getValue();
+			}
+			else
+			{
+				id = id + " / " + (String)((PatientDataResult)row.getColumnValue(columnList.get(IMB_ID))).getValue();
+			}
+			DataSetColumn idcol = new DataSetColumn("id", "id", String.class);
+			rr.addColumnValue(idcol, id);
+			
+			String name = (String)((PatientDataResult)row.getColumnValue(columnList.get(GIVEN_NAME))).getValue();
+			if(name == null)
+			{
+				name = (String)((PatientDataResult)row.getColumnValue(columnList.get(FAMILY_NAME))).getValue();
+			}
+			else
+			{
+				name = name + " " + (String)((PatientDataResult)row.getColumnValue(columnList.get(FAMILY_NAME))).getValue();
+			}
+			DataSetColumn namecol = new DataSetColumn("name", "name", String.class);
+			rr.addColumnValue(namecol, name);
+			
+			for (int j = 6; j < 9; j++)
+			{
+				Object cellValue = ((PatientDataResult)row.getColumnValue(columnList.get(j))).getValue();
+		    
+				if(cellValue instanceof ArrayList)
+				{
+					cellValue = cellValue.toString();
+				}
+				if(cellValue instanceof DrugOrder)
+				{
+					String drugName = "Drug Missing";
+					try{
+						drugName = ((DrugOrder)cellValue).getDrug().getName();
+					}catch(Exception e)
+					{
+						System.err.println(e.getMessage());
+					}
+					cellValue = drugName;
+				}
+				DataSetColumn col = new DataSetColumn(columnList.get(j).getLabel(), columnList.get(j).getLabel(), columnList.get(j).getClass());
+				rr.addColumnValue(col, cellValue);
+			}
+			
+			ObservationResult weightAtStart = (ObservationResult)row.getColumnValue(columnList.get(WEIGHT_AT_START));
+			String colLabel = columnList.get(WEIGHT_AT_START).getLabel();
+			DataSetColumn weightCol = new DataSetColumn(colLabel, colLabel, String.class);
+			rr.addColumnValue(weightCol, weightAtStart.getValue());
+			
+			ObservationResult stageAtStart = (ObservationResult)row.getColumnValue(columnList.get(INITIAL_STAGE));
+			String stageResult = (String)stageAtStart.getValue();
+			//need to remove the "WHO STAGE" from the result
+			if(stageResult != null)
+			{
+				stageResult = stageResult.replaceFirst("WHO STAGE", "");
+			}
+			DataSetColumn initStageCol = new DataSetColumn(columnList.get(INITIAL_STAGE).getLabel(), columnList.get(INITIAL_STAGE).getLabel(), String.class);
+			rr.addColumnValue(initStageCol, stageResult);
+			
+			DataSetColumn col = new DataSetColumn("initialCD4", "initialCD4", String.class);
+			String cd4Result = null;
+			for(int c = 11; c < 13; c++)
+			{
+				Object obsResult = row.getColumnValue(columnList.get(c));
+				if(obsResult instanceof ObservationResult)
+				{
+					ObservationResult obs = (ObservationResult)row.getColumnValue(columnList.get(c));
+					
+					if(obs.getValue() != null)
+					{
+						if(cd4Result == null)
+						{
+							cd4Result = obs.getValue();
+						}
+						else
+						{
+							cd4Result = cd4Result + " " + obs.getValue();
+						}
+						if(obs.getDateOfObservation() != null)
+						{
+							cd4Result = cd4Result + " " + new SimpleDateFormat("yyyy-MM-dd").format(obs.getDateOfObservation());
+						}
+					}
+				}
+			}
+			rr.addColumnValue(col, cd4Result);
+			
+			for(int k = 13; k < 15; k++)
+			{
+				List<DrugOrder> values = (List<DrugOrder>)((PatientDataResult)row.getColumnValue(columnList.get(k))).getValue();
+			
+				String cellValue = "";
+				Date startDate = null;
+				Date endDate = null;
+				for(DrugOrder drO: values)
+				{
+					startDate = drO.getStartDate();
+					endDate = drO.getDiscontinuedDate();
+				}
+				
+				String dates = null;
+				if(startDate != null)
+				{
+					dates = "Start: " + new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+					if(endDate != null)
+					{
+						dates = dates + "/ End: " + new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+					}
+				}
+				
+				DataSetColumn startCol = new DataSetColumn(columnList.get(k).getLabel(), columnList.get(k).getLabel(), String.class);
+				rr.addColumnValue(startCol, dates);
+			}
+
+			List<Obs> pregnancy = (List<Obs>)((PatientDataResult)row.getColumnValue(columnList.get(PREGNANCY_DELIVERY_DATES))).getValue();
+			for(int m = 0; m < 4; m++)
+			{
+				String columnName = "Pregnancy " + m;
+				DataSetColumn pregcol = new DataSetColumn(columnName, columnName, String.class);
+				
+				if(pregnancy != null && pregnancy.size() > m)
+				{
+					Obs pregOb = pregnancy.get(m);
+					rr.addColumnValue(pregcol,pregOb.getValueAsString(Context.getLocale()));
+				}
+				else
+				{
+					rr.addColumnValue(pregcol,null);
+				}
+			}
+
+			DrugOrder initial = (DrugOrder)((PatientDataResult)row.getColumnValue(columnList.get(INITIAL_REGIMEN))).getValue();
+			String drugName = "Drug Missing";
+			try{
+				drugName = ((DrugOrder)initial).getDrug().getName();
+			}catch(Exception e)
+			{
+				System.err.println(e.getMessage());
+			}
+			DataSetColumn initReg = new DataSetColumn("Initial Regimen", "Initial Regimen", String.class);
+			rr.addColumnValue(initReg, drugName);
+		
+			DataSetColumn firstLine = new DataSetColumn("First Line Changes", "First Line Changes", String.class);
+			rr.addColumnValue(firstLine, getDiscontinuedReasons(firstLineChange));
+		
+			DataSetColumn secondLine = new DataSetColumn("Second Line Changes", "Second Line Changes", String.class);
+			rr.addColumnValue(secondLine, getDiscontinuedReasons(secondLineChange));
+
+			String drugCellValue = retrieveCorrectMonthsOb(0, drugsValue, startingDate);
+			DataSetColumn monthZero = new DataSetColumn("Month 0", "Month 0", String.class);
+			rr.addColumnValue(monthZero, drugCellValue);
+			
+	        addPatientRow(startingDate, rowNumber, startingMonth, sheetNumber, row, rr, dataset, firstLineChangeStr, secondLineChangeStr, drugsValue, cd4Value, stageValue, tbValue);
 	        resultSet.addRow(rr);
 	    }
 		
 		return resultSet;
 	}
 	
-	private void addPatientRow(int rowNumber, int startingMonth, int sheetNumber, DataSetRow row, DataSetRow resultRow, DataSet dataset, String firstLineChange, String secondLineChange, List<DrugOrder> drugsValue, List<Obs> cd4Value, List<Obs> stageValue, List<Obs> tbValue)
+	private void addPatientRow(Date startingDate, int rowNumber, int startingMonth, int sheetNumber, DataSetRow row, DataSetRow resultRow, DataSet dataset, String firstLineChange, String secondLineChange, List<DrugOrder> drugsValue, List<Obs> cd4Value, List<Obs> stageValue, List<Obs> tbValue)
 	{
-		String colName = "No" + sheetNumber;
-		DataSetColumn one = new DataSetColumn(colName, colName, Integer.class);
-		resultRow.addColumnValue(one, rowNumber);
-		
-		Date startingDate = null;
-		
-		List<DataSetColumn> columnList = dataset.getMetaData().getColumns();
-		
-		Date workflowChangeDate = startingDate = (Date)((PatientDataResult)row.getColumnValue(columnList.get(START_DATE_WORKFLOW_ART))).getValue();
-		
-		DataSetColumn two = new DataSetColumn("Date of Debut of ARV/ART" + sheetNumber, "Date of Debut of ARV/ART", Date.class);
-		resultRow.addColumnValue(two, workflowChangeDate);
-
-		DrugOrder startingRegimen = (DrugOrder)((PatientDataResult)row.getColumnValue(columnList.get(START_ART_REGIMEN))).getValue();
-		DataSetColumn three = new DataSetColumn("Date of Starting Regimen" + sheetNumber, "Date of Starting Regimen", Date.class);
-		if(startingRegimen == null)
-		{
-			resultRow.addColumnValue(three, null);
-		}
-		else
-		{
-			resultRow.addColumnValue(three, startingRegimen);
-		}
-		
-		startingDate = workflowChangeDate;
-		
-		for (int j = 2; j < 9; j++)
-		{
-			Object cellValue = ((PatientDataResult)row.getColumnValue(columnList.get(j))).getValue();
-	    
-			if(cellValue instanceof ArrayList)
-			{
-				cellValue = cellValue.toString();
-			}
-			if(cellValue instanceof DrugOrder)
-			{
-				String drugName = "Drug Missing";
-				try{
-					drugName = ((DrugOrder)cellValue).getDrug().getName();
-				}catch(Exception e)
-				{
-					System.err.println(e.getMessage());
-				}
-				cellValue = drugName;
-			}
-			DataSetColumn col = new DataSetColumn(columnList.get(j).getLabel()+ sheetNumber, columnList.get(j).getLabel(), columnList.get(j).getClass());
-			resultRow.addColumnValue(col, cellValue);
-		}
-		
-		ObservationResult weightAtStart = (ObservationResult)row.getColumnValue(columnList.get(WEIGHT_AT_START));
-		String colLabel = columnList.get(WEIGHT_AT_START).getLabel();
-		DataSetColumn weightCol = new DataSetColumn(colLabel + sheetNumber, colLabel, String.class);
-		resultRow.addColumnValue(weightCol, weightAtStart.getValue());
-		colLabel = colLabel + " date";
-		DataSetColumn weightColDate = new DataSetColumn(colLabel + sheetNumber, colLabel, Date.class);
-		resultRow.addColumnValue(weightColDate, weightAtStart.getDateOfObservation());
-		
-		ObservationResult stageAtStart = (ObservationResult)row.getColumnValue(columnList.get(INITIAL_STAGE));
-		String stageResult = (String)stageAtStart.getValue();
-		//need to remove the "WHO STAGE" from the result
-		if(stageResult != null)
-		{
-			stageResult = stageResult.replaceFirst("WHO STAGE", "");
-		}
-		DataSetColumn initStageCol = new DataSetColumn(columnList.get(INITIAL_STAGE).getLabel()+ sheetNumber, columnList.get(INITIAL_STAGE).getLabel(), String.class);
-		resultRow.addColumnValue(initStageCol, stageResult);
-		
-		for(int c = 11; c < 13; c++)
-		{
-			Object obsResult = row.getColumnValue(columnList.get(c));
-			DataSetColumn col = new DataSetColumn(columnList.get(c).getLabel()+ sheetNumber, columnList.get(c).getLabel(), String.class);
-			
-			if(obsResult instanceof ObservationResult)
-			{
-				ObservationResult obs = (ObservationResult)row.getColumnValue(columnList.get(c));
-				
-				String result = obs.getValue();
-				if(obs.getDateOfObservation() != null)
-				{
-					result = result + " " + new SimpleDateFormat("yyyy-MM-dd").format(obs.getDateOfObservation());
-				}
-				resultRow.addColumnValue(col, result);
-			}
-			else
-			{
-				resultRow.addColumnValue(col, null);
-			}
-		}
-		
-		for(int k = 13; k < 15; k++)
-		{
-			List<DrugOrder> values = (List<DrugOrder>)((PatientDataResult)row.getColumnValue(columnList.get(k))).getValue();
-		
-			String cellValue = "";
-			Date startDate = null;
-			Date endDate = null;
-			for(DrugOrder drO: values)
-			{
-				startDate = drO.getStartDate();
-				endDate = drO.getDiscontinuedDate();
-			}
-			DataSetColumn startCol = new DataSetColumn("start " + columnList.get(k).getLabel() + sheetNumber, columnList.get(k).getLabel(), Date.class);
-			resultRow.addColumnValue(startCol, startDate);
-			DataSetColumn endCol = new DataSetColumn("end " + columnList.get(k).getLabel() + sheetNumber, columnList.get(k).getLabel(), Date.class);
-			resultRow.addColumnValue(endCol, endDate);
-		}
-
-		List<Obs> pregnancy = (List<Obs>)((PatientDataResult)row.getColumnValue(columnList.get(PREGNANCY_DELIVERY_DATES))).getValue();
-		for(int m = 0; m < 4; m++)
-		{
-			String columnName = "Pregnancy " + m + sheetNumber;
-			DataSetColumn col = new DataSetColumn(columnName, columnName, String.class);
-			
-			if(pregnancy != null && pregnancy.size() > m)
-			{
-				Obs pregOb = pregnancy.get(m);
-				resultRow.addColumnValue(col,pregOb.getValueAsString(Context.getLocale()));
-			}
-			else
-			{
-				resultRow.addColumnValue(col,null);
-			}
-		}
-
-		DrugOrder initial = (DrugOrder)((PatientDataResult)row.getColumnValue(columnList.get(INITIAL_REGIMEN))).getValue();
-		String drugName = "Drug Missing";
-		try{
-			drugName = ((DrugOrder)initial).getDrug().getName();
-		}catch(Exception e)
-		{
-			System.err.println(e.getMessage());
-		}
-		DataSetColumn initReg = new DataSetColumn("Initial Regimen" + sheetNumber, "Initial Regimen", String.class);
-		resultRow.addColumnValue(initReg, drugName);
-	
-		DataSetColumn firstLine = new DataSetColumn("First Line Changes" + sheetNumber, "First Line Changes", String.class);
-		resultRow.addColumnValue(firstLine, firstLineChange);
-	
-		DataSetColumn secondLine = new DataSetColumn("Second Line Changes"+ sheetNumber, "Second Line Changes", String.class);
-		resultRow.addColumnValue(secondLine, secondLineChange);
-	    
 		int month = startingMonth;
-
-		String drugCellValue = retrieveCorrectMonthsOb(month, drugsValue, startingDate);
-		DataSetColumn monthZero = new DataSetColumn("Month 0" + sheetNumber, "Month 0", String.class);
-		resultRow.addColumnValue(monthZero, drugCellValue);
-		
-		DataSetColumn monthDateZero = new DataSetColumn("Month 0" + sheetNumber + "date", "Month 0 date", String.class);
-		if(drugCellValue != null)
-		{
-			String cellValues[] = drugCellValue.split(";");
-			resultRow.addColumnValue(monthZero, cellValues[0]);
-		
-			if(cellValues.length > 1)
-			{
-				resultRow.addColumnValue(monthDateZero, cellValues[1]);
-			}
-		}
-		else
-		{
-			resultRow.addColumnValue(monthZero, null);
-			resultRow.addColumnValue(monthDateZero, null);
-		}
 	    
 		for(int f = 0; f < 6; f++)
 		{
@@ -372,28 +373,11 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 				
 				String columnName = "Month " + month;
 				DataSetColumn monthCol = new DataSetColumn(columnName, columnName, String.class);
-				DataSetColumn monthDateCol = new DataSetColumn(columnName + "date", columnName, String.class);
-				if(cellValue != null)
-				{
-					String cellValues[] = cellValue.split(";");
-					resultRow.addColumnValue(monthCol, cellValues[0]);
-				
-					if(cellValues.length > 1)
-					{
-						resultRow.addColumnValue(monthDateCol, cellValues[1]);
-					}
-				}
-				else
-				{
-					resultRow.addColumnValue(monthCol, null);
-					resultRow.addColumnValue(monthDateCol, null);
-				}
+				resultRow.addColumnValue(monthCol, cellValue);
 			}
 			month++;
 			String columnName = "CD4 " + month;
 			DataSetColumn monthCol = new DataSetColumn(columnName, columnName, String.class);
-			columnName = "CD4 date" + month;
-			DataSetColumn monthDateCol = new DataSetColumn(columnName, columnName, String.class);
 			
 			if(cd4Value != null && cd4Value.size() > 0)
 			{
@@ -406,18 +390,19 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 					{
 						cellValue = ob.getValueAsString(Context.getLocale()); 
 						date = ob.getObsDatetime();
+						if(date != null)
+						{
+							cellValue = cellValue + " " + new SimpleDateFormat("yyyy-MM-dd").format(date);
+						}
 					}
 	        	
 					cd4Value.removeAll(valueToBeUsed);
 				}
 				resultRow.addColumnValue(monthCol, cellValue);
-				resultRow.addColumnValue(monthDateCol, date);
-				
 	    	}
 			else
 			{
 				resultRow.addColumnValue(monthCol, null);
-				resultRow.addColumnValue(monthDateCol, null);
 			}
 	    
 			String stageColName = "Stage " + month;
@@ -471,7 +456,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 		String checkForDrugOrders = retrieveCorrectMonthsOb(month + 1, drugsValue, startingDate);
 		if((cd4Value != null && cd4Value.size() > 0) || (stageValue != null && stageValue.size() > 0) || (tbValue != null && tbValue.size() > 0) || checkForDrugOrders.length() > 0)
 		{
-			addPatientRow(rowNumber, month, sheetNumber + 1, row, resultRow, dataset, firstLineChange, secondLineChange, drugsValue, cd4Value, stageValue, tbValue);
+			addPatientRow(startingDate, rowNumber, month, sheetNumber + 1, row, resultRow, dataset, firstLineChange, secondLineChange, drugsValue, cd4Value, stageValue, tbValue);
 		}
 	}
 
@@ -562,7 +547,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 			
 			if(drugOrders.length() > 0)
 			{
-				drugOrders = drugOrders + ";" + new SimpleDateFormat("MMM yyyy").format(monthDate.getTime());
+				drugOrders = drugOrders + " " + new SimpleDateFormat("MMM yyyy").format(monthDate.getTime());
 			}
 		}
 		return drugOrders;

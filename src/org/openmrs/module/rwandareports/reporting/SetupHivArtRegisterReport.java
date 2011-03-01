@@ -34,15 +34,20 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueBe
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
 
 public class SetupHivArtRegisterReport {
 	
 	Helper h = new Helper();
 	
+	boolean pedi = false;
+	
 	private HashMap<String, String> properties;
 	
-	public SetupHivArtRegisterReport(Helper helper) {
+	public SetupHivArtRegisterReport(Helper helper, boolean pedi) {
 		h = helper;
+		
+		this.pedi = pedi;
 	}
 	
 	public void setup() throws Exception {
@@ -53,7 +58,7 @@ public class SetupHivArtRegisterReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "RegisterTemplate.xls", "HIVArtTemplate.xls_", null);
+		h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "HIVArtTemplate.xls_", null);
 	}
 	
 	public void delete() {
@@ -63,9 +68,23 @@ public class SetupHivArtRegisterReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "HIV ART Register");
+		if(pedi)
+		{
+			h.purgeDefinition(ReportDefinition.class, "Pedi HIV ART Register");
+		}
+		else
+		{
+			h.purgeDefinition(ReportDefinition.class, "Adult HIV ART Register");
+		}
 		
-		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "HIV ART Register Data Set");
+		if(pedi)
+		{
+			h.purgeDefinition(HIVARTRegisterDataSetDefinition2.class, "Pedi HIV ART Register Data Set");
+		}
+		else
+		{
+			h.purgeDefinition(HIVARTRegisterDataSetDefinition2.class, "Adult HIV ART Register Data Set");
+		}
 		
 		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
 	}
@@ -73,7 +92,14 @@ public class SetupHivArtRegisterReport {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("HIV ART Register");
+		if(pedi)
+		{
+			reportDefinition.setName("Peid HIV ART Register");
+		}
+		else
+		{
+			reportDefinition.setName("Adult HIV ART Register");
+		}
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
@@ -88,19 +114,36 @@ public class SetupHivArtRegisterReport {
 	private void createDataSetDefinition(ReportDefinition reportDefinition)
 	{
 		// Create new dataset definition 
-		HIVARTRegisterDataSetDefinition dataSetDefinition = new HIVARTRegisterDataSetDefinition();
+		HIVARTRegisterDataSetDefinition2 dataSetDefinition = new HIVARTRegisterDataSetDefinition2();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		
-		InProgramCohortDefinition inAdultHIVProgram = new InProgramCohortDefinition();
-		inAdultHIVProgram.setName("hiv: In Adult HIV Programs");
-		List<Program> hivPrograms = new ArrayList<Program>();
-		Program adult = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
-		if(adult != null)
+		if(pedi)
 		{
-			hivPrograms.add(adult);
+			InProgramCohortDefinition inPediHIVProgram = new InProgramCohortDefinition();
+			inPediHIVProgram.setName("hiv: In Peid HIV Programs");
+			List<Program> hivPrograms = new ArrayList<Program>();
+			Program pedi = Context.getProgramWorkflowService().getProgramByName(properties.get("PEDI_HIV_PROGRAM"));
+			if(pedi != null)
+			{
+				hivPrograms.add(pedi);
+			}
+			inPediHIVProgram.setPrograms(hivPrograms);
+			dataSetDefinition.addFilter(inPediHIVProgram);
 		}
-		inAdultHIVProgram.setPrograms(hivPrograms);
-		dataSetDefinition.addFilter(inAdultHIVProgram);
+		else
+		{
+		
+			InProgramCohortDefinition inAdultHIVProgram = new InProgramCohortDefinition();
+			inAdultHIVProgram.setName("hiv: In Adult HIV Programs");
+			List<Program> hivPrograms = new ArrayList<Program>();
+			Program adult = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
+			if(adult != null)
+			{
+				hivPrograms.add(adult);
+			}
+			inAdultHIVProgram.setPrograms(hivPrograms);
+			dataSetDefinition.addFilter(inAdultHIVProgram);
+		}
 		
 //		PersonAttributeCohortDefinition location = new PersonAttributeCohortDefinition();
 //		PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
@@ -320,6 +363,9 @@ public class SetupHivArtRegisterReport {
 		String hivProgram = Context.getAdministrationService().getGlobalProperty("reports.hivprogramname");
 		properties.put("HIV_PROGRAM", hivProgram);
 		
+		String pediHivProgram = Context.getAdministrationService().getGlobalProperty("reports.pedihivprogramname");
+		properties.put("PEDI_HIV_PROGRAM", pediHivProgram);
+		
 		String currentLocation = Context.getAdministrationService().getGlobalProperty("reports.currentlocation");
 		properties.put("CURRENT_LOCATION", currentLocation);
 		
@@ -329,37 +375,37 @@ public class SetupHivArtRegisterReport {
 		String onARTState = Context.getAdministrationService().getGlobalProperty("reports.hivonartstate");
 		properties.put("HIV_ON_ART_STATE", onARTState);
 		
-		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("registers.allArtDrugsConceptSet");
+		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
 		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
 		
 		String weightConcept = Context.getAdministrationService().getGlobalProperty("reports.weightConcept");
 		properties.put("WEIGHT_CONCEPT", weightConcept);
 		
-		String stageConcept = Context.getAdministrationService().getGlobalProperty("registers.stageConcept");
+		String stageConcept = Context.getAdministrationService().getGlobalProperty("reports.stageConcept");
 		properties.put("STAGE_CONCEPT", stageConcept);
 		
 		String cd4Concept = Context.getAdministrationService().getGlobalProperty("reports.cd4Concept");
 		properties.put("CD4_CONCEPT", cd4Concept);
 		
-		String cd4PercentageConcept = Context.getAdministrationService().getGlobalProperty("registers.cd4PercentageConcept");
+		String cd4PercentageConcept = Context.getAdministrationService().getGlobalProperty("reports.cd4PercentageConcept");
 		properties.put("CD4_PERCENTAGE_CONCEPT", cd4PercentageConcept);
 		
-		String ctxTreatmentConcept = Context.getAdministrationService().getGlobalProperty("registers.ctxTreatmentConcept");
+		String ctxTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.ctxTreatmentConcept");
 		properties.put("CTX_TREATMENT_CONCEPT", ctxTreatmentConcept);
 		
-		String tbTreatmentConcept = Context.getAdministrationService().getGlobalProperty("registers.tbTreatmentConcept");
+		String tbTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTreatmentConcept");
 		properties.put("TB_TREATMENT_CONCEPT", tbTreatmentConcept);
 		
-		String pregnancyDeliveryDateConcept = Context.getAdministrationService().getGlobalProperty("registers.pregnancyDeliveryDateConcept");
+		String pregnancyDeliveryDateConcept = Context.getAdministrationService().getGlobalProperty("reports.pregnancyDeliveryDateConcept");
 		properties.put("PREGNANCY_DELIVERY_DATE_CONCEPT", pregnancyDeliveryDateConcept);
 		
-		String allFirstLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("registers.allFirstLineArtDrugsConceptSet");
+		String allFirstLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allFirstLineArtDrugsConceptSet");
 		properties.put("ALL_FIRST_LINE_ART_DRUGS_CONCEPT", allFirstLineARTDrugsConcept);
 		
-		String allSecondLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("registers.allSecondLineArtDrugsConceptSet");
+		String allSecondLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allSecondLineArtDrugsConceptSet");
 		properties.put("ALL_SECOND_LINE_ART_DRUGS_CONCEPT", allSecondLineARTDrugsConcept);
 		
-		String tbTestConcept = Context.getAdministrationService().getGlobalProperty("registers.tbTestConcept");
+		String tbTestConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTestConcept");
 		properties.put("TB_TEST_CONCEPT", tbTestConcept);
 	}
 	
