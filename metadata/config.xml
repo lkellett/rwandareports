@@ -103,6 +103,51 @@
 		</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.pmtctGaveBirthStatus</property>
+		<defaultValue>GAVE BIRTH</defaultValue>
+		<description>
+			The workflow status that indicates a pmtct patient has given birth
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.currentlocation</property>
+		<defaultValue>Rwinkwavu Health Center</defaultValue>
+		<description>
+			The current location to be used by the reports
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctcombinedprogramname</property>
+		<defaultValue>PMTCT Combined Clinic - Infant</defaultValue>
+		<description>
+			The Program name for the PMTCT Combined clinic
+		</description>
+	</globalProperty>
+	
+	<!-- Late Visit And CD$ Global Property -->
+	<globalProperty>
+		<property>ClinicalencounterTypeIds.labTestExcl</property>
+		<defaultValue>1,2,3,4</defaultValue>
+		<description>
+			Clinical Encounter Type to find patients who have have not had a clinical encounter (lab test excluded)		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>hiv.programid.adult</property>
+		<defaultValue>3</defaultValue>
+		<description>Id for Adult HIV program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>hiv.programid.pediatric</property>
+		<defaultValue>10</defaultValue>
+		<description>Id for Pediatric HIV program</description>
+	</globalProperty>
+	
+	
 	<!-- /Rwanda Report Module Properties -->
 	
 </module>

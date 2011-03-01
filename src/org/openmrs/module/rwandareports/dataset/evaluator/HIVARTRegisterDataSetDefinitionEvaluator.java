@@ -16,6 +16,8 @@ package org.openmrs.module.rwandareports.dataset.evaluator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +45,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDat
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 import org.openmrs.module.rowperpatientreports.patientdata.service.PatientDataService;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.HIVRegisterDataSetRowComparator;
 
 /**
  * The logic that evaluates a {@link PatientDataSetDefinition} and produces an {@link DataSet}
@@ -116,10 +119,20 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 	
 	private SimpleDataSet transformDataSet(DataSet dataset, DataSetDefinition dataSetDefinition, EvaluationContext context)
 	{
+		//sort into a list
+		List<DataSetRow> rows = new ArrayList<DataSetRow>();
+		
+		for(DataSetRow row: dataset)
+		{
+			rows.add(row);
+		}
+		
+		Collections.sort(rows, new HIVRegisterDataSetRowComparator(dataset));
+		
 		SimpleDataSet resultSet = new SimpleDataSet(dataSetDefinition, context);
 		
 		int rowNumber = 0;
-		for(DataSetRow row: dataset)
+		for(DataSetRow row: rows)
 	    {
 			
 			DataSetRow rr = new DataSetRow();

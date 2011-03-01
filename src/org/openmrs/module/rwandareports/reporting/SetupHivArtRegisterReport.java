@@ -8,7 +8,6 @@ import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.PersonAttributeType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
@@ -16,7 +15,9 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
+import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
@@ -66,15 +67,16 @@ public class SetupHivArtRegisterReport {
 		
 		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "HIV ART Register Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "hiv: In Adult HIV Programs");
+		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
 	}
 	
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("HIV ART Register");
+		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("hiv: In Adult HIV Programs"), new HashMap<String,Object>());
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -89,15 +91,26 @@ public class SetupHivArtRegisterReport {
 		HIVARTRegisterDataSetDefinition dataSetDefinition = new HIVARTRegisterDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		
-		PersonAttributeCohortDefinition location = new PersonAttributeCohortDefinition();
-		PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
-		location.setAttributeType(healthCenterType);
+		InProgramCohortDefinition inAdultHIVProgram = new InProgramCohortDefinition();
+		inAdultHIVProgram.setName("hiv: In Adult HIV Programs");
+		List<Program> hivPrograms = new ArrayList<Program>();
+		Program adult = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
+		if(adult != null)
+		{
+			hivPrograms.add(adult);
+		}
+		inAdultHIVProgram.setPrograms(hivPrograms);
+		dataSetDefinition.addFilter(inAdultHIVProgram);
 		
-		List<Location> locations = new ArrayList<Location>();
-		Location currentLocationObj = Context.getLocationService().getLocation(properties.get("CURRENT_LOCATION"));
-		locations.add(currentLocationObj);
-		location.setValueLocations(locations);
-		dataSetDefinition.addFilter(location);
+//		PersonAttributeCohortDefinition location = new PersonAttributeCohortDefinition();
+//		PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
+//		location.setAttributeType(healthCenterType);
+//		
+//		List<Location> locations = new ArrayList<Location>();
+//		Location currentLocationObj = Context.getLocationService().getLocation(properties.get("CURRENT_LOCATION"));
+//		locations.add(currentLocationObj);
+//		location.setValueLocations(locations);
+//		dataSetDefinition.addFilter(location);
 		
 		InStateCohortDefinition onARTCohort = new InStateCohortDefinition();
 		List<ProgramWorkflowState> states = new ArrayList<ProgramWorkflowState>();
@@ -289,16 +302,12 @@ public class SetupHivArtRegisterReport {
 	
 	private void createCohortDefinitions() {
 		
-		InProgramCohortDefinition inAdultHIVProgram = new InProgramCohortDefinition();
-		inAdultHIVProgram.setName("hiv: In Adult HIV Programs");
-		List<Program> hivPrograms = new ArrayList<Program>();
-		Program adult = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
-		if(adult != null)
-		{
-			hivPrograms.add(adult);
-		}
-		inAdultHIVProgram.setPrograms(hivPrograms);
-		h.replaceCohortDefinition(inAdultHIVProgram);
+		SqlCohortDefinition location = new SqlCohortDefinition();
+		location
+		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		location.setName("location: Patients at location");
+		location.addParameter(new Parameter("location", "location", Location.class));
+		h.replaceCohortDefinition(location);
 		
 	}
 	
@@ -311,7 +320,7 @@ public class SetupHivArtRegisterReport {
 		String hivProgram = Context.getAdministrationService().getGlobalProperty("reports.hivprogramname");
 		properties.put("HIV_PROGRAM", hivProgram);
 		
-		String currentLocation = Context.getAdministrationService().getGlobalProperty("registers.currentlocation");
+		String currentLocation = Context.getAdministrationService().getGlobalProperty("reports.currentlocation");
 		properties.put("CURRENT_LOCATION", currentLocation);
 		
 		String workflowStatus = Context.getAdministrationService().getGlobalProperty("reports.hivworkflowstatus");
