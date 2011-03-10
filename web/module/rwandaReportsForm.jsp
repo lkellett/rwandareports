@@ -38,6 +38,14 @@ Adult Late Visit And CD4:
 <br></br>	
 Pediatric Late Visit And CD4:
 <hr></hr>
+Missing CD4 Report:
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4Report.form">Remove</a>
+<br></br>
+Missing CD4 All Sites Report:
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4AllSiteReport.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4AllSiteReport.form">Remove</a>		
+<hr></hr>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
 

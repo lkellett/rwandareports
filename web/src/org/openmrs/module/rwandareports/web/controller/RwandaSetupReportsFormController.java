@@ -1,10 +1,11 @@
 package org.openmrs.module.rwandareports.web.controller;
 
 import org.openmrs.module.rwandareports.reporting.Helper;
-import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
+import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
+import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
@@ -76,14 +77,14 @@ public class RwandaSetupReportsFormController {
 		new SetupCombinedHFCSPConsultationReport(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
-	
-	@RequestMapping("/module/rwandareports/register_pmtctFoodDistribution")
+					
+	@RequestMapping("/module/rwandareports/register_pmtctFoodDistributionSheet")
 	public ModelAndView registerPmtctFoodDistribution() throws Exception {
 		new SetupPMTCTFoodDistributionReport(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	@RequestMapping("/module/rwandareports/remove_pmtctFoodDistribution")
+	@RequestMapping("/module/rwandareports/remove_pmtctFoodDistributionSheet")
 	public ModelAndView removePmtctFoodDistribution() throws Exception {
 		new SetupPMTCTFoodDistributionReport(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
@@ -100,6 +101,30 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_adultLatevisitAndCD4")
 	public ModelAndView removeAdultLatevisitAndCD4() throws Exception {
 		new SetupAdultLateVisitAndCD4Report(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_missingCD4Report")
+	public ModelAndView registerMissingCD4Report() throws Exception {
+		new SetupMissingCD4Report(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_missingCD4Report")
+	public ModelAndView removeMissingCD4Report() throws Exception {
+		new SetupMissingCD4Report(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_missingCD4AllSiteReport")
+	public ModelAndView registerMissingCD4AllSiteReport() throws Exception {
+		new SetupMissingCD4AllSiteReport(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_missingCD4AllSiteReport")
+	public ModelAndView removeMissingCD4AllSiteReport() throws Exception {
+		new SetupMissingCD4AllSiteReport(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }

@@ -48,6 +48,14 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.hivtreatmentstatus</property>
+		<defaultValue>TREATMENT GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the group of the HIV patients
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.hivonartstate</property>
 		<defaultValue>ON ANTIRETROVIRALS</defaultValue>
 		<description>
@@ -68,6 +76,30 @@
 		<defaultValue>5497</defaultValue>
 		<description>
 			The concept id of the cd4 count concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.patientDiedConcept</property>
+		<defaultValue>1811</defaultValue>
+		<description>
+			The concept id of the patient died concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4LabConcept</property>
+		<defaultValue>657</defaultValue>
+		<description>
+			The concept id of the cd4 lab concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labOrderType</property>
+		<defaultValue>4</defaultValue>
+		<description>
+			The lab test order type
 		</description>
 	</globalProperty>
 	
@@ -218,6 +250,55 @@
 		<defaultValue>10</defaultValue>
 		<description>Id for Pediatric HIV program</description>
 	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctIdIdentifier</property>
+		<defaultValue>IMB ID</defaultValue>
+		<description>Identifier type that should be returned for the PMTCT reports</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctMotherRelationship</property>
+		<defaultValue>8</defaultValue>
+		<description>The id of the Relationship that represents the mother in the PMTCT program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctFeedingStatusWorkflowName</property>
+		<defaultValue>Feeding status</defaultValue>
+		<description>The name of the workflow for the feeding status</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctRelationshipStatusWorkflowName</property>
+		<defaultValue>Relationship status</defaultValue>
+		<description>The name of the workflow for the relationship status</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.accompagnatuerRelationship</property>
+		<defaultValue>1</defaultValue>
+		<description>The id of the Relationship that represents the accompagnatuer</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctNextVisitConcept</property>
+		<defaultValue>5096</defaultValue>
+		<description>The id of the concept for next pmtct visit</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dbsConcept</property>
+		<defaultValue>1553</defaultValue>
+		<description>The id of the concept for the DBS test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctDiscordantCoupleWorkflowState</property>
+		<defaultValue>Discordant Couple</defaultValue>
+		<description>The workflow state representing a discordant couple</description>
+	</globalProperty>
+
 	<!-- /Rwanda Report Module Properties -->
 	
 </module>
