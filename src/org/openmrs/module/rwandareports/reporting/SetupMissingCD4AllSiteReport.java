@@ -114,14 +114,13 @@ public class SetupMissingCD4AllSiteReport {
 		
 		SqlCohortDefinition noResult = new SqlCohortDefinition();
 		noResult
-		        .setQuery("select person_id from obs where concept_id = " +
-		        		  properties.get("CD4_CONCEPT") + 
-		        		  " and comments in ('Re-order', 'Closed', 'Failed') and obs_datetime < :endDate " + 
-		        		  "and obs_id in( " +
-		        		  "select obs_id from" +  
-		        		  "( " +
-		        		  "select obs_id, person_id, max(obs_datetime) from obs group by person_id " +
-		        		  ") MostRecent )");
+		        .setQuery("select person_id from obs where comments in ('Re-order', 'Closed', 'Failed') and obs_datetime < :endDate " +
+						"and concept_id =" +
+						properties.get("CD4_CONCEPT") + 
+						" and obs_id in (select o.obs_id from (select person_id as pi, max(obs_datetime) od from obs where concept_id=" +
+						 properties.get("CD4_CONCEPT") + 
+						" and voided = 0 group by person_id)RecentObs inner join obs o on o.obs_datetime = RecentObs.od and o.person_id = RecentObs.pi)");	
+		
 		noResult.addParameter(new Parameter("endDate", "endDate", Date.class));
 		noResultDataSet.addFilter(noResult, ParameterizableUtil.createParameterMappings("endDate=${endDate-1w}"));
 		
