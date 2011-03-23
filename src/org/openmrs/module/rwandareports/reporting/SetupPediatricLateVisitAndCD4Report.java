@@ -59,21 +59,19 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAf
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueBeforeDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilter;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
-import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 
-public class SetupAdultLateVisitAndCD4Report {
-	protected final static Log log = LogFactory.getLog(SetupAdultLateVisitAndCD4Report.class);
+public class SetupPediatricLateVisitAndCD4Report {
+	protected final static Log log = LogFactory.getLog(SetupPediatricLateVisitAndCD4Report.class);
 	
 	Helper h = new Helper();
 	
 	//private HashMap<String, String> properties;
 	
-	public SetupAdultLateVisitAndCD4Report(Helper helper) {
+	public SetupPediatricLateVisitAndCD4Report(Helper helper) {
 		h = helper;
 	}
 	
@@ -85,19 +83,19 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
+		h.createRowPerPatientXlsOverview(rd, "PediatricLateVisitAndCD4Template.xls", "XlsPediatricLateVisitAndCD4Template", null);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("XlsAdultLateVisitAndCD4Template".equals(rd.getName())) {
+			if ("XlsPediatricLateVisitAndCD4Template".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "Adult Late Visit And CD4");
+		h.purgeDefinition(ReportDefinition.class, "Pediatric Late Visit And CD4");
 		
-		h.purgeDefinition(PatientDataSetDefinition.class, "Adult Late Visit And CD4 Data Set");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Pediatric Late Visit And CD4 Data Set");
 		
 		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
 	}
@@ -105,7 +103,7 @@ public class SetupAdultLateVisitAndCD4Report {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult Late Visit And CD4");
+		reportDefinition.setName("Pediatric Late Visit And CD4");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -147,7 +145,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		InProgramCohortDefinition adultHivProgramCohort = new InProgramCohortDefinition();
 		adultHivProgramCohort.addParameter(new Parameter("onDate","On Date",Date.class));
 		List<Program> programs = new ArrayList<Program>();
-		Program hadultHivProgram = Context.getProgramWorkflowService().getProgram(Integer.parseInt(Context.getAdministrationService().getGlobalProperty("hiv.programid.adult")));
+		Program hadultHivProgram = Context.getProgramWorkflowService().getProgram(Integer.parseInt(Context.getAdministrationService().getGlobalProperty("hiv.programid.pediatric")));
 		programs.add(hadultHivProgram);
 		adultHivProgramCohort.setPrograms(programs);
 		
@@ -156,25 +154,32 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition3.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition4.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
+		/*
+		SqlCohortDefinition patientDied=new SqlCohortDefinition("SELECT DISTINCT person_id FROM obs o WHERE o.concept_id='1811'");
+		patientDied.addParameter(new Parameter("onDate","On Date",Date.class));
+		InverseCohortDefinition patientAlive=new InverseCohortDefinition(patientDied);
+		dataSetDefinition1.addFilter(patientAlive,new HashMap<String, Object>());
+		dataSetDefinition2.addFilter(patientAlive,new HashMap<String, Object>());
+		dataSetDefinition3.addFilter(patientAlive,new HashMap<String, Object>());
+		dataSetDefinition4.addFilter(patientAlive,new HashMap<String, Object>());
+		*/
 		//==================================================================
-		//                 1. Adult ART late visit
-		//==================================================================		
+		//                 1. Pediatric ART late visit
+		//==================================================================
+		
 		
 		
 		// ON ANTIRETROVIRALS state cohort definition.
-		
-		
+			
 		InStateCohortDefinition onARTStatusCohort = new InStateCohortDefinition();
 		onARTStatusCohort.addParameter(new Parameter("onDate","On Date",Date.class));
 		List<ProgramWorkflowState> states = new ArrayList<ProgramWorkflowState>();
 		ProgramWorkflow txStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_STATUS_ID);
 		
-				
 		ProgramWorkflowState onART = null;
 		if(txStatus != null)
 		{
 			onART = txStatus.getState(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.ON_ANTIRETROVIRALS_UUID));
-					
 			if(onART != null)
 			{
 				states.add(onART);
@@ -243,7 +248,7 @@ public class SetupAdultLateVisitAndCD4Report {
 				
 		
 		//==================================================================
-		//                 2. Adult Pre-ART late visit
+		//                 2. Pediatric Pre-ART late visit
 		//==================================================================
 		
 		// Following state cohort definition.
@@ -254,22 +259,17 @@ public class SetupAdultLateVisitAndCD4Report {
 		List<ProgramWorkflowState> followingstates = new ArrayList<ProgramWorkflowState>();
 		ProgramWorkflow followingtxStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_STATUS_ID);
 		
-			
 		ProgramWorkflowState following = null;
 		if(txStatus != null)
 		{
 			following = followingtxStatus.getState(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.FOLLOWING_UUID));
-					
 			if(following != null)
 			{
 				followingstates.add(following);
 				followingStatusCohort.setStates(followingstates);
 				dataSetDefinition2.addFilter(followingStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 			}
-		}	
-		
-		
-		
+		}		
 		
 		// Patients without Any clinical Encounter(Test lab excluded) in last six months.
 		dataSetDefinition2.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
@@ -278,7 +278,7 @@ public class SetupAdultLateVisitAndCD4Report {
 			
 
 		//==================================================================
-		//                 3. Adult HIV late CD4 count
+		//                 3. Pediatric HIV late CD4 count
 		//==================================================================
 		
 		NumericObsCohortDefinition cd4CohortDefinition=new NumericObsCohortDefinition();
@@ -296,11 +296,14 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 
 		//==================================================================
-		//                 4. HIV lost to follow-up
+		//                 4. Pediatric HIV lost to follow-up
 		//==================================================================
 		
 		//Patients with no encounters of any kind in the past year
 		
+		
+		//SqlCohortDefinition patientsWithoutEncountersInPastYear = new SqlCohortDefinition("select distinct p.patient_id from patient p, encounter e1 where p.patient_id = e1.patient_id and e1.voided = 0 and p.voided = 0 and e1.encounter_datetime < '"+sdf1.format(dateOneYearAgo)+"' and p.patient_id not in (select patient_id from encounter where encounter_datetime >= '"+sdf1.format(dateOneYearAgo)+"' and voided = 0)");
+		//SqlCohortDefinition patientsWithEncountersInPastYear = new SqlCohortDefinition("select distinct p.patient_id from patient p, encounter e1 where p.patient_id = e1.patient_id and e1.voided = 0 and p.voided = 0 and e1.encounter_datetime >= '"+sdf1.format(dateOneYearAgo)+"'");
 		InverseCohortDefinition patientsWithoutEncountersInPastYear=new InverseCohortDefinition(patientsWithClinicalEncounters);
 		dataSetDefinition4.addFilter(patientsWithoutEncountersInPastYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));		
 		
@@ -359,7 +362,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		txGroup.setPatientProgram(hadultHivProgram);
 		txGroup.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_GROUP_ID));
 		txGroup.setName("Group");
-		txGroup.setDescription("Group");
+		txGroup.setDescription("Group");	
 		txGroup.setFilter(new GroupStateFilter());
 		dataSetDefinition1.addColumn(txGroup,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(txGroup,new HashMap<String, Object>());
@@ -389,7 +392,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
-		lastEncounterType.setFilter(new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(lastEncounterType,new HashMap<String, Object>());
@@ -402,6 +404,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		returnVisitDate.setDescription("Date of missed appointment");
 		dataSetDefinition1.addColumn(returnVisitDate,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(returnVisitDate,new HashMap<String, Object>());
+		
 		
 		RecentObservation cd4Count=new RecentObservation();
 		cd4Count.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
@@ -448,11 +451,10 @@ public class SetupAdultLateVisitAndCD4Report {
 		mappings.put("location", "${location}");
 		mappings.put("endDate", "${endDate}");
 		
-
-		reportDefinition.addDataSetDefinition("AdultARTLateVisit", dataSetDefinition1, mappings);
-		reportDefinition.addDataSetDefinition("AdultPreARTLateVisit", dataSetDefinition2, mappings);
-		reportDefinition.addDataSetDefinition("AdultHIVLateCD4Count", dataSetDefinition3, mappings);
-		reportDefinition.addDataSetDefinition("HIVLostToFollowup", dataSetDefinition4, mappings);
+		reportDefinition.addDataSetDefinition("PediatricARTLateVisit", dataSetDefinition1, mappings);
+		reportDefinition.addDataSetDefinition("PediatricPreARTLateVisit", dataSetDefinition2, mappings);
+		reportDefinition.addDataSetDefinition("PediatricHIVLateCD4Count", dataSetDefinition3, mappings);
+		reportDefinition.addDataSetDefinition("PediatricHIVLostToFollowup", dataSetDefinition4, mappings);
 		
 	}
 	

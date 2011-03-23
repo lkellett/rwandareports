@@ -7,8 +7,10 @@ import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
+import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
+import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -90,7 +92,7 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	//Remove Register Late visit And CD4
+//Remove/Register Adult Late visit And CD4
 	
 	@RequestMapping("/module/rwandareports/register_adultLatevisitAndCD4")
 	public ModelAndView registerAdultLatevisitAndCD4() throws Exception {
@@ -101,6 +103,31 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_adultLatevisitAndCD4")
 	public ModelAndView removeAdultLatevisitAndCD4() throws Exception {
 		new SetupAdultLateVisitAndCD4Report(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	//Remove/Register Pediatric Late visit And CD4
+	@RequestMapping("/module/rwandareports/register_pediatricLatevisitAndCD4")
+	public ModelAndView registerPediatricLatevisitAndCD4() throws Exception {
+		new SetupPediatricLateVisitAndCD4Report(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_pediatricLatevisitAndCD4")
+	public ModelAndView removePediatricLatevisitAndCD4() throws Exception {
+		new SetupPediatricLateVisitAndCD4Report(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//Remove/Register Rwanda primary care report
+	@RequestMapping("/module/rwandareports/remove_rwandaPrimaryCareReport")
+	public ModelAndView removeRwandaPrimaryCareIndicator() throws Exception {
+		new SetupRwandaPrimaryCareReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_rwandaPrimaryCareReport")
+	public ModelAndView registerRwandaPrimaryCareIndicator() throws Exception {
+		new SetupRwandaPrimaryCareReport(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
