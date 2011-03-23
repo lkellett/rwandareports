@@ -62,6 +62,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
+import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 
 public class SetupPediatricLateVisitAndCD4Report {
@@ -392,6 +393,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
+		lastEncounterType.setFilter(new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(lastEncounterType,new HashMap<String, Object>());
