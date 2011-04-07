@@ -252,14 +252,20 @@
 	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.pmtctIdIdentifier</property>
+		<property>reports.imbIdIdentifier</property>
+		<defaultValue>Primary Care</defaultValue>
+		<description>Identifier type that should be returned for the Primary Care</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.primaryCareIdIdentifier</property>
 		<defaultValue>IMB ID</defaultValue>
-		<description>Identifier type that should be returned for the PMTCT reports</description>
+		<description>Identifier type that should be returned for the IMB Id</description>
 	</globalProperty>
 	
 	<globalProperty>
 		<property>reports.pmtctMotherRelationship</property>
-		<defaultValue>8</defaultValue>
+		<defaultValue>13</defaultValue>
 		<description>The id of the Relationship that represents the mother in the PMTCT program</description>
 	</globalProperty>
 	

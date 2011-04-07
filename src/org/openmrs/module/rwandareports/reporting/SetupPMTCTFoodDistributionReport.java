@@ -1,6 +1,7 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,16 @@ import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.PersonAddress;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflowState;
+import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -22,6 +27,7 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAgeInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
@@ -72,6 +78,8 @@ public class SetupPMTCTFoodDistributionReport {
 		reportDefinition.setName("Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, "PMTCT Combined Clinic - Infant"));
+		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -86,6 +94,13 @@ public class SetupPMTCTFoodDistributionReport {
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
+		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
+		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
+		
+		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
+		feedingStatus.addParameter(new Parameter("states", "States", ProgramWorkflowState.class));
+		feedingStatus.setName("feeding state: Feeding state of patients");
+		dataSetDefinition.addFilter(feedingStatus, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
@@ -98,17 +113,37 @@ public class SetupPMTCTFoodDistributionReport {
 		inPMTCTProgram.setPrograms(programs);
 		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
 		
+		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
+		
+		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
+		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
+		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
+		dueThatWeek.setTimeModifier(TimeModifier.ANY);
+		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
+		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
+		dueThatWeek.setName("patients due that week");
+		dueThatWeek.setGroupingConcept(nextVisitConcept);
+		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
+		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
 		
 		PatientProperty familyName = new PatientProperty("familyName");
 		dataSetDefinition.addColumn(familyName, new HashMap<String,Object>());
 		
-		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PMTCT_IDENTIFIER_TYPE"));
+		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("IMB_IDENTIFIER_TYPE"));
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		imbId.setName("InfantIMBId");
 		imbType.setPatientIdentifierTypeId(imbId.getId());
-		dataSetDefinition.addColumn(imbId, new HashMap<String,Object>());
+		
+		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
+		PatientIdentifier pcId = new PatientIdentifier(imbType);
+		pcType.setPatientIdentifierTypeId(pcId.getId());
+		
+		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
+		infantId.setName("InfantId");
+		infantId.addPatientDataDefinition(imbId);
+		infantId.addPatientDataDefinition(pcId);
+		dataSetDefinition.addColumn(infantId, new HashMap<String,Object>());
 		
 		RetrievePersonByRelationship mother = new RetrievePersonByRelationship();
 		mother.setRelationshipTypeId(Integer.valueOf(properties.get("PMTCT_MOTHER_RELATIONSHIP_ID")));
@@ -122,7 +157,7 @@ public class SetupPMTCTFoodDistributionReport {
 		
 		EvaluateDefinitionForOtherPersonData motherId = new EvaluateDefinitionForOtherPersonData();
 		motherId.setPersonData(mother, new HashMap<String,Object>());
-		motherId.setDefinition(imbId, new HashMap<String,Object>());
+		motherId.setDefinition(infantId, new HashMap<String,Object>());
 		motherId.setName("MotherId");
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
@@ -141,7 +176,6 @@ public class SetupPMTCTFoodDistributionReport {
 		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		
 		MostRecentObservation nextVisit = new MostRecentObservation();
-		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		nextVisit.setConcept(nextVisitConcept);
 		nextVisit.setName("NextVisit");
 		dataSetDefinition.addColumn(nextVisit, new HashMap<String,Object>());
@@ -161,7 +195,8 @@ public class SetupPMTCTFoodDistributionReport {
 		//dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		//mappings.put("location", "${location}");
+		mappings.put("state", "${state}");
+		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
 		
@@ -176,7 +211,6 @@ public class SetupPMTCTFoodDistributionReport {
 		location.setName("location: Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
-		
 	}
 	
 	private void setUpGlobalProperties()
@@ -189,8 +223,11 @@ public class SetupPMTCTFoodDistributionReport {
 		String currentLocation = Context.getAdministrationService().getGlobalProperty("reports.currentlocation");
 		properties.put("CURRENT_LOCATION", currentLocation);
 		
-		String identifierType = Context.getAdministrationService().getGlobalProperty("reports.pmtctIdIdentifier");
-		properties.put("PMTCT_IDENTIFIER_TYPE", identifierType);
+		String identifierType = Context.getAdministrationService().getGlobalProperty("reports.imbIdIdentifier");
+		properties.put("IMB_IDENTIFIER_TYPE", identifierType);
+		
+		String pcPdentifierType = Context.getAdministrationService().getGlobalProperty("reports.primaryCareIdIdentifier");
+		properties.put("PRIMARY_CARE_IDENTIFIER_TYPE", identifierType);
 		
 		String relationshipType = Context.getAdministrationService().getGlobalProperty("reports.pmtctMotherRelationship");
 		properties.put("PMTCT_MOTHER_RELATIONSHIP_ID", relationshipType);

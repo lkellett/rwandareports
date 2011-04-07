@@ -24,12 +24,12 @@ Pedi HIV Art Register report:
 <hr></hr>
 <h3>PMTCT Reports</h3>
 Combined HFCSP Consultation Sheet:
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation">(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_combinedHSCSPConsultation">Remove</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_combinedHSCSPConsultation.form">Remove</a>
 <br></br>	
-Food Distribution:
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistribution">(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistribution">Remove</a>	
+Food Distribution:							   
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistributionSheet.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistributionSheet.form">Remove</a>	
 <hr></hr>
 <h3>Late Visit And CD4</h3>
 Adult Late Visit And CD4:

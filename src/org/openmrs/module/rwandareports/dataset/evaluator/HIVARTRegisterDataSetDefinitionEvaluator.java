@@ -38,6 +38,7 @@ import org.openmrs.module.reporting.dataset.SimpleDataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
@@ -103,8 +104,15 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 		
 		for(CohortDefinition cd: definition.getFilters())
 		{
-			Cohort filter = Context.getService(CohortDefinitionService.class).evaluate(cd, context);
-			cohort = cohort.intersect(cohort, filter);
+			Cohort filter;
+			try {
+				filter = Context.getService(CohortDefinitionService.class).evaluate(cd, context);
+				cohort = cohort.intersect(cohort, filter);
+			} catch (EvaluationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 
 		// Get a list of patients based on the cohort members

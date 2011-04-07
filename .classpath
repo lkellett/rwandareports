@@ -7,7 +7,6 @@
 	<classpathentry kind="lib" path="lib-common/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.2.15605-dev.jar" sourcepath="/openmrs-1.6.2"/>
 	<classpathentry kind="lib" path="lib-common/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-webmvc.jar"/>
@@ -15,8 +14,9 @@
 	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.6.2.15605-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/htmlwidgets-1.5.0.jar"/>
 	<classpathentry kind="lib" path="lib-common/serialization.xstream-0.2.2.jar"/>
-	<classpathentry kind="lib" path="lib-common/reporting-0.5.2.jar" sourcepath="/reporting"/>
 	<classpathentry kind="lib" path="lib-common/rowperpatientreports-0.0.1.jar" sourcepath="/RowPerPatientReports"/>
 	<classpathentry kind="lib" path="lib-common/poi-3.2-FINAL-20081019.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.3.18847-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/reporting-0.5.4.999.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
