@@ -78,7 +78,7 @@ public class SetupPMTCTFoodDistributionReport {
 		reportDefinition.setName("Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, "PMTCT Combined Clinic - Infant"));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
@@ -141,8 +141,8 @@ public class SetupPMTCTFoodDistributionReport {
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
 		infantId.setName("InfantId");
-		infantId.addPatientDataDefinition(imbId);
-		infantId.addPatientDataDefinition(pcId);
+		infantId.addPatientDataDefinition(imbId, new HashMap<String,Object>());
+		infantId.addPatientDataDefinition(pcId, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(infantId, new HashMap<String,Object>());
 		
 		RetrievePersonByRelationship mother = new RetrievePersonByRelationship();
@@ -166,7 +166,8 @@ public class SetupPMTCTFoodDistributionReport {
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
-		dataSetDefinition.addColumn(ageInMonths, new HashMap<String,Object>());
+		ageInMonths.addParameter(new Parameter("onDate", "onDate", ProgramWorkflowState.class));
+		dataSetDefinition.addColumn(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
 		feedingGroup.setName("FeedingGroup");
@@ -226,8 +227,8 @@ public class SetupPMTCTFoodDistributionReport {
 		String identifierType = Context.getAdministrationService().getGlobalProperty("reports.imbIdIdentifier");
 		properties.put("IMB_IDENTIFIER_TYPE", identifierType);
 		
-		String pcPdentifierType = Context.getAdministrationService().getGlobalProperty("reports.primaryCareIdIdentifier");
-		properties.put("PRIMARY_CARE_IDENTIFIER_TYPE", identifierType);
+		String pcIdentifierType = Context.getAdministrationService().getGlobalProperty("reports.primaryCareIdIdentifier");
+		properties.put("PRIMARY_CARE_IDENTIFIER_TYPE", pcIdentifierType);
 		
 		String relationshipType = Context.getAdministrationService().getGlobalProperty("reports.pmtctMotherRelationship");
 		properties.put("PMTCT_MOTHER_RELATIONSHIP_ID", relationshipType);

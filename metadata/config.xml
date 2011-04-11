@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>0.1.1</version>
+	<version>1.0.1</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>
@@ -300,10 +300,25 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.viralLoadConcept</property>
+		<defaultValue>856</defaultValue>
+		<description>The id of the concept for the Viral Load test</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.pmtctDiscordantCoupleWorkflowState</property>
 		<defaultValue>Discordant Couple</defaultValue>
 		<description>The workflow state representing a discordant couple</description>
 	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labEncounterType</property>
+		<defaultValue>9</defaultValue>
+		<description>The id for the lab encounter type</description>
+	</globalProperty>
+	
+	
+	
 
 	<!-- /Rwanda Report Module Properties -->
 	

@@ -7,6 +7,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
+import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
@@ -89,6 +90,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_pmtctFoodDistributionSheet")
 	public ModelAndView removePmtctFoodDistribution() throws Exception {
 		new SetupPMTCTFoodDistributionReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_pmtctFormulaDistributionSheet")
+	public ModelAndView registerPmtctFormulaDistribution() throws Exception {
+		new SetupPMTCTFormulaDistributionReport(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_pmtctFormulaDistributionSheet")
+	public ModelAndView removePmtctFormulaDistribution() throws Exception {
+		new SetupPMTCTFormulaDistributionReport(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

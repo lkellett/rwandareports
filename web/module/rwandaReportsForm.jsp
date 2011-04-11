@@ -30,6 +30,10 @@ Combined HFCSP Consultation Sheet:
 Food Distribution:							   
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistributionSheet.form">(Re) register</a>
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistributionSheet.form">Remove</a>	
+<br></br>	
+Formula Distribution:							   
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFormulaDistributionSheet.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFormulaDistributionSheet.form">Remove</a>	
 <hr></hr>
 <h3>Late Visit And CD4</h3>
 Adult Late Visit And CD4:

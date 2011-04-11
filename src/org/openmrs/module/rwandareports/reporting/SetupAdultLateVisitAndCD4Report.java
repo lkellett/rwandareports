@@ -31,14 +31,12 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDateOfBirth;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterDate;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentObservation;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentObservationDate;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ReturnVisitDate;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
@@ -358,14 +356,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(stOfPatient,new HashMap<String, Object>());
 		
 		
-		RecentEncounterDate lastVisitEncounterDate=new  RecentEncounterDate();
-		lastVisitEncounterDate.setName("Last visit date");
-		lastVisitEncounterDate.setDescription("Last visit date");
-		dataSetDefinition1.addColumn(lastVisitEncounterDate,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(lastVisitEncounterDate,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(lastVisitEncounterDate,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(lastVisitEncounterDate,new HashMap<String, Object>());
-		
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
@@ -383,7 +373,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition1.addColumn(returnVisitDate,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(returnVisitDate,new HashMap<String, Object>());
 		
-		RecentObservation cd4Count=new RecentObservation();
+		MostRecentObservation cd4Count=new MostRecentObservation();
 		cd4Count.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
 		cd4Count.setName("Most recent CD4");
 		cd4Count.setDescription("Most recent CD4");
@@ -391,16 +381,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Count,new HashMap<String, Object>());
-		
-				
-		RecentObservationDate dateOfCD4Count=new RecentObservationDate();
-		dateOfCD4Count.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
-		dateOfCD4Count.setName("Most recent CD4 date");
-		dateOfCD4Count.setDescription("Most recent CD4 date");
-		dataSetDefinition1.addColumn(dateOfCD4Count,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(dateOfCD4Count,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(dateOfCD4Count,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(dateOfCD4Count,new HashMap<String, Object>());
 		
 		PatientRelationship accompagnateur=new PatientRelationship();
 		accompagnateur.setRelationshipTypeId(LateVisitAndCD4ReportConstant.RELATIONSHIP_TYPE_ID);

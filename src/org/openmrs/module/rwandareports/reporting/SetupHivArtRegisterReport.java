@@ -229,19 +229,19 @@ public class SetupHivArtRegisterReport {
 		dataSetDefinition.addColumn(birthdate);
 		
 		AgeAtDateOfOtherDefinition ageAtStart = new AgeAtDateOfOtherDefinition();
-		ageAtStart.setDateOfPatientData(startDate);
+		ageAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(ageAtStart);
 		
 		ObsValueAfterDateOfOtherDefinition weightAtStart = new ObsValueAfterDateOfOtherDefinition();
 		Concept weight = Context.getConceptService().getConcept(new Integer(properties.get("WEIGHT_CONCEPT")));
 		weightAtStart.setConcept(weight);
-		weightAtStart.setDateOfPatientData(startDate);
+		weightAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(weightAtStart);
 		
 		ObsValueAfterDateOfOtherDefinition stageAtStart = new ObsValueAfterDateOfOtherDefinition();
 		Concept stage = Context.getConceptService().getConcept(new Integer(properties.get("STAGE_CONCEPT")));
 		stageAtStart.setConcept(stage);
-		stageAtStart.setDateOfPatientData(startDate);
+		stageAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		stageAtStart.setName("Initial stage");
 		stageAtStart.setDescription("Initial stage");
 		dataSetDefinition.addColumn(stageAtStart);
@@ -249,27 +249,27 @@ public class SetupHivArtRegisterReport {
 		ObsValueBeforeDateOfOtherDefinition cd4CountAtStartBefore = new ObsValueBeforeDateOfOtherDefinition();
 		Concept cd4 = Context.getConceptService().getConcept(new Integer(properties.get("CD4_CONCEPT")));
 		cd4CountAtStartBefore.setConcept(cd4);
-		cd4CountAtStartBefore.setDateOfPatientData(startDate);
+		cd4CountAtStartBefore.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		cd4CountAtStartBefore.setName("Initial CD4 count");
 		cd4CountAtStartBefore.setDescription("Initial CD4 count");
 		
 		ObsValueAfterDateOfOtherDefinition cd4CountAtStartAfter = new ObsValueAfterDateOfOtherDefinition();
 		cd4CountAtStartAfter.setConcept(cd4);
-		cd4CountAtStartAfter.setDateOfPatientData(startDate);
+		cd4CountAtStartAfter.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		cd4CountAtStartAfter.setName("Initial CD4 count");
 		cd4CountAtStartAfter.setDescription("Initial CD4 count");
 		
 		MultiplePatientDataDefinitions cd4CountAtStart = new MultiplePatientDataDefinitions();
 		cd4CountAtStart.setName("Initial CD4 count");
 		cd4CountAtStart.setDescription("Initial CD4 count");
-		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartBefore);
-		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartAfter);
+		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartBefore, new HashMap<String,Object>());
+		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartAfter, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(cd4CountAtStart);
 		
 		ObsValueBeforeDateOfOtherDefinition cd4PercentAtStart = new ObsValueBeforeDateOfOtherDefinition();
 		Concept cd4percentage = Context.getConceptService().getConcept(new Integer(properties.get("CD4_PERCENTAGE_CONCEPT")));
 		cd4PercentAtStart.setConcept(cd4percentage);
-		cd4PercentAtStart.setDateOfPatientData(startDate);
+		cd4PercentAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(cd4PercentAtStart);
 		
 		AllDrugOrdersRestrictedByConcept ctx = new AllDrugOrdersRestrictedByConcept();
@@ -295,7 +295,7 @@ public class SetupHivArtRegisterReport {
 		artDrugsInitial.setName("Initial Regimen");
 		artDrugsInitial.setDescription("Initial Regimen");
 		artDrugsInitial.setDrugConceptSetConcept(artDrugsSet);
-		artDrugsInitial.setDateOfPatientData(startDate);
+		artDrugsInitial.setDateOfPatientData(startDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(artDrugsInitial);
 		
 		AllDrugOrdersRestrictedByConceptSet firstLineChanges = new AllDrugOrdersRestrictedByConceptSet();
