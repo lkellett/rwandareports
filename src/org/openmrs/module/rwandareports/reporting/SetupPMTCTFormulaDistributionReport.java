@@ -157,7 +157,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		imbType.setPatientIdentifierTypeId(imbId.getId());
 		
 		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
-		PatientIdentifier pcId = new PatientIdentifier(imbType);
+		PatientIdentifier pcId = new PatientIdentifier(pcType);
 		pcType.setPatientIdentifierTypeId(pcId.getId());
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();

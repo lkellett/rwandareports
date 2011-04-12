@@ -31,7 +31,9 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrd
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MultipleConceptObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationPresentInMostRecentOrder;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
@@ -145,7 +147,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		imbType.setPatientIdentifierTypeId(imbId.getId());
 		
 		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
-		PatientIdentifier pcId = new PatientIdentifier(imbType);
+		PatientIdentifier pcId = new PatientIdentifier(pcType);
 		pcType.setPatientIdentifierTypeId(pcId.getId());
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
@@ -245,6 +247,18 @@ public class SetupCombinedHFCSPConsultationReport {
 		motherViralLoad.setDescription("motherViralLoad");
 		dataSetDefinition.addColumn(motherViralLoad, new HashMap<String,Object>());
 		
+		MostRecentObservation hiv = new MostRecentObservation();
+		Concept hivConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("HIV_TEST_CONCEPT")));
+		hiv.setConcept(hivConcept);
+		hiv.setName("HIVTest");
+		
+		EvaluateDefinitionForOtherPersonData motherHIVTest = new EvaluateDefinitionForOtherPersonData();
+		motherHIVTest.setPersonData(mother, new HashMap<String,Object>());
+		motherHIVTest.setDefinition(hiv, new HashMap<String,Object>());
+		motherHIVTest.setName("motherHIV");
+		motherHIVTest.setDescription("motherHIV");
+		dataSetDefinition.addColumn(motherHIVTest, new HashMap<String,Object>());
+		
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
@@ -260,28 +274,20 @@ public class SetupCombinedHFCSPConsultationReport {
 		motherARV.setDescription("motherART");
 		dataSetDefinition.addColumn(motherARV, new HashMap<String,Object>());
 		
-		AllObservationValues allDbs = new AllObservationValues();
-		allDbs.setConcept(dbsConcept);
-		allDbs.setName("DBSObservations");
+		MostRecentEncounterOfType encounters = new MostRecentEncounterOfType();
+		EncounterType exposedEnc = Context.getEncounterService().getEncounterType(new Integer(properties.get("EXPOSED_ENCOUNTER_TYPE")));
+		encounters.setName("LastPMTCTEncounter");
+		encounters.setDescription("LastPMTCTEncounter");
+		encounters.addEncounterType(exposedEnc);
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions infantHivTestDue = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		infantHivTestDue.addParameter(new Parameter("onDate", "onDate", ProgramWorkflowState.class));
-		infantHivTestDue.addPatientDataToBeEvaluated(allDbs, new HashMap<String,Object>());
-		infantHivTestDue.addPatientDataToBeEvaluated(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		infantHivTestDue.addPatientDataToBeEvaluated(encounters, new HashMap<String,Object>());
 		infantHivTestDue.setCalculator(new PMTCTInfantDBSDue());
 		infantHivTestDue.setName("infantTestDue");
 		infantHivTestDue.setDescription("infantTestDue");
-		dataSetDefinition.addColumn(infantHivTestDue, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		dataSetDefinition.addColumn(infantHivTestDue, new HashMap<String,Object>());
 		
-		ObservationPresentInMostRecentOrder dbsOrder = new ObservationPresentInMostRecentOrder();
-		EncounterType labTest = Context.getEncounterService().getEncounterType(new Integer(properties.get("LAB_ENCOUNTER_TYPE")));
-		dbsOrder.setEncounterType(labTest);
-		dbsOrder.setOrderConcept(dbsConcept);
-		dbsOrder.setObservationConcept(dbsConcept);
-		dbsOrder.setFilter(new PMTCTDbsTestOrderedFilter());
-		dbsOrder.setName("DBSOrder");
-		dbsOrder.setDescription("DBSOrder");
-		dataSetDefinition.addColumn(dbsOrder, new HashMap<String,Object>());
+		
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
@@ -342,6 +348,12 @@ public class SetupCombinedHFCSPConsultationReport {
 		String dbsConcept = Context.getAdministrationService().getGlobalProperty("reports.dbsConcept");
 		properties.put("DBS_CONCEPT_ID", dbsConcept);
 		
+		String dbsInitialConcept = Context.getAdministrationService().getGlobalProperty("reports.dbsInitialConcept");
+		properties.put("DBS_INITIAL_CONCEPT_ID", dbsInitialConcept);
+		
+		String dbsConfirmConcept = Context.getAdministrationService().getGlobalProperty("reports.dbsConfirmationConcept");
+		properties.put("DBS_CONFIRM_CONCEPT_ID", dbsConfirmConcept);
+		
 		String cd4Concept = Context.getAdministrationService().getGlobalProperty("reports.cd4Concept");
 		properties.put("CD4_CONCEPT", cd4Concept);
 		
@@ -351,8 +363,11 @@ public class SetupCombinedHFCSPConsultationReport {
 		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
 		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
 		
-		String labEncounterType = Context.getAdministrationService().getGlobalProperty("reports.labEncounterType");
-		properties.put("LAB_ENCOUNTER_TYPE", labEncounterType);	
+		String exposedType = Context.getAdministrationService().getGlobalProperty("reports.ExposedInfantEncounterType");
+		properties.put("EXPOSED_ENCOUNTER_TYPE", exposedType);
+		
+		String hivConcept = Context.getAdministrationService().getGlobalProperty("reports.hivTestConcept");
+		properties.put("HIV_TEST_CONCEPT", hivConcept);
 	}	
 	
 }

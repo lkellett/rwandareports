@@ -8,6 +8,7 @@ import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
+import org.openmrs.module.rwandareports.reporting.SetupPMTCTRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
@@ -48,6 +49,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/register_adulthivartregister")
 	public ModelAndView registerAdultHivArtRegiser() throws Exception {
 		new SetupHivArtRegisterReport(new Helper(), false).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_pmtctregister")
+	public ModelAndView removePMTCTRegister() throws Exception {
+		new SetupPMTCTRegisterReport(new Helper(), false).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_pmtctregister")
+	public ModelAndView registerPMTCTRegiser() throws Exception {
+		new SetupPMTCTRegisterReport(new Helper(), false).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

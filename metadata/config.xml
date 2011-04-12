@@ -176,6 +176,22 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.testOrderedConcept</property>
+		<defaultValue>1271</defaultValue>
+		<description>
+			The concept id for test ordered
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labTestDateConcept</property>
+		<defaultValue>3267</defaultValue>
+		<description>
+			The concept id for the labratory test date
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.allFirstLineArtDrugsConceptSet</property>
 		<defaultValue>1085</defaultValue>
 		<description>
@@ -253,13 +269,19 @@
 	
 	<globalProperty>
 		<property>reports.imbIdIdentifier</property>
-		<defaultValue>Primary Care</defaultValue>
+		<defaultValue>IMB ID</defaultValue>
 		<description>Identifier type that should be returned for the Primary Care</description>
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.tracIdentifier</property>
+		<defaultValue>TRACnet ID</defaultValue>
+		<description>Identifier type that should be returned for the TRACnet ID</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.primaryCareIdIdentifier</property>
-		<defaultValue>IMB ID</defaultValue>
+		<defaultValue>Primary Care</defaultValue>
 		<description>Identifier type that should be returned for the IMB Id</description>
 	</globalProperty>
 	
@@ -300,6 +322,18 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.dbsInitialConcept</property>
+		<defaultValue>6961</defaultValue>
+		<description>The id of the concept for the DBS initial test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dbsConfirmationConcept</property>
+		<defaultValue>6962</defaultValue>
+		<description>The id of the concept for the DBS confirmation test</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.viralLoadConcept</property>
 		<defaultValue>856</defaultValue>
 		<description>The id of the concept for the Viral Load test</description>
@@ -317,7 +351,17 @@
 		<description>The id for the lab encounter type</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.ExposedInfantEncounterType</property>
+		<defaultValue>27</defaultValue>
+		<description>The id for the exposed infant encounter type</description>
+	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.hivTestConcept</property>
+		<defaultValue>2169</defaultValue>
+		<description>The id of the concept for the HIV test</description>
+	</globalProperty>
 	
 
 	<!-- /Rwanda Report Module Properties -->

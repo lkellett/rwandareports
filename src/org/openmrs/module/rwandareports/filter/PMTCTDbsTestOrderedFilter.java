@@ -5,8 +5,11 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 
 public class PMTCTDbsTestOrderedFilter implements ResultFilter {
 	
+	private String initialConceptName;
+	private String confirmConceptName;
+	
 	public String filter(String obsResult) {
-		if(obsResult.equals("Obs not present"))
+		if(obsResult.contains(initialConceptName + ":") || obsResult.contains(confirmConceptName + ":"))
 		{
 			return "Yes";
 		}
@@ -14,6 +17,22 @@ public class PMTCTDbsTestOrderedFilter implements ResultFilter {
 		{
 			return "No";
 		}
+	}
+
+	public String getInitialConceptName() {
+		return initialConceptName;
+	}
+
+	public void setInitialConceptName(String initialConceptName) {
+		this.initialConceptName = initialConceptName;
+	}
+
+	public String getConfirmConceptName() {
+		return confirmConceptName;
+	}
+
+	public void setConfirmConceptName(String confirmConceptName) {
+		this.confirmConceptName = confirmConceptName;
 	}
 	
 }

@@ -21,6 +21,10 @@ Adult HIV Art Register report:
 Pedi HIV Art Register report:	
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pedihivartregister.form">(Re) register</a>
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pedihivartregister.form">Remove</a>
+<br></br>
+TRAC Mother-Infant Pair Follow-up Register report:	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctregister.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctregister.form">Remove</a>
 <hr></hr>
 <h3>PMTCT Reports</h3>
 Combined HFCSP Consultation Sheet:
