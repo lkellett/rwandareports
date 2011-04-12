@@ -24,6 +24,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rwandareports.filter.GroupStateFilter;
+import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 
 public class SetupMissingCD4Report {
 	
@@ -183,7 +185,8 @@ public class SetupMissingCD4Report {
 		pediTxGroup.setPatientProgram(hadultHivProgram);
 		pediTxGroup.setPatienProgramWorkflow(pediAdultHivProgram.getWorkflowByName(properties.get("HIV_TREATMENT_GROUP_STATUS")));
 		pediTxGroup.setName("PediGroup");
-		pediTxGroup.setDescription("PediGroup");		
+		pediTxGroup.setDescription("PediGroup");
+		pediTxGroup.setFilter(new GroupStateFilter());
 		notCompletedDataSet.addColumn(pediTxGroup, new HashMap<String,Object>());
 		noResultDataSet.addColumn(pediTxGroup, new HashMap<String,Object>());
 		
@@ -192,6 +195,7 @@ public class SetupMissingCD4Report {
 		pediStOfPatient.setPatienProgramWorkflow(hadultHivProgram.getWorkflowByName(properties.get("HIV_WORKFLOW_STATUS")));
 		pediStOfPatient.setName("PediTreatment");
 		pediStOfPatient.setDescription("PediTreatment");
+		pediStOfPatient.setFilter(new TreatmentStateFilter());
 		notCompletedDataSet.addColumn(pediStOfPatient, new HashMap<String,Object>());
 		noResultDataSet.addColumn(pediStOfPatient, new HashMap<String,Object>());
 		
@@ -202,7 +206,7 @@ public class SetupMissingCD4Report {
 		noResultDataSet.addColumn(lastEncounterType, new HashMap<String,Object>());
 		
 		MostRecentObservation cd4Count=new MostRecentObservation();
-		cd4Count.setConcept(Context.getConceptService().getConceptByName("CD4 COUNT"));
+    	cd4Count.setConcept(Context.getConceptService().getConceptByName("CD4 COUNT"));
 		cd4Count.setName("Most recent CD4");
 		cd4Count.setDescription("Most recent CD4");
 		notCompletedDataSet.addColumn(cd4Count, new HashMap<String,Object>());

@@ -3,6 +3,7 @@ package org.openmrs.module.rwandareports.web.controller;
 import org.openmrs.module.rwandareports.reporting.Helper;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
+import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
@@ -156,6 +157,20 @@ public class RwandaSetupReportsFormController {
 		new SetupRwandaPrimaryCareReport(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	
+	//Remove/Register Heart Failure report
+	@RequestMapping("/module/rwandareports/remove_heartFailureReport")
+	public ModelAndView removeHeartFailureIndicator() throws Exception {
+		new SetupHeartFailurereport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_heartFailureReport")
+	public ModelAndView registerHeartFailureIndicatorIndicator() throws Exception {
+		new SetupHeartFailurereport(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
 	
 	@RequestMapping("/module/rwandareports/register_missingCD4Report")
 	public ModelAndView registerMissingCD4Report() throws Exception {

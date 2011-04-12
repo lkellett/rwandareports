@@ -16,6 +16,10 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDateOfBirth;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
@@ -30,15 +34,11 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDateOfBirth;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ReturnVisitDate;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
@@ -77,7 +77,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult Late Visit And CD4 Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "location: HIV Adult Patients at location");
 	}
 	
 	
@@ -87,7 +87,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: HIV Adult Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -145,7 +145,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		InStateCohortDefinition onARTStatusCohort = new InStateCohortDefinition();
 		onARTStatusCohort.addParameter(new Parameter("onDate","On Date",Date.class));
 		List<ProgramWorkflowState> states = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow txStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_STATUS_ID);
+		ProgramWorkflow txStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.ADULT_TREATMENT_STATUS_ID);
 		
 				
 		ProgramWorkflowState onART = null;
@@ -230,7 +230,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		InStateCohortDefinition followingStatusCohort = new InStateCohortDefinition();
 		followingStatusCohort.addParameter(new Parameter("onDate","On date",Date.class));
 		List<ProgramWorkflowState> followingstates = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow followingtxStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_STATUS_ID);
+		ProgramWorkflow followingtxStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.ADULT_TREATMENT_STATUS_ID);
 		
 			
 		ProgramWorkflowState following = null;
@@ -335,7 +335,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		StateOfPatient txGroup=new StateOfPatient();
 		txGroup.setPatientProgram(hadultHivProgram);
-		txGroup.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_GROUP_ID));
+		txGroup.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.ADULT_TREATMENT_GROUP_ID));
 		txGroup.setName("Group");
 		txGroup.setDescription("Group");
 		txGroup.setFilter(new GroupStateFilter());
@@ -346,7 +346,7 @@ public class SetupAdultLateVisitAndCD4Report {
 				
 		StateOfPatient stOfPatient=new StateOfPatient();
 		stOfPatient.setPatientProgram(hadultHivProgram);
-		stOfPatient.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.TREATMENT_STATUS_ID));
+		stOfPatient.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.ADULT_TREATMENT_STATUS_ID));
 		stOfPatient.setName("Treatment");
 		stOfPatient.setDescription("Treatment");
 		stOfPatient.setFilter(new TreatmentStateFilter());
@@ -354,7 +354,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(stOfPatient,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(stOfPatient,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(stOfPatient,new HashMap<String, Object>());
-		
 		
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
@@ -381,6 +380,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Count,new HashMap<String, Object>());
+		
+				
 		
 		PatientRelationship accompagnateur=new PatientRelationship();
 		accompagnateur.setRelationshipTypeId(LateVisitAndCD4ReportConstant.RELATIONSHIP_TYPE_ID);
@@ -423,7 +424,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
-		location.setName("location: Patients at location");
+		location.setName("location: HIV Adult Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
 		

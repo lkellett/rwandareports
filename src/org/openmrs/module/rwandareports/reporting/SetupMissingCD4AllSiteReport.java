@@ -24,6 +24,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rwandareports.filter.GroupStateFilter;
+import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 
 public class SetupMissingCD4AllSiteReport {
 	
@@ -179,7 +181,8 @@ public class SetupMissingCD4AllSiteReport {
 		pediTxGroup.setPatientProgram(hadultHivProgram);
 		pediTxGroup.setPatienProgramWorkflow(pediAdultHivProgram.getWorkflowByName(properties.get("HIV_TREATMENT_GROUP_STATUS")));
 		pediTxGroup.setName("PediGroup");
-		pediTxGroup.setDescription("PediGroup");		
+		pediTxGroup.setDescription("PediGroup");
+		pediTxGroup.setFilter(new GroupStateFilter());
 		notCompletedDataSet.addColumn(pediTxGroup, new HashMap<String,Object>());
 		noResultDataSet.addColumn(pediTxGroup, new HashMap<String,Object>());
 		
@@ -188,6 +191,7 @@ public class SetupMissingCD4AllSiteReport {
 		pediStOfPatient.setPatienProgramWorkflow(hadultHivProgram.getWorkflowByName(properties.get("HIV_WORKFLOW_STATUS")));
 		pediStOfPatient.setName("PediTreatment");
 		pediStOfPatient.setDescription("PediTreatment");
+		pediStOfPatient.setFilter(new TreatmentStateFilter());
 		notCompletedDataSet.addColumn(pediStOfPatient, new HashMap<String,Object>());
 		noResultDataSet.addColumn(pediStOfPatient, new HashMap<String,Object>());
 		
