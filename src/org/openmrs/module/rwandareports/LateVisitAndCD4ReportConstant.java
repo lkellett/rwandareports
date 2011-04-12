@@ -2,8 +2,11 @@ package org.openmrs.module.rwandareports;
 
 public class LateVisitAndCD4ReportConstant {
 // Workflow ids
-	public static final int TREATMENT_STATUS_ID=3;
-	public static final int TREATMENT_GROUP_ID=9;
+	public static final int ADULT_TREATMENT_STATUS_ID=3;
+	public static final int ADULT_TREATMENT_GROUP_ID=9;
+
+	public static final int PEDI_TREATMENT_STATUS_ID=19;
+	public static final int PEDI_TREATMENT_GROUP_ID=20;
 
 // concepts uuids
 	public static final String ON_ANTIRETROVIRALS_UUID="3cdc0a8c-26fe-102b-80cb-0017a47871b2";  //1577
