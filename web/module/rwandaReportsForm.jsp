@@ -51,8 +51,13 @@ Pediatric Late Visit And CD4:
 <hr></hr>
 <h3>Primary Care Report</h3>
 Rwanda Primary Care Report:
-	<a href="${pageContext.request.contextPath}/module/rwandareports/register_rwandaPrimaryCareReport.form" onclick=msgreg(this)>(Re) register</a>
-	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_rwandaPrimaryCareReport.form" onclick=msgrem(this)>Remove</a>	
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_rwandaPrimaryCareReport.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_rwandaPrimaryCareReport.form">Remove</a>	
+<hr></hr>
+<h3>Heart Failure Report</h3>
+Heart Failure Report:
+	<a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReport.form">(Re) register</a>
+	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form">Remove</a>	
 <hr></hr>
 Missing CD4 Report:
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form">(Re) register</a>
