@@ -247,7 +247,7 @@
 		</description>
 	</globalProperty>
 	
-	<!-- Late Visit And CD$ Global Property -->
+	<!-- Late Visit And CD4 Global Property -->
 	<globalProperty>
 		<property>ClinicalencounterTypeIds.labTestExcl</property>
 		<defaultValue>1,2,3,4</defaultValue>
@@ -265,9 +265,24 @@
 		<property>hiv.programid.pediatric</property>
 		<defaultValue>10</defaultValue>
 		<description>Id for Pediatric HIV program</description>
+	</globalProperty>	
+	<globalProperty>
+		<property>reports.imbIdIdentifier</property>
+		<defaultValue>IMB ID</defaultValue>
+		<description>Identifier type that should be returned for the Primary Care</description>
 	</globalProperty>
 	
 	<globalProperty>
+
+		<property>reports.tracIdentifier</property>
+		<defaultValue>TRACnet ID</defaultValue>
+		<description>Identifier type that should be returned for the TRACnet ID</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.primaryCareIdIdentifier</property>
+		<defaultValue>Primary Care</defaultValue>
+		<description>Identifier type that should be returned for the IMB Id</description>
 		<property>reports.imbIdIdentifier</property>
 		<defaultValue>IMB ID</defaultValue>
 		<description>Identifier type that should be returned for the Primary Care</description>
@@ -283,6 +298,7 @@
 		<property>reports.primaryCareIdIdentifier</property>
 		<defaultValue>Primary Care</defaultValue>
 		<description>Identifier type that should be returned for the IMB Id</description>
+
 	</globalProperty>
 	
 	<globalProperty>
@@ -364,6 +380,43 @@
 	</globalProperty>
 	
 
-	<!-- /Rwanda Report Module Properties -->
+	<!-- start of Rwanda Primary Report Module Properties -->
 	
+	<globalProperty>
+		<property>primarycarereport.registration.encountertypeid</property>
+		<defaultValue>20</defaultValue>
+		<description>The id of Registration encounter type</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>primarycarereport.vitals.encountertypeid</property>
+		<defaultValue>21</defaultValue>
+		<description>The id of Vitals encounter type</description>
+	</globalProperty>
+	<!-- End of Rwanda Primary Report Module Properties -->
+	
+	<!-- Start Heart Failure report global properties  -->
+	<globalProperty>
+		<property>cardiologyreporting.cardilogyEncounterTypes</property>
+		<defaultValue>1,2,23</defaultValue>
+		<description>
+			This global property is used to get all forms of heart failure program. The default values are incounterType IDs of those forms.  
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>cardiologyreporting.cardilogyConsultationFormId</property>
+		<defaultValue>82</defaultValue>
+		<description>
+			This global property is used to get Cardiology Consultation Form . The default value is form ID.  
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>cardiologyreporting.hFDonneDeBaseFormId</property>
+		<defaultValue>77</defaultValue>
+		<description>
+          This global property is used to get Heart failure donne de Base Form . The default value is form ID. 
+		</description>
+	</globalProperty>
+	
+	<!-- End Heart Failure report global properties  -->
 </module>
