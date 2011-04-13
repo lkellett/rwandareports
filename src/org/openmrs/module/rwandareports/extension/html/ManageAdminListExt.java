@@ -13,7 +13,7 @@ public class ManageAdminListExt extends AdministrationSectionExt {
 	}
 	
 	public String getTitle() {
-		return "reporting.manage.title";
+		return "rwandareports.manage.title";
 	}
 	
 	public String getRequiredPrivilege() {
