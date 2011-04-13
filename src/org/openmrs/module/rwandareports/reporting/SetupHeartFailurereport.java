@@ -91,8 +91,8 @@ public class SetupHeartFailurereport {
 
 		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFProgram");
 		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgram");
-		h.purgeDefinition(CohortDefinition.class, "males");
-		h.purgeDefinition(CohortDefinition.class, "females");
+		h.purgeDefinition(CohortDefinition.class, "malesDefinition");
+		h.purgeDefinition(CohortDefinition.class, "femalesDefinition");
 		h.purgeDefinition(CohortDefinition.class, "maleInFHProgramComposition");
 		h.purgeDefinition(CohortDefinition.class, "femaleInFHProgramComposition");
 		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFIndicator");
@@ -267,23 +267,23 @@ public class SetupHeartFailurereport {
 
 //Gender Cohort definitions
 		
-		GenderCohortDefinition females=new GenderCohortDefinition();
-		females.setName("females");
-		females.setFemaleIncluded(true);
-		h.replaceCohortDefinition(females);
+		GenderCohortDefinition femalesDefinition=new GenderCohortDefinition();
+		femalesDefinition.setName("femalesDefinition");
+		femalesDefinition.setFemaleIncluded(true);
+		h.replaceCohortDefinition(femalesDefinition);
 		
-		GenderCohortDefinition males=new GenderCohortDefinition();
-		males.setName("males");
-		males.setMaleIncluded(true);		
-		h.replaceCohortDefinition(males);
+		GenderCohortDefinition malesDefinition=new GenderCohortDefinition();
+		malesDefinition.setName("malesDefinition");
+		malesDefinition.setMaleIncluded(true);		
+		h.replaceCohortDefinition(malesDefinition);
 		
 		CompositionCohortDefinition maleInFHProgramComposition=new CompositionCohortDefinition();
 		maleInFHProgramComposition.setName("maleInFHProgramComposition");
 		maleInFHProgramComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
 		maleInFHProgramComposition.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
 		maleInFHProgramComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		maleInFHProgramComposition.getSearches().put("males",new Mapped<CohortDefinition>(males,null));
-		maleInFHProgramComposition.setCompositionString("patientsInHFProgram AND males");
+		maleInFHProgramComposition.getSearches().put("malesDefinition",new Mapped<CohortDefinition>(malesDefinition,null));
+		maleInFHProgramComposition.setCompositionString("patientsInHFProgram AND malesDefinition");
 		h.replaceCohortDefinition(maleInFHProgramComposition);
 		
 		CompositionCohortDefinition femaleInFHProgramComposition=new CompositionCohortDefinition();
@@ -291,8 +291,8 @@ public class SetupHeartFailurereport {
 		femaleInFHProgramComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
 		femaleInFHProgramComposition.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
 		femaleInFHProgramComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		femaleInFHProgramComposition.getSearches().put("females",new Mapped<CohortDefinition>(females,null));
-		femaleInFHProgramComposition.setCompositionString("patientsInHFProgram AND females");
+		femaleInFHProgramComposition.getSearches().put("femalesDefinition",new Mapped<CohortDefinition>(femalesDefinition,null));
+		femaleInFHProgramComposition.setCompositionString("patientsInHFProgram AND femalesDefinition");
 		h.replaceCohortDefinition(femaleInFHProgramComposition);
 		
 		CohortIndicator percentMaleInFHProgramIndicator = CohortIndicator.newFractionIndicator
@@ -691,9 +691,9 @@ public class SetupHeartFailurereport {
 	 patientsInHFWithoutFamilyPlanningCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
 	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
 	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("patientsInFamilyPlanning", new Mapped<CohortDefinition>(patientsInFamilyPlanning,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("females", new Mapped<CohortDefinition>(females,null));
+	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("femalesDefinition", new Mapped<CohortDefinition>(femalesDefinition,null));
 	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("lessThanFifty", new Mapped<CohortDefinition>(lessThanFifty,null));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.setCompositionString("patientsInHFProgram AND females AND lessThanFifty AND (NOT patientsInFamilyPlanning)");
+	 patientsInHFWithoutFamilyPlanningCompositionCohort.setCompositionString("patientsInHFProgram AND femalesDefinition AND lessThanFifty AND (NOT patientsInFamilyPlanning)");
 	 h.replaceCohortDefinition(patientsInHFWithoutFamilyPlanningCompositionCohort);
 	 
 	CohortIndicator patientsInHFWithoutFamilyPlanningIndicator = CohortIndicator.newFractionIndicator("patientsInHFWithoutFamilyPlanningIndicator", new Mapped<CohortDefinition>(patientsInHFWithoutFamilyPlanningCompositionCohort , 
