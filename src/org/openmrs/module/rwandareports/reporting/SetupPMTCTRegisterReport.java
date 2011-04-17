@@ -1,6 +1,7 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,35 +11,35 @@ import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
-import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AgeAtDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfMostRecentObservationHavingCodedAnswer;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfWorkflowStateChange;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedAfterDateRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueBeforeDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ReasonForExitingProgram;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rwandareports.customcalculators.ArtTakenDuringBreastFeeding;
+import org.openmrs.module.rwandareports.customcalculators.StartOfARTForThisPMTCT;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
 import org.openmrs.module.rwandareports.dataset.PMTCTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.filter.DiscordantCoupleFilter;
 
 public class SetupPMTCTRegisterReport {
 	
@@ -106,18 +107,19 @@ public class SetupPMTCTRegisterReport {
 		InProgramCohortDefinition inPMTCTCombinedProgram = new InProgramCohortDefinition();
 		inPMTCTCombinedProgram.setName("pmtct: In PMTCT Combined Infant Program");
 		List<Program> pmtctPrograms = new ArrayList<Program>();
-		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
-		if(pmtct != null)
+		Program pmtctCombined = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+		if(pmtctCombined != null)
 		{
-			pmtctPrograms.add(pmtct);
+			pmtctPrograms.add(pmtctCombined);
 		}
 		inPMTCTCombinedProgram.setPrograms(pmtctPrograms);
+		inPMTCTCombinedProgram.setOnOrBefore(new Date());
 		dataSetDefinition.addFilter(inPMTCTCombinedProgram);
 		
 		DateOfProgramEnrolment infantRegistration = new DateOfProgramEnrolment();
 		infantRegistration.setName("infantRegistration");
 		infantRegistration.setDescription("infantDescription");
-		infantRegistration.setProgramId(pmtct.getId());
+		infantRegistration.setProgramId(pmtctCombined.getId());
 		dataSetDefinition.addColumn(infantRegistration);
 		
 		PatientProperty givenName = new PatientProperty("givenName");
@@ -153,9 +155,155 @@ public class SetupPMTCTRegisterReport {
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId);
 		
+		PatientProperty gender = new PatientProperty("gender");
+		dataSetDefinition.addColumn(gender);
 		
+		MostRecentObservation birthWeight = new MostRecentObservation();
+		Concept birthWeightConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("BIRTH_WEIGHT_CONCEPT_ID")));
+		birthWeight.setName("birthWeight");
+		birthWeight.setDescription("birthWeight");
+		birthWeight.setConcept(birthWeightConcept);
+		dataSetDefinition.addColumn(birthWeight);
 		
+		MostRecentObservation infantFeedingMethod = new MostRecentObservation();
+		Concept infantFeedingMethodConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("INFANT_FEEDING_METHOD_CONCEPT_ID")));
+		infantFeedingMethod.setName("infantFeedingMethod");
+		infantFeedingMethod.setDescription("infantFeedingMethod");
+		infantFeedingMethod.setConcept(infantFeedingMethodConcept);
+		dataSetDefinition.addColumn(infantFeedingMethod);
 		
+		AllObservationValues hiv = new AllObservationValues();
+		Concept hivConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("HIV_TEST_CONCEPT")));
+		hiv.setConcept(hivConcept);
+		hiv.setName("HIVTest");
+		
+		EvaluateDefinitionForOtherPersonData motherHIVTest = new EvaluateDefinitionForOtherPersonData();
+		motherHIVTest.setPersonData(mother, new HashMap<String,Object>());
+		motherHIVTest.setDefinition(hiv, new HashMap<String,Object>());
+		motherHIVTest.setName("motherHIV");
+		motherHIVTest.setDescription("motherHIV");
+		dataSetDefinition.addColumn(motherHIVTest);
+		
+		AllDrugOrdersRestrictedByConcept ctx = new AllDrugOrdersRestrictedByConcept();
+		ctx.setName("CTX treatment");
+		ctx.setDescription("CTX treatment");
+		Concept ctxConcept = Context.getConceptService().getConcept(new Integer(properties.get("CTX_TREATMENT_CONCEPT")));
+		ctx.setConcept(ctxConcept);
+		dataSetDefinition.addColumn(ctx);
+		
+		AllObservationValues testType = new AllObservationValues();
+		Concept testTypeConcept = Context.getConceptService().getConcept(new Integer(properties.get("HIV_TEST_TYPE_CONCEPT")));
+		testType.setName("HivTestTypes");
+		testType.setDescription("HivTestTypes");
+		testType.setConcept(testTypeConcept);
+		dataSetDefinition.addColumn(testType);
+		
+		AllObservationValues testResults = new AllObservationValues();
+		testResults.setName("testResults");
+		testResults.setDescription("testResults");
+		testResults.setConcept(hivConcept);
+		dataSetDefinition.addColumn(testResults);
+		
+		AllObservationValues testDate = new AllObservationValues();
+		Concept testDateConcept = Context.getConceptService().getConcept(new Integer(properties.get("HIV_TEST_DATE_CONCEPT")));
+		testDate.setName("testDates");
+		testDate.setDescription("testDates");
+		testDate.setConcept(testDateConcept);
+		dataSetDefinition.addColumn(testDate);
+		
+		Concept breastFedStatusConcept = Context.getConceptService().getConcept(new Integer(properties.get("BREAST_FED_CONCEPT")));
+		Concept weanedConcept = Context.getConceptService().getConcept(new Integer(properties.get("WEANED_CONCEPT")));
+		DateOfMostRecentObservationHavingCodedAnswer dateWeaned = new DateOfMostRecentObservationHavingCodedAnswer();
+		dateWeaned.setName("dateWeaned");
+		dateWeaned.setDescription("dateWeaned");
+		dateWeaned.addConcept(breastFedStatusConcept);
+		dateWeaned.addAnswer(weanedConcept);
+		dataSetDefinition.addColumn(dateWeaned);
+		
+		ReasonForExitingProgram exitingPMTCTCombined = new ReasonForExitingProgram();
+		ProgramWorkflow treatmentWF = pmtctCombined.getWorkflowByName(properties.get("TREATMENT_STATUS"));
+		exitingPMTCTCombined.setPatientProgram(pmtctCombined);
+		exitingPMTCTCombined.setReasonWorkflow(treatmentWF);
+		exitingPMTCTCombined.setName("ReasonForExit");
+		exitingPMTCTCombined.setDescription("ReasonForExit");
+		dataSetDefinition.addColumn(exitingPMTCTCombined);
+		
+		DateOfWorkflowStateChange preArt = new DateOfWorkflowStateChange();
+		Concept artConcept = Context.getConceptService().getConcept(new Integer(properties.get("PRE_ART_CONCEPT")));
+		preArt.setConcept(artConcept);
+		preArt.setName("preArt");
+		preArt.setDescription("preArt");
+		dataSetDefinition.addColumn(preArt);
+		
+		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
+		AllDrugOrdersRestrictedByConceptSet allArtDrugs = new AllDrugOrdersRestrictedByConceptSet();
+		allArtDrugs.setName("ArtDrugs");
+		allArtDrugs.setDescription("ArtDrugs");
+		allArtDrugs.setDrugConceptSetConcept(artDrugsSet);
+		
+		EvaluateDefinitionForOtherPersonData motherStartARV = new EvaluateDefinitionForOtherPersonData();
+		motherStartARV.setPersonData(mother, new HashMap<String,Object>());
+		motherStartARV.setDefinition(allArtDrugs, new HashMap<String,Object>());
+		motherStartARV.setName("ArtDrugs");
+		motherStartARV.setDescription("ArtDrugs");
+		
+		DateOfProgramEnrolment motherRegistration = new DateOfProgramEnrolment();
+		Program pmtctProg = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
+		motherRegistration.setName("motherRegistration");
+		motherRegistration.setDescription("motherRegistration");
+		motherRegistration.setProgramId(pmtctProg.getId());
+		
+		EvaluateDefinitionForOtherPersonData motherReg = new EvaluateDefinitionForOtherPersonData();
+		motherReg.setPersonData(mother, new HashMap<String,Object>());
+		motherReg.setDefinition(motherRegistration, new HashMap<String,Object>());
+		motherReg.setName("motherRegistration");
+		motherReg.setDescription("motherRegistration");
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions motherStartArt = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		motherStartArt.setName("motherStartArt");
+		motherStartArt.setDescription("motherStartArt");
+		motherStartArt.addPatientDataToBeEvaluated(motherReg, new HashMap<String,Object>());
+		motherStartArt.addPatientDataToBeEvaluated(motherStartARV, new HashMap<String,Object>());
+		motherStartArt.setCalculator(new StartOfARTForThisPMTCT());
+		dataSetDefinition.addColumn(motherStartArt);
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions arvDuringBreastFeeding = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		arvDuringBreastFeeding.setName("arvDuringBreastFeeding");
+		arvDuringBreastFeeding.setDescription("arvDuringBreastFeeding");
+		arvDuringBreastFeeding.addPatientDataToBeEvaluated(birthdate, new HashMap<String,Object>());
+		arvDuringBreastFeeding.addPatientDataToBeEvaluated(dateWeaned, new HashMap<String,Object>());
+		arvDuringBreastFeeding.addPatientDataToBeEvaluated(motherStartARV, new HashMap<String,Object>());
+		arvDuringBreastFeeding.setCalculator(new ArtTakenDuringBreastFeeding());
+		dataSetDefinition.addColumn(arvDuringBreastFeeding);
+		
+		StateOfPatient discordant = new StateOfPatient();
+		discordant.setName("DiscordantCouple");
+		discordant.setDescription("DiscordantCouple");
+		if(pmtctProg != null)
+		{
+			discordant.setPatientProgram(pmtctProg);
+			discordant.setPatienProgramWorkflow(pmtctProg.getWorkflowByName(properties.get("PMTCT_RELATIONSHIP_STATUS_WORKFLOW")));
+		}
+		discordant.setFilter(new DiscordantCoupleFilter());
+		
+		EvaluateDefinitionForOtherPersonData motherDiscordant = new EvaluateDefinitionForOtherPersonData();
+		motherDiscordant.setPersonData(mother, new HashMap<String,Object>());
+		motherDiscordant.setDefinition(discordant, new HashMap<String,Object>());
+		motherDiscordant.setName("motherDiscordant");
+		motherDiscordant.setDescription("motherDiscordant");
+		dataSetDefinition.addColumn(motherDiscordant);
+
+		AllObservationValues cd4Test = new AllObservationValues();
+		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
+		cd4Test.setConcept(cd4Concept);
+		cd4Test.setName("CD4Test");
+	
+		EvaluateDefinitionForOtherPersonData motherCD4 = new EvaluateDefinitionForOtherPersonData();
+		motherCD4.setPersonData(mother, new HashMap<String,Object>());
+		motherCD4.setDefinition(cd4Test, new HashMap<String,Object>());
+		motherCD4.setName("motherCD4");
+		motherCD4.setDescription("motherCD4");
+		dataSetDefinition.addColumn(motherCD4);
 		
 		
 		
@@ -192,8 +340,7 @@ public class SetupPMTCTRegisterReport {
 //		
 //		
 //		
-//		PatientProperty gender = new PatientProperty("gender");
-//		dataSetDefinition.addColumn(gender);
+//		
 //		
 //		PatientProperty birthdate = new PatientProperty("birthdate");
 //		dataSetDefinition.addColumn(birthdate);
@@ -342,6 +489,60 @@ public class SetupPMTCTRegisterReport {
 		String relationshipType = Context.getAdministrationService().getGlobalProperty("reports.pmtctMotherRelationship");
 		properties.put("PMTCT_MOTHER_RELATIONSHIP_ID", relationshipType);
 		
+		String birthWeightConcept = Context.getAdministrationService().getGlobalProperty("reports.birthWeightConcept");
+		properties.put("BIRTH_WEIGHT_CONCEPT_ID", birthWeightConcept);
+		
+		String infantFeedingMethodConcept = Context.getAdministrationService().getGlobalProperty("reports.infantFeedingMethodConcept");
+		properties.put("INFANT_FEEDING_METHOD_CONCEPT_ID", infantFeedingMethodConcept);
+		
+		String hivConcept = Context.getAdministrationService().getGlobalProperty("reports.hivTestConcept");
+		properties.put("HIV_TEST_CONCEPT", hivConcept);
+		
+		String ctxTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.ctxTreatmentConcept");
+		properties.put("CTX_TREATMENT_CONCEPT", ctxTreatmentConcept);
+		
+		String hivTestType = Context.getAdministrationService().getGlobalProperty("reports.infantHivTestTypeConcept");
+		properties.put("HIV_TEST_TYPE_CONCEPT", hivTestType);
+		
+		String hivTestDate = Context.getAdministrationService().getGlobalProperty("reports.hivTestDateConcept");
+		properties.put("HIV_TEST_DATE_CONCEPT", hivTestDate);
+		
+		String breastFedConcept = Context.getAdministrationService().getGlobalProperty("reports.breastFedStatusConcept");
+		properties.put("BREAST_FED_CONCEPT", breastFedConcept);
+		
+		String weanedConcept = Context.getAdministrationService().getGlobalProperty("reports.weanedConcept");
+		properties.put("WEANED_CONCEPT", weanedConcept);
+		
+		String treatmentStatus = Context.getAdministrationService().getGlobalProperty("reports.hivworkflowstatus");
+		properties.put("TREATMENT_STATUS", treatmentStatus);
+		
+		String preArtStatusConcept = Context.getAdministrationService().getGlobalProperty("reports.preArtStatusConcept");
+		properties.put("PRE_ART_CONCEPT", preArtStatusConcept);
+		
+		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
+		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
+		
+		String pmtct = Context.getAdministrationService().getGlobalProperty("reports.pmtctprogramname");
+		properties.put("PMTCT_PROGRAM", pmtct);
+		
+		String disCordRelationshipType = Context.getAdministrationService().getGlobalProperty("reports.pmtctRelationshipStatusWorkflowName");
+		properties.put("PMTCT_RELATIONSHIP_STATUS_WORKFLOW", disCordRelationshipType);
+		
+		String cd4Concept = Context.getAdministrationService().getGlobalProperty("reports.cd4Concept");
+		properties.put("CD4_CONCEPT", cd4Concept);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -359,8 +560,7 @@ public class SetupPMTCTRegisterReport {
 		String onARTState = Context.getAdministrationService().getGlobalProperty("reports.hivonartstate");
 		properties.put("HIV_ON_ART_STATE", onARTState);
 		
-		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
-		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
+		
 		
 		String weightConcept = Context.getAdministrationService().getGlobalProperty("reports.weightConcept");
 		properties.put("WEIGHT_CONCEPT", weightConcept);
@@ -368,14 +568,12 @@ public class SetupPMTCTRegisterReport {
 		String stageConcept = Context.getAdministrationService().getGlobalProperty("reports.stageConcept");
 		properties.put("STAGE_CONCEPT", stageConcept);
 		
-		String cd4Concept = Context.getAdministrationService().getGlobalProperty("reports.cd4Concept");
-		properties.put("CD4_CONCEPT", cd4Concept);
+		
 		
 		String cd4PercentageConcept = Context.getAdministrationService().getGlobalProperty("reports.cd4PercentageConcept");
 		properties.put("CD4_PERCENTAGE_CONCEPT", cd4PercentageConcept);
 		
-		String ctxTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.ctxTreatmentConcept");
-		properties.put("CTX_TREATMENT_CONCEPT", ctxTreatmentConcept);
+		
 		
 		String tbTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTreatmentConcept");
 		properties.put("TB_TREATMENT_CONCEPT", tbTreatmentConcept);

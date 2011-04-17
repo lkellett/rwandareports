@@ -41,7 +41,7 @@
 	
 	<globalProperty>
 		<property>reports.hivworkflowstatus</property>
-		<defaultValue>TX STATUS</defaultValue>
+		<defaultValue>TREATMENT STATUS</defaultValue>
 		<description>
 			The workflow status that is used to determine if patients are on ART
 		</description>
@@ -265,24 +265,9 @@
 		<property>hiv.programid.pediatric</property>
 		<defaultValue>10</defaultValue>
 		<description>Id for Pediatric HIV program</description>
-	</globalProperty>	
-	<globalProperty>
-		<property>reports.imbIdIdentifier</property>
-		<defaultValue>IMB ID</defaultValue>
-		<description>Identifier type that should be returned for the Primary Care</description>
 	</globalProperty>
 	
 	<globalProperty>
-
-		<property>reports.tracIdentifier</property>
-		<defaultValue>TRACnet ID</defaultValue>
-		<description>Identifier type that should be returned for the TRACnet ID</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.primaryCareIdIdentifier</property>
-		<defaultValue>Primary Care</defaultValue>
-		<description>Identifier type that should be returned for the IMB Id</description>
 		<property>reports.imbIdIdentifier</property>
 		<defaultValue>IMB ID</defaultValue>
 		<description>Identifier type that should be returned for the Primary Care</description>
@@ -298,7 +283,6 @@
 		<property>reports.primaryCareIdIdentifier</property>
 		<defaultValue>Primary Care</defaultValue>
 		<description>Identifier type that should be returned for the IMB Id</description>
-
 	</globalProperty>
 	
 	<globalProperty>
@@ -311,6 +295,12 @@
 		<property>reports.pmtctFeedingStatusWorkflowName</property>
 		<defaultValue>Feeding status</defaultValue>
 		<description>The name of the workflow for the feeding status</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.preArtStatusConcept</property>
+		<defaultValue>1490</defaultValue>
+		<description>The concept id for the Pre Art status concept</description>
 	</globalProperty>
 	
 	<globalProperty>
@@ -379,7 +369,44 @@
 		<description>The id of the concept for the HIV test</description>
 	</globalProperty>
 	
-
+	<globalProperty>
+		<property>reports.birthWeightConcept</property>
+		<defaultValue>5916</defaultValue>
+		<description>The id of the concept for the Birth date</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.infantFeedingMethodConcept</property>
+		<defaultValue>1151</defaultValue>
+		<description>The id of the concept for the infant feeding method</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.infantHivTestTypeConcept</property>
+		<defaultValue>1867</defaultValue>
+		<description>The id of the concept for the infant hiv type test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivTestDateConcept</property>
+		<defaultValue>1837</defaultValue>
+		<description>The id of the concept for the infant hiv test date</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.breastFedStatusConcept</property>
+		<defaultValue>6911</defaultValue>
+		<description>The id of the concept for the breast fed status concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.weanedConcept</property>
+		<defaultValue>1152</defaultValue>
+		<description>The id of the concept for the weaned concept</description>
+	</globalProperty>
+	
+	<!-- /Rwanda Report Module Properties -->
+	
 	<!-- start of Rwanda Primary Report Module Properties -->
 	
 	<globalProperty>

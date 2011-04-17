@@ -26,9 +26,12 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
@@ -44,6 +47,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRel
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.customcalculators.PMTCTInfantDBSDue;
+import org.openmrs.module.rwandareports.customcalculators.StartOfARTForThisPMTCT;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.DiscordantCoupleFilter;
 import org.openmrs.module.rwandareports.filter.PMTCTDbsTestOrderedFilter;
@@ -287,7 +291,36 @@ public class SetupCombinedHFCSPConsultationReport {
 		infantHivTestDue.setDescription("infantTestDue");
 		dataSetDefinition.addColumn(infantHivTestDue, new HashMap<String,Object>());
 		
+		AllDrugOrdersRestrictedByConceptSet allArtDrugs = new AllDrugOrdersRestrictedByConceptSet();
+		allArtDrugs.setName("ArtDrugs");
+		allArtDrugs.setDescription("ArtDrugs");
+		allArtDrugs.setDrugConceptSetConcept(artDrugsSet);
 		
+		EvaluateDefinitionForOtherPersonData motherStartARV = new EvaluateDefinitionForOtherPersonData();
+		motherStartARV.setPersonData(mother, new HashMap<String,Object>());
+		motherStartARV.setDefinition(allArtDrugs, new HashMap<String,Object>());
+		motherStartARV.setName("ArtDrugs");
+		motherStartARV.setDescription("ArtDrugs");
+		
+		DateOfProgramEnrolment motherRegistration = new DateOfProgramEnrolment();
+		Program pmtctProg = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
+		motherRegistration.setName("motherRegistration");
+		motherRegistration.setDescription("motherRegistration");
+		motherRegistration.setProgramId(pmtctProg.getId());
+		
+		EvaluateDefinitionForOtherPersonData motherReg = new EvaluateDefinitionForOtherPersonData();
+		motherReg.setPersonData(mother, new HashMap<String,Object>());
+		motherReg.setDefinition(motherRegistration, new HashMap<String,Object>());
+		motherReg.setName("motherRegistration");
+		motherReg.setDescription("motherRegistration");
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions motherStartArt = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		motherStartArt.setName("motherStartArt");
+		motherStartArt.setDescription("motherStartArt");
+		motherStartArt.addPatientDataToBeEvaluated(motherReg, new HashMap<String,Object>());
+		motherStartArt.addPatientDataToBeEvaluated(motherStartARV, new HashMap<String,Object>());
+		motherStartArt.setCalculator(new StartOfARTForThisPMTCT());
+		dataSetDefinition.addColumn(motherStartArt, new HashMap<String,Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
@@ -368,6 +401,9 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		String hivConcept = Context.getAdministrationService().getGlobalProperty("reports.hivTestConcept");
 		properties.put("HIV_TEST_CONCEPT", hivConcept);
+		
+		String pmtct = Context.getAdministrationService().getGlobalProperty("reports.pmtctprogramname");
+		properties.put("PMTCT_PROGRAM", pmtct);
 	}	
 	
 }
