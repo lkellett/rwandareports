@@ -3,11 +3,11 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 <script type="text/javascript">
 function msgreg(){
-document.getElementById('msg').innerHTML="<div id='openmrs_msg'>Wait for Registering...</div>";
+document.getElementById('msg').innerHTML="<div id='openmrs_msg'>Registering...</div>";
 exit();
 }
 function msgrem(){
-	document.getElementById('msg').innerHTML="<div id='openmrs_msg'>Wait for Removing...</div>";
+	document.getElementById('msg').innerHTML="<div id='openmrs_msg'>Removing...</div>";
 	exit();
 	}
 </script>

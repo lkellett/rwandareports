@@ -1,20 +1,15 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Timer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
-import org.openmrs.Program;
-import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
@@ -24,9 +19,6 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -39,6 +31,7 @@ import org.openmrs.module.reporting.report.definition.PeriodIndicatorReportDefin
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.PrimaryCareReportConstants;
+import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 
 public class SetupRwandaPrimaryCareReport {
 	protected final static Log log = LogFactory.getLog(SetupRwandaPrimaryCareReport.class);
@@ -60,13 +53,14 @@ public class SetupRwandaPrimaryCareReport {
 		//createCompositionCohortDefinitions();
 		//createIndicators();
 		ReportDefinition rd = createReportDefinition();
-		h.createXlsOverview(rd, "rwandaprimarycarereporttemplate.xls", "Xlsrwandaprimarycarereporttemplate", null);
+		h.createXlsCalendarOverview(rd, "rwandacalendarprimarycarereporttemplate.xls", "Primary_Care_Report_Template", null);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
+		//for (ReportDesign rd : rs.getReportDesigns(null, ExcelCalendarTemplateRenderer.class, false)) {
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("Xlsrwandaprimarycarereporttemplate".equals(rd.getName())) {
+			if ("Primary_Care_Report_Template".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
@@ -306,234 +300,234 @@ public class SetupRwandaPrimaryCareReport {
 		h.purgeDefinition(CohortIndicator.class, "patientsWithNONEInsAndGreaterThanThreeVisitsIndicator");
 		h.purgeDefinition(CohortIndicator.class, "patientsWithMissingInsAndGreaterThanThreeVisitsIndicator");		
 		h.purgeDefinition(CohortIndicator.class, "peakHoursAndPeakDaysIndicator");
-		h.purgeDefinition(CohortIndicator.class, "monday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "monday31Indicator");	
-		h.purgeDefinition(CohortIndicator.class, "tuesday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "tuesday31Indicator");	
-		h.purgeDefinition(CohortIndicator.class, "wednesday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "wednesday31Indicator");
-		
-		h.purgeDefinition(CohortIndicator.class, "thursday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "thursday31Indicator");
-		
-		h.purgeDefinition(CohortIndicator.class, "friday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "friday31Indicator");	
-
-		h.purgeDefinition(CohortIndicator.class, "saturday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "saturday31Indicator");
-		
-		h.purgeDefinition(CohortIndicator.class, "sunday1Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday2Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday3Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday4Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday5Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday6Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday7Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday8Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday9Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday10Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday11Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday12Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday13Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday14Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday15Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday16Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday17Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday18Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday19Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday20Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday21Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday22Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday23Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday24Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday25Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday26Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday27Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday28Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday29Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday30Indicator");
-		h.purgeDefinition(CohortIndicator.class, "sunday31Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "monday31Indicator");	
+//		h.purgeDefinition(CohortIndicator.class, "tuesday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "tuesday31Indicator");	
+//		h.purgeDefinition(CohortIndicator.class, "wednesday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "wednesday31Indicator");
+//		
+//		h.purgeDefinition(CohortIndicator.class, "thursday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "thursday31Indicator");
+//		
+//		h.purgeDefinition(CohortIndicator.class, "friday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "friday31Indicator");	
+//
+//		h.purgeDefinition(CohortIndicator.class, "saturday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "saturday31Indicator");
+//		
+//		h.purgeDefinition(CohortIndicator.class, "sunday1Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday2Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday3Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday4Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday5Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday6Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday7Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday8Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday9Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday10Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday11Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday12Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday13Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday14Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday15Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday16Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday17Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday18Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday19Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday20Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday21Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday22Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday23Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday24Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday25Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday26Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday27Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday28Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday29Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday30Indicator");
+//		h.purgeDefinition(CohortIndicator.class, "sunday31Indicator");
 	}
 	
 	
 	private ReportDefinition createReportDefinition() {
 		// PIH Quarterly Cross Site Indicator Report
 		
-		PeriodIndicatorReportDefinition rd = new PeriodIndicatorReportDefinition();
+		RollingDailyPeriodIndicatorReportDefinition rd = new RollingDailyPeriodIndicatorReportDefinition();
 		rd.removeParameter(ReportingConstants.START_DATE_PARAMETER);
 		rd.removeParameter(ReportingConstants.END_DATE_PARAMETER);
 		rd.removeParameter(ReportingConstants.LOCATION_PARAMETER);
@@ -548,13 +542,17 @@ public class SetupRwandaPrimaryCareReport {
 	//Creation of Vitals and Registration Encounter types during report period
 		int registrationEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.registration.encountertypeid"));
 		int vitalsEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.vitals.encountertypeid"));
-
+        
 		List<EncounterType> registrationEncounterType=new ArrayList<EncounterType>();
 		EncounterType registration=Context.getEncounterService().getEncounterType(registrationEncTypeId);
+		if (registration == null)
+			throw new RuntimeException("Are you sure the global property primarycarereport.registration.encountertypeid is set correctly?");
 		registrationEncounterType.add(registration);
 		
 		List<EncounterType> vitalsEncounterType=new ArrayList<EncounterType>();
 		EncounterType vitals=Context.getEncounterService().getEncounterType(vitalsEncTypeId);
+		if (vitals == null)
+			throw new RuntimeException("Are you sure the global property primarycarereport.vitals.encountertypeid is set correctly?");
 		vitalsEncounterType.add(vitals);
 		
 		EncounterCohortDefinition patientsWithPrimaryCareRegistration=new EncounterCohortDefinition();
@@ -577,1640 +575,1640 @@ public class SetupRwandaPrimaryCareReport {
 		
 		//Monday		
 		
-		SqlCohortDefinition monday=new SqlCohortDefinition();
-		monday.setName("monday");
-		monday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=0 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		monday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(monday);
-		
-		
-		CohortIndicator monday1Indicator = new CohortIndicator();
-		monday1Indicator.setName("monday1Indicator");
-		monday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(monday1Indicator);
-		
-		
-		CohortIndicator monday2Indicator = new CohortIndicator();
-		monday2Indicator.setName("monday2Indicator");
-		monday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(monday2Indicator);
-		
-		CohortIndicator monday3Indicator = new CohortIndicator();
-		monday3Indicator.setName("monday3Indicator");
-		monday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(monday3Indicator);
-		
-		
-		CohortIndicator monday4Indicator = new CohortIndicator();
-		monday4Indicator.setName("monday4Indicator");
-		monday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(monday4Indicator);
-		
-		CohortIndicator monday5Indicator = new CohortIndicator();
-		monday5Indicator.setName("monday5Indicator");
-		monday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(monday5Indicator);
-		
-		CohortIndicator monday6Indicator = new CohortIndicator();
-		monday6Indicator.setName("monday6Indicator");
-		monday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(monday6Indicator);
-		
-		CohortIndicator monday7Indicator = new CohortIndicator();
-		monday7Indicator.setName("monday7Indicator");
-		monday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(monday7Indicator);
-		
-		CohortIndicator monday8Indicator = new CohortIndicator();
-		monday8Indicator.setName("monday8Indicator");
-		monday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(monday8Indicator);
-		
-		CohortIndicator monday9Indicator = new CohortIndicator();
-		monday9Indicator.setName("monday9Indicator");
-		monday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(monday9Indicator);
-		
-		CohortIndicator monday10Indicator = new CohortIndicator();
-		monday10Indicator.setName("monday10Indicator");
-		monday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(monday10Indicator);
-		
-		CohortIndicator monday11Indicator = new CohortIndicator();
-		monday11Indicator.setName("monday11Indicator");
-		monday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(monday11Indicator);
-		
-		
-		CohortIndicator monday12Indicator = new CohortIndicator();
-		monday12Indicator.setName("monday12Indicator");
-		monday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(monday12Indicator);
-		
-		CohortIndicator monday13Indicator = new CohortIndicator();
-		monday13Indicator.setName("monday13Indicator");
-		monday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(monday13Indicator);
-		
-		
-		CohortIndicator monday14Indicator = new CohortIndicator();
-		monday14Indicator.setName("monday14Indicator");
-		monday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(monday14Indicator);
-		
-		CohortIndicator monday15Indicator = new CohortIndicator();
-		monday15Indicator.setName("monday15Indicator");
-		monday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(monday15Indicator);
-		
-		CohortIndicator monday16Indicator = new CohortIndicator();
-		monday16Indicator.setName("monday16Indicator");
-		monday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(monday16Indicator);
-		
-		CohortIndicator monday17Indicator = new CohortIndicator();
-		monday17Indicator.setName("monday17Indicator");
-		monday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(monday17Indicator);
-		
-		CohortIndicator monday18Indicator = new CohortIndicator();
-		monday18Indicator.setName("monday18Indicator");
-		monday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(monday18Indicator);
-		
-		CohortIndicator monday19Indicator = new CohortIndicator();
-		monday19Indicator.setName("monday19Indicator");
-		monday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(monday19Indicator);
-		
-		CohortIndicator monday20Indicator = new CohortIndicator();
-		monday20Indicator.setName("monday20Indicator");
-		monday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(monday20Indicator);
-		
-		CohortIndicator monday21Indicator = new CohortIndicator();
-		monday21Indicator.setName("monday21Indicator");
-		monday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(monday21Indicator);
-		
-		
-		CohortIndicator monday22Indicator = new CohortIndicator();
-		monday22Indicator.setName("monday22Indicator");
-		monday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(monday22Indicator);
-		
-		CohortIndicator monday23Indicator = new CohortIndicator();
-		monday23Indicator.setName("monday23Indicator");
-		monday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(monday23Indicator);
-		
-		
-		CohortIndicator monday24Indicator = new CohortIndicator();
-		monday24Indicator.setName("monday24Indicator");
-		monday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(monday24Indicator);
-		
-		CohortIndicator monday25Indicator = new CohortIndicator();
-		monday25Indicator.setName("monday25Indicator");
-		monday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(monday25Indicator);
-		
-		CohortIndicator monday26Indicator = new CohortIndicator();
-		monday26Indicator.setName("monday26Indicator");
-		monday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(monday26Indicator);
-		
-		CohortIndicator monday27Indicator = new CohortIndicator();
-		monday27Indicator.setName("monday27Indicator");
-		monday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(monday27Indicator);
-		
-		CohortIndicator monday28Indicator = new CohortIndicator();
-		monday28Indicator.setName("monday28Indicator");
-		monday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(monday28Indicator);
-		
-		CohortIndicator monday29Indicator = new CohortIndicator();
-		monday29Indicator.setName("monday29Indicator");
-		monday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(monday29Indicator);
-		
-		CohortIndicator monday30Indicator = new CohortIndicator();
-		monday30Indicator.setName("monday30Indicator");
-		monday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(monday30Indicator);
-		
-		CohortIndicator monday31Indicator = new CohortIndicator();
-		monday31Indicator.setName("monday31Indicator");
-		monday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		monday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		monday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(monday31Indicator);
-
-		
-//Tuesday
-		SqlCohortDefinition tuesday=new SqlCohortDefinition();
-		tuesday.setName("tuesday");
-		tuesday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=1 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		tuesday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(tuesday);
-		
-		
-		CohortIndicator tuesday1Indicator = new CohortIndicator();
-		tuesday1Indicator.setName("tuesday1Indicator");
-		tuesday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(tuesday1Indicator);
-		
-		
-		CohortIndicator tuesday2Indicator = new CohortIndicator();
-		tuesday2Indicator.setName("tuesday2Indicator");
-		tuesday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(tuesday2Indicator);
-		
-		CohortIndicator tuesday3Indicator = new CohortIndicator();
-		tuesday3Indicator.setName("tuesday3Indicator");
-		tuesday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(tuesday3Indicator);
-		
-		
-		CohortIndicator tuesday4Indicator = new CohortIndicator();
-		tuesday4Indicator.setName("tuesday4Indicator");
-		tuesday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(tuesday4Indicator);
-		
-		CohortIndicator tuesday5Indicator = new CohortIndicator();
-		tuesday5Indicator.setName("tuesday5Indicator");
-		tuesday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(tuesday5Indicator);
-		
-		CohortIndicator tuesday6Indicator = new CohortIndicator();
-		tuesday6Indicator.setName("tuesday6Indicator");
-		tuesday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(tuesday6Indicator);
-		
-		CohortIndicator tuesday7Indicator = new CohortIndicator();
-		tuesday7Indicator.setName("tuesday7Indicator");
-		tuesday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(tuesday7Indicator);
-		
-		CohortIndicator tuesday8Indicator = new CohortIndicator();
-		tuesday8Indicator.setName("tuesday8Indicator");
-		tuesday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(tuesday8Indicator);
-		
-		CohortIndicator tuesday9Indicator = new CohortIndicator();
-		tuesday9Indicator.setName("tuesday9Indicator");
-		tuesday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(tuesday9Indicator);
-		
-		CohortIndicator tuesday10Indicator = new CohortIndicator();
-		tuesday10Indicator.setName("tuesday10Indicator");
-		tuesday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(tuesday10Indicator);
-		
-		CohortIndicator tuesday11Indicator = new CohortIndicator();
-		tuesday11Indicator.setName("tuesday11Indicator");
-		tuesday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(tuesday11Indicator);
-		
-		
-		CohortIndicator tuesday12Indicator = new CohortIndicator();
-		tuesday12Indicator.setName("tuesday12Indicator");
-		tuesday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(tuesday12Indicator);
-		
-		CohortIndicator tuesday13Indicator = new CohortIndicator();
-		tuesday13Indicator.setName("tuesday13Indicator");
-		tuesday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(tuesday13Indicator);
-		
-		
-		CohortIndicator tuesday14Indicator = new CohortIndicator();
-		tuesday14Indicator.setName("tuesday14Indicator");
-		tuesday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(tuesday14Indicator);
-		
-		CohortIndicator tuesday15Indicator = new CohortIndicator();
-		tuesday15Indicator.setName("tuesday15Indicator");
-		tuesday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(tuesday15Indicator);
-		
-		CohortIndicator tuesday16Indicator = new CohortIndicator();
-		tuesday16Indicator.setName("tuesday16Indicator");
-		tuesday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(tuesday16Indicator);
-		
-		CohortIndicator tuesday17Indicator = new CohortIndicator();
-		tuesday17Indicator.setName("tuesday17Indicator");
-		tuesday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(tuesday17Indicator);
-		
-		CohortIndicator tuesday18Indicator = new CohortIndicator();
-		tuesday18Indicator.setName("tuesday18Indicator");
-		tuesday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(tuesday18Indicator);
-		
-		CohortIndicator tuesday19Indicator = new CohortIndicator();
-		tuesday19Indicator.setName("tuesday19Indicator");
-		tuesday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(tuesday19Indicator);
-		
-		CohortIndicator tuesday20Indicator = new CohortIndicator();
-		tuesday20Indicator.setName("tuesday20Indicator");
-		tuesday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(tuesday20Indicator);
-		
-		CohortIndicator tuesday21Indicator = new CohortIndicator();
-		tuesday21Indicator.setName("tuesday21Indicator");
-		tuesday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(tuesday21Indicator);
-		
-		
-		CohortIndicator tuesday22Indicator = new CohortIndicator();
-		tuesday22Indicator.setName("tuesday22Indicator");
-		tuesday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(tuesday22Indicator);
-		
-		CohortIndicator tuesday23Indicator = new CohortIndicator();
-		tuesday23Indicator.setName("tuesday23Indicator");
-		tuesday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(tuesday23Indicator);
-		
-		
-		CohortIndicator tuesday24Indicator = new CohortIndicator();
-		tuesday24Indicator.setName("tuesday24Indicator");
-		tuesday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(tuesday24Indicator);
-		
-		CohortIndicator tuesday25Indicator = new CohortIndicator();
-		tuesday25Indicator.setName("tuesday25Indicator");
-		tuesday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(tuesday25Indicator);
-		
-		CohortIndicator tuesday26Indicator = new CohortIndicator();
-		tuesday26Indicator.setName("tuesday26Indicator");
-		tuesday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(tuesday26Indicator);
-		
-		CohortIndicator tuesday27Indicator = new CohortIndicator();
-		tuesday27Indicator.setName("tuesday27Indicator");
-		tuesday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(tuesday27Indicator);
-		
-		CohortIndicator tuesday28Indicator = new CohortIndicator();
-		tuesday28Indicator.setName("tuesday28Indicator");
-		tuesday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(tuesday28Indicator);
-		
-		CohortIndicator tuesday29Indicator = new CohortIndicator();
-		tuesday29Indicator.setName("tuesday29Indicator");
-		tuesday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(tuesday29Indicator);
-		
-		CohortIndicator tuesday30Indicator = new CohortIndicator();
-		tuesday30Indicator.setName("tuesday30Indicator");
-		tuesday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(tuesday30Indicator);
-		
-		CohortIndicator tuesday31Indicator = new CohortIndicator();
-		tuesday31Indicator.setName("tuesday31Indicator");
-		tuesday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		tuesday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		tuesday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(tuesday31Indicator);
-		
-		
-//Wednesday
-		
-		SqlCohortDefinition wednesday=new SqlCohortDefinition();
-		wednesday.setName("wednesday");
-		wednesday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=2 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		wednesday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(wednesday);
-		
-		
-		CohortIndicator wednesday1Indicator = new CohortIndicator();
-		wednesday1Indicator.setName("wednesday1Indicator");
-		wednesday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(wednesday1Indicator);
-		
-		
-		CohortIndicator wednesday2Indicator = new CohortIndicator();
-		wednesday2Indicator.setName("wednesday2Indicator");
-		wednesday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(wednesday2Indicator);
-		
-		CohortIndicator wednesday3Indicator = new CohortIndicator();
-		wednesday3Indicator.setName("wednesday3Indicator");
-		wednesday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(wednesday3Indicator);
-		
-		
-		CohortIndicator wednesday4Indicator = new CohortIndicator();
-		wednesday4Indicator.setName("wednesday4Indicator");
-		wednesday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(wednesday4Indicator);
-		
-		CohortIndicator wednesday5Indicator = new CohortIndicator();
-		wednesday5Indicator.setName("wednesday5Indicator");
-		wednesday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(wednesday5Indicator);
-		
-		CohortIndicator wednesday6Indicator = new CohortIndicator();
-		wednesday6Indicator.setName("wednesday6Indicator");
-		wednesday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(wednesday6Indicator);
-		
-		CohortIndicator wednesday7Indicator = new CohortIndicator();
-		wednesday7Indicator.setName("wednesday7Indicator");
-		wednesday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(wednesday7Indicator);
-		
-		CohortIndicator wednesday8Indicator = new CohortIndicator();
-		wednesday8Indicator.setName("wednesday8Indicator");
-		wednesday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(wednesday8Indicator);
-		
-		CohortIndicator wednesday9Indicator = new CohortIndicator();
-		wednesday9Indicator.setName("wednesday9Indicator");
-		wednesday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(wednesday9Indicator);
-		
-		CohortIndicator wednesday10Indicator = new CohortIndicator();
-		wednesday10Indicator.setName("wednesday10Indicator");
-		wednesday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(wednesday10Indicator);
-		
-		CohortIndicator wednesday11Indicator = new CohortIndicator();
-		wednesday11Indicator.setName("wednesday11Indicator");
-		wednesday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(wednesday11Indicator);
-		
-		
-		CohortIndicator wednesday12Indicator = new CohortIndicator();
-		wednesday12Indicator.setName("wednesday12Indicator");
-		wednesday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(wednesday12Indicator);
-		
-		CohortIndicator wednesday13Indicator = new CohortIndicator();
-		wednesday13Indicator.setName("wednesday13Indicator");
-		wednesday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(wednesday13Indicator);
-		
-		
-		CohortIndicator wednesday14Indicator = new CohortIndicator();
-		wednesday14Indicator.setName("wednesday14Indicator");
-		wednesday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(wednesday14Indicator);
-		
-		CohortIndicator wednesday15Indicator = new CohortIndicator();
-		wednesday15Indicator.setName("wednesday15Indicator");
-		wednesday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(wednesday15Indicator);
-		
-		CohortIndicator wednesday16Indicator = new CohortIndicator();
-		wednesday16Indicator.setName("wednesday16Indicator");
-		wednesday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(wednesday16Indicator);
-		
-		CohortIndicator wednesday17Indicator = new CohortIndicator();
-		wednesday17Indicator.setName("wednesday17Indicator");
-		wednesday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(wednesday17Indicator);
-		
-		CohortIndicator wednesday18Indicator = new CohortIndicator();
-		wednesday18Indicator.setName("wednesday18Indicator");
-		wednesday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(wednesday18Indicator);
-		
-		CohortIndicator wednesday19Indicator = new CohortIndicator();
-		wednesday19Indicator.setName("wednesday19Indicator");
-		wednesday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(wednesday19Indicator);
-		
-		CohortIndicator wednesday20Indicator = new CohortIndicator();
-		wednesday20Indicator.setName("wednesday20Indicator");
-		wednesday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(wednesday20Indicator);
-		
-		CohortIndicator wednesday21Indicator = new CohortIndicator();
-		wednesday21Indicator.setName("wednesday21Indicator");
-		wednesday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(wednesday21Indicator);
-		
-		
-		CohortIndicator wednesday22Indicator = new CohortIndicator();
-		wednesday22Indicator.setName("wednesday22Indicator");
-		wednesday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(wednesday22Indicator);
-		
-		CohortIndicator wednesday23Indicator = new CohortIndicator();
-		wednesday23Indicator.setName("wednesday23Indicator");
-		wednesday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(wednesday23Indicator);
-		
-		
-		CohortIndicator wednesday24Indicator = new CohortIndicator();
-		wednesday24Indicator.setName("wednesday24Indicator");
-		wednesday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(wednesday24Indicator);
-		
-		CohortIndicator wednesday25Indicator = new CohortIndicator();
-		wednesday25Indicator.setName("wednesday25Indicator");
-		wednesday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(wednesday25Indicator);
-		
-		CohortIndicator wednesday26Indicator = new CohortIndicator();
-		wednesday26Indicator.setName("wednesday26Indicator");
-		wednesday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(wednesday26Indicator);
-		
-		CohortIndicator wednesday27Indicator = new CohortIndicator();
-		wednesday27Indicator.setName("wednesday27Indicator");
-		wednesday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(wednesday27Indicator);
-		
-		CohortIndicator wednesday28Indicator = new CohortIndicator();
-		wednesday28Indicator.setName("wednesday28Indicator");
-		wednesday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(wednesday28Indicator);
-		
-		CohortIndicator wednesday29Indicator = new CohortIndicator();
-		wednesday29Indicator.setName("wednesday29Indicator");
-		wednesday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(wednesday29Indicator);
-		
-		CohortIndicator wednesday30Indicator = new CohortIndicator();
-		wednesday30Indicator.setName("wednesday30Indicator");
-		wednesday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(wednesday30Indicator);
-		
-		CohortIndicator wednesday31Indicator = new CohortIndicator();
-		wednesday31Indicator.setName("wednesday31Indicator");
-		wednesday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		wednesday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		wednesday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(wednesday31Indicator);
-		
-		
-		
-		
-//Thursday
-		
-		SqlCohortDefinition thursday=new SqlCohortDefinition();
-		thursday.setName("thursday");
-		thursday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=3 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		thursday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(thursday);
-		
-		
-		CohortIndicator thursday1Indicator = new CohortIndicator();
-		thursday1Indicator.setName("thursday1Indicator");
-		thursday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(thursday1Indicator);
-		
-		
-		CohortIndicator thursday2Indicator = new CohortIndicator();
-		thursday2Indicator.setName("thursday2Indicator");
-		thursday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(thursday2Indicator);
-		
-		CohortIndicator thursday3Indicator = new CohortIndicator();
-		thursday3Indicator.setName("thursday3Indicator");
-		thursday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(thursday3Indicator);
-		
-		
-		CohortIndicator thursday4Indicator = new CohortIndicator();
-		thursday4Indicator.setName("thursday4Indicator");
-		thursday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(thursday4Indicator);
-		
-		CohortIndicator thursday5Indicator = new CohortIndicator();
-		thursday5Indicator.setName("thursday5Indicator");
-		thursday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(thursday5Indicator);
-		
-		CohortIndicator thursday6Indicator = new CohortIndicator();
-		thursday6Indicator.setName("thursday6Indicator");
-		thursday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(thursday6Indicator);
-		
-		CohortIndicator thursday7Indicator = new CohortIndicator();
-		thursday7Indicator.setName("thursday7Indicator");
-		thursday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(thursday7Indicator);
-		
-		CohortIndicator thursday8Indicator = new CohortIndicator();
-		thursday8Indicator.setName("thursday8Indicator");
-		thursday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(thursday8Indicator);
-		
-		CohortIndicator thursday9Indicator = new CohortIndicator();
-		thursday9Indicator.setName("thursday9Indicator");
-		thursday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(thursday9Indicator);
-		
-		CohortIndicator thursday10Indicator = new CohortIndicator();
-		thursday10Indicator.setName("thursday10Indicator");
-		thursday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(thursday10Indicator);
-		
-		CohortIndicator thursday11Indicator = new CohortIndicator();
-		thursday11Indicator.setName("thursday11Indicator");
-		thursday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(thursday11Indicator);
-		
-		
-		CohortIndicator thursday12Indicator = new CohortIndicator();
-		thursday12Indicator.setName("thursday12Indicator");
-		thursday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(thursday12Indicator);
-		
-		CohortIndicator thursday13Indicator = new CohortIndicator();
-		thursday13Indicator.setName("thursday13Indicator");
-		thursday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(thursday13Indicator);
-		
-		
-		CohortIndicator thursday14Indicator = new CohortIndicator();
-		thursday14Indicator.setName("thursday14Indicator");
-		thursday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(thursday14Indicator);
-		
-		CohortIndicator thursday15Indicator = new CohortIndicator();
-		thursday15Indicator.setName("thursday15Indicator");
-		thursday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(thursday15Indicator);
-		
-		CohortIndicator thursday16Indicator = new CohortIndicator();
-		thursday16Indicator.setName("thursday16Indicator");
-		thursday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(thursday16Indicator);
-		
-		CohortIndicator thursday17Indicator = new CohortIndicator();
-		thursday17Indicator.setName("thursday17Indicator");
-		thursday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(thursday17Indicator);
-		
-		CohortIndicator thursday18Indicator = new CohortIndicator();
-		thursday18Indicator.setName("thursday18Indicator");
-		thursday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(thursday18Indicator);
-		
-		CohortIndicator thursday19Indicator = new CohortIndicator();
-		thursday19Indicator.setName("thursday19Indicator");
-		thursday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(thursday19Indicator);
-		
-		CohortIndicator thursday20Indicator = new CohortIndicator();
-		thursday20Indicator.setName("thursday20Indicator");
-		thursday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(thursday20Indicator);
-		
-		CohortIndicator thursday21Indicator = new CohortIndicator();
-		thursday21Indicator.setName("thursday21Indicator");
-		thursday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(thursday21Indicator);
-		
-		
-		CohortIndicator thursday22Indicator = new CohortIndicator();
-		thursday22Indicator.setName("thursday22Indicator");
-		thursday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(thursday22Indicator);
-		
-		CohortIndicator thursday23Indicator = new CohortIndicator();
-		thursday23Indicator.setName("thursday23Indicator");
-		thursday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(thursday23Indicator);
-		
-		
-		CohortIndicator thursday24Indicator = new CohortIndicator();
-		thursday24Indicator.setName("thursday24Indicator");
-		thursday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(thursday24Indicator);
-		
-		CohortIndicator thursday25Indicator = new CohortIndicator();
-		thursday25Indicator.setName("thursday25Indicator");
-		thursday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(thursday25Indicator);
-		
-		CohortIndicator thursday26Indicator = new CohortIndicator();
-		thursday26Indicator.setName("thursday26Indicator");
-		thursday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(thursday26Indicator);
-		
-		CohortIndicator thursday27Indicator = new CohortIndicator();
-		thursday27Indicator.setName("thursday27Indicator");
-		thursday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(thursday27Indicator);
-		
-		CohortIndicator thursday28Indicator = new CohortIndicator();
-		thursday28Indicator.setName("thursday28Indicator");
-		thursday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(thursday28Indicator);
-		
-		CohortIndicator thursday29Indicator = new CohortIndicator();
-		thursday29Indicator.setName("thursday29Indicator");
-		thursday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(thursday29Indicator);
-		
-		CohortIndicator thursday30Indicator = new CohortIndicator();
-		thursday30Indicator.setName("thursday30Indicator");
-		thursday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(thursday30Indicator);
-		
-		CohortIndicator thursday31Indicator = new CohortIndicator();
-		thursday31Indicator.setName("thursday31Indicator");
-		thursday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		thursday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		thursday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(thursday31Indicator);
-		
-
-//Friday
-		
-		SqlCohortDefinition friday=new SqlCohortDefinition();
-		friday.setName("friday");
-		friday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=4 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		friday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(friday);
-		
-		
-		CohortIndicator friday1Indicator = new CohortIndicator();
-		friday1Indicator.setName("friday1Indicator");
-		friday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(friday1Indicator);
-		
-		
-		CohortIndicator friday2Indicator = new CohortIndicator();
-		friday2Indicator.setName("friday2Indicator");
-		friday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(friday2Indicator);
-		
-		CohortIndicator friday3Indicator = new CohortIndicator();
-		friday3Indicator.setName("friday3Indicator");
-		friday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(friday3Indicator);
-		
-		
-		CohortIndicator friday4Indicator = new CohortIndicator();
-		friday4Indicator.setName("friday4Indicator");
-		friday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(friday4Indicator);
-		
-		CohortIndicator friday5Indicator = new CohortIndicator();
-		friday5Indicator.setName("friday5Indicator");
-		friday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(friday5Indicator);
-		
-		CohortIndicator friday6Indicator = new CohortIndicator();
-		friday6Indicator.setName("friday6Indicator");
-		friday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(friday6Indicator);
-		
-		CohortIndicator friday7Indicator = new CohortIndicator();
-		friday7Indicator.setName("friday7Indicator");
-		friday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(friday7Indicator);
-		
-		CohortIndicator friday8Indicator = new CohortIndicator();
-		friday8Indicator.setName("friday8Indicator");
-		friday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(friday8Indicator);
-		
-		CohortIndicator friday9Indicator = new CohortIndicator();
-		friday9Indicator.setName("friday9Indicator");
-		friday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(friday9Indicator);
-		
-		CohortIndicator friday10Indicator = new CohortIndicator();
-		friday10Indicator.setName("friday10Indicator");
-		friday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(friday10Indicator);
-		
-		CohortIndicator friday11Indicator = new CohortIndicator();
-		friday11Indicator.setName("friday11Indicator");
-		friday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(friday11Indicator);
-		
-		
-		CohortIndicator friday12Indicator = new CohortIndicator();
-		friday12Indicator.setName("friday12Indicator");
-		friday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(friday12Indicator);
-		
-		CohortIndicator friday13Indicator = new CohortIndicator();
-		friday13Indicator.setName("friday13Indicator");
-		friday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(friday13Indicator);
-		
-		
-		CohortIndicator friday14Indicator = new CohortIndicator();
-		friday14Indicator.setName("friday14Indicator");
-		friday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(friday14Indicator);
-		
-		CohortIndicator friday15Indicator = new CohortIndicator();
-		friday15Indicator.setName("friday15Indicator");
-		friday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(friday15Indicator);
-		
-		CohortIndicator friday16Indicator = new CohortIndicator();
-		friday16Indicator.setName("friday16Indicator");
-		friday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(friday16Indicator);
-		
-		CohortIndicator friday17Indicator = new CohortIndicator();
-		friday17Indicator.setName("friday17Indicator");
-		friday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(friday17Indicator);
-		
-		CohortIndicator friday18Indicator = new CohortIndicator();
-		friday18Indicator.setName("friday18Indicator");
-		friday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(friday18Indicator);
-		
-		CohortIndicator friday19Indicator = new CohortIndicator();
-		friday19Indicator.setName("friday19Indicator");
-		friday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(friday19Indicator);
-		
-		CohortIndicator friday20Indicator = new CohortIndicator();
-		friday20Indicator.setName("friday20Indicator");
-		friday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(friday20Indicator);
-		
-		CohortIndicator friday21Indicator = new CohortIndicator();
-		friday21Indicator.setName("friday21Indicator");
-		friday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(friday21Indicator);
-		
-		
-		CohortIndicator friday22Indicator = new CohortIndicator();
-		friday22Indicator.setName("friday22Indicator");
-		friday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(friday22Indicator);
-		
-		CohortIndicator friday23Indicator = new CohortIndicator();
-		friday23Indicator.setName("friday23Indicator");
-		friday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(friday23Indicator);
-		
-		
-		CohortIndicator friday24Indicator = new CohortIndicator();
-		friday24Indicator.setName("friday24Indicator");
-		friday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(friday24Indicator);
-		
-		CohortIndicator friday25Indicator = new CohortIndicator();
-		friday25Indicator.setName("friday25Indicator");
-		friday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(friday25Indicator);
-		
-		CohortIndicator friday26Indicator = new CohortIndicator();
-		friday26Indicator.setName("friday26Indicator");
-		friday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(friday26Indicator);
-		
-		CohortIndicator friday27Indicator = new CohortIndicator();
-		friday27Indicator.setName("friday27Indicator");
-		friday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(friday27Indicator);
-		
-		CohortIndicator friday28Indicator = new CohortIndicator();
-		friday28Indicator.setName("friday28Indicator");
-		friday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(friday28Indicator);
-		
-		CohortIndicator friday29Indicator = new CohortIndicator();
-		friday29Indicator.setName("friday29Indicator");
-		friday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(friday29Indicator);
-		
-		CohortIndicator friday30Indicator = new CohortIndicator();
-		friday30Indicator.setName("friday30Indicator");
-		friday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(friday30Indicator);
-		
-		CohortIndicator friday31Indicator = new CohortIndicator();
-		friday31Indicator.setName("friday31Indicator");
-		friday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		friday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		friday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(friday31Indicator);		
-		
-//saturday
-		
-		SqlCohortDefinition saturday=new SqlCohortDefinition();
-		saturday.setName("saturday");
-		saturday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=5 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		saturday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(saturday);
-		
-		
-		CohortIndicator saturday1Indicator = new CohortIndicator();
-		saturday1Indicator.setName("saturday1Indicator");
-		saturday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(saturday1Indicator);
-		
-		
-		CohortIndicator saturday2Indicator = new CohortIndicator();
-		saturday2Indicator.setName("saturday2Indicator");
-		saturday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(saturday2Indicator);
-		
-		CohortIndicator saturday3Indicator = new CohortIndicator();
-		saturday3Indicator.setName("saturday3Indicator");
-		saturday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(saturday3Indicator);
-		
-		
-		CohortIndicator saturday4Indicator = new CohortIndicator();
-		saturday4Indicator.setName("saturday4Indicator");
-		saturday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(saturday4Indicator);
-		
-		CohortIndicator saturday5Indicator = new CohortIndicator();
-		saturday5Indicator.setName("saturday5Indicator");
-		saturday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(saturday5Indicator);
-		
-		CohortIndicator saturday6Indicator = new CohortIndicator();
-		saturday6Indicator.setName("saturday6Indicator");
-		saturday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(saturday6Indicator);
-		
-		CohortIndicator saturday7Indicator = new CohortIndicator();
-		saturday7Indicator.setName("saturday7Indicator");
-		saturday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(saturday7Indicator);
-		
-		CohortIndicator saturday8Indicator = new CohortIndicator();
-		saturday8Indicator.setName("saturday8Indicator");
-		saturday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(saturday8Indicator);
-		
-		CohortIndicator saturday9Indicator = new CohortIndicator();
-		saturday9Indicator.setName("saturday9Indicator");
-		saturday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(saturday9Indicator);
-		
-		CohortIndicator saturday10Indicator = new CohortIndicator();
-		saturday10Indicator.setName("saturday10Indicator");
-		saturday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(saturday10Indicator);
-		
-		CohortIndicator saturday11Indicator = new CohortIndicator();
-		saturday11Indicator.setName("saturday11Indicator");
-		saturday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(saturday11Indicator);
-		
-		
-		CohortIndicator saturday12Indicator = new CohortIndicator();
-		saturday12Indicator.setName("saturday12Indicator");
-		saturday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(saturday12Indicator);
-		
-		CohortIndicator saturday13Indicator = new CohortIndicator();
-		saturday13Indicator.setName("saturday13Indicator");
-		saturday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(saturday13Indicator);
-		
-		
-		CohortIndicator saturday14Indicator = new CohortIndicator();
-		saturday14Indicator.setName("saturday14Indicator");
-		saturday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(saturday14Indicator);
-		
-		CohortIndicator saturday15Indicator = new CohortIndicator();
-		saturday15Indicator.setName("saturday15Indicator");
-		saturday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(saturday15Indicator);
-		
-		CohortIndicator saturday16Indicator = new CohortIndicator();
-		saturday16Indicator.setName("saturday16Indicator");
-		saturday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(saturday16Indicator);
-		
-		CohortIndicator saturday17Indicator = new CohortIndicator();
-		saturday17Indicator.setName("saturday17Indicator");
-		saturday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(saturday17Indicator);
-		
-		CohortIndicator saturday18Indicator = new CohortIndicator();
-		saturday18Indicator.setName("saturday18Indicator");
-		saturday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(saturday18Indicator);
-		
-		CohortIndicator saturday19Indicator = new CohortIndicator();
-		saturday19Indicator.setName("saturday19Indicator");
-		saturday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(saturday19Indicator);
-		
-		CohortIndicator saturday20Indicator = new CohortIndicator();
-		saturday20Indicator.setName("saturday20Indicator");
-		saturday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(saturday20Indicator);
-		
-		CohortIndicator saturday21Indicator = new CohortIndicator();
-		saturday21Indicator.setName("saturday21Indicator");
-		saturday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(saturday21Indicator);
-		
-		
-		CohortIndicator saturday22Indicator = new CohortIndicator();
-		saturday22Indicator.setName("saturday22Indicator");
-		saturday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(saturday22Indicator);
-		
-		CohortIndicator saturday23Indicator = new CohortIndicator();
-		saturday23Indicator.setName("saturday23Indicator");
-		saturday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(saturday23Indicator);
-		
-		
-		CohortIndicator saturday24Indicator = new CohortIndicator();
-		saturday24Indicator.setName("saturday24Indicator");
-		saturday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(saturday24Indicator);
-		
-		CohortIndicator saturday25Indicator = new CohortIndicator();
-		saturday25Indicator.setName("saturday25Indicator");
-		saturday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(saturday25Indicator);
-		
-		CohortIndicator saturday26Indicator = new CohortIndicator();
-		saturday26Indicator.setName("saturday26Indicator");
-		saturday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(saturday26Indicator);
-		
-		CohortIndicator saturday27Indicator = new CohortIndicator();
-		saturday27Indicator.setName("saturday27Indicator");
-		saturday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(saturday27Indicator);
-		
-		CohortIndicator saturday28Indicator = new CohortIndicator();
-		saturday28Indicator.setName("saturday28Indicator");
-		saturday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(saturday28Indicator);
-		
-		CohortIndicator saturday29Indicator = new CohortIndicator();
-		saturday29Indicator.setName("saturday29Indicator");
-		saturday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(saturday29Indicator);
-		
-		CohortIndicator saturday30Indicator = new CohortIndicator();
-		saturday30Indicator.setName("saturday30Indicator");
-		saturday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(saturday30Indicator);
-		
-		CohortIndicator saturday31Indicator = new CohortIndicator();
-		saturday31Indicator.setName("saturday31Indicator");
-		saturday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		saturday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		saturday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(saturday31Indicator);
-
-		
-//Sunday
-		
-		SqlCohortDefinition sunday=new SqlCohortDefinition();
-		sunday.setName("sunday");
-		sunday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=6 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
-		sunday.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(sunday);
-		
-		
-		CohortIndicator sunday1Indicator = new CohortIndicator();
-		sunday1Indicator.setName("sunday1Indicator");
-		sunday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
-		h.replaceDefinition(sunday1Indicator);
-		
-		
-		CohortIndicator sunday2Indicator = new CohortIndicator();
-		sunday2Indicator.setName("sunday2Indicator");
-		sunday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
-		h.replaceDefinition(sunday2Indicator);
-		
-		CohortIndicator sunday3Indicator = new CohortIndicator();
-		sunday3Indicator.setName("sunday3Indicator");
-		sunday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
-		h.replaceDefinition(sunday3Indicator);
-		
-		
-		CohortIndicator sunday4Indicator = new CohortIndicator();
-		sunday4Indicator.setName("sunday4Indicator");
-		sunday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
-		h.replaceDefinition(sunday4Indicator);
-		
-		CohortIndicator sunday5Indicator = new CohortIndicator();
-		sunday5Indicator.setName("sunday5Indicator");
-		sunday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
-		h.replaceDefinition(sunday5Indicator);
-		
-		CohortIndicator sunday6Indicator = new CohortIndicator();
-		sunday6Indicator.setName("sunday6Indicator");
-		sunday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
-		h.replaceDefinition(sunday6Indicator);
-		
-		CohortIndicator sunday7Indicator = new CohortIndicator();
-		sunday7Indicator.setName("sunday7Indicator");
-		sunday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
-		h.replaceDefinition(sunday7Indicator);
-		
-		CohortIndicator sunday8Indicator = new CohortIndicator();
-		sunday8Indicator.setName("sunday8Indicator");
-		sunday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
-		h.replaceDefinition(sunday8Indicator);
-		
-		CohortIndicator sunday9Indicator = new CohortIndicator();
-		sunday9Indicator.setName("sunday9Indicator");
-		sunday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
-		h.replaceDefinition(sunday9Indicator);
-		
-		CohortIndicator sunday10Indicator = new CohortIndicator();
-		sunday10Indicator.setName("sunday10Indicator");
-		sunday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
-		h.replaceDefinition(sunday10Indicator);
-		
-		CohortIndicator sunday11Indicator = new CohortIndicator();
-		sunday11Indicator.setName("sunday11Indicator");
-		sunday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
-		h.replaceDefinition(sunday11Indicator);
-		
-		
-		CohortIndicator sunday12Indicator = new CohortIndicator();
-		sunday12Indicator.setName("sunday12Indicator");
-		sunday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
-		h.replaceDefinition(sunday12Indicator);
-		
-		CohortIndicator sunday13Indicator = new CohortIndicator();
-		sunday13Indicator.setName("sunday13Indicator");
-		sunday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
-		h.replaceDefinition(sunday13Indicator);
-		
-		
-		CohortIndicator sunday14Indicator = new CohortIndicator();
-		sunday14Indicator.setName("sunday14Indicator");
-		sunday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
-		h.replaceDefinition(sunday14Indicator);
-		
-		CohortIndicator sunday15Indicator = new CohortIndicator();
-		sunday15Indicator.setName("sunday15Indicator");
-		sunday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
-		h.replaceDefinition(sunday15Indicator);
-		
-		CohortIndicator sunday16Indicator = new CohortIndicator();
-		sunday16Indicator.setName("sunday16Indicator");
-		sunday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
-		h.replaceDefinition(sunday16Indicator);
-		
-		CohortIndicator sunday17Indicator = new CohortIndicator();
-		sunday17Indicator.setName("sunday17Indicator");
-		sunday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
-		h.replaceDefinition(sunday17Indicator);
-		
-		CohortIndicator sunday18Indicator = new CohortIndicator();
-		sunday18Indicator.setName("sunday18Indicator");
-		sunday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
-		h.replaceDefinition(sunday18Indicator);
-		
-		CohortIndicator sunday19Indicator = new CohortIndicator();
-		sunday19Indicator.setName("sunday19Indicator");
-		sunday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
-		h.replaceDefinition(sunday19Indicator);
-		
-		CohortIndicator sunday20Indicator = new CohortIndicator();
-		sunday20Indicator.setName("sunday20Indicator");
-		sunday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
-		h.replaceDefinition(sunday20Indicator);
-		
-		CohortIndicator sunday21Indicator = new CohortIndicator();
-		sunday21Indicator.setName("sunday21Indicator");
-		sunday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
-		h.replaceDefinition(sunday21Indicator);
-		
-		
-		CohortIndicator sunday22Indicator = new CohortIndicator();
-		sunday22Indicator.setName("sunday22Indicator");
-		sunday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
-		h.replaceDefinition(sunday22Indicator);
-		
-		CohortIndicator sunday23Indicator = new CohortIndicator();
-		sunday23Indicator.setName("sunday23Indicator");
-		sunday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
-		h.replaceDefinition(sunday23Indicator);
-		
-		
-		CohortIndicator sunday24Indicator = new CohortIndicator();
-		sunday24Indicator.setName("sunday24Indicator");
-		sunday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
-		h.replaceDefinition(sunday24Indicator);
-		
-		CohortIndicator sunday25Indicator = new CohortIndicator();
-		sunday25Indicator.setName("sunday25Indicator");
-		sunday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
-		h.replaceDefinition(sunday25Indicator);
-		
-		CohortIndicator sunday26Indicator = new CohortIndicator();
-		sunday26Indicator.setName("sunday26Indicator");
-		sunday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
-		h.replaceDefinition(sunday26Indicator);
-		
-		CohortIndicator sunday27Indicator = new CohortIndicator();
-		sunday27Indicator.setName("sunday27Indicator");
-		sunday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
-		h.replaceDefinition(sunday27Indicator);
-		
-		CohortIndicator sunday28Indicator = new CohortIndicator();
-		sunday28Indicator.setName("sunday28Indicator");
-		sunday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
-		h.replaceDefinition(sunday28Indicator);
-		
-		CohortIndicator sunday29Indicator = new CohortIndicator();
-		sunday29Indicator.setName("sunday29Indicator");
-		sunday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
-		h.replaceDefinition(sunday29Indicator);
-		
-		CohortIndicator sunday30Indicator = new CohortIndicator();
-		sunday30Indicator.setName("sunday30Indicator");
-		sunday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
-		h.replaceDefinition(sunday30Indicator);
-		
-		CohortIndicator sunday31Indicator = new CohortIndicator();
-		sunday31Indicator.setName("sunday31Indicator");
-		sunday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		sunday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		sunday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
-		h.replaceDefinition(sunday31Indicator);
+//		SqlCohortDefinition monday=new SqlCohortDefinition();
+//		monday.setName("monday");
+//		monday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=0 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		monday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(monday);
+//		
+//		
+//		CohortIndicator monday1Indicator = new CohortIndicator();
+//		monday1Indicator.setName("monday1Indicator");
+//		monday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(monday1Indicator);
+//		
+//		
+//		CohortIndicator monday2Indicator = new CohortIndicator();
+//		monday2Indicator.setName("monday2Indicator");
+//		monday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(monday2Indicator);
+//		
+//		CohortIndicator monday3Indicator = new CohortIndicator();
+//		monday3Indicator.setName("monday3Indicator");
+//		monday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(monday3Indicator);
+//		
+//		
+//		CohortIndicator monday4Indicator = new CohortIndicator();
+//		monday4Indicator.setName("monday4Indicator");
+//		monday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(monday4Indicator);
+//		
+//		CohortIndicator monday5Indicator = new CohortIndicator();
+//		monday5Indicator.setName("monday5Indicator");
+//		monday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(monday5Indicator);
+//		
+//		CohortIndicator monday6Indicator = new CohortIndicator();
+//		monday6Indicator.setName("monday6Indicator");
+//		monday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(monday6Indicator);
+//		
+//		CohortIndicator monday7Indicator = new CohortIndicator();
+//		monday7Indicator.setName("monday7Indicator");
+//		monday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(monday7Indicator);
+//		
+//		CohortIndicator monday8Indicator = new CohortIndicator();
+//		monday8Indicator.setName("monday8Indicator");
+//		monday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(monday8Indicator);
+//		
+//		CohortIndicator monday9Indicator = new CohortIndicator();
+//		monday9Indicator.setName("monday9Indicator");
+//		monday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(monday9Indicator);
+//		
+//		CohortIndicator monday10Indicator = new CohortIndicator();
+//		monday10Indicator.setName("monday10Indicator");
+//		monday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(monday10Indicator);
+//		
+//		CohortIndicator monday11Indicator = new CohortIndicator();
+//		monday11Indicator.setName("monday11Indicator");
+//		monday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(monday11Indicator);
+//		
+//		
+//		CohortIndicator monday12Indicator = new CohortIndicator();
+//		monday12Indicator.setName("monday12Indicator");
+//		monday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(monday12Indicator);
+//		
+//		CohortIndicator monday13Indicator = new CohortIndicator();
+//		monday13Indicator.setName("monday13Indicator");
+//		monday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(monday13Indicator);
+//		
+//		
+//		CohortIndicator monday14Indicator = new CohortIndicator();
+//		monday14Indicator.setName("monday14Indicator");
+//		monday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(monday14Indicator);
+//		
+//		CohortIndicator monday15Indicator = new CohortIndicator();
+//		monday15Indicator.setName("monday15Indicator");
+//		monday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(monday15Indicator);
+//		
+//		CohortIndicator monday16Indicator = new CohortIndicator();
+//		monday16Indicator.setName("monday16Indicator");
+//		monday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(monday16Indicator);
+//		
+//		CohortIndicator monday17Indicator = new CohortIndicator();
+//		monday17Indicator.setName("monday17Indicator");
+//		monday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(monday17Indicator);
+//		
+//		CohortIndicator monday18Indicator = new CohortIndicator();
+//		monday18Indicator.setName("monday18Indicator");
+//		monday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(monday18Indicator);
+//		
+//		CohortIndicator monday19Indicator = new CohortIndicator();
+//		monday19Indicator.setName("monday19Indicator");
+//		monday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(monday19Indicator);
+//		
+//		CohortIndicator monday20Indicator = new CohortIndicator();
+//		monday20Indicator.setName("monday20Indicator");
+//		monday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(monday20Indicator);
+//		
+//		CohortIndicator monday21Indicator = new CohortIndicator();
+//		monday21Indicator.setName("monday21Indicator");
+//		monday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(monday21Indicator);
+//		
+//		
+//		CohortIndicator monday22Indicator = new CohortIndicator();
+//		monday22Indicator.setName("monday22Indicator");
+//		monday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(monday22Indicator);
+//		
+//		CohortIndicator monday23Indicator = new CohortIndicator();
+//		monday23Indicator.setName("monday23Indicator");
+//		monday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(monday23Indicator);
+//		
+//		
+//		CohortIndicator monday24Indicator = new CohortIndicator();
+//		monday24Indicator.setName("monday24Indicator");
+//		monday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(monday24Indicator);
+//		
+//		CohortIndicator monday25Indicator = new CohortIndicator();
+//		monday25Indicator.setName("monday25Indicator");
+//		monday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(monday25Indicator);
+//		
+//		CohortIndicator monday26Indicator = new CohortIndicator();
+//		monday26Indicator.setName("monday26Indicator");
+//		monday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(monday26Indicator);
+//		
+//		CohortIndicator monday27Indicator = new CohortIndicator();
+//		monday27Indicator.setName("monday27Indicator");
+//		monday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(monday27Indicator);
+//		
+//		CohortIndicator monday28Indicator = new CohortIndicator();
+//		monday28Indicator.setName("monday28Indicator");
+//		monday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(monday28Indicator);
+//		
+//		CohortIndicator monday29Indicator = new CohortIndicator();
+//		monday29Indicator.setName("monday29Indicator");
+//		monday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(monday29Indicator);
+//		
+//		CohortIndicator monday30Indicator = new CohortIndicator();
+//		monday30Indicator.setName("monday30Indicator");
+//		monday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(monday30Indicator);
+//		
+//		CohortIndicator monday31Indicator = new CohortIndicator();
+//		monday31Indicator.setName("monday31Indicator");
+//		monday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		monday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		monday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(monday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(monday31Indicator);
+//
+//		
+////Tuesday
+//		SqlCohortDefinition tuesday=new SqlCohortDefinition();
+//		tuesday.setName("tuesday");
+//		tuesday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=1 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		tuesday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(tuesday);
+//		
+//		
+//		CohortIndicator tuesday1Indicator = new CohortIndicator();
+//		tuesday1Indicator.setName("tuesday1Indicator");
+//		tuesday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(tuesday1Indicator);
+//		
+//		
+//		CohortIndicator tuesday2Indicator = new CohortIndicator();
+//		tuesday2Indicator.setName("tuesday2Indicator");
+//		tuesday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(tuesday2Indicator);
+//		
+//		CohortIndicator tuesday3Indicator = new CohortIndicator();
+//		tuesday3Indicator.setName("tuesday3Indicator");
+//		tuesday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(tuesday3Indicator);
+//		
+//		
+//		CohortIndicator tuesday4Indicator = new CohortIndicator();
+//		tuesday4Indicator.setName("tuesday4Indicator");
+//		tuesday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(tuesday4Indicator);
+//		
+//		CohortIndicator tuesday5Indicator = new CohortIndicator();
+//		tuesday5Indicator.setName("tuesday5Indicator");
+//		tuesday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(tuesday5Indicator);
+//		
+//		CohortIndicator tuesday6Indicator = new CohortIndicator();
+//		tuesday6Indicator.setName("tuesday6Indicator");
+//		tuesday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(tuesday6Indicator);
+//		
+//		CohortIndicator tuesday7Indicator = new CohortIndicator();
+//		tuesday7Indicator.setName("tuesday7Indicator");
+//		tuesday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(tuesday7Indicator);
+//		
+//		CohortIndicator tuesday8Indicator = new CohortIndicator();
+//		tuesday8Indicator.setName("tuesday8Indicator");
+//		tuesday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(tuesday8Indicator);
+//		
+//		CohortIndicator tuesday9Indicator = new CohortIndicator();
+//		tuesday9Indicator.setName("tuesday9Indicator");
+//		tuesday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(tuesday9Indicator);
+//		
+//		CohortIndicator tuesday10Indicator = new CohortIndicator();
+//		tuesday10Indicator.setName("tuesday10Indicator");
+//		tuesday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(tuesday10Indicator);
+//		
+//		CohortIndicator tuesday11Indicator = new CohortIndicator();
+//		tuesday11Indicator.setName("tuesday11Indicator");
+//		tuesday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(tuesday11Indicator);
+//		
+//		
+//		CohortIndicator tuesday12Indicator = new CohortIndicator();
+//		tuesday12Indicator.setName("tuesday12Indicator");
+//		tuesday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(tuesday12Indicator);
+//		
+//		CohortIndicator tuesday13Indicator = new CohortIndicator();
+//		tuesday13Indicator.setName("tuesday13Indicator");
+//		tuesday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(tuesday13Indicator);
+//		
+//		
+//		CohortIndicator tuesday14Indicator = new CohortIndicator();
+//		tuesday14Indicator.setName("tuesday14Indicator");
+//		tuesday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(tuesday14Indicator);
+//		
+//		CohortIndicator tuesday15Indicator = new CohortIndicator();
+//		tuesday15Indicator.setName("tuesday15Indicator");
+//		tuesday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(tuesday15Indicator);
+//		
+//		CohortIndicator tuesday16Indicator = new CohortIndicator();
+//		tuesday16Indicator.setName("tuesday16Indicator");
+//		tuesday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(tuesday16Indicator);
+//		
+//		CohortIndicator tuesday17Indicator = new CohortIndicator();
+//		tuesday17Indicator.setName("tuesday17Indicator");
+//		tuesday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(tuesday17Indicator);
+//		
+//		CohortIndicator tuesday18Indicator = new CohortIndicator();
+//		tuesday18Indicator.setName("tuesday18Indicator");
+//		tuesday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(tuesday18Indicator);
+//		
+//		CohortIndicator tuesday19Indicator = new CohortIndicator();
+//		tuesday19Indicator.setName("tuesday19Indicator");
+//		tuesday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(tuesday19Indicator);
+//		
+//		CohortIndicator tuesday20Indicator = new CohortIndicator();
+//		tuesday20Indicator.setName("tuesday20Indicator");
+//		tuesday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(tuesday20Indicator);
+//		
+//		CohortIndicator tuesday21Indicator = new CohortIndicator();
+//		tuesday21Indicator.setName("tuesday21Indicator");
+//		tuesday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(tuesday21Indicator);
+//		
+//		
+//		CohortIndicator tuesday22Indicator = new CohortIndicator();
+//		tuesday22Indicator.setName("tuesday22Indicator");
+//		tuesday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(tuesday22Indicator);
+//		
+//		CohortIndicator tuesday23Indicator = new CohortIndicator();
+//		tuesday23Indicator.setName("tuesday23Indicator");
+//		tuesday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(tuesday23Indicator);
+//		
+//		
+//		CohortIndicator tuesday24Indicator = new CohortIndicator();
+//		tuesday24Indicator.setName("tuesday24Indicator");
+//		tuesday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(tuesday24Indicator);
+//		
+//		CohortIndicator tuesday25Indicator = new CohortIndicator();
+//		tuesday25Indicator.setName("tuesday25Indicator");
+//		tuesday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(tuesday25Indicator);
+//		
+//		CohortIndicator tuesday26Indicator = new CohortIndicator();
+//		tuesday26Indicator.setName("tuesday26Indicator");
+//		tuesday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(tuesday26Indicator);
+//		
+//		CohortIndicator tuesday27Indicator = new CohortIndicator();
+//		tuesday27Indicator.setName("tuesday27Indicator");
+//		tuesday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(tuesday27Indicator);
+//		
+//		CohortIndicator tuesday28Indicator = new CohortIndicator();
+//		tuesday28Indicator.setName("tuesday28Indicator");
+//		tuesday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(tuesday28Indicator);
+//		
+//		CohortIndicator tuesday29Indicator = new CohortIndicator();
+//		tuesday29Indicator.setName("tuesday29Indicator");
+//		tuesday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(tuesday29Indicator);
+//		
+//		CohortIndicator tuesday30Indicator = new CohortIndicator();
+//		tuesday30Indicator.setName("tuesday30Indicator");
+//		tuesday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(tuesday30Indicator);
+//		
+//		CohortIndicator tuesday31Indicator = new CohortIndicator();
+//		tuesday31Indicator.setName("tuesday31Indicator");
+//		tuesday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		tuesday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		tuesday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(tuesday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(tuesday31Indicator);
+//		
+//		
+////Wednesday
+//		
+//		SqlCohortDefinition wednesday=new SqlCohortDefinition();
+//		wednesday.setName("wednesday");
+//		wednesday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=2 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		wednesday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(wednesday);
+//		
+//		
+//		CohortIndicator wednesday1Indicator = new CohortIndicator();
+//		wednesday1Indicator.setName("wednesday1Indicator");
+//		wednesday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(wednesday1Indicator);
+//		
+//		
+//		CohortIndicator wednesday2Indicator = new CohortIndicator();
+//		wednesday2Indicator.setName("wednesday2Indicator");
+//		wednesday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(wednesday2Indicator);
+//		
+//		CohortIndicator wednesday3Indicator = new CohortIndicator();
+//		wednesday3Indicator.setName("wednesday3Indicator");
+//		wednesday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(wednesday3Indicator);
+//		
+//		
+//		CohortIndicator wednesday4Indicator = new CohortIndicator();
+//		wednesday4Indicator.setName("wednesday4Indicator");
+//		wednesday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(wednesday4Indicator);
+//		
+//		CohortIndicator wednesday5Indicator = new CohortIndicator();
+//		wednesday5Indicator.setName("wednesday5Indicator");
+//		wednesday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(wednesday5Indicator);
+//		
+//		CohortIndicator wednesday6Indicator = new CohortIndicator();
+//		wednesday6Indicator.setName("wednesday6Indicator");
+//		wednesday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(wednesday6Indicator);
+//		
+//		CohortIndicator wednesday7Indicator = new CohortIndicator();
+//		wednesday7Indicator.setName("wednesday7Indicator");
+//		wednesday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(wednesday7Indicator);
+//		
+//		CohortIndicator wednesday8Indicator = new CohortIndicator();
+//		wednesday8Indicator.setName("wednesday8Indicator");
+//		wednesday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(wednesday8Indicator);
+//		
+//		CohortIndicator wednesday9Indicator = new CohortIndicator();
+//		wednesday9Indicator.setName("wednesday9Indicator");
+//		wednesday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(wednesday9Indicator);
+//		
+//		CohortIndicator wednesday10Indicator = new CohortIndicator();
+//		wednesday10Indicator.setName("wednesday10Indicator");
+//		wednesday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(wednesday10Indicator);
+//		
+//		CohortIndicator wednesday11Indicator = new CohortIndicator();
+//		wednesday11Indicator.setName("wednesday11Indicator");
+//		wednesday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(wednesday11Indicator);
+//		
+//		
+//		CohortIndicator wednesday12Indicator = new CohortIndicator();
+//		wednesday12Indicator.setName("wednesday12Indicator");
+//		wednesday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(wednesday12Indicator);
+//		
+//		CohortIndicator wednesday13Indicator = new CohortIndicator();
+//		wednesday13Indicator.setName("wednesday13Indicator");
+//		wednesday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(wednesday13Indicator);
+//		
+//		
+//		CohortIndicator wednesday14Indicator = new CohortIndicator();
+//		wednesday14Indicator.setName("wednesday14Indicator");
+//		wednesday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(wednesday14Indicator);
+//		
+//		CohortIndicator wednesday15Indicator = new CohortIndicator();
+//		wednesday15Indicator.setName("wednesday15Indicator");
+//		wednesday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(wednesday15Indicator);
+//		
+//		CohortIndicator wednesday16Indicator = new CohortIndicator();
+//		wednesday16Indicator.setName("wednesday16Indicator");
+//		wednesday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(wednesday16Indicator);
+//		
+//		CohortIndicator wednesday17Indicator = new CohortIndicator();
+//		wednesday17Indicator.setName("wednesday17Indicator");
+//		wednesday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(wednesday17Indicator);
+//		
+//		CohortIndicator wednesday18Indicator = new CohortIndicator();
+//		wednesday18Indicator.setName("wednesday18Indicator");
+//		wednesday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(wednesday18Indicator);
+//		
+//		CohortIndicator wednesday19Indicator = new CohortIndicator();
+//		wednesday19Indicator.setName("wednesday19Indicator");
+//		wednesday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(wednesday19Indicator);
+//		
+//		CohortIndicator wednesday20Indicator = new CohortIndicator();
+//		wednesday20Indicator.setName("wednesday20Indicator");
+//		wednesday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(wednesday20Indicator);
+//		
+//		CohortIndicator wednesday21Indicator = new CohortIndicator();
+//		wednesday21Indicator.setName("wednesday21Indicator");
+//		wednesday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(wednesday21Indicator);
+//		
+//		
+//		CohortIndicator wednesday22Indicator = new CohortIndicator();
+//		wednesday22Indicator.setName("wednesday22Indicator");
+//		wednesday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(wednesday22Indicator);
+//		
+//		CohortIndicator wednesday23Indicator = new CohortIndicator();
+//		wednesday23Indicator.setName("wednesday23Indicator");
+//		wednesday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(wednesday23Indicator);
+//		
+//		
+//		CohortIndicator wednesday24Indicator = new CohortIndicator();
+//		wednesday24Indicator.setName("wednesday24Indicator");
+//		wednesday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(wednesday24Indicator);
+//		
+//		CohortIndicator wednesday25Indicator = new CohortIndicator();
+//		wednesday25Indicator.setName("wednesday25Indicator");
+//		wednesday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(wednesday25Indicator);
+//		
+//		CohortIndicator wednesday26Indicator = new CohortIndicator();
+//		wednesday26Indicator.setName("wednesday26Indicator");
+//		wednesday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(wednesday26Indicator);
+//		
+//		CohortIndicator wednesday27Indicator = new CohortIndicator();
+//		wednesday27Indicator.setName("wednesday27Indicator");
+//		wednesday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(wednesday27Indicator);
+//		
+//		CohortIndicator wednesday28Indicator = new CohortIndicator();
+//		wednesday28Indicator.setName("wednesday28Indicator");
+//		wednesday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(wednesday28Indicator);
+//		
+//		CohortIndicator wednesday29Indicator = new CohortIndicator();
+//		wednesday29Indicator.setName("wednesday29Indicator");
+//		wednesday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(wednesday29Indicator);
+//		
+//		CohortIndicator wednesday30Indicator = new CohortIndicator();
+//		wednesday30Indicator.setName("wednesday30Indicator");
+//		wednesday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(wednesday30Indicator);
+//		
+//		CohortIndicator wednesday31Indicator = new CohortIndicator();
+//		wednesday31Indicator.setName("wednesday31Indicator");
+//		wednesday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		wednesday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		wednesday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(wednesday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(wednesday31Indicator);
+//		
+//		
+//		
+//		
+////Thursday
+//		
+//		SqlCohortDefinition thursday=new SqlCohortDefinition();
+//		thursday.setName("thursday");
+//		thursday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=3 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		thursday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(thursday);
+//		
+//		
+//		CohortIndicator thursday1Indicator = new CohortIndicator();
+//		thursday1Indicator.setName("thursday1Indicator");
+//		thursday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(thursday1Indicator);
+//		
+//		
+//		CohortIndicator thursday2Indicator = new CohortIndicator();
+//		thursday2Indicator.setName("thursday2Indicator");
+//		thursday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(thursday2Indicator);
+//		
+//		CohortIndicator thursday3Indicator = new CohortIndicator();
+//		thursday3Indicator.setName("thursday3Indicator");
+//		thursday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(thursday3Indicator);
+//		
+//		
+//		CohortIndicator thursday4Indicator = new CohortIndicator();
+//		thursday4Indicator.setName("thursday4Indicator");
+//		thursday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(thursday4Indicator);
+//		
+//		CohortIndicator thursday5Indicator = new CohortIndicator();
+//		thursday5Indicator.setName("thursday5Indicator");
+//		thursday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(thursday5Indicator);
+//		
+//		CohortIndicator thursday6Indicator = new CohortIndicator();
+//		thursday6Indicator.setName("thursday6Indicator");
+//		thursday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(thursday6Indicator);
+//		
+//		CohortIndicator thursday7Indicator = new CohortIndicator();
+//		thursday7Indicator.setName("thursday7Indicator");
+//		thursday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(thursday7Indicator);
+//		
+//		CohortIndicator thursday8Indicator = new CohortIndicator();
+//		thursday8Indicator.setName("thursday8Indicator");
+//		thursday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(thursday8Indicator);
+//		
+//		CohortIndicator thursday9Indicator = new CohortIndicator();
+//		thursday9Indicator.setName("thursday9Indicator");
+//		thursday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(thursday9Indicator);
+//		
+//		CohortIndicator thursday10Indicator = new CohortIndicator();
+//		thursday10Indicator.setName("thursday10Indicator");
+//		thursday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(thursday10Indicator);
+//		
+//		CohortIndicator thursday11Indicator = new CohortIndicator();
+//		thursday11Indicator.setName("thursday11Indicator");
+//		thursday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(thursday11Indicator);
+//		
+//		
+//		CohortIndicator thursday12Indicator = new CohortIndicator();
+//		thursday12Indicator.setName("thursday12Indicator");
+//		thursday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(thursday12Indicator);
+//		
+//		CohortIndicator thursday13Indicator = new CohortIndicator();
+//		thursday13Indicator.setName("thursday13Indicator");
+//		thursday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(thursday13Indicator);
+//		
+//		
+//		CohortIndicator thursday14Indicator = new CohortIndicator();
+//		thursday14Indicator.setName("thursday14Indicator");
+//		thursday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(thursday14Indicator);
+//		
+//		CohortIndicator thursday15Indicator = new CohortIndicator();
+//		thursday15Indicator.setName("thursday15Indicator");
+//		thursday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(thursday15Indicator);
+//		
+//		CohortIndicator thursday16Indicator = new CohortIndicator();
+//		thursday16Indicator.setName("thursday16Indicator");
+//		thursday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(thursday16Indicator);
+//		
+//		CohortIndicator thursday17Indicator = new CohortIndicator();
+//		thursday17Indicator.setName("thursday17Indicator");
+//		thursday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(thursday17Indicator);
+//		
+//		CohortIndicator thursday18Indicator = new CohortIndicator();
+//		thursday18Indicator.setName("thursday18Indicator");
+//		thursday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(thursday18Indicator);
+//		
+//		CohortIndicator thursday19Indicator = new CohortIndicator();
+//		thursday19Indicator.setName("thursday19Indicator");
+//		thursday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(thursday19Indicator);
+//		
+//		CohortIndicator thursday20Indicator = new CohortIndicator();
+//		thursday20Indicator.setName("thursday20Indicator");
+//		thursday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(thursday20Indicator);
+//		
+//		CohortIndicator thursday21Indicator = new CohortIndicator();
+//		thursday21Indicator.setName("thursday21Indicator");
+//		thursday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(thursday21Indicator);
+//		
+//		
+//		CohortIndicator thursday22Indicator = new CohortIndicator();
+//		thursday22Indicator.setName("thursday22Indicator");
+//		thursday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(thursday22Indicator);
+//		
+//		CohortIndicator thursday23Indicator = new CohortIndicator();
+//		thursday23Indicator.setName("thursday23Indicator");
+//		thursday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(thursday23Indicator);
+//		
+//		
+//		CohortIndicator thursday24Indicator = new CohortIndicator();
+//		thursday24Indicator.setName("thursday24Indicator");
+//		thursday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(thursday24Indicator);
+//		
+//		CohortIndicator thursday25Indicator = new CohortIndicator();
+//		thursday25Indicator.setName("thursday25Indicator");
+//		thursday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(thursday25Indicator);
+//		
+//		CohortIndicator thursday26Indicator = new CohortIndicator();
+//		thursday26Indicator.setName("thursday26Indicator");
+//		thursday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(thursday26Indicator);
+//		
+//		CohortIndicator thursday27Indicator = new CohortIndicator();
+//		thursday27Indicator.setName("thursday27Indicator");
+//		thursday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(thursday27Indicator);
+//		
+//		CohortIndicator thursday28Indicator = new CohortIndicator();
+//		thursday28Indicator.setName("thursday28Indicator");
+//		thursday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(thursday28Indicator);
+//		
+//		CohortIndicator thursday29Indicator = new CohortIndicator();
+//		thursday29Indicator.setName("thursday29Indicator");
+//		thursday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(thursday29Indicator);
+//		
+//		CohortIndicator thursday30Indicator = new CohortIndicator();
+//		thursday30Indicator.setName("thursday30Indicator");
+//		thursday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(thursday30Indicator);
+//		
+//		CohortIndicator thursday31Indicator = new CohortIndicator();
+//		thursday31Indicator.setName("thursday31Indicator");
+//		thursday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		thursday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		thursday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(thursday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(thursday31Indicator);
+//		
+//
+////Friday
+//		
+//		SqlCohortDefinition friday=new SqlCohortDefinition();
+//		friday.setName("friday");
+//		friday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=4 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		friday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(friday);
+//		
+//		
+//		CohortIndicator friday1Indicator = new CohortIndicator();
+//		friday1Indicator.setName("friday1Indicator");
+//		friday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(friday1Indicator);
+//		
+//		
+//		CohortIndicator friday2Indicator = new CohortIndicator();
+//		friday2Indicator.setName("friday2Indicator");
+//		friday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(friday2Indicator);
+//		
+//		CohortIndicator friday3Indicator = new CohortIndicator();
+//		friday3Indicator.setName("friday3Indicator");
+//		friday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(friday3Indicator);
+//		
+//		
+//		CohortIndicator friday4Indicator = new CohortIndicator();
+//		friday4Indicator.setName("friday4Indicator");
+//		friday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(friday4Indicator);
+//		
+//		CohortIndicator friday5Indicator = new CohortIndicator();
+//		friday5Indicator.setName("friday5Indicator");
+//		friday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(friday5Indicator);
+//		
+//		CohortIndicator friday6Indicator = new CohortIndicator();
+//		friday6Indicator.setName("friday6Indicator");
+//		friday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(friday6Indicator);
+//		
+//		CohortIndicator friday7Indicator = new CohortIndicator();
+//		friday7Indicator.setName("friday7Indicator");
+//		friday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(friday7Indicator);
+//		
+//		CohortIndicator friday8Indicator = new CohortIndicator();
+//		friday8Indicator.setName("friday8Indicator");
+//		friday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(friday8Indicator);
+//		
+//		CohortIndicator friday9Indicator = new CohortIndicator();
+//		friday9Indicator.setName("friday9Indicator");
+//		friday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(friday9Indicator);
+//		
+//		CohortIndicator friday10Indicator = new CohortIndicator();
+//		friday10Indicator.setName("friday10Indicator");
+//		friday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(friday10Indicator);
+//		
+//		CohortIndicator friday11Indicator = new CohortIndicator();
+//		friday11Indicator.setName("friday11Indicator");
+//		friday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(friday11Indicator);
+//		
+//		
+//		CohortIndicator friday12Indicator = new CohortIndicator();
+//		friday12Indicator.setName("friday12Indicator");
+//		friday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(friday12Indicator);
+//		
+//		CohortIndicator friday13Indicator = new CohortIndicator();
+//		friday13Indicator.setName("friday13Indicator");
+//		friday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(friday13Indicator);
+//		
+//		
+//		CohortIndicator friday14Indicator = new CohortIndicator();
+//		friday14Indicator.setName("friday14Indicator");
+//		friday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(friday14Indicator);
+//		
+//		CohortIndicator friday15Indicator = new CohortIndicator();
+//		friday15Indicator.setName("friday15Indicator");
+//		friday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(friday15Indicator);
+//		
+//		CohortIndicator friday16Indicator = new CohortIndicator();
+//		friday16Indicator.setName("friday16Indicator");
+//		friday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(friday16Indicator);
+//		
+//		CohortIndicator friday17Indicator = new CohortIndicator();
+//		friday17Indicator.setName("friday17Indicator");
+//		friday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(friday17Indicator);
+//		
+//		CohortIndicator friday18Indicator = new CohortIndicator();
+//		friday18Indicator.setName("friday18Indicator");
+//		friday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(friday18Indicator);
+//		
+//		CohortIndicator friday19Indicator = new CohortIndicator();
+//		friday19Indicator.setName("friday19Indicator");
+//		friday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(friday19Indicator);
+//		
+//		CohortIndicator friday20Indicator = new CohortIndicator();
+//		friday20Indicator.setName("friday20Indicator");
+//		friday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(friday20Indicator);
+//		
+//		CohortIndicator friday21Indicator = new CohortIndicator();
+//		friday21Indicator.setName("friday21Indicator");
+//		friday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(friday21Indicator);
+//		
+//		
+//		CohortIndicator friday22Indicator = new CohortIndicator();
+//		friday22Indicator.setName("friday22Indicator");
+//		friday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(friday22Indicator);
+//		
+//		CohortIndicator friday23Indicator = new CohortIndicator();
+//		friday23Indicator.setName("friday23Indicator");
+//		friday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(friday23Indicator);
+//		
+//		
+//		CohortIndicator friday24Indicator = new CohortIndicator();
+//		friday24Indicator.setName("friday24Indicator");
+//		friday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(friday24Indicator);
+//		
+//		CohortIndicator friday25Indicator = new CohortIndicator();
+//		friday25Indicator.setName("friday25Indicator");
+//		friday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(friday25Indicator);
+//		
+//		CohortIndicator friday26Indicator = new CohortIndicator();
+//		friday26Indicator.setName("friday26Indicator");
+//		friday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(friday26Indicator);
+//		
+//		CohortIndicator friday27Indicator = new CohortIndicator();
+//		friday27Indicator.setName("friday27Indicator");
+//		friday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(friday27Indicator);
+//		
+//		CohortIndicator friday28Indicator = new CohortIndicator();
+//		friday28Indicator.setName("friday28Indicator");
+//		friday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(friday28Indicator);
+//		
+//		CohortIndicator friday29Indicator = new CohortIndicator();
+//		friday29Indicator.setName("friday29Indicator");
+//		friday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(friday29Indicator);
+//		
+//		CohortIndicator friday30Indicator = new CohortIndicator();
+//		friday30Indicator.setName("friday30Indicator");
+//		friday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(friday30Indicator);
+//		
+//		CohortIndicator friday31Indicator = new CohortIndicator();
+//		friday31Indicator.setName("friday31Indicator");
+//		friday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		friday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		friday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(friday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(friday31Indicator);		
+//		
+////saturday
+//		
+//		SqlCohortDefinition saturday=new SqlCohortDefinition();
+//		saturday.setName("saturday");
+//		saturday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=5 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		saturday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(saturday);
+//		
+//		
+//		CohortIndicator saturday1Indicator = new CohortIndicator();
+//		saturday1Indicator.setName("saturday1Indicator");
+//		saturday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(saturday1Indicator);
+//		
+//		
+//		CohortIndicator saturday2Indicator = new CohortIndicator();
+//		saturday2Indicator.setName("saturday2Indicator");
+//		saturday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(saturday2Indicator);
+//		
+//		CohortIndicator saturday3Indicator = new CohortIndicator();
+//		saturday3Indicator.setName("saturday3Indicator");
+//		saturday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(saturday3Indicator);
+//		
+//		
+//		CohortIndicator saturday4Indicator = new CohortIndicator();
+//		saturday4Indicator.setName("saturday4Indicator");
+//		saturday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(saturday4Indicator);
+//		
+//		CohortIndicator saturday5Indicator = new CohortIndicator();
+//		saturday5Indicator.setName("saturday5Indicator");
+//		saturday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(saturday5Indicator);
+//		
+//		CohortIndicator saturday6Indicator = new CohortIndicator();
+//		saturday6Indicator.setName("saturday6Indicator");
+//		saturday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(saturday6Indicator);
+//		
+//		CohortIndicator saturday7Indicator = new CohortIndicator();
+//		saturday7Indicator.setName("saturday7Indicator");
+//		saturday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(saturday7Indicator);
+//		
+//		CohortIndicator saturday8Indicator = new CohortIndicator();
+//		saturday8Indicator.setName("saturday8Indicator");
+//		saturday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(saturday8Indicator);
+//		
+//		CohortIndicator saturday9Indicator = new CohortIndicator();
+//		saturday9Indicator.setName("saturday9Indicator");
+//		saturday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(saturday9Indicator);
+//		
+//		CohortIndicator saturday10Indicator = new CohortIndicator();
+//		saturday10Indicator.setName("saturday10Indicator");
+//		saturday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(saturday10Indicator);
+//		
+//		CohortIndicator saturday11Indicator = new CohortIndicator();
+//		saturday11Indicator.setName("saturday11Indicator");
+//		saturday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(saturday11Indicator);
+//		
+//		
+//		CohortIndicator saturday12Indicator = new CohortIndicator();
+//		saturday12Indicator.setName("saturday12Indicator");
+//		saturday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(saturday12Indicator);
+//		
+//		CohortIndicator saturday13Indicator = new CohortIndicator();
+//		saturday13Indicator.setName("saturday13Indicator");
+//		saturday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(saturday13Indicator);
+//		
+//		
+//		CohortIndicator saturday14Indicator = new CohortIndicator();
+//		saturday14Indicator.setName("saturday14Indicator");
+//		saturday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(saturday14Indicator);
+//		
+//		CohortIndicator saturday15Indicator = new CohortIndicator();
+//		saturday15Indicator.setName("saturday15Indicator");
+//		saturday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(saturday15Indicator);
+//		
+//		CohortIndicator saturday16Indicator = new CohortIndicator();
+//		saturday16Indicator.setName("saturday16Indicator");
+//		saturday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(saturday16Indicator);
+//		
+//		CohortIndicator saturday17Indicator = new CohortIndicator();
+//		saturday17Indicator.setName("saturday17Indicator");
+//		saturday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(saturday17Indicator);
+//		
+//		CohortIndicator saturday18Indicator = new CohortIndicator();
+//		saturday18Indicator.setName("saturday18Indicator");
+//		saturday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(saturday18Indicator);
+//		
+//		CohortIndicator saturday19Indicator = new CohortIndicator();
+//		saturday19Indicator.setName("saturday19Indicator");
+//		saturday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(saturday19Indicator);
+//		
+//		CohortIndicator saturday20Indicator = new CohortIndicator();
+//		saturday20Indicator.setName("saturday20Indicator");
+//		saturday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(saturday20Indicator);
+//		
+//		CohortIndicator saturday21Indicator = new CohortIndicator();
+//		saturday21Indicator.setName("saturday21Indicator");
+//		saturday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(saturday21Indicator);
+//		
+//		
+//		CohortIndicator saturday22Indicator = new CohortIndicator();
+//		saturday22Indicator.setName("saturday22Indicator");
+//		saturday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(saturday22Indicator);
+//		
+//		CohortIndicator saturday23Indicator = new CohortIndicator();
+//		saturday23Indicator.setName("saturday23Indicator");
+//		saturday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(saturday23Indicator);
+//		
+//		
+//		CohortIndicator saturday24Indicator = new CohortIndicator();
+//		saturday24Indicator.setName("saturday24Indicator");
+//		saturday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(saturday24Indicator);
+//		
+//		CohortIndicator saturday25Indicator = new CohortIndicator();
+//		saturday25Indicator.setName("saturday25Indicator");
+//		saturday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(saturday25Indicator);
+//		
+//		CohortIndicator saturday26Indicator = new CohortIndicator();
+//		saturday26Indicator.setName("saturday26Indicator");
+//		saturday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(saturday26Indicator);
+//		
+//		CohortIndicator saturday27Indicator = new CohortIndicator();
+//		saturday27Indicator.setName("saturday27Indicator");
+//		saturday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(saturday27Indicator);
+//		
+//		CohortIndicator saturday28Indicator = new CohortIndicator();
+//		saturday28Indicator.setName("saturday28Indicator");
+//		saturday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(saturday28Indicator);
+//		
+//		CohortIndicator saturday29Indicator = new CohortIndicator();
+//		saturday29Indicator.setName("saturday29Indicator");
+//		saturday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(saturday29Indicator);
+//		
+//		CohortIndicator saturday30Indicator = new CohortIndicator();
+//		saturday30Indicator.setName("saturday30Indicator");
+//		saturday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(saturday30Indicator);
+//		
+//		CohortIndicator saturday31Indicator = new CohortIndicator();
+//		saturday31Indicator.setName("saturday31Indicator");
+//		saturday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		saturday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		saturday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(saturday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(saturday31Indicator);
+//
+//		
+////Sunday
+//		
+//		SqlCohortDefinition sunday=new SqlCohortDefinition();
+//		sunday.setName("sunday");
+//		sunday.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays=6 and encounter_datetime>= :startDate and encounter_datetime< :endDate");
+//		sunday.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(sunday);
+//		
+//		
+//		CohortIndicator sunday1Indicator = new CohortIndicator();
+//		sunday1Indicator.setName("sunday1Indicator");
+//		sunday1Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday1Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday1Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-30d},endDate=${endDate-29d}")));
+//		h.replaceDefinition(sunday1Indicator);
+//		
+//		
+//		CohortIndicator sunday2Indicator = new CohortIndicator();
+//		sunday2Indicator.setName("sunday2Indicator");
+//		sunday2Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday2Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday2Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-29d},endDate=${endDate-28d}")));
+//		h.replaceDefinition(sunday2Indicator);
+//		
+//		CohortIndicator sunday3Indicator = new CohortIndicator();
+//		sunday3Indicator.setName("sunday3Indicator");
+//		sunday3Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday3Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday3Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-28d},endDate=${endDate-27d}")));
+//		h.replaceDefinition(sunday3Indicator);
+//		
+//		
+//		CohortIndicator sunday4Indicator = new CohortIndicator();
+//		sunday4Indicator.setName("sunday4Indicator");
+//		sunday4Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday4Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday4Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-27d},endDate=${endDate-26d}")));
+//		h.replaceDefinition(sunday4Indicator);
+//		
+//		CohortIndicator sunday5Indicator = new CohortIndicator();
+//		sunday5Indicator.setName("sunday5Indicator");
+//		sunday5Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday5Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday5Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-26d},endDate=${endDate-25d}")));
+//		h.replaceDefinition(sunday5Indicator);
+//		
+//		CohortIndicator sunday6Indicator = new CohortIndicator();
+//		sunday6Indicator.setName("sunday6Indicator");
+//		sunday6Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday6Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday6Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-25d},endDate=${endDate-24d}")));
+//		h.replaceDefinition(sunday6Indicator);
+//		
+//		CohortIndicator sunday7Indicator = new CohortIndicator();
+//		sunday7Indicator.setName("sunday7Indicator");
+//		sunday7Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday7Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday7Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-24d},endDate=${endDate-23d}")));
+//		h.replaceDefinition(sunday7Indicator);
+//		
+//		CohortIndicator sunday8Indicator = new CohortIndicator();
+//		sunday8Indicator.setName("sunday8Indicator");
+//		sunday8Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday8Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday8Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-23d},endDate=${endDate-22d}")));
+//		h.replaceDefinition(sunday8Indicator);
+//		
+//		CohortIndicator sunday9Indicator = new CohortIndicator();
+//		sunday9Indicator.setName("sunday9Indicator");
+//		sunday9Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday9Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday9Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-22d},endDate=${endDate-21d}")));
+//		h.replaceDefinition(sunday9Indicator);
+//		
+//		CohortIndicator sunday10Indicator = new CohortIndicator();
+//		sunday10Indicator.setName("sunday10Indicator");
+//		sunday10Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday10Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday10Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-21d},endDate=${endDate-20d}")));
+//		h.replaceDefinition(sunday10Indicator);
+//		
+//		CohortIndicator sunday11Indicator = new CohortIndicator();
+//		sunday11Indicator.setName("sunday11Indicator");
+//		sunday11Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday11Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday11Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-20d},endDate=${endDate-19d}")));
+//		h.replaceDefinition(sunday11Indicator);
+//		
+//		
+//		CohortIndicator sunday12Indicator = new CohortIndicator();
+//		sunday12Indicator.setName("sunday12Indicator");
+//		sunday12Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday12Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday12Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-19d},endDate=${endDate-18d}")));
+//		h.replaceDefinition(sunday12Indicator);
+//		
+//		CohortIndicator sunday13Indicator = new CohortIndicator();
+//		sunday13Indicator.setName("sunday13Indicator");
+//		sunday13Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday13Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday13Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-18d},endDate=${endDate-17d}")));
+//		h.replaceDefinition(sunday13Indicator);
+//		
+//		
+//		CohortIndicator sunday14Indicator = new CohortIndicator();
+//		sunday14Indicator.setName("sunday14Indicator");
+//		sunday14Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday14Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday14Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-17d},endDate=${endDate-16d}")));
+//		h.replaceDefinition(sunday14Indicator);
+//		
+//		CohortIndicator sunday15Indicator = new CohortIndicator();
+//		sunday15Indicator.setName("sunday15Indicator");
+//		sunday15Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday15Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday15Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-16d},endDate=${endDate-15d}")));
+//		h.replaceDefinition(sunday15Indicator);
+//		
+//		CohortIndicator sunday16Indicator = new CohortIndicator();
+//		sunday16Indicator.setName("sunday16Indicator");
+//		sunday16Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday16Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday16Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-15d},endDate=${endDate-14d}")));
+//		h.replaceDefinition(sunday16Indicator);
+//		
+//		CohortIndicator sunday17Indicator = new CohortIndicator();
+//		sunday17Indicator.setName("sunday17Indicator");
+//		sunday17Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday17Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday17Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-14d},endDate=${endDate-13d}")));
+//		h.replaceDefinition(sunday17Indicator);
+//		
+//		CohortIndicator sunday18Indicator = new CohortIndicator();
+//		sunday18Indicator.setName("sunday18Indicator");
+//		sunday18Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday18Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday18Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-13d},endDate=${endDate-12d}")));
+//		h.replaceDefinition(sunday18Indicator);
+//		
+//		CohortIndicator sunday19Indicator = new CohortIndicator();
+//		sunday19Indicator.setName("sunday19Indicator");
+//		sunday19Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday19Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday19Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-12d},endDate=${endDate-11d}")));
+//		h.replaceDefinition(sunday19Indicator);
+//		
+//		CohortIndicator sunday20Indicator = new CohortIndicator();
+//		sunday20Indicator.setName("sunday20Indicator");
+//		sunday20Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday20Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday20Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-11d},endDate=${endDate-10d}")));
+//		h.replaceDefinition(sunday20Indicator);
+//		
+//		CohortIndicator sunday21Indicator = new CohortIndicator();
+//		sunday21Indicator.setName("sunday21Indicator");
+//		sunday21Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday21Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday21Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-10d},endDate=${endDate-9d}")));
+//		h.replaceDefinition(sunday21Indicator);
+//		
+//		
+//		CohortIndicator sunday22Indicator = new CohortIndicator();
+//		sunday22Indicator.setName("sunday22Indicator");
+//		sunday22Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday22Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday22Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-9d},endDate=${endDate-8d}")));
+//		h.replaceDefinition(sunday22Indicator);
+//		
+//		CohortIndicator sunday23Indicator = new CohortIndicator();
+//		sunday23Indicator.setName("sunday23Indicator");
+//		sunday23Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday23Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday23Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-8d},endDate=${endDate-7d}")));
+//		h.replaceDefinition(sunday23Indicator);
+//		
+//		
+//		CohortIndicator sunday24Indicator = new CohortIndicator();
+//		sunday24Indicator.setName("sunday24Indicator");
+//		sunday24Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday24Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday24Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-7d},endDate=${endDate-6d}")));
+//		h.replaceDefinition(sunday24Indicator);
+//		
+//		CohortIndicator sunday25Indicator = new CohortIndicator();
+//		sunday25Indicator.setName("sunday25Indicator");
+//		sunday25Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday25Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday25Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-6d},endDate=${endDate-5d}")));
+//		h.replaceDefinition(sunday25Indicator);
+//		
+//		CohortIndicator sunday26Indicator = new CohortIndicator();
+//		sunday26Indicator.setName("sunday26Indicator");
+//		sunday26Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday26Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday26Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-5d},endDate=${endDate-4d}")));
+//		h.replaceDefinition(sunday26Indicator);
+//		
+//		CohortIndicator sunday27Indicator = new CohortIndicator();
+//		sunday27Indicator.setName("sunday27Indicator");
+//		sunday27Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday27Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday27Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-4d},endDate=${endDate-3d}")));
+//		h.replaceDefinition(sunday27Indicator);
+//		
+//		CohortIndicator sunday28Indicator = new CohortIndicator();
+//		sunday28Indicator.setName("sunday28Indicator");
+//		sunday28Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday28Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday28Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-3d},endDate=${endDate-2d}")));
+//		h.replaceDefinition(sunday28Indicator);
+//		
+//		CohortIndicator sunday29Indicator = new CohortIndicator();
+//		sunday29Indicator.setName("sunday29Indicator");
+//		sunday29Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday29Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday29Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-2d},endDate=${endDate-1d}")));
+//		h.replaceDefinition(sunday29Indicator);
+//		
+//		CohortIndicator sunday30Indicator = new CohortIndicator();
+//		sunday30Indicator.setName("sunday30Indicator");
+//		sunday30Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday30Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday30Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate-1d},endDate=${endDate}")));
+//		h.replaceDefinition(sunday30Indicator);
+//		
+//		CohortIndicator sunday31Indicator = new CohortIndicator();
+//		sunday31Indicator.setName("sunday31Indicator");
+//		sunday31Indicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		sunday31Indicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		sunday31Indicator.setCohortDefinition(new Mapped<CohortDefinition>(sunday,ParameterizableUtil.createParameterMappings("startDate=${endDate},endDate=${endDate+1d}")));
+//		h.replaceDefinition(sunday31Indicator);
 
 
 
@@ -4215,230 +4213,230 @@ public class SetupRwandaPrimaryCareReport {
 		
 		// add global filter to the report
 		
-		rd.addIndicator("1.1.1", "Monday 1st", monday1Indicator);
-		rd.addIndicator("1.1.2", "Monday 2nd", monday2Indicator);
-		rd.addIndicator("1.1.3", "Monday 3rd", monday3Indicator);
-		rd.addIndicator("1.1.4", "Monday 4th", monday4Indicator);
-		rd.addIndicator("1.1.5", "Monday 5th", monday5Indicator);
-		rd.addIndicator("1.1.6", "Monday 6th", monday6Indicator);
-		rd.addIndicator("1.1.7", "Monday 7th", monday7Indicator);
-		rd.addIndicator("1.1.8", "Monday 8th", monday8Indicator);
-		rd.addIndicator("1.1.9", "Monday 9th", monday9Indicator);
-		rd.addIndicator("1.1.10", "Monday 10th", monday10Indicator);
-		rd.addIndicator("1.1.11", "Monday 11th", monday11Indicator);
-		rd.addIndicator("1.1.12", "Monday 12th", monday12Indicator);
-		rd.addIndicator("1.1.13", "Monday 13th", monday13Indicator);
-		rd.addIndicator("1.1.14", "Monday 14th", monday14Indicator);
-		rd.addIndicator("1.1.15", "Monday 15th", monday15Indicator);
-		rd.addIndicator("1.1.16", "Monday 16th", monday16Indicator);
-		rd.addIndicator("1.1.17", "Monday 17th", monday17Indicator);
-		rd.addIndicator("1.1.18", "Monday 18th", monday18Indicator);
-		rd.addIndicator("1.1.19", "Monday 19th", monday19Indicator);
-		rd.addIndicator("1.1.20", "Monday 20th", monday20Indicator);
-		rd.addIndicator("1.1.21", "Monday 21st", monday21Indicator);
-		rd.addIndicator("1.1.22", "Monday 22nd", monday22Indicator);
-		rd.addIndicator("1.1.23", "Monday 23rd", monday23Indicator);
-		rd.addIndicator("1.1.24", "Monday 24th", monday24Indicator);
-		rd.addIndicator("1.1.25", "Monday 25th", monday25Indicator);
-		rd.addIndicator("1.1.26", "Monday 26th", monday26Indicator);
-		rd.addIndicator("1.1.27", "Monday 27th", monday27Indicator);
-		rd.addIndicator("1.1.28", "Monday 28th", monday28Indicator);
-		rd.addIndicator("1.1.29", "Monday 29th", monday29Indicator);
-		rd.addIndicator("1.1.30", "Monday 30th", monday30Indicator);
-		rd.addIndicator("1.1.31", "Monday 31st", monday31Indicator);
-		
-		rd.addIndicator("1.2.1", "Tuesday 1st", tuesday1Indicator);
-		rd.addIndicator("1.2.2", "Tuesday 2nd", tuesday2Indicator);
-		rd.addIndicator("1.2.3", "Tuesday 3rd", tuesday3Indicator);
-		rd.addIndicator("1.2.4", "Tuesday 4th", tuesday4Indicator);
-		rd.addIndicator("1.2.5", "Tuesday 5th", tuesday5Indicator);
-		rd.addIndicator("1.2.6", "Tuesday 6th", tuesday6Indicator);
-		rd.addIndicator("1.2.7", "Tuesday 7th", tuesday7Indicator);
-		rd.addIndicator("1.2.8", "Tuesday 8th", tuesday8Indicator);
-		rd.addIndicator("1.2.9", "Tuesday 9th", tuesday9Indicator);
-		rd.addIndicator("1.2.10", "Tuesday 10th", tuesday10Indicator);
-		rd.addIndicator("1.2.11", "Tuesday 11th", tuesday11Indicator);
-		rd.addIndicator("1.2.12", "Tuesday 12th", tuesday12Indicator);
-		rd.addIndicator("1.2.13", "Tuesday 13th", tuesday13Indicator);
-		rd.addIndicator("1.2.14", "Tuesday 14th", tuesday14Indicator);
-		rd.addIndicator("1.2.15", "Tuesday 15th", tuesday15Indicator);
-		rd.addIndicator("1.2.16", "Tuesday 16th", tuesday16Indicator);
-		rd.addIndicator("1.2.17", "Tuesday 17th", tuesday17Indicator);
-		rd.addIndicator("1.2.18", "Tuesday 18th", tuesday18Indicator);
-		rd.addIndicator("1.2.19", "Tuesday 19th", tuesday19Indicator);
-		rd.addIndicator("1.2.20", "Tuesday 20th", tuesday20Indicator);
-		rd.addIndicator("1.2.21", "Tuesday 21st", tuesday21Indicator);
-		rd.addIndicator("1.2.22", "Tuesday 22nd", tuesday22Indicator);
-		rd.addIndicator("1.2.23", "Tuesday 23rd", tuesday23Indicator);
-		rd.addIndicator("1.2.24", "Tuesday 24th", tuesday24Indicator);
-		rd.addIndicator("1.2.25", "Tuesday 25th", tuesday25Indicator);
-		rd.addIndicator("1.2.26", "Tuesday 26th", tuesday26Indicator);
-		rd.addIndicator("1.2.27", "Tuesday 27th", tuesday27Indicator);
-		rd.addIndicator("1.2.28", "Tuesday 28th", tuesday28Indicator);
-		rd.addIndicator("1.2.29", "Tuesday 29th", tuesday29Indicator);
-		rd.addIndicator("1.2.30", "Tuesday 30th", tuesday30Indicator);
-		rd.addIndicator("1.2.31", "Tuesday 31st", tuesday31Indicator);
-			
-		rd.addIndicator("1.3.1", "wednesday 1st", wednesday1Indicator);
-		rd.addIndicator("1.3.2", "wednesday 2nd", wednesday2Indicator);
-		rd.addIndicator("1.3.3", "wednesday 3rd", wednesday3Indicator);
-		rd.addIndicator("1.3.4", "wednesday 4th", wednesday4Indicator);
-		rd.addIndicator("1.3.5", "wednesday 5th", wednesday5Indicator);
-		rd.addIndicator("1.3.6", "wednesday 6th", wednesday6Indicator);
-		rd.addIndicator("1.3.7", "wednesday 7th", wednesday7Indicator);
-		rd.addIndicator("1.3.8", "wednesday 8th", wednesday8Indicator);
-		rd.addIndicator("1.3.9", "wednesday 9th", wednesday9Indicator);
-		rd.addIndicator("1.3.10", "wednesday 10th", wednesday10Indicator);
-		rd.addIndicator("1.3.11", "wednesday 11th", wednesday11Indicator);
-		rd.addIndicator("1.3.12", "wednesday 13th", wednesday12Indicator);
-		rd.addIndicator("1.3.13", "wednesday 13th", wednesday13Indicator);
-		rd.addIndicator("1.3.14", "wednesday 14th", wednesday14Indicator);
-		rd.addIndicator("1.3.15", "wednesday 15th", wednesday15Indicator);
-		rd.addIndicator("1.3.16", "wednesday 16th", wednesday16Indicator);
-		rd.addIndicator("1.3.17", "wednesday 17th", wednesday17Indicator);
-		rd.addIndicator("1.3.18", "wednesday 18th", wednesday18Indicator);
-		rd.addIndicator("1.3.19", "wednesday 19th", wednesday19Indicator);
-		rd.addIndicator("1.3.20", "wednesday 20th", wednesday20Indicator);
-		rd.addIndicator("1.3.21", "wednesday 21st", wednesday21Indicator);
-		rd.addIndicator("1.3.22", "wednesday 22nd", wednesday22Indicator);
-		rd.addIndicator("1.3.23", "wednesday 23rd", wednesday23Indicator);
-		rd.addIndicator("1.3.24", "wednesday 24th", wednesday24Indicator);
-		rd.addIndicator("1.3.25", "wednesday 25th", wednesday25Indicator);
-		rd.addIndicator("1.3.26", "wednesday 26th", wednesday26Indicator);
-		rd.addIndicator("1.3.27", "wednesday 27th", wednesday27Indicator);
-		rd.addIndicator("1.3.28", "wednesday 28th", wednesday28Indicator);
-		rd.addIndicator("1.3.29", "wednesday 29th", wednesday29Indicator);
-		rd.addIndicator("1.3.30", "wednesday 30th", wednesday30Indicator);
-		rd.addIndicator("1.3.31", "wednesday 31st", wednesday31Indicator);
-		
-		
-		rd.addIndicator("1.4.1", "thursday 1st", thursday1Indicator);
-		rd.addIndicator("1.4.2", "thursday 2nd", thursday2Indicator);
-		rd.addIndicator("1.4.3", "thursday 3rd", thursday3Indicator);
-		rd.addIndicator("1.4.4", "thursday 4th", thursday4Indicator);
-		rd.addIndicator("1.4.5", "thursday 5th", thursday5Indicator);
-		rd.addIndicator("1.4.6", "thursday 6th", thursday6Indicator);
-		rd.addIndicator("1.4.7", "thursday 7th", thursday7Indicator);
-		rd.addIndicator("1.4.8", "thursday 8th", thursday8Indicator);
-		rd.addIndicator("1.4.9", "thursday 9th", thursday9Indicator);
-		rd.addIndicator("1.4.10", "thursday 10th", thursday10Indicator);
-		rd.addIndicator("1.4.11", "thursday 11th", thursday11Indicator);
-		rd.addIndicator("1.4.12", "thursday 13th", thursday12Indicator);
-		rd.addIndicator("1.4.13", "thursday 13th", thursday13Indicator);
-		rd.addIndicator("1.4.14", "thursday 14th", thursday14Indicator);
-		rd.addIndicator("1.4.15", "thursday 15th", thursday15Indicator);
-		rd.addIndicator("1.4.16", "thursday 16th", thursday16Indicator);
-		rd.addIndicator("1.4.17", "thursday 17th", thursday17Indicator);
-		rd.addIndicator("1.4.18", "thursday 18th", thursday18Indicator);
-		rd.addIndicator("1.4.19", "thursday 19th", thursday19Indicator);
-		rd.addIndicator("1.4.20", "thursday 20th", thursday20Indicator);
-		rd.addIndicator("1.4.21", "thursday 21st", thursday21Indicator);
-		rd.addIndicator("1.4.22", "thursday 22nd", thursday22Indicator);
-		rd.addIndicator("1.4.23", "thursday 23rd", thursday23Indicator);
-		rd.addIndicator("1.4.24", "thursday 24th", thursday24Indicator);
-		rd.addIndicator("1.4.25", "thursday 25th", thursday25Indicator);
-		rd.addIndicator("1.4.26", "thursday 26th", thursday26Indicator);
-		rd.addIndicator("1.4.27", "thursday 27th", thursday27Indicator);
-		rd.addIndicator("1.4.28", "thursday 28th", thursday28Indicator);
-		rd.addIndicator("1.4.29", "thursday 29th", thursday29Indicator);
-		rd.addIndicator("1.4.30", "thursday 30th", thursday30Indicator);
-		rd.addIndicator("1.4.31", "thursday 31st", thursday31Indicator);
-		
-		rd.addIndicator("1.5.1", "friday 1st", friday1Indicator);
-		rd.addIndicator("1.5.2", "friday 2nd", friday2Indicator);
-		rd.addIndicator("1.5.3", "friday 3rd", friday3Indicator);
-		rd.addIndicator("1.5.4", "friday 4th", friday4Indicator);
-		rd.addIndicator("1.5.5", "friday 5th", friday5Indicator);
-		rd.addIndicator("1.5.6", "friday 6th", friday6Indicator);
-		rd.addIndicator("1.5.7", "friday 7th", friday7Indicator);
-		rd.addIndicator("1.5.8", "friday 8th", friday8Indicator);
-		rd.addIndicator("1.5.9", "friday 9th", friday9Indicator);
-		rd.addIndicator("1.5.10", "friday 10th", friday10Indicator);
-		rd.addIndicator("1.5.11", "friday 11th", friday11Indicator);
-		rd.addIndicator("1.5.12", "friday 13th", friday12Indicator);
-		rd.addIndicator("1.5.13", "friday 13th", friday13Indicator);
-		rd.addIndicator("1.5.14", "friday 14th", friday14Indicator);
-		rd.addIndicator("1.5.15", "friday 15th", friday15Indicator);
-		rd.addIndicator("1.5.16", "friday 16th", friday16Indicator);
-		rd.addIndicator("1.5.17", "friday 17th", friday17Indicator);
-		rd.addIndicator("1.5.18", "friday 18th", friday18Indicator);
-		rd.addIndicator("1.5.19", "friday 19th", friday19Indicator);
-		rd.addIndicator("1.5.20", "friday 20th", friday20Indicator);
-		rd.addIndicator("1.5.21", "friday 21st", friday21Indicator);
-		rd.addIndicator("1.5.22", "friday 22nd", friday22Indicator);
-		rd.addIndicator("1.5.23", "friday 23rd", friday23Indicator);
-		rd.addIndicator("1.5.24", "friday 24th", friday24Indicator);
-		rd.addIndicator("1.5.25", "friday 25th", friday25Indicator);
-		rd.addIndicator("1.5.26", "friday 26th", friday26Indicator);
-		rd.addIndicator("1.5.27", "friday 27th", friday27Indicator);
-		rd.addIndicator("1.5.28", "friday 28th", friday28Indicator);
-		rd.addIndicator("1.5.29", "friday 29th", friday29Indicator);
-		rd.addIndicator("1.5.30", "friday 30th", friday30Indicator);
-		rd.addIndicator("1.5.31", "friday 31st", friday31Indicator);
-		
-		rd.addIndicator("1.6.1", "saturday 1st", saturday1Indicator);
-		rd.addIndicator("1.6.2", "saturday 2nd", saturday2Indicator);
-		rd.addIndicator("1.6.3", "saturday 3rd", saturday3Indicator);
-		rd.addIndicator("1.6.4", "saturday 4th", saturday4Indicator);
-		rd.addIndicator("1.6.5", "saturday 5th", saturday5Indicator);
-		rd.addIndicator("1.6.6", "saturday 6th", saturday6Indicator);
-		rd.addIndicator("1.6.7", "saturday 7th", saturday7Indicator);
-		rd.addIndicator("1.6.8", "saturday 8th", saturday8Indicator);
-		rd.addIndicator("1.6.9", "saturday 9th", saturday9Indicator);
-		rd.addIndicator("1.6.10", "saturday 10th", saturday10Indicator);
-		rd.addIndicator("1.6.11", "saturday 11th", saturday11Indicator);
-		rd.addIndicator("1.6.12", "saturday 13th", saturday12Indicator);
-		rd.addIndicator("1.6.13", "saturday 13th", saturday13Indicator);
-		rd.addIndicator("1.6.14", "saturday 14th", saturday14Indicator);
-		rd.addIndicator("1.6.15", "saturday 15th", saturday15Indicator);
-		rd.addIndicator("1.6.16", "saturday 16th", saturday16Indicator);
-		rd.addIndicator("1.6.17", "saturday 17th", saturday17Indicator);
-		rd.addIndicator("1.6.18", "saturday 18th", saturday18Indicator);
-		rd.addIndicator("1.6.19", "saturday 19th", saturday19Indicator);
-		rd.addIndicator("1.6.20", "saturday 20th", saturday20Indicator);
-		rd.addIndicator("1.6.21", "saturday 21st", saturday21Indicator);
-		rd.addIndicator("1.6.22", "saturday 22nd", saturday22Indicator);
-		rd.addIndicator("1.6.23", "saturday 23rd", saturday23Indicator);
-		rd.addIndicator("1.6.24", "saturday 24th", saturday24Indicator);
-		rd.addIndicator("1.6.25", "saturday 25th", saturday25Indicator);
-		rd.addIndicator("1.6.26", "saturday 26th", saturday26Indicator);
-		rd.addIndicator("1.6.27", "saturday 27th", saturday27Indicator);
-		rd.addIndicator("1.6.28", "saturday 28th", saturday28Indicator);
-		rd.addIndicator("1.6.29", "saturday 29th", saturday29Indicator);
-		rd.addIndicator("1.6.30", "saturday 30th", saturday30Indicator);
-		rd.addIndicator("1.6.31", "saturday 31st", saturday31Indicator);
-		
-		rd.addIndicator("1.7.1", "sunday 1st", sunday1Indicator);
-		rd.addIndicator("1.7.2", "sunday 2nd", sunday2Indicator);
-		rd.addIndicator("1.7.3", "sunday 3rd", sunday3Indicator);
-		rd.addIndicator("1.7.4", "sunday 4th", sunday4Indicator);
-		rd.addIndicator("1.7.5", "sunday 5th", sunday5Indicator);
-		rd.addIndicator("1.7.6", "sunday 6th", sunday6Indicator);
-		rd.addIndicator("1.7.7", "sunday 7th", sunday7Indicator);
-		rd.addIndicator("1.7.8", "sunday 8th", sunday8Indicator);
-		rd.addIndicator("1.7.9", "sunday 9th", sunday9Indicator);
-		rd.addIndicator("1.7.10", "sunday 10th", sunday10Indicator);
-		rd.addIndicator("1.7.11", "sunday 11th", sunday11Indicator);
-		rd.addIndicator("1.7.12", "sunday 13th", sunday12Indicator);
-		rd.addIndicator("1.7.13", "sunday 13th", sunday13Indicator);
-		rd.addIndicator("1.7.14", "sunday 14th", sunday14Indicator);
-		rd.addIndicator("1.7.15", "sunday 15th", sunday15Indicator);
-		rd.addIndicator("1.7.16", "sunday 16th", sunday16Indicator);
-		rd.addIndicator("1.7.17", "sunday 17th", sunday17Indicator);
-		rd.addIndicator("1.7.18", "sunday 18th", sunday18Indicator);
-		rd.addIndicator("1.7.19", "sunday 19th", sunday19Indicator);
-		rd.addIndicator("1.7.20", "sunday 20th", sunday20Indicator);
-		rd.addIndicator("1.7.21", "sunday 21st", sunday21Indicator);
-		rd.addIndicator("1.7.22", "sunday 22nd", sunday22Indicator);
-		rd.addIndicator("1.7.23", "sunday 23rd", sunday23Indicator);
-		rd.addIndicator("1.7.24", "sunday 24th", sunday24Indicator);
-		rd.addIndicator("1.7.25", "sunday 25th", sunday25Indicator);
-		rd.addIndicator("1.7.26", "sunday 26th", sunday26Indicator);
-		rd.addIndicator("1.7.27", "sunday 27th", sunday27Indicator);
-		rd.addIndicator("1.7.28", "sunday 28th", sunday28Indicator);
-		rd.addIndicator("1.7.29", "sunday 29th", sunday29Indicator);
-		rd.addIndicator("1.7.30", "sunday 30th", sunday30Indicator);
-		rd.addIndicator("1.7.31", "sunday 31st", sunday31Indicator);
+//		rd.addIndicator("1.1.1", "Monday 1st", monday1Indicator);
+//		rd.addIndicator("1.1.2", "Monday 2nd", monday2Indicator);
+//		rd.addIndicator("1.1.3", "Monday 3rd", monday3Indicator);
+//		rd.addIndicator("1.1.4", "Monday 4th", monday4Indicator);
+//		rd.addIndicator("1.1.5", "Monday 5th", monday5Indicator);
+//		rd.addIndicator("1.1.6", "Monday 6th", monday6Indicator);
+//		rd.addIndicator("1.1.7", "Monday 7th", monday7Indicator);
+//		rd.addIndicator("1.1.8", "Monday 8th", monday8Indicator);
+//		rd.addIndicator("1.1.9", "Monday 9th", monday9Indicator);
+//		rd.addIndicator("1.1.10", "Monday 10th", monday10Indicator);
+//		rd.addIndicator("1.1.11", "Monday 11th", monday11Indicator);
+//		rd.addIndicator("1.1.12", "Monday 12th", monday12Indicator);
+//		rd.addIndicator("1.1.13", "Monday 13th", monday13Indicator);
+//		rd.addIndicator("1.1.14", "Monday 14th", monday14Indicator);
+//		rd.addIndicator("1.1.15", "Monday 15th", monday15Indicator);
+//		rd.addIndicator("1.1.16", "Monday 16th", monday16Indicator);
+//		rd.addIndicator("1.1.17", "Monday 17th", monday17Indicator);
+//		rd.addIndicator("1.1.18", "Monday 18th", monday18Indicator);
+//		rd.addIndicator("1.1.19", "Monday 19th", monday19Indicator);
+//		rd.addIndicator("1.1.20", "Monday 20th", monday20Indicator);
+//		rd.addIndicator("1.1.21", "Monday 21st", monday21Indicator);
+//		rd.addIndicator("1.1.22", "Monday 22nd", monday22Indicator);
+//		rd.addIndicator("1.1.23", "Monday 23rd", monday23Indicator);
+//		rd.addIndicator("1.1.24", "Monday 24th", monday24Indicator);
+//		rd.addIndicator("1.1.25", "Monday 25th", monday25Indicator);
+//		rd.addIndicator("1.1.26", "Monday 26th", monday26Indicator);
+//		rd.addIndicator("1.1.27", "Monday 27th", monday27Indicator);
+//		rd.addIndicator("1.1.28", "Monday 28th", monday28Indicator);
+//		rd.addIndicator("1.1.29", "Monday 29th", monday29Indicator);
+//		rd.addIndicator("1.1.30", "Monday 30th", monday30Indicator);
+//		rd.addIndicator("1.1.31", "Monday 31st", monday31Indicator);
+//		
+//		rd.addIndicator("1.2.1", "Tuesday 1st", tuesday1Indicator);
+//		rd.addIndicator("1.2.2", "Tuesday 2nd", tuesday2Indicator);
+//		rd.addIndicator("1.2.3", "Tuesday 3rd", tuesday3Indicator);
+//		rd.addIndicator("1.2.4", "Tuesday 4th", tuesday4Indicator);
+//		rd.addIndicator("1.2.5", "Tuesday 5th", tuesday5Indicator);
+//		rd.addIndicator("1.2.6", "Tuesday 6th", tuesday6Indicator);
+//		rd.addIndicator("1.2.7", "Tuesday 7th", tuesday7Indicator);
+//		rd.addIndicator("1.2.8", "Tuesday 8th", tuesday8Indicator);
+//		rd.addIndicator("1.2.9", "Tuesday 9th", tuesday9Indicator);
+//		rd.addIndicator("1.2.10", "Tuesday 10th", tuesday10Indicator);
+//		rd.addIndicator("1.2.11", "Tuesday 11th", tuesday11Indicator);
+//		rd.addIndicator("1.2.12", "Tuesday 12th", tuesday12Indicator);
+//		rd.addIndicator("1.2.13", "Tuesday 13th", tuesday13Indicator);
+//		rd.addIndicator("1.2.14", "Tuesday 14th", tuesday14Indicator);
+//		rd.addIndicator("1.2.15", "Tuesday 15th", tuesday15Indicator);
+//		rd.addIndicator("1.2.16", "Tuesday 16th", tuesday16Indicator);
+//		rd.addIndicator("1.2.17", "Tuesday 17th", tuesday17Indicator);
+//		rd.addIndicator("1.2.18", "Tuesday 18th", tuesday18Indicator);
+//		rd.addIndicator("1.2.19", "Tuesday 19th", tuesday19Indicator);
+//		rd.addIndicator("1.2.20", "Tuesday 20th", tuesday20Indicator);
+//		rd.addIndicator("1.2.21", "Tuesday 21st", tuesday21Indicator);
+//		rd.addIndicator("1.2.22", "Tuesday 22nd", tuesday22Indicator);
+//		rd.addIndicator("1.2.23", "Tuesday 23rd", tuesday23Indicator);
+//		rd.addIndicator("1.2.24", "Tuesday 24th", tuesday24Indicator);
+//		rd.addIndicator("1.2.25", "Tuesday 25th", tuesday25Indicator);
+//		rd.addIndicator("1.2.26", "Tuesday 26th", tuesday26Indicator);
+//		rd.addIndicator("1.2.27", "Tuesday 27th", tuesday27Indicator);
+//		rd.addIndicator("1.2.28", "Tuesday 28th", tuesday28Indicator);
+//		rd.addIndicator("1.2.29", "Tuesday 29th", tuesday29Indicator);
+//		rd.addIndicator("1.2.30", "Tuesday 30th", tuesday30Indicator);
+//		rd.addIndicator("1.2.31", "Tuesday 31st", tuesday31Indicator);
+//			
+//		rd.addIndicator("1.3.1", "wednesday 1st", wednesday1Indicator);
+//		rd.addIndicator("1.3.2", "wednesday 2nd", wednesday2Indicator);
+//		rd.addIndicator("1.3.3", "wednesday 3rd", wednesday3Indicator);
+//		rd.addIndicator("1.3.4", "wednesday 4th", wednesday4Indicator);
+//		rd.addIndicator("1.3.5", "wednesday 5th", wednesday5Indicator);
+//		rd.addIndicator("1.3.6", "wednesday 6th", wednesday6Indicator);
+//		rd.addIndicator("1.3.7", "wednesday 7th", wednesday7Indicator);
+//		rd.addIndicator("1.3.8", "wednesday 8th", wednesday8Indicator);
+//		rd.addIndicator("1.3.9", "wednesday 9th", wednesday9Indicator);
+//		rd.addIndicator("1.3.10", "wednesday 10th", wednesday10Indicator);
+//		rd.addIndicator("1.3.11", "wednesday 11th", wednesday11Indicator);
+//		rd.addIndicator("1.3.12", "wednesday 12th", wednesday12Indicator);
+//		rd.addIndicator("1.3.13", "wednesday 13th", wednesday13Indicator);
+//		rd.addIndicator("1.3.14", "wednesday 14th", wednesday14Indicator);
+//		rd.addIndicator("1.3.15", "wednesday 15th", wednesday15Indicator);
+//		rd.addIndicator("1.3.16", "wednesday 16th", wednesday16Indicator);
+//		rd.addIndicator("1.3.17", "wednesday 17th", wednesday17Indicator);
+//		rd.addIndicator("1.3.18", "wednesday 18th", wednesday18Indicator);
+//		rd.addIndicator("1.3.19", "wednesday 19th", wednesday19Indicator);
+//		rd.addIndicator("1.3.20", "wednesday 20th", wednesday20Indicator);
+//		rd.addIndicator("1.3.21", "wednesday 21st", wednesday21Indicator);
+//		rd.addIndicator("1.3.22", "wednesday 22nd", wednesday22Indicator);
+//		rd.addIndicator("1.3.23", "wednesday 23rd", wednesday23Indicator);
+//		rd.addIndicator("1.3.24", "wednesday 24th", wednesday24Indicator);
+//		rd.addIndicator("1.3.25", "wednesday 25th", wednesday25Indicator);
+//		rd.addIndicator("1.3.26", "wednesday 26th", wednesday26Indicator);
+//		rd.addIndicator("1.3.27", "wednesday 27th", wednesday27Indicator);
+//		rd.addIndicator("1.3.28", "wednesday 28th", wednesday28Indicator);
+//		rd.addIndicator("1.3.29", "wednesday 29th", wednesday29Indicator);
+//		rd.addIndicator("1.3.30", "wednesday 30th", wednesday30Indicator);
+//		rd.addIndicator("1.3.31", "wednesday 31st", wednesday31Indicator);
+//		
+//		
+//		rd.addIndicator("1.4.1", "thursday 1st", thursday1Indicator);
+//		rd.addIndicator("1.4.2", "thursday 2nd", thursday2Indicator);
+//		rd.addIndicator("1.4.3", "thursday 3rd", thursday3Indicator);
+//		rd.addIndicator("1.4.4", "thursday 4th", thursday4Indicator);
+//		rd.addIndicator("1.4.5", "thursday 5th", thursday5Indicator);
+//		rd.addIndicator("1.4.6", "thursday 6th", thursday6Indicator);
+//		rd.addIndicator("1.4.7", "thursday 7th", thursday7Indicator);
+//		rd.addIndicator("1.4.8", "thursday 8th", thursday8Indicator);
+//		rd.addIndicator("1.4.9", "thursday 9th", thursday9Indicator);
+//		rd.addIndicator("1.4.10", "thursday 10th", thursday10Indicator);
+//		rd.addIndicator("1.4.11", "thursday 11th", thursday11Indicator);
+//		rd.addIndicator("1.4.12", "thursday 13th", thursday12Indicator);
+//		rd.addIndicator("1.4.13", "thursday 13th", thursday13Indicator);
+//		rd.addIndicator("1.4.14", "thursday 14th", thursday14Indicator);
+//		rd.addIndicator("1.4.15", "thursday 15th", thursday15Indicator);
+//		rd.addIndicator("1.4.16", "thursday 16th", thursday16Indicator);
+//		rd.addIndicator("1.4.17", "thursday 17th", thursday17Indicator);
+//		rd.addIndicator("1.4.18", "thursday 18th", thursday18Indicator);
+//		rd.addIndicator("1.4.19", "thursday 19th", thursday19Indicator);
+//		rd.addIndicator("1.4.20", "thursday 20th", thursday20Indicator);
+//		rd.addIndicator("1.4.21", "thursday 21st", thursday21Indicator);
+//		rd.addIndicator("1.4.22", "thursday 22nd", thursday22Indicator);
+//		rd.addIndicator("1.4.23", "thursday 23rd", thursday23Indicator);
+//		rd.addIndicator("1.4.24", "thursday 24th", thursday24Indicator);
+//		rd.addIndicator("1.4.25", "thursday 25th", thursday25Indicator);
+//		rd.addIndicator("1.4.26", "thursday 26th", thursday26Indicator);
+//		rd.addIndicator("1.4.27", "thursday 27th", thursday27Indicator);
+//		rd.addIndicator("1.4.28", "thursday 28th", thursday28Indicator);
+//		rd.addIndicator("1.4.29", "thursday 29th", thursday29Indicator);
+//		rd.addIndicator("1.4.30", "thursday 30th", thursday30Indicator);
+//		rd.addIndicator("1.4.31", "thursday 31st", thursday31Indicator);
+//		
+//		rd.addIndicator("1.5.1", "friday 1st", friday1Indicator);
+//		rd.addIndicator("1.5.2", "friday 2nd", friday2Indicator);
+//		rd.addIndicator("1.5.3", "friday 3rd", friday3Indicator);
+//		rd.addIndicator("1.5.4", "friday 4th", friday4Indicator);
+//		rd.addIndicator("1.5.5", "friday 5th", friday5Indicator);
+//		rd.addIndicator("1.5.6", "friday 6th", friday6Indicator);
+//		rd.addIndicator("1.5.7", "friday 7th", friday7Indicator);
+//		rd.addIndicator("1.5.8", "friday 8th", friday8Indicator);
+//		rd.addIndicator("1.5.9", "friday 9th", friday9Indicator);
+//		rd.addIndicator("1.5.10", "friday 10th", friday10Indicator);
+//		rd.addIndicator("1.5.11", "friday 11th", friday11Indicator);
+//		rd.addIndicator("1.5.12", "friday 13th", friday12Indicator);
+//		rd.addIndicator("1.5.13", "friday 13th", friday13Indicator);
+//		rd.addIndicator("1.5.14", "friday 14th", friday14Indicator);
+//		rd.addIndicator("1.5.15", "friday 15th", friday15Indicator);
+//		rd.addIndicator("1.5.16", "friday 16th", friday16Indicator);
+//		rd.addIndicator("1.5.17", "friday 17th", friday17Indicator);
+//		rd.addIndicator("1.5.18", "friday 18th", friday18Indicator);
+//		rd.addIndicator("1.5.19", "friday 19th", friday19Indicator);
+//		rd.addIndicator("1.5.20", "friday 20th", friday20Indicator);
+//		rd.addIndicator("1.5.21", "friday 21st", friday21Indicator);
+//		rd.addIndicator("1.5.22", "friday 22nd", friday22Indicator);
+//		rd.addIndicator("1.5.23", "friday 23rd", friday23Indicator);
+//		rd.addIndicator("1.5.24", "friday 24th", friday24Indicator);
+//		rd.addIndicator("1.5.25", "friday 25th", friday25Indicator);
+//		rd.addIndicator("1.5.26", "friday 26th", friday26Indicator);
+//		rd.addIndicator("1.5.27", "friday 27th", friday27Indicator);
+//		rd.addIndicator("1.5.28", "friday 28th", friday28Indicator);
+//		rd.addIndicator("1.5.29", "friday 29th", friday29Indicator);
+//		rd.addIndicator("1.5.30", "friday 30th", friday30Indicator);
+//		rd.addIndicator("1.5.31", "friday 31st", friday31Indicator);
+//		
+//		rd.addIndicator("1.6.1", "saturday 1st", saturday1Indicator);
+//		rd.addIndicator("1.6.2", "saturday 2nd", saturday2Indicator);
+//		rd.addIndicator("1.6.3", "saturday 3rd", saturday3Indicator);
+//		rd.addIndicator("1.6.4", "saturday 4th", saturday4Indicator);
+//		rd.addIndicator("1.6.5", "saturday 5th", saturday5Indicator);
+//		rd.addIndicator("1.6.6", "saturday 6th", saturday6Indicator);
+//		rd.addIndicator("1.6.7", "saturday 7th", saturday7Indicator);
+//		rd.addIndicator("1.6.8", "saturday 8th", saturday8Indicator);
+//		rd.addIndicator("1.6.9", "saturday 9th", saturday9Indicator);
+//		rd.addIndicator("1.6.10", "saturday 10th", saturday10Indicator);
+//		rd.addIndicator("1.6.11", "saturday 11th", saturday11Indicator);
+//		rd.addIndicator("1.6.12", "saturday 13th", saturday12Indicator);
+//		rd.addIndicator("1.6.13", "saturday 13th", saturday13Indicator);
+//		rd.addIndicator("1.6.14", "saturday 14th", saturday14Indicator);
+//		rd.addIndicator("1.6.15", "saturday 15th", saturday15Indicator);
+//		rd.addIndicator("1.6.16", "saturday 16th", saturday16Indicator);
+//		rd.addIndicator("1.6.17", "saturday 17th", saturday17Indicator);
+//		rd.addIndicator("1.6.18", "saturday 18th", saturday18Indicator);
+//		rd.addIndicator("1.6.19", "saturday 19th", saturday19Indicator);
+//		rd.addIndicator("1.6.20", "saturday 20th", saturday20Indicator);
+//		rd.addIndicator("1.6.21", "saturday 21st", saturday21Indicator);
+//		rd.addIndicator("1.6.22", "saturday 22nd", saturday22Indicator);
+//		rd.addIndicator("1.6.23", "saturday 23rd", saturday23Indicator);
+//		rd.addIndicator("1.6.24", "saturday 24th", saturday24Indicator);
+//		rd.addIndicator("1.6.25", "saturday 25th", saturday25Indicator);
+//		rd.addIndicator("1.6.26", "saturday 26th", saturday26Indicator);
+//		rd.addIndicator("1.6.27", "saturday 27th", saturday27Indicator);
+//		rd.addIndicator("1.6.28", "saturday 28th", saturday28Indicator);
+//		rd.addIndicator("1.6.29", "saturday 29th", saturday29Indicator);
+//		rd.addIndicator("1.6.30", "saturday 30th", saturday30Indicator);
+//		rd.addIndicator("1.6.31", "saturday 31st", saturday31Indicator);
+//		
+//		rd.addIndicator("1.7.1", "sunday 1st", sunday1Indicator);
+//		rd.addIndicator("1.7.2", "sunday 2nd", sunday2Indicator);
+//		rd.addIndicator("1.7.3", "sunday 3rd", sunday3Indicator);
+//		rd.addIndicator("1.7.4", "sunday 4th", sunday4Indicator);
+//		rd.addIndicator("1.7.5", "sunday 5th", sunday5Indicator);
+//		rd.addIndicator("1.7.6", "sunday 6th", sunday6Indicator);
+//		rd.addIndicator("1.7.7", "sunday 7th", sunday7Indicator);
+//		rd.addIndicator("1.7.8", "sunday 8th", sunday8Indicator);
+//		rd.addIndicator("1.7.9", "sunday 9th", sunday9Indicator);
+//		rd.addIndicator("1.7.10", "sunday 10th", sunday10Indicator);
+//		rd.addIndicator("1.7.11", "sunday 11th", sunday11Indicator);
+//		rd.addIndicator("1.7.12", "sunday 13th", sunday12Indicator);
+//		rd.addIndicator("1.7.13", "sunday 13th", sunday13Indicator);
+//		rd.addIndicator("1.7.14", "sunday 14th", sunday14Indicator);
+//		rd.addIndicator("1.7.15", "sunday 15th", sunday15Indicator);
+//		rd.addIndicator("1.7.16", "sunday 16th", sunday16Indicator);
+//		rd.addIndicator("1.7.17", "sunday 17th", sunday17Indicator);
+//		rd.addIndicator("1.7.18", "sunday 18th", sunday18Indicator);
+//		rd.addIndicator("1.7.19", "sunday 19th", sunday19Indicator);
+//		rd.addIndicator("1.7.20", "sunday 20th", sunday20Indicator);
+//		rd.addIndicator("1.7.21", "sunday 21st", sunday21Indicator);
+//		rd.addIndicator("1.7.22", "sunday 22nd", sunday22Indicator);
+//		rd.addIndicator("1.7.23", "sunday 23rd", sunday23Indicator);
+//		rd.addIndicator("1.7.24", "sunday 24th", sunday24Indicator);
+//		rd.addIndicator("1.7.25", "sunday 25th", sunday25Indicator);
+//		rd.addIndicator("1.7.26", "sunday 26th", sunday26Indicator);
+//		rd.addIndicator("1.7.27", "sunday 27th", sunday27Indicator);
+//		rd.addIndicator("1.7.28", "sunday 28th", sunday28Indicator);
+//		rd.addIndicator("1.7.29", "sunday 29th", sunday29Indicator);
+//		rd.addIndicator("1.7.30", "sunday 30th", sunday30Indicator);
+//		rd.addIndicator("1.7.31", "sunday 31st", sunday31Indicator);
 		
 		rd.addIndicator("2.1", "Percent of patients who do not have an observation for temperature in the vitals", patientsWithoutTemperatureInVitalsIndicator);
 		rd.addIndicator("2.2", "Percent of children under 5 who did have observation for temperature, and actually had a fever", patientsWithTemperatureGreaterThanNormalInVitalsIndicator);

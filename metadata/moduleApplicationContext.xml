@@ -15,6 +15,7 @@
     <context:component-scan base-package="@MODULE_PACKAGE@" />
     
     <bean id="rwandaReportUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="order"><value>44</value></property>
     	<property name="mappings">
             <props>
 	           <prop key="module/rwandareports/rwandareports.form">rwandaReportsFormController</prop>

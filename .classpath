@@ -18,5 +18,7 @@
 	<classpathentry kind="lib" path="lib-common/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.3.18847-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/reporting-0.5.4.999.jar"/>
+	<classpathentry kind="lib" path="lib-common/logic-0.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-lang-2.4.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

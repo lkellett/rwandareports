@@ -36,6 +36,7 @@ import org.openmrs.module.reporting.report.renderer.ExcelTemplateRenderer;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.module.rowperpatientreports.renderer.RowPerPatientExcelTemplateRenderer;
+import org.openmrs.module.rwandareports.report.renderer.ExcelCalendarTemplateRenderer;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 
@@ -308,6 +309,26 @@ public class Helper {
     	design.setName(name);
     	design.setReportDefinition(rd);
     	design.setRendererType(ExcelTemplateRenderer.class);
+    	design.addResource(resource);
+    	if (properties != null) {
+    		design.getProperties().putAll(properties);
+    	}
+    	resource.setReportDesign(design);
+    	
+    	ReportService rs = Context.getService(ReportService.class);
+    	rs.saveReportDesign(design);
+    }
+	
+	public void createXlsCalendarOverview(ReportDefinition rd, String resourceName, String name, Map<? extends Object, ? extends Object> properties) throws IOException {
+        ReportDesignResource resource = new ReportDesignResource();
+    	resource.setName(resourceName);
+    	resource.setExtension("xls");
+    	InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
+    	resource.setContents(IOUtils.toByteArray(is));
+    	final ReportDesign design = new ReportDesign();
+    	design.setName(name);
+    	design.setReportDefinition(rd);
+    	design.setRendererType(ExcelCalendarTemplateRenderer.class);
     	design.addResource(resource);
     	if (properties != null) {
     		design.getProperties().putAll(properties);
