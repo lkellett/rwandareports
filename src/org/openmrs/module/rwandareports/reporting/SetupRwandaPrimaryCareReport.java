@@ -27,7 +27,6 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.report.ReportDesign;
-import org.openmrs.module.reporting.report.definition.PeriodIndicatorReportDefinition;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.PrimaryCareReportConstants;
@@ -49,10 +48,22 @@ public class SetupRwandaPrimaryCareReport {
 		
 		//setUpGlobalProperties();
 		
-		createLocationCohortDefinitions();
+		
+		int registrationEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.registration.encountertypeid"));
+		int vitalsEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.vitals.encountertypeid"));
+        
+		EncounterType registration=Context.getEncounterService().getEncounterType(registrationEncTypeId);
+		if (registration == null)
+			throw new RuntimeException("Are you sure the global property primarycarereport.registration.encountertypeid is set correctly?");
+		
+		EncounterType vitals=Context.getEncounterService().getEncounterType(vitalsEncTypeId);
+		if (vitals == null)
+			throw new RuntimeException("Are you sure the global property primarycarereport.vitals.encountertypeid is set correctly?");
+		
+		createLocationCohortDefinitions(registration);
 		//createCompositionCohortDefinitions();
 		//createIndicators();
-		ReportDefinition rd = createReportDefinition();
+		ReportDefinition rd = createReportDefinition(registration, vitals);
 		h.createXlsCalendarOverview(rd, "rwandacalendarprimarycarereporttemplate.xls", "Primary_Care_Report_Template", null);
 	}
 	
@@ -64,7 +75,7 @@ public class SetupRwandaPrimaryCareReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(PeriodIndicatorReportDefinition.class, "Rwanda Primary Care Report");
+		h.purgeDefinition(RollingDailyPeriodIndicatorReportDefinition.class, "Rwanda Primary Care Report");
 		
 		h.purgeDefinition(DataSetDefinition.class, "Rwanda Primary Care Report Data Set");
 		h.purgeDefinition(CohortDefinition.class, "location: Primary Care Patients at location");
@@ -524,8 +535,12 @@ public class SetupRwandaPrimaryCareReport {
 	}
 	
 	
-	private ReportDefinition createReportDefinition() {
+	private ReportDefinition createReportDefinition(EncounterType reg, EncounterType vitals) {
+		
 		// PIH Quarterly Cross Site Indicator Report
+		
+		int vitalsEncTypeId = vitals.getEncounterTypeId();
+		int registrationEncTypeId = reg.getEncounterTypeId();
 		
 		RollingDailyPeriodIndicatorReportDefinition rd = new RollingDailyPeriodIndicatorReportDefinition();
 		rd.removeParameter(ReportingConstants.START_DATE_PARAMETER);
@@ -540,21 +555,9 @@ public class SetupRwandaPrimaryCareReport {
 		rd.setupDataSetDefinition();
 		
 	//Creation of Vitals and Registration Encounter types during report period
-		int registrationEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.registration.encountertypeid"));
-		int vitalsEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.vitals.encountertypeid"));
-        
-		List<EncounterType> registrationEncounterType=new ArrayList<EncounterType>();
-		EncounterType registration=Context.getEncounterService().getEncounterType(registrationEncTypeId);
-		if (registration == null)
-			throw new RuntimeException("Are you sure the global property primarycarereport.registration.encountertypeid is set correctly?");
-		registrationEncounterType.add(registration);
 		
-		List<EncounterType> vitalsEncounterType=new ArrayList<EncounterType>();
-		EncounterType vitals=Context.getEncounterService().getEncounterType(vitalsEncTypeId);
-		if (vitals == null)
-			throw new RuntimeException("Are you sure the global property primarycarereport.vitals.encountertypeid is set correctly?");
-		vitalsEncounterType.add(vitals);
-		
+		List<EncounterType> registrationEncounterType = new ArrayList<EncounterType>();
+		registrationEncounterType.add(reg);
 		EncounterCohortDefinition patientsWithPrimaryCareRegistration=new EncounterCohortDefinition();
 		patientsWithPrimaryCareRegistration.setName("patientsWithPrimaryCareRegistration");
 		patientsWithPrimaryCareRegistration.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
@@ -562,6 +565,8 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithPrimaryCareRegistration.setEncounterTypeList(registrationEncounterType);
 		h.replaceCohortDefinition(patientsWithPrimaryCareRegistration);
 		
+		List<EncounterType> vitalsEncounterType = new ArrayList<EncounterType>();
+		vitalsEncounterType.add(vitals);
 		EncounterCohortDefinition patientsWithPrimaryCareVitals=new EncounterCohortDefinition();
 		patientsWithPrimaryCareVitals.setName("patientsWithPrimaryCareVitals");
 		patientsWithPrimaryCareVitals.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
@@ -4540,11 +4545,12 @@ public class SetupRwandaPrimaryCareReport {
 	}
 	
 		
-	private void createLocationCohortDefinitions() {
+	private void createLocationCohortDefinitions(EncounterType reg) {
 		
 		SqlCohortDefinition location = new SqlCohortDefinition();
-		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		//    select p.patient_id from encounter where encounter_type_id = 8 and voided = 0 and location = :location
+		//location.setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		location.setQuery("select distinct p.patient_id from encounter e, patient p where p.voided = 0 and p.patient_id = e.patient_id and e.encounter_type = " +  reg.getEncounterTypeId() + " and e.voided = 0 and e.location_id = :location ");
 		location.setName("location: Primary Care Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);

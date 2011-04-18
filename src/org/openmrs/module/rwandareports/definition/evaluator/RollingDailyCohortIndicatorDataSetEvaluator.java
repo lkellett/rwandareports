@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.EncounterType;
+import org.openmrs.Location;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -26,8 +27,6 @@ import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluato
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
-import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.indicator.CohortIndicatorResult;
 import org.openmrs.module.reporting.indicator.aggregation.CountAggregator;
@@ -36,7 +35,6 @@ import org.openmrs.module.reporting.indicator.dimension.CohortDimensionResult;
 import org.openmrs.module.reporting.indicator.dimension.CohortIndicatorAndDimensionResult;
 import org.openmrs.module.reporting.indicator.dimension.service.DimensionService;
 import org.openmrs.module.reporting.indicator.service.IndicatorService;
-import org.openmrs.module.reporting.indicator.util.IndicatorUtil;
 import org.openmrs.module.rwandareports.dataset.RollingDailyCohortIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
@@ -68,13 +66,15 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 		Date endDate = (Date) context.getParameterValue("endDate");
 		if (startDate.getTime() >= endDate.getTime())
 			throw new IllegalArgumentException("Start date must be before End date.");
+		Location location = (Location) context.getParameterValue("location");
+		
 		
 		
 		
 		Calendar calendarStart = RwandaReportsUtil.findSundayBeforeOrEqualToStartDate(startDate);
 		//for all of the weeks that we're rendering in the calendar:
 		while (calendarStart.getTime().getTime() <= endDate.getTime()){
-			System.out.println("HERE In inner while");
+			
 			Calendar weeklyCal = new GregorianCalendar();
         	weeklyCal.setTime(calendarStart.getTime());
         	// for the days in the week:
@@ -88,7 +88,10 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
         		SqlCohortDefinition cohortQuery=new SqlCohortDefinition();
         		cohortQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
         		//cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()));
-        		cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= '" + databaseFormat.format(weeklyCal.getTime()) + "' and encounter_datetime<  '"+databaseFormat.format(endDateCal.getTime())+"'   ");
+        		String query = "select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= '" + databaseFormat.format(weeklyCal.getTime()) + "' and encounter_datetime<  '"+databaseFormat.format(endDateCal.getTime())+"'  ";
+        		if (location != null)
+        			query += " and e.location_id = " + location.getLocationId().toString();
+        		cohortQuery.setQuery(query);
         		
         		
         		//cohortQuery.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
@@ -96,6 +99,7 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
         		
 				CohortIndicator dailyCohortIndicator = new CohortIndicator();
 				dailyCohortIndicator.setName("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
+				dailyCohortIndicator.setDescription("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
 				//dailyCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
 				//dailyCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 				//dailyCohortIndicator.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
@@ -107,7 +111,6 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 				//Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, IndicatorUtil.getDefaultParameterMappings());
 				//Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, ParameterizableUtil.createParameterMappings("calStartDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='" + databaseFormat.format(weeklyCal.getTime()) + "',calEndDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='"+ databaseFormat.format(endDateCal.getTime()) +"'"));
 				Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, new HashMap<String, Object>() );
-				
 				dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "Number of registrations on " + Context.getDateFormat().format(weeklyCal.getTime()), m, new HashMap<String,String>());
 				//context.addParameterValue("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(weeklyCal.getTime()) + "'");
         		//context.addParameterValue("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(endDateCal.getTime()) + "'" );
@@ -151,6 +154,7 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 			CohortIndicatorAndDimensionColumn col = (CohortIndicatorAndDimensionColumn) c;
 			if (!indicatorCalculationCache.containsKey(col.getIndicator())) {
 				try {
+					
 					CohortIndicatorResult result = (CohortIndicatorResult) is.evaluate(col.getIndicator(), context);
 					log.debug("Caching indicator: " + col.getIndicator());
 					indicatorCalculationCache.put(col.getIndicator(), result);
