@@ -13,7 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.EncounterType;
-import org.openmrs.Location;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -66,10 +65,7 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 		Date endDate = (Date) context.getParameterValue("endDate");
 		if (startDate.getTime() >= endDate.getTime())
 			throw new IllegalArgumentException("Start date must be before End date.");
-		Location location = (Location) context.getParameterValue("location");
-		
-		
-		
+
 		
 		Calendar calendarStart = RwandaReportsUtil.findSundayBeforeOrEqualToStartDate(startDate);
 		//for all of the weeks that we're rendering in the calendar:
@@ -88,9 +84,7 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
         		SqlCohortDefinition cohortQuery=new SqlCohortDefinition();
         		cohortQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
         		//cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()));
-        		String query = "select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= '" + databaseFormat.format(weeklyCal.getTime()) + "' and encounter_datetime<  '"+databaseFormat.format(endDateCal.getTime())+"'  ";
-        		if (location != null)
-        			query += " and e.location_id = " + location.getLocationId().toString();
+        		String query = "select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= '" + databaseFormat.format(weeklyCal.getTime()) + "' and encounter_datetime<  '" + databaseFormat.format(endDateCal.getTime()) + "'   and e.location_id = :location  ";
         		cohortQuery.setQuery(query);
         		
         		
@@ -114,7 +108,6 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 				dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "Number of registrations on " + Context.getDateFormat().format(weeklyCal.getTime()), m, new HashMap<String,String>());
 				//context.addParameterValue("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(weeklyCal.getTime()) + "'");
         		//context.addParameterValue("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(endDateCal.getTime()) + "'" );
-        		
 				weeklyCal.add(Calendar.DATE, 1);
 			
             }
