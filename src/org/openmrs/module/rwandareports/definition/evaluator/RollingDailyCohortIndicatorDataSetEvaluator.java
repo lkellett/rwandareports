@@ -69,12 +69,7 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 		if (startDate.getTime() >= endDate.getTime())
 			throw new IllegalArgumentException("Start date must be before End date.");
 		
-		//build the cohort definition
-		SqlCohortDefinition cohortQuery=new SqlCohortDefinition();
-		cohortQuery.setName("monday");
-		cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= :startDate and encounter_datetime< :endDate");
-		cohortQuery.addParameter(new Parameter("startDate", "startDate", Date.class));
-		cohortQuery.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
 		
 		Calendar calendarStart = RwandaReportsUtil.findSundayBeforeOrEqualToStartDate(startDate);
 		//for all of the weeks that we're rendering in the calendar:
@@ -84,20 +79,41 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
         	weeklyCal.setTime(calendarStart.getTime());
         	// for the days in the week:
         	for (int i = 0; i < 7; i++) {
-				CohortIndicator dailyCohortIndicator = new CohortIndicator();
-				dailyCohortIndicator.setName("PC_REG_COUNT_" + sdfIndicatorVar.format(weeklyCal.getTime()));
-				dailyCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-				dailyCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-				dailyCohortIndicator.setAggregator(CountAggregator.class);
-				Calendar endDateCal = new GregorianCalendar();
+
+        		Calendar endDateCal = new GregorianCalendar();
 				endDateCal.setTime(weeklyCal.getTime());
 				endDateCal.add(Calendar.DATE, 1);
-				//todo:  FIX THIS:
-				dailyCohortIndicator.setCohortDefinition(new Mapped<CohortDefinition>(cohortQuery,ParameterizableUtil.createParameterMappings("startDate='" + databaseFormat.format(weeklyCal.getTime()) + "',endDate='"+ databaseFormat.format(endDateCal.getTime()) +"'")));
-				Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, IndicatorUtil.getDefaultParameterMappings());
-				//todo:FIX THIS
-				dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "PC_REG_COUNT_" + sdfIndicatorVar.format(weeklyCal.getTime()), m, new HashMap<String,String>());
+				
+        		//build the cohort definition
+        		SqlCohortDefinition cohortQuery=new SqlCohortDefinition();
+        		cohortQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
+        		//cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()));
+        		cohortQuery.setQuery("select distinct patient_id from encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0 and encounter_datetime >= '" + databaseFormat.format(weeklyCal.getTime()) + "' and encounter_datetime<  '"+databaseFormat.format(endDateCal.getTime())+"'   ");
+        		
+        		
+        		//cohortQuery.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
+        		//cohortQuery.addParameter(new Parameter("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
+        		
+				CohortIndicator dailyCohortIndicator = new CohortIndicator();
+				dailyCohortIndicator.setName("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
+				//dailyCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+				//dailyCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+				//dailyCohortIndicator.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
+				//dailyCohortIndicator.addParameter(new Parameter("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), String.class));
+				dailyCohortIndicator.setAggregator(CountAggregator.class);
+				
+				//dailyCohortIndicator.setCohortDefinition(new Mapped<CohortDefinition>(cohortQuery,ParameterizableUtil.createParameterMappings("calStartDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='" + databaseFormat.format(weeklyCal.getTime()) + "',calEndDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='"+ databaseFormat.format(endDateCal.getTime()) +"'")));
+				dailyCohortIndicator.setCohortDefinition(new Mapped<CohortDefinition>(cohortQuery,new HashMap<String, Object>()));
+				//Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, IndicatorUtil.getDefaultParameterMappings());
+				//Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, ParameterizableUtil.createParameterMappings("calStartDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='" + databaseFormat.format(weeklyCal.getTime()) + "',calEndDate"+sdfIndicatorVar.format(weeklyCal.getTime())+"='"+ databaseFormat.format(endDateCal.getTime()) +"'"));
+				Mapped<CohortIndicator> m = new Mapped<CohortIndicator>(dailyCohortIndicator, new HashMap<String, Object>() );
+				
+				dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "Number of registrations on " + Context.getDateFormat().format(weeklyCal.getTime()), m, new HashMap<String,String>());
+				//context.addParameterValue("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(weeklyCal.getTime()) + "'");
+        		//context.addParameterValue("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "'" + databaseFormat.format(endDateCal.getTime()) + "'" );
+        		
 				weeklyCal.add(Calendar.DATE, 1);
+			
             }
 			
 			calendarStart.add(Calendar.DATE, 7);
