@@ -181,6 +181,8 @@ public class SetupAdultLateVisitAndCD4Report {
 			if(Context.getEncounterService().getEncounterType(Integer.parseInt(id))!=null)
 			clinicalEncounterTypes.add(Context.getEncounterService().getEncounterType(Integer.parseInt(id)));
 		}
+		if(clinicalEncounterTypes==null||clinicalEncounterTypes.size()==0)
+			throw new RuntimeException("Are you sure the global property ClinicalencounterTypeIds.labTestIncl is set correctly?");
 		
 		EncounterCohortDefinition patientsWithClinicalEncounters=new EncounterCohortDefinition();
 		patientsWithClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
