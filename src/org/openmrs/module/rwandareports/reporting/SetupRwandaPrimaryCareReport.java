@@ -2424,8 +2424,8 @@ public class SetupRwandaPrimaryCareReport {
 		
 		rd.addIndicator("7.1.f", "Female number of patient requested primary care", femalePatientsrequestPrimCareInRegistrationIndicator);
 		rd.addIndicator("7.1.m", "Male number of patient requested primary care", malePatientsrequestPrimCareInRegistrationIndicator);
-		rd.addIndicator("7.2.f", "Female Number of patients requested VCT PROGRAM", femalePatientsrequestVCTProgramInRegistrationIndicator);
-		rd.addIndicator("7.2.m", "Male Number of patients requested VCT PROGRAM", malePatientsrequestVCTProgramInRegistrationIndicator);
+		rd.addIndicator("7.2.f", "Female Number of patients requested VCT", femalePatientsrequestVCTProgramInRegistrationIndicator);
+		rd.addIndicator("7.2.m", "Male Number of patients requested VCT", malePatientsrequestVCTProgramInRegistrationIndicator);
 		rd.addIndicator("7.3.f", "Female Number of patients requested ANTENATAL CLINIC", femalePatientsrequestAntenatalClinicInRegistrationIndicator);
 		rd.addIndicator("7.3.m", "Male Number of patients requested ANTENATAL CLINIC", malePatientsrequestAntenatalClinicInRegistrationIndicator);
 		rd.addIndicator("7.4.f", "Female Number of patients requested FAMILY PLANNING SERVICES", femalePatientsrequestFamilyPlaningServicesRegistrationIndicator);
@@ -2434,16 +2434,16 @@ public class SetupRwandaPrimaryCareReport {
 		rd.addIndicator("7.5.m", "Male Number of patients requested MUTUELLE SERVICE", malePatientsrequestMutuelleServiceRegistrationIndicator);
 		rd.addIndicator("7.6.f", "Female Number of patients requested ACCOUNTING OFFICE SERVICE", femalePatientsrequestAccountingOfficeServiceRegistrationIndicator);
 		rd.addIndicator("7.6.m", "Male Number of patients requested ACCOUNTING OFFICE SERVICE", malePatientsrequestAccountingOfficeServiceRegistrationIndicator);
-		rd.addIndicator("7.7.f", "Female Number of patients requested INTEGRATED MANAGEMENT OF ADULT ILLNESS SERVICE", femalePatientsrequestAdultIllnessServiceIndicator);
-		rd.addIndicator("7.7.m", "Male Number of patients requested INTEGRATED MANAGEMENT OF ADULT ILLNESS SERVICE", malePatientsrequestAdultIllnessServiceIndicator);
-		rd.addIndicator("7.8.f", "Female Number of patients requested INTEGRATED MANAGEMENT OF CHILDHOOD ILLNESS", femalePatientsrequestChildIllnessServiceIndicator);
-		rd.addIndicator("7.8.m", "Male Number of patients requested INTEGRATED MANAGEMENT OF CHILDHOOD ILLNESS", malePatientsrequestChildIllnessServiceIndicator);
-		rd.addIndicator("7.9.f", "Female Number of patients requested INFECTIOUS DISEASES CLINIC SERVICE", femalePatientsrequestInfectiousDiseasesServiceIndicator);
-		rd.addIndicator("7.9.m", "Male Number of patients requested INFECTIOUS DISEASES CLINIC SERVICE", malePatientsrequestInfectiousDiseasesServiceIndicator);
+		rd.addIndicator("7.7.f", "Female Number of patients requested ADULT CLINIC", femalePatientsrequestAdultIllnessServiceIndicator);
+		rd.addIndicator("7.7.m", "Male Number of patients requested ADULT CLINIC", malePatientsrequestAdultIllnessServiceIndicator);
+		rd.addIndicator("7.8.f", "Female Number of patients requested PEDIATRIC CLINIC", femalePatientsrequestChildIllnessServiceIndicator);
+		rd.addIndicator("7.8.m", "Male Number of patients requested PEDIATRIC CLINIC", malePatientsrequestChildIllnessServiceIndicator);
+		rd.addIndicator("7.9.f", "Female Number of patients requested ID CLINIC", femalePatientsrequestInfectiousDiseasesServiceIndicator);
+		rd.addIndicator("7.9.m", "Male Number of patients requested ID CLINIC", malePatientsrequestInfectiousDiseasesServiceIndicator);
 		rd.addIndicator("7.10.f", "Female Number of patients requested SOCIAL WORKER SERVICE", femalePatientsrequestSocialWorkerServiceIndicator);
 		rd.addIndicator("7.10.m", "Male Number of patients requested SOCIAL WORKER SERVICE", malePatientsrequestSocialWorkerServiceIndicator);
-		rd.addIndicator("7.11.f", "Female number of patient requested PREVENTION OF MOTHER TO CHILD TRANSMISSION SERVICE", femalePatientsrequestPMTCTServiceIndicator);
-		rd.addIndicator("7.11.m", "Male number of patient requested PREVENTION OF MOTHER TO CHILD TRANSMISSION SERVICE", malePatientsrequestPMTCTServiceIndicator);
+		rd.addIndicator("7.11.f", "Female number of patient requested PMTCT", femalePatientsrequestPMTCTServiceIndicator);
+		rd.addIndicator("7.11.m", "Male number of patient requested PMTCT", malePatientsrequestPMTCTServiceIndicator);
 		rd.addIndicator("7.12.f", "Female Number of patients requested LABORATORY SERVICE", femalePatientsrequestLabServiceIndicator);
 		rd.addIndicator("7.12.m", "Male Number of patients requested LABORATORY SERVICE", malePatientsrequestLabServiceIndicator);
 		rd.addIndicator("7.13.f", "Female Number of patients requested PHARMACY SERVICES", femalePatientsrequestPharmacyServiceIndicator);
