@@ -3,7 +3,8 @@ package org.openmrs.module.rwandareports.web.controller;
 import org.openmrs.module.rwandareports.reporting.Helper;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
-import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
+import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereportAllSites;
+import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereportBySite;
 import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4AllSiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
@@ -158,18 +159,31 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	//Remove/Register Heart Failure report
+	//Remove/Register Heart Failure report by site and all
 	@RequestMapping("/module/rwandareports/remove_heartFailureReport")
 	public ModelAndView removeHeartFailureIndicator() throws Exception {
-		new SetupHeartFailurereport(new Helper()).delete();
+		new SetupHeartFailurereportBySite(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
 	@RequestMapping("/module/rwandareports/register_heartFailureReport")
 	public ModelAndView registerHeartFailureIndicatorIndicator() throws Exception {
-		new SetupHeartFailurereport(new Helper()).setup();
+		new SetupHeartFailurereportBySite(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	@RequestMapping("/module/rwandareports/remove_heartFailureReportAllSites")
+	public ModelAndView removeHeartFailureAllSitesIndicator() throws Exception {
+		new SetupHeartFailurereportAllSites(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_heartFailureReportAllSites")
+	public ModelAndView registerHeartFailureAllSitesIndicatorIndicator() throws Exception {
+		new SetupHeartFailurereportAllSites(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	// end of Heart failure report
 	
 	
 	@RequestMapping("/module/rwandareports/register_missingCD4Report")

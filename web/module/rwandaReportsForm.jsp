@@ -66,9 +66,14 @@ Rwanda Primary Care Report:
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_rwandaPrimaryCareReport.form" onclick=msgrem(this)>Remove</a>	
 <hr></hr>
 <h3>Heart Failure Report</h3>
-Heart Failure Report:
+Heart Failure Report By Site:
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReport.form" onclick=msgreg(this)>(Re) register</a>
 	<a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a>	
+<br></br>
+Heart Failure Report All Sites:
+<a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReportAllSites.form" onclick=msgreg(this)>(Re) register</a>
+<a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReportAllSites.form" onclick=msgrem(this)>Remove</a>	
+
 <hr></hr>
 Missing CD4 Report:
 	<a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a>

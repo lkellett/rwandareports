@@ -53,13 +53,13 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.HeartFailureReportConstants;
 
-public class SetupHeartFailurereportBySite {
-	protected final static Log log = LogFactory.getLog(SetupHeartFailurereportBySite.class);
+public class SetupHeartFailurereportAllSites {
+	protected final static Log log = LogFactory.getLog(SetupHeartFailurereportAllSites.class);
 	Helper h = new Helper();
 	
 	private HashMap<String, String> properties;
 	
-	public SetupHeartFailurereportBySite(Helper helper) {
+	public SetupHeartFailurereportAllSites(Helper helper) {
 		h = helper;
 	}
 	
@@ -69,24 +69,24 @@ public class SetupHeartFailurereportBySite {
 		
 		//setUpGlobalProperties();
 		
-		createLocationCohortDefinitions();
+		//createLocationCohortDefinitions();
 		//createCompositionCohortDefinitions();
 		//createIndicators();
 		ReportDefinition rd = createReportDefinition();
-		h.createXlsOverview(rd, "heartfailurereporttemplate.xls", "Xlsheartfailurereporttemplate", null);
+		h.createXlsOverview(rd, "heartfailurereporttemplateallsites.xls", "XlsheartfailurereporttemplateAllSites", null);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("Xlsheartfailurereporttemplate".equals(rd.getName())) {
+			if ("XlsheartfailurereporttemplateAllSites".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(PeriodIndicatorReportDefinition.class, "Heart Failure Report By Site");
+		h.purgeDefinition(PeriodIndicatorReportDefinition.class, "Heart Failure Report All Site");
 		
 		h.purgeDefinition(DataSetDefinition.class, "Heart Failure Report Data Set");
-		h.purgeDefinition(CohortDefinition.class, "location: Heart Failure Patients at location");
+		//h.purgeDefinition(CohortDefinition.class, "location: Heart Failure Patients at location");
 		
 
 		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFProgram");
@@ -212,11 +212,11 @@ public class SetupHeartFailurereportBySite {
 		rd.removeParameter(ReportingConstants.START_DATE_PARAMETER);
 		rd.removeParameter(ReportingConstants.END_DATE_PARAMETER);
 		rd.removeParameter(ReportingConstants.LOCATION_PARAMETER);
-		rd.addParameter(new Parameter("location", "Location", Location.class));		
+		//rd.addParameter(new Parameter("location", "Location", Location.class));		
 		rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		rd.addParameter(new Parameter("endDate", "End Date", Date.class));
 				
-		rd.setName("Heart Failure Report By Site");
+		rd.setName("Heart Failure Report All Sites");
 		
 		rd.setupDataSetDefinition();
 
@@ -1327,7 +1327,7 @@ h.replaceDefinition(hospitalizedDuringPeriodIndicator);
 		rd.addIndicator("6.1", "number of patients without a height ever", heightEverCohortIndicator);
 		rd.addIndicator("6.2", "number of patients without a donne de base (intake form)", patientWithoutDonneDebasePeriodIndicator);
 
-		rd.setBaseCohortDefinition(h.cohortDefinition("location: Heart Failure Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		//rd.setBaseCohortDefinition(h.cohortDefinition("location: Heart Failure Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 	    h.replaceReportDefinition(rd);
 		
