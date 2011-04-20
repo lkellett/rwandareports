@@ -7,12 +7,12 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd 
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
            
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-    <context:component-scan base-package="@MODULE_PACKAGE@" />
+    <context:component-scan base-package="org.openmrs.module.rwandareports" />
     
     <bean id="rwandaReportUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="order"><value>44</value></property>
@@ -28,5 +28,93 @@
 		<property name="formView"><value>/module/rwandareports/rwandaReportsForm</value></property>
 		<property name="successView"><value>rwandareports.form</value></property>
     </bean>
+	
+     <bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.openmrs.module.rwandareports.encounter.query.service.EncounterGroupQueryService</value> 
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+					<property name="transactionManager"><ref bean="transactionManager"/></property>
+					<property name="target">
+						<bean class="org.openmrs.module.rwandareports.encounter.query.service.EncounterGroupQueryServiceImpl">
+							<property name="dao">
+								<bean class="org.openmrs.module.rwandareports.encounter.query.db.hibernate.HibernateEncounterGroupQueryServiceDAO">
+									<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+								</bean>
+							</property>
+						</bean>	
+					</property>
+					<property name="preInterceptors">
+						<ref bean="serviceInterceptors" />
+					</property>
+					<property name="transactionAttributeSource">
+						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+					</property>
+				</bean>		
+			</list>
+		</property>
+	</bean>
+
+	
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionService</value> 
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+					<property name="transactionManager"><ref bean="transactionManager"/></property>
+					<property name="target">
+						<bean class="org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionServiceImpl"></bean>
+					</property>
+					<property name="preInterceptors">
+						<ref bean="serviceInterceptors" />
+					</property>
+					<property name="transactionAttributeSource">
+						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+					</property>
+				</bean>		
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="rwandaReportsSerializer" class="org.openmrs.module.rwandareports.serializer.RwandaReportsSerializer"/>
+	<bean parent="serializationServiceTarget">
+		<property name="serializers">
+			<list merge="true">
+				<ref bean="rwandaReportsSerializer"/>
+			</list>
+		</property>
+	</bean>
+		<bean parent="serializedObjectDAO">
+		<property name="supportedTypes">
+			<list merge="true">
+				<value>org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition</value>
+			</list>
+		</property>
+	</bean>	
+	
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list merge="true">
+				<value>org.openmrs.module.rwandareports.serializer.RwandaReportsSerializedDefinitionService</value> 
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+					<property name="transactionManager"><ref bean="transactionManager"/></property>
+					<property name="target">
+						<bean class="org.openmrs.module.rwandareports.serializer.RwandaReportsSerializedDefinitionServiceImpl">
+							<property name="dao"><ref bean="serializedObjectDAO"/></property>
+							<property name="serializer"><ref bean="rwandaReportsSerializer"/></property>
+						</bean>
+					</property>
+					<property name="preInterceptors">
+						<ref bean="serviceInterceptors" />
+					</property>
+					<property name="transactionAttributeSource">
+						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+					</property>
+				</bean>		
+			</list>
+		</property>
+	</bean>
+	
+	
    
 </beans>

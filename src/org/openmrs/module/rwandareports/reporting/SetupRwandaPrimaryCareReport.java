@@ -30,6 +30,9 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.PrimaryCareReportConstants;
+import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
+import org.openmrs.module.rwandareports.encounter.definition.SqlEncounterGroupDefinition;
+import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
 import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 
 public class SetupRwandaPrimaryCareReport {
@@ -311,13 +314,13 @@ public class SetupRwandaPrimaryCareReport {
 		h.purgeDefinition(CohortIndicator.class, "patientsWithNONEInsAndGreaterThanThreeVisitsIndicator");
 		h.purgeDefinition(CohortIndicator.class, "patientsWithMissingInsAndGreaterThanThreeVisitsIndicator");		
 		h.purgeDefinition(CohortIndicator.class, "peakHoursAndPeakDaysIndicator");
-	
+
 	}
 	
 	
 	private ReportDefinition createReportDefinition(EncounterType reg, EncounterType vitals) {
 		
-		// Primary care Indicator Report
+		// PIH Quarterly Cross Site Indicator Report
 		
 		int vitalsEncTypeId = vitals.getEncounterTypeId();
 		int registrationEncTypeId = reg.getEncounterTypeId();
@@ -353,12 +356,15 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithPrimaryCareVitals.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
 		patientsWithPrimaryCareVitals.setEncounterTypeList(vitalsEncounterType);
 		h.replaceCohortDefinition(patientsWithPrimaryCareVitals);
+		
+		
 
 //======================================================================================
 //       1st Question
 //======================================================================================
 		
-		// working with Calendar
+
+
 
 //======================================================================================
 //       2nd Question
@@ -470,48 +476,79 @@ public class SetupRwandaPrimaryCareReport {
 //========================================================================
 	
 // Peak Hours (08:00:00 to 10:00:00)
+//		
+//		SqlCohortDefinition peakHours=new SqlCohortDefinition();
+//		peakHours.setName("peakHours");
+//		peakHours.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,TIME(e.encounter_datetime) as peakhours,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakhours where peakhours>= :startTime and peakhours<= :endTime and peakdays<=4 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+//		peakHours.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		peakHours.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		peakHours.addParameter(new Parameter("startTime", "startTime", Date.class));
+//		peakHours.addParameter(new Parameter("endTime", "endTime", Date.class));
+//		h.replaceCohortDefinition(peakHours);
+//		
+//// Peak Days (Monday to Friday)
+//		
+//		SqlCohortDefinition peakDays=new SqlCohortDefinition();
+//		peakDays.setName("peakDays");
+//		peakDays.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays<=4 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+//		peakDays.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		peakDays.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceCohortDefinition(peakDays);
+//		
+////
+//		CompositionCohortDefinition peakHoursAndPeakDays=new CompositionCohortDefinition();
+//		peakHoursAndPeakDays.setName("peakHoursAndPeakDays");
+//		peakHoursAndPeakDays.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		peakHoursAndPeakDays.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		peakHoursAndPeakDays.addParameter(new Parameter("startTime", "startTime", Date.class));
+//		peakHoursAndPeakDays.addParameter(new Parameter("endTime", "endTime", Date.class));
+//		peakHoursAndPeakDays.getSearches().put("peakHours", new Mapped<CohortDefinition>(peakHours,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")));
+//		peakHoursAndPeakDays.getSearches().put("peakDays", new Mapped<CohortDefinition>(peakDays,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
+//		peakHoursAndPeakDays.setCompositionString("peakHours AND peakDays");
+//		h.replaceCohortDefinition(peakHoursAndPeakDays);
+//		
+//		
+//		CohortIndicator peakHoursAndPeakDaysIndicator = CohortIndicator.newFractionIndicator
+//		(null,new Mapped<CohortDefinition>(peakHoursAndPeakDays, 
+//				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")), 
+//				new Mapped<CohortDefinition>(peakDays, 
+//				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), 
+//				null);
+//		peakHoursAndPeakDaysIndicator.setName("peakHoursAndPeakDaysIndicator");
+//		peakHoursAndPeakDaysIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
+//		peakHoursAndPeakDaysIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+//		h.replaceDefinition(peakHoursAndPeakDaysIndicator);
 		
-		SqlCohortDefinition peakHours=new SqlCohortDefinition();
+		//8 to 10, monday to friday
+		SqlEncounterGroupDefinition peakHours = new SqlEncounterGroupDefinition();
 		peakHours.setName("peakHours");
-		peakHours.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,TIME(e.encounter_datetime) as peakhours,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakhours where peakhours>= :startTime and peakhours<= :endTime and peakdays<=4 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+		peakHours.setQuery("select distinct encounter_id, patient_id from encounter where TIME(encounter_datetime) >= :startTime and TIME(encounter_datetime) <= :endTime and WEEKDAY(encounter_datetime) <=4  and encounter_datetime>= :startDate and encounter_datetime<= :endDate and encounter_type = "+registrationEncTypeId+" and voided = 0 and location_id = :location");
 		peakHours.addParameter(new Parameter("startDate", "startDate", Date.class));
 		peakHours.addParameter(new Parameter("endDate", "endDate", Date.class));
 		peakHours.addParameter(new Parameter("startTime", "startTime", Date.class));
 		peakHours.addParameter(new Parameter("endTime", "endTime", Date.class));
-		h.replaceCohortDefinition(peakHours);
+		h.replaceEncounterGroupDefinition(peakHours);
 		
-// Peak Days (Monday to Friday)
+
 		
-		SqlCohortDefinition peakDays=new SqlCohortDefinition();
-		peakDays.setName("peakDays");
-		peakDays.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,WEEKDAY(e.encounter_datetime) as peakdays FROM encounter e where e.encounter_type="+registrationEncTypeId+" and e.voided=0) as patientspeakdays where peakdays<=4 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
-		peakDays.addParameter(new Parameter("startDate", "startDate", Date.class));
-		peakDays.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceCohortDefinition(peakDays);
+		//number of weekdays between startDate and stopDate / 2
 		
-//
-		CompositionCohortDefinition peakHoursAndPeakDays=new CompositionCohortDefinition();
-		peakHoursAndPeakDays.setName("peakHoursAndPeakDays");
-		peakHoursAndPeakDays.addParameter(new Parameter("startDate", "startDate", Date.class));
-		peakHoursAndPeakDays.addParameter(new Parameter("endDate", "endDate", Date.class));
-		peakHoursAndPeakDays.addParameter(new Parameter("startTime", "startTime", Date.class));
-		peakHoursAndPeakDays.addParameter(new Parameter("endTime", "endTime", Date.class));
-		peakHoursAndPeakDays.getSearches().put("peakHours", new Mapped<CohortDefinition>(peakHours,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")));
-		peakHoursAndPeakDays.getSearches().put("peakDays", new Mapped<CohortDefinition>(peakDays,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
-		peakHoursAndPeakDays.setCompositionString("peakHours AND peakDays");
-		h.replaceCohortDefinition(peakHoursAndPeakDays);
-		
-		
-		CohortIndicator peakHoursAndPeakDaysIndicator = CohortIndicator.newFractionIndicator
-		(null,new Mapped<CohortDefinition>(peakHoursAndPeakDays, 
-				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")), 
-				new Mapped<CohortDefinition>(peakDays, 
-				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), 
+		EncounterIndicator peakHoursAndPeakDaysIndicator = EncounterIndicator.newDailyDivisionIndicator("peakHoursIndicator", 
+				new Mapped<EncounterGroupDefinition>(peakHours, ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")),
+				Integer.valueOf(2), 
+				EncounterIndicator.IndicatorType.PER_WEEKDAYS,
 				null);
 		peakHoursAndPeakDaysIndicator.setName("peakHoursAndPeakDaysIndicator");
 		peakHoursAndPeakDaysIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
 		peakHoursAndPeakDaysIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
+		peakHoursAndPeakDaysIndicator.setPerHourDenominator(2);
 		h.replaceDefinition(peakHoursAndPeakDaysIndicator);
+		
+		
+		
+		
+		
+		
 
 		
 //========================================================================
@@ -2360,6 +2397,7 @@ public class SetupRwandaPrimaryCareReport {
 		
 		
 		// add global filter to the report
+	
 		
 		rd.addIndicator("2.1", "Percent of patients who do not have an observation for temperature in the vitals", patientsWithoutTemperatureInVitalsIndicator);
 		rd.addIndicator("2.2", "Percent of children under 5 who did have observation for temperature, and actually had a fever", patientsWithTemperatureGreaterThanNormalInVitalsIndicator);
@@ -2424,8 +2462,8 @@ public class SetupRwandaPrimaryCareReport {
 		
 		rd.addIndicator("7.1.f", "Female number of patient requested primary care", femalePatientsrequestPrimCareInRegistrationIndicator);
 		rd.addIndicator("7.1.m", "Male number of patient requested primary care", malePatientsrequestPrimCareInRegistrationIndicator);
-		rd.addIndicator("7.2.f", "Female Number of patients requested VCT", femalePatientsrequestVCTProgramInRegistrationIndicator);
-		rd.addIndicator("7.2.m", "Male Number of patients requested VCT", malePatientsrequestVCTProgramInRegistrationIndicator);
+		rd.addIndicator("7.2.f", "Female Number of patients requested VCT PROGRAM", femalePatientsrequestVCTProgramInRegistrationIndicator);
+		rd.addIndicator("7.2.m", "Male Number of patients requested VCT PROGRAM", malePatientsrequestVCTProgramInRegistrationIndicator);
 		rd.addIndicator("7.3.f", "Female Number of patients requested ANTENATAL CLINIC", femalePatientsrequestAntenatalClinicInRegistrationIndicator);
 		rd.addIndicator("7.3.m", "Male Number of patients requested ANTENATAL CLINIC", malePatientsrequestAntenatalClinicInRegistrationIndicator);
 		rd.addIndicator("7.4.f", "Female Number of patients requested FAMILY PLANNING SERVICES", femalePatientsrequestFamilyPlaningServicesRegistrationIndicator);
@@ -2434,16 +2472,16 @@ public class SetupRwandaPrimaryCareReport {
 		rd.addIndicator("7.5.m", "Male Number of patients requested MUTUELLE SERVICE", malePatientsrequestMutuelleServiceRegistrationIndicator);
 		rd.addIndicator("7.6.f", "Female Number of patients requested ACCOUNTING OFFICE SERVICE", femalePatientsrequestAccountingOfficeServiceRegistrationIndicator);
 		rd.addIndicator("7.6.m", "Male Number of patients requested ACCOUNTING OFFICE SERVICE", malePatientsrequestAccountingOfficeServiceRegistrationIndicator);
-		rd.addIndicator("7.7.f", "Female Number of patients requested ADULT CLINIC", femalePatientsrequestAdultIllnessServiceIndicator);
-		rd.addIndicator("7.7.m", "Male Number of patients requested ADULT CLINIC", malePatientsrequestAdultIllnessServiceIndicator);
-		rd.addIndicator("7.8.f", "Female Number of patients requested PEDIATRIC CLINIC", femalePatientsrequestChildIllnessServiceIndicator);
-		rd.addIndicator("7.8.m", "Male Number of patients requested PEDIATRIC CLINIC", malePatientsrequestChildIllnessServiceIndicator);
-		rd.addIndicator("7.9.f", "Female Number of patients requested ID CLINIC", femalePatientsrequestInfectiousDiseasesServiceIndicator);
-		rd.addIndicator("7.9.m", "Male Number of patients requested ID CLINIC", malePatientsrequestInfectiousDiseasesServiceIndicator);
+		rd.addIndicator("7.7.f", "Female Number of patients requested INTEGRATED MANAGEMENT OF ADULT ILLNESS SERVICE", femalePatientsrequestAdultIllnessServiceIndicator);
+		rd.addIndicator("7.7.m", "Male Number of patients requested INTEGRATED MANAGEMENT OF ADULT ILLNESS SERVICE", malePatientsrequestAdultIllnessServiceIndicator);
+		rd.addIndicator("7.8.f", "Female Number of patients requested INTEGRATED MANAGEMENT OF CHILDHOOD ILLNESS", femalePatientsrequestChildIllnessServiceIndicator);
+		rd.addIndicator("7.8.m", "Male Number of patients requested INTEGRATED MANAGEMENT OF CHILDHOOD ILLNESS", malePatientsrequestChildIllnessServiceIndicator);
+		rd.addIndicator("7.9.f", "Female Number of patients requested INFECTIOUS DISEASES CLINIC SERVICE", femalePatientsrequestInfectiousDiseasesServiceIndicator);
+		rd.addIndicator("7.9.m", "Male Number of patients requested INFECTIOUS DISEASES CLINIC SERVICE", malePatientsrequestInfectiousDiseasesServiceIndicator);
 		rd.addIndicator("7.10.f", "Female Number of patients requested SOCIAL WORKER SERVICE", femalePatientsrequestSocialWorkerServiceIndicator);
 		rd.addIndicator("7.10.m", "Male Number of patients requested SOCIAL WORKER SERVICE", malePatientsrequestSocialWorkerServiceIndicator);
-		rd.addIndicator("7.11.f", "Female number of patient requested PMTCT", femalePatientsrequestPMTCTServiceIndicator);
-		rd.addIndicator("7.11.m", "Male number of patient requested PMTCT", malePatientsrequestPMTCTServiceIndicator);
+		rd.addIndicator("7.11.f", "Female number of patient requested PREVENTION OF MOTHER TO CHILD TRANSMISSION SERVICE", femalePatientsrequestPMTCTServiceIndicator);
+		rd.addIndicator("7.11.m", "Male number of patient requested PREVENTION OF MOTHER TO CHILD TRANSMISSION SERVICE", malePatientsrequestPMTCTServiceIndicator);
 		rd.addIndicator("7.12.f", "Female Number of patients requested LABORATORY SERVICE", femalePatientsrequestLabServiceIndicator);
 		rd.addIndicator("7.12.m", "Male Number of patients requested LABORATORY SERVICE", malePatientsrequestLabServiceIndicator);
 		rd.addIndicator("7.13.f", "Female Number of patients requested PHARMACY SERVICES", femalePatientsrequestPharmacyServiceIndicator);

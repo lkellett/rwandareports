@@ -17,4 +17,15 @@ public class RwandaReportsUtil {
 		}
 		throw new RuntimeException("Unable to find first Sunday before or equal to startDate parameter.");
 	}
+	
+	
+	public static boolean isWeekday(Date startDate){
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(startDate);
+		if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+				|| cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY)
+			return false;
+		return true;
+			
+	}
 }

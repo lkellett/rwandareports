@@ -36,6 +36,8 @@ import org.openmrs.module.reporting.report.renderer.ExcelTemplateRenderer;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.module.rowperpatientreports.renderer.RowPerPatientExcelTemplateRenderer;
+import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
+import org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionService;
 import org.openmrs.module.rwandareports.report.renderer.ExcelCalendarTemplateRenderer;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
@@ -123,6 +125,12 @@ public class Helper {
 	
 	public void replaceCohortDefinition(CohortDefinition def) {
 		CohortDefinitionService cds = Context.getService(CohortDefinitionService.class);
+		purgeDefinition(def.getClass(), def.getName());
+		cds.saveDefinition(def);
+	}
+	
+	public void replaceEncounterGroupDefinition(EncounterGroupDefinition def) {
+		EncounterGroupDefinitionService cds = Context.getService(EncounterGroupDefinitionService.class);
 		purgeDefinition(def.getClass(), def.getName());
 		cds.saveDefinition(def);
 	}

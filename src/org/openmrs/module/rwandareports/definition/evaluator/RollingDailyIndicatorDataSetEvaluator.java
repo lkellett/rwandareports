@@ -20,37 +20,39 @@ import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.dataset.DataSetColumn;
 import org.openmrs.module.reporting.dataset.MapDataSet;
-import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition.CohortIndicatorAndDimensionColumn;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
-import org.openmrs.module.reporting.indicator.CohortIndicatorResult;
+import org.openmrs.module.reporting.indicator.Indicator;
+import org.openmrs.module.reporting.indicator.IndicatorResult;
 import org.openmrs.module.reporting.indicator.aggregation.CountAggregator;
 import org.openmrs.module.reporting.indicator.dimension.CohortDefinitionDimension;
 import org.openmrs.module.reporting.indicator.dimension.CohortDimensionResult;
-import org.openmrs.module.reporting.indicator.dimension.CohortIndicatorAndDimensionResult;
+import org.openmrs.module.reporting.indicator.dimension.Dimension;
 import org.openmrs.module.reporting.indicator.dimension.service.DimensionService;
 import org.openmrs.module.reporting.indicator.service.IndicatorService;
-import org.openmrs.module.rwandareports.dataset.RollingDailyCohortIndicatorDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.RollingDailyIndicatorDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.RollingDailyIndicatorDataSetDefinition.RwandaReportsIndicatorAndDimensionColumn;
+import org.openmrs.module.rwandareports.encounter.indicator.IndicatorAndDimensionResult;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
 
-@Handler(supports={RollingDailyCohortIndicatorDataSetDefinition.class},order=0)
-public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvaluator {
+@Handler(supports={RollingDailyIndicatorDataSetDefinition.class},order=0)
+public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	private static final SimpleDateFormat sdfIndicatorVar = new SimpleDateFormat("yyyyMMdd");
 	private static final SimpleDateFormat databaseFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public RollingDailyCohortIndicatorDataSetEvaluator() { }
+	public RollingDailyIndicatorDataSetEvaluator() { }
 	
 	public MapDataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) throws EvaluationException {
 		
-		RollingDailyCohortIndicatorDataSetDefinition dsd = (RollingDailyCohortIndicatorDataSetDefinition) dataSetDefinition;
+		RollingDailyIndicatorDataSetDefinition dsd = (RollingDailyIndicatorDataSetDefinition) dataSetDefinition;
 		
 		// get registration encounter types:
 		int registrationEncTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("primarycarereport.registration.encountertypeid"));
@@ -131,24 +133,29 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 		
 		// evaluate all dimension options
 		Map<String, Map<String, Cohort>> dimensionCalculationCache = new HashMap<String, Map<String, Cohort>>();
-		for (Map.Entry<String, Mapped<CohortDefinitionDimension>> e : dsd.getDimensions().entrySet()) {
-			String dimensionKey = e.getKey();
-			try {
-				CohortDimensionResult dim = (CohortDimensionResult)ds.evaluate(e.getValue(), context);
-				dimensionCalculationCache.put(dimensionKey, dim.getOptionCohorts());
-			} catch (Exception ex) {
-				throw new EvaluationException("dimension " + dimensionKey, ex);
-			}
+		for (Map.Entry<String, Mapped<? extends Dimension>> e : dsd.getDimensions().entrySet()) {
+				String dimensionKey = e.getKey();
+				Mapped<? extends Dimension> m = e.getValue();
+				if (m.getParameterizable() instanceof CohortDefinitionDimension){
+					try {
+						CohortDimensionResult dim = (CohortDimensionResult)ds.evaluate(m, context);
+						dimensionCalculationCache.put(dimensionKey, dim.getOptionCohorts());
+					} catch (Exception ex) {
+						throw new EvaluationException("dimension " + dimensionKey, ex);
+					}
+				} else {
+					throw new EvaluationException("Other dimension evaluations besides cohort evaluations are not supported.");
+				}
 		}
 		
 		// evaluate unique indicators
-		Map<Mapped<? extends CohortIndicator>, CohortIndicatorResult> indicatorCalculationCache = new HashMap<Mapped<? extends CohortIndicator>, CohortIndicatorResult>();
+		Map<Mapped<? extends Indicator>, IndicatorResult> indicatorCalculationCache = new HashMap<Mapped<? extends Indicator>, IndicatorResult>();
 		for (DataSetColumn c : dsd.getColumns()) {
-			CohortIndicatorAndDimensionColumn col = (CohortIndicatorAndDimensionColumn) c;
+			RwandaReportsIndicatorAndDimensionColumn col = (RwandaReportsIndicatorAndDimensionColumn) c;
 			if (!indicatorCalculationCache.containsKey(col.getIndicator())) {
 				try {
 					
-					CohortIndicatorResult result = (CohortIndicatorResult) is.evaluate(col.getIndicator(), context);
+					IndicatorResult result = (IndicatorResult) is.evaluate(col.getIndicator(), context);
 					log.debug("Caching indicator: " + col.getIndicator());
 					indicatorCalculationCache.put(col.getIndicator(), result);
 				} catch (Exception ex) {
@@ -159,16 +166,16 @@ public class RollingDailyCohortIndicatorDataSetEvaluator implements DataSetEvalu
 		
 		// Populate Data Set columns with Indicator and Dimension Results as defined
 		for (DataSetColumn c : dsd.getColumns()) {
-			CohortIndicatorAndDimensionColumn col = (CohortIndicatorAndDimensionColumn) c;
+			RwandaReportsIndicatorAndDimensionColumn col = (RwandaReportsIndicatorAndDimensionColumn) c;
 			// get this indicator result from the cache
-			CohortIndicatorResult result = indicatorCalculationCache.get(col.getIndicator());
+			IndicatorResult result = indicatorCalculationCache.get(col.getIndicator());
 			// get its value taking dimensions into account
-			CohortIndicatorAndDimensionResult resultWithDimensions = new CohortIndicatorAndDimensionResult(result, context);
+			IndicatorAndDimensionResult resultWithDimensions = new IndicatorAndDimensionResult(result, context);
 
 			if (col.getDimensionOptions() != null) {
 				for (Map.Entry<String, String> e : col.getDimensionOptions().entrySet()) {
 					log.debug("looking up dimension: " + e.getKey() + " = " + e.getValue());
-					CohortDefinitionDimension dimension = dsd.getDimension(e.getKey()).getParameterizable();
+					CohortDefinitionDimension dimension = (CohortDefinitionDimension) dsd.getDimension(e.getKey()).getParameterizable();
 					Cohort dimensionCohort = dimensionCalculationCache.get(e.getKey()).get(e.getValue());
 					resultWithDimensions.addDimensionResult(dimension, dimensionCohort);
 				}
