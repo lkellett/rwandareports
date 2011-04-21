@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.definition.evaluator;
+package org.openmrs.module.rwandareports.dataset.evaluator;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,6 +41,28 @@ import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndi
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
 
+
+/**
+ * This evaluator class supports the DataSetDefinition and ReportDesign types necessary for building a dynamic indicator calendar.
+ * The calendar is rendered according to the enum RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType:
+ * if this is set to NONE, then no calendar is built.  Otherwise , the SQL is as follows:
+ * 
+ * for ENCOUNTER
+ * select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per where  e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
+ * 
+ * for ENCOUNTER_AND_OBS
+ * select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per , obs o where o.encounter_id = e.encounter_id and o.voided = 0 and e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
+ * 
+ * for COHORT: not yet implemented
+ * 
+ * dsd.getBaseRollingQueryExtension() is retrieved from the RollingDailyPeriodIndicatorReportDefinition itself.  getBaseRollingQueryExtension retrieves the last piece of the query that is used to define a dynamic indicator for each calendar day in the calendar renderer.
+ * For example, if the calendar type is ENCOUNTER, you might set baseRollingQueryExtension to be ' and encounter_type = 8' to limit the encounter query used to build the calendar day EncounterGroups.
+ * 
+ * However, regular cohort or encounter indicators are run normally.
+ * 
+ * @author dthomas
+ *
+ */
 @Handler(supports={RollingDailyIndicatorDataSetDefinition.class},order=0)
 public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 
