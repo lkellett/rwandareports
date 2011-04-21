@@ -1,12 +1,9 @@
 package org.openmrs.module.rwandareports.report.definition;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.openmrs.module.reporting.ReportingConstants;
-import org.openmrs.module.reporting.dataset.definition.BaseDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.indicator.dimension.CohortDefinitionDimension;
@@ -24,10 +21,24 @@ import org.openmrs.util.OpenmrsUtil;
 public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefinition {
 
 	
-		public static final String DEFAULT_DATASET_KEY = "defaultDataSet";
-	
-	
-	
+	    public static final String DEFAULT_DATASET_KEY = "defaultDataSet";
+		 
+		 
+	    public enum RollingBaseReportQueryType {
+	    	//results in the following base query being run for all days:
+	    	ENCOUNTER,  //select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per where  e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 
+	    	ENCOUNTER_AND_OBS, //TODO: not implemented -- will be more processor intensive, will include join to obs table on encounter_id
+		 	COHORT, //TODO: not implemented
+		 	NONE //don't do anything
+		}
+		 
+		private String baseRollingQueryExtension = "";
+		private RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType rollingBaseReportQueryType = RollingBaseReportQueryType.NONE;
+
+
+
+
+
 		public RollingDailyPeriodIndicatorReportDefinition(){
 			super();
 			// add parameters for startDate, endDate, and location
@@ -35,23 +46,28 @@ public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefiniti
 			addParameter(ReportingConstants.END_DATE_PARAMETER);
 			addParameter(ReportingConstants.LOCATION_PARAMETER);
 		}
-	
-		private List<BaseDataSetDefinition> dailyRollingIndicators =  new ArrayList<BaseDataSetDefinition>();
-
-		public List<BaseDataSetDefinition> getDailyRollingIndicators() {
-			return dailyRollingIndicators;
+		
+		public RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType getRollingBaseReportQueryType() {
+			return rollingBaseReportQueryType;
 		}
 
-		public void setDailyRollingIndicators(
-				List<BaseDataSetDefinition> dailyRollingIndicators) {
-			this.dailyRollingIndicators = dailyRollingIndicators;
+
+		public void setRollingBaseReportQueryType(
+				RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType rollingBaseReportQueryType) {
+			this.rollingBaseReportQueryType = rollingBaseReportQueryType;
 		}
+
+
 		
-		public void addSqlDefinition(Object o){
-			this.dailyRollingIndicators.add((BaseDataSetDefinition) o);
+		
+		public String getBaseRollingQueryExtension() {
+			return baseRollingQueryExtension;
 		}
-		
-		
+
+		public void setBaseRollingQueryExtension(String baseRollingQueryExtension) {
+			this.baseRollingQueryExtension = baseRollingQueryExtension;
+		}
+
 		/**
 		 * Ensure this report has a data set definition
 		 */
@@ -60,7 +76,9 @@ public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefiniti
 				
 				// Create new dataset definition 
 				RollingDailyIndicatorDataSetDefinition dataSetDefinition = new RollingDailyIndicatorDataSetDefinition();
-				dataSetDefinition.setName(getName() + " Data Set");
+				dataSetDefinition.setBaseRollingQueryExtension(baseRollingQueryExtension);
+				dataSetDefinition.setRollingBaseReportQueryType(this.getRollingBaseReportQueryType());
+//				dataSetDefinition.setName(getName() + " Data Set");
 				dataSetDefinition.addParameter(ReportingConstants.START_DATE_PARAMETER);
 				dataSetDefinition.addParameter(ReportingConstants.END_DATE_PARAMETER);
 				dataSetDefinition.addParameter(ReportingConstants.LOCATION_PARAMETER);

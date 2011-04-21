@@ -160,8 +160,9 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 		if (evaluator == null) {
 			throw new APIException("No CohortDefinitionEvaluator found for (" + definition.getClass() + ") " + definition.getName());
 		}
-
+		System.out.println("HERE EncounterGroupDefinitionServiceImpl found evaluator " + evaluator.getClass().getName());
 		// Clone CohortDefinition and set all properties from the Parameters in the EvaluationContext
+		
 		EncounterGroupDefinition clonedDefinition = DefinitionUtil.clone(definition);
 		for (Parameter p : clonedDefinition.getParameters()) {
 			Object value = p.getDefaultValue();
@@ -174,26 +175,26 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 		// Retrieve from cache if possible, otherwise evaluate
 		EncounterGroup c = null;
 		if (context != null) {
-			Caching caching = clonedDefinition.getClass().getAnnotation(Caching.class);
-			if (caching != null && caching.strategy() != NoCachingStrategy.class) {
-				try {
-					CachingStrategy strategy = caching.strategy().newInstance();
-					String cacheKey = strategy.getCacheKey(clonedDefinition);
-					if (cacheKey != null) {
-						c = (EncounterGroup) context.getFromCache(cacheKey);
-					}
-					if (c == null) {
+//			Caching caching = clonedDefinition.getClass().getAnnotation(Caching.class);
+//			if (caching != null && caching.strategy() != NoCachingStrategy.class) {
+//				try {
+//					CachingStrategy strategy = caching.strategy().newInstance();
+//					String cacheKey = strategy.getCacheKey(clonedDefinition);
+//					if (cacheKey != null) {
+//						c = (EncounterGroup) context.getFromCache(cacheKey);
+//					}
+//					if (c == null) {
 						c = evaluator.evaluate(clonedDefinition, context);
-						context.addToCache(cacheKey, c);
-					}
-				}
-				catch (IllegalDatabaseAccessException ie) {
-					throw ie;
-				}
-				catch (Exception e) {
-					log.warn("An error occurred while attempting to access the cache.", e);
-				}
-			}
+//						context.addToCache(cacheKey, c);
+//					}
+//				}
+//				catch (IllegalDatabaseAccessException ie) {
+//					throw ie;
+//				}
+//				catch (Exception e) {
+//					log.warn("An error occurred while attempting to access the cache.", e);
+//				}
+//			}
 		}
 		if (c == null) {
 			c = evaluator.evaluate(clonedDefinition, context);

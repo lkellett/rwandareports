@@ -38,6 +38,7 @@ public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQue
 	public EncounterGroup executeSqlQuery(String sqlQuery, Map<String, Object> paramMap) { 
 		try { 			
 			validateSqlQuery(sqlQuery, paramMap);
+			
 			Query query = prepareQuery(sqlQuery, paramMap);	
 			return executeQuery(query);
 		} 
@@ -86,7 +87,6 @@ public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQue
 			boolean bindParameter = (query.getQueryString().indexOf(":" + paramName) > 0 );
 					
 			if (bindParameter) { 
-
 				// Make sure parameter value is not null
 				if (paramValue == null) { 
 					// TODO Should try to convert 'columnName = null' to 'columnName IS NULL'  

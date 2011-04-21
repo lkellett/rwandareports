@@ -27,10 +27,11 @@ public class SqlEncounterGroupDefinitionEvaluator implements EncounterGroupDefin
     	
     	EncounterGroupQueryService egs = Context.getService(EncounterGroupQueryService.class);
     	EncounterGroup c = egs.executeSqlQuery(sqlEncounterGroupDefinition.getQuery(), context.getParameterValues());
-
+    	System.out.println("HERE SqlEncounterGroupDefinitionEvaluator before intersect with base cohort: " + c.size());
     	if (context.getBaseCohort() != null) {
     		c = EncounterGroup.intersect(c, context.getBaseCohort());
     	}
+    	System.out.println("HERE SqlEncounterGroupDefinitionEvaluator after instersect with base cohort: " + c.size());
     	return c;
     }
 	

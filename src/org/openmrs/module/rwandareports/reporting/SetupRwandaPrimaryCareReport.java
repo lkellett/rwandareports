@@ -332,11 +332,9 @@ public class SetupRwandaPrimaryCareReport {
 		rd.addParameter(new Parameter("location", "Location", Location.class));		
 		rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		rd.addParameter(new Parameter("endDate", "End Date", Date.class));
-				
+		rd.setRollingBaseReportQueryType(RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER);
 		rd.setName("Rwanda Primary Care Report");
-		
-		rd.setupDataSetDefinition();
-		
+
 	//Creation of Vitals and Registration Encounter types during report period
 		
 		List<EncounterType> registrationEncounterType = new ArrayList<EncounterType>();
@@ -357,8 +355,9 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithPrimaryCareVitals.setEncounterTypeList(vitalsEncounterType);
 		h.replaceCohortDefinition(patientsWithPrimaryCareVitals);
 		
+		rd.setBaseRollingQueryExtension(" and  e.encounter_type="+registrationEncTypeId );
 		
-
+		rd.setupDataSetDefinition();
 //======================================================================================
 //       1st Question
 //======================================================================================

@@ -12,6 +12,8 @@ import org.openmrs.module.reporting.dataset.definition.BaseDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.indicator.Indicator;
 import org.openmrs.module.reporting.indicator.dimension.Dimension;
+import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
+import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType;
 import org.openmrs.util.OpenmrsUtil;
 
 
@@ -23,10 +25,35 @@ public class RollingDailyIndicatorDataSetDefinition extends BaseDataSetDefinitio
 	
 	Map<String, Mapped<? extends Dimension>> dimensions = new HashMap<String, Mapped<? extends Dimension>>();
 	List<RwandaReportsIndicatorAndDimensionColumn> columns = new ArrayList<RwandaReportsIndicatorAndDimensionColumn>();
+	private String baseRollingQueryExtension = "";
+	private RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType rollingBaseReportQueryType = RollingBaseReportQueryType.NONE;
+	
+	
+	public RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType getRollingBaseReportQueryType() {
+		return rollingBaseReportQueryType;
+	}
+
+
+	public void setRollingBaseReportQueryType(
+			RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType rollingBaseReportQueryType) {
+		this.rollingBaseReportQueryType = rollingBaseReportQueryType;
+	}
+
+
+	public String getBaseRollingQueryExtension() {
+		return baseRollingQueryExtension;
+	}
+
+
+	public void setBaseRollingQueryExtension(String baseRollingQueryExtension) {
+		this.baseRollingQueryExtension = baseRollingQueryExtension;
+	}
 	
 	
 	//***** CONSTRUCTORS *****
 	
+
+
 	public RollingDailyIndicatorDataSetDefinition() {
 		super();
 	}
