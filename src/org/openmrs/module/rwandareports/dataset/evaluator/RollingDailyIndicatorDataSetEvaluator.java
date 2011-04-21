@@ -63,7 +63,7 @@ import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
  * @author dthomas
  *
  */
-@Handler(supports={RollingDailyIndicatorDataSetDefinition.class},order=0)
+@Handler(supports={RollingDailyIndicatorDataSetDefinition.class},order=50)
 public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 
 	protected Log log = LogFactory.getLog(this.getClass());
@@ -102,28 +102,28 @@ public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 						
 						
 						if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER || dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER_AND_OBS){
-			        		//build the cohort definition
-			        		SqlEncounterGroupDefinition cohortQuery=new SqlEncounterGroupDefinition();
-			        		cohortQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
+			        		//build the  definition
+			        		SqlEncounterGroupDefinition encQuery=new SqlEncounterGroupDefinition();
+			        		encQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
 			        		if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER)
-			        			cohortQuery.setQuery("select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per where  e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
+			        			encQuery.setQuery("select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per where  e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
 			        		else  //ENCOUNTER_AND_OBS
-			        			cohortQuery.setQuery("select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per , obs o where o.encounter_id = e.encounter_id and o.voided = 0 and e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
+			        			encQuery.setQuery("select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per , obs o where o.encounter_id = e.encounter_id and o.voided = 0 and e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
 			        		
-			        		cohortQuery.addParameter(new Parameter("location", "location", Location.class));
-			        		cohortQuery.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
-			        		cohortQuery.addParameter(new Parameter("calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
+			        		encQuery.addParameter(new Parameter("location", "location", Location.class));
+			        		encQuery.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
+			        		encQuery.addParameter(new Parameter("calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
 			        		
 			        		
-			        		EncounterIndicator dailyCohortIndicator = EncounterIndicator.newCountIndicator("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), 
-									new Mapped<EncounterGroupDefinition>(cohortQuery, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime()))), 
+			        		EncounterIndicator dailyEncIndicator = EncounterIndicator.newCountIndicator("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), 
+									new Mapped<EncounterGroupDefinition>(encQuery, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime()))), 
 									null);
-							dailyCohortIndicator.setDescription("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
-							dailyCohortIndicator.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
-							dailyCohortIndicator.addParameter(new Parameter("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
-							dailyCohortIndicator.setAggregator(CountAggregator.class);
+			        		dailyEncIndicator.setDescription("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
+			        		dailyEncIndicator.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
+			        		dailyEncIndicator.addParameter(new Parameter("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
+			        		dailyEncIndicator.setAggregator(CountAggregator.class);
 							
-							Mapped<EncounterIndicator> m = new Mapped<EncounterIndicator>(dailyCohortIndicator, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime())) );
+							Mapped<EncounterIndicator> m = new Mapped<EncounterIndicator>(dailyEncIndicator, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime())) );
 							dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "Number of registrations on " + Context.getDateFormat().format(weeklyCal.getTime()), m, new HashMap<String,String>());
 							
 						} else if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.COHORT){
@@ -154,6 +154,7 @@ public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 		}
 		
 		// evaluate all dimension options
+		//TODO:  encounter dimensions?
 		Map<String, Map<String, Cohort>> dimensionCalculationCache = new HashMap<String, Map<String, Cohort>>();
 		for (Map.Entry<String, Mapped<? extends Dimension>> e : dsd.getDimensions().entrySet()) {
 				String dimensionKey = e.getKey();

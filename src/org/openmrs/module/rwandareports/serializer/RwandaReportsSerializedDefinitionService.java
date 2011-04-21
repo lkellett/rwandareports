@@ -60,7 +60,7 @@ public interface RwandaReportsSerializedDefinitionService extends OpenmrsService
 	
 	/**
 	 * @param includeRetired indicates whether to also include retired Definitions in the count
-	 * @return the number of saved Cohort Definitions
+	 * @return the number of saved Definitions
 	 */
 	public <T extends Definition> int getNumberOfDefinitions(Class<T> definitionType, boolean includeRetired);
 	

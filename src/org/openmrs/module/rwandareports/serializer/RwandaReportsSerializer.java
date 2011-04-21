@@ -1,10 +1,5 @@
 package org.openmrs.module.rwandareports.serializer;
 
-import org.openmrs.module.reporting.serializer.CohortDefinitionConverter;
-import org.openmrs.module.reporting.serializer.DataSetDefinitionConverter;
-import org.openmrs.module.reporting.serializer.DimensionConverter;
-import org.openmrs.module.reporting.serializer.IndicatorConverter;
-import org.openmrs.module.reporting.serializer.ReportDefinitionConverter;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
 import org.openmrs.module.serialization.xstream.mapper.HibernateCollectionMapper;
@@ -19,16 +14,17 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
+/**
+ * This is basically a copy of the ReportingFramework serializer object.  This loads in the applicationContext.xml file.
+ * Only necessary in order to register EncounterGroupDefinitionConverter 
+ * @author dthomas
+ *
+ */
 public class RwandaReportsSerializer extends XStreamShortSerializer {
 
 private static ThreadLocal<DataHolder> cache = new ThreadLocal<DataHolder>();
 	
-	/**
-	 * @throws SerializationException
-	 * @should serialize a cohort definition
-	 * @should serialize an indicator that contains a persisted cohort definition
-	 * @should serialize an indicator that contains an unsaved cohort definition
-	 */
+
 	public RwandaReportsSerializer() throws SerializationException {
 	    super(new XStream(new DomDriver()) {
 	    	

@@ -9,12 +9,24 @@ import org.openmrs.module.reporting.indicator.BaseIndicator;
 import org.openmrs.module.reporting.indicator.aggregation.Aggregator;
 import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
 
+/**
+ * 
+ * Represents an Indicator that can be built out of EncounterGroups.
+ * 
+ * Behaves similarly to a CohortIndicator, except that there is additional 'per day' functionality, that allows you to put a number of days in the denominator, thus creating a 'per day' indicator
+ * Additionally, there is a perHourDenominator property that allows you to multiply the denominator by a number of hours, creating the possibility of a 'per hour' indicator
+ * 
+ * @author dthomas
+ *
+ */
 public class EncounterIndicator extends BaseIndicator {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
      * Enumerated Indicator Types
+     * PER_DAY, PER_WEEKDAYS allow you to divide by the number of days, or the number of weekdays between startDate and endDate parameters.
+     * 
      */
     public enum IndicatorType {
 //    	COUNT, FRACTION, LOGIC

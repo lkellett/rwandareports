@@ -6,6 +6,11 @@ import java.util.GregorianCalendar;
 
 public class RwandaReportsUtil {
 	
+	/**
+	 * Finds the report equal to or before start date
+	 * @param startDate
+	 * @return Calendar representing the found Sunday.
+	 */
 	public static Calendar findSundayBeforeOrEqualToStartDate(Date startDate){
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(startDate);
@@ -19,6 +24,11 @@ public class RwandaReportsUtil {
 	}
 	
 	
+	/**
+	 * decides if a day is Mon through Fri
+	 * @param startDate
+	 * @return true if weekday, else false
+	 */
 	public static boolean isWeekday(Date startDate){
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(startDate);

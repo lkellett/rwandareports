@@ -16,7 +16,7 @@ import org.openmrs.util.OpenmrsUtil;
 /**
  * 
  * A semi-generic ReportDefinition that can hold both Cohort and EncounterGroup indicators.  Also has special support for the creation of dynamic daily calendar indicator definitions.
- * See @RollingDailyIndicatorDataSetEvaluator for more info...
+ * @see RollingDailyIndicatorDataSetEvaluator for more info...
  *
  */
 public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefinition {

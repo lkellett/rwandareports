@@ -70,19 +70,17 @@ public class EncounterIndicatorEvaluator implements IndicatorEvaluator {
 			
 			EncounterGroupDefinitionService cds = Context.getService(EncounterGroupDefinitionService.class);
 			
-			// Determine Base Cohort from LocationFilter and EvaluationContext base cohort
-			
 			
 //			//resets the base cohort to be all people in the encounterGroup
 			Cohort baseCohort = context.getBaseCohort();
 			if (cid.getLocationFilter() != null) {
 				try {
-					EncounterGroup locationCohort = cds.evaluate(cid.getLocationFilter(), context);
+					EncounterGroup locationEncounterGroup = cds.evaluate(cid.getLocationFilter(), context);
 					if (baseCohort == null) {
-						baseCohort = locationCohort.getCohort();
+						baseCohort = locationEncounterGroup.getCohort();
 					}
 					else {
-						baseCohort = Cohort.intersect(baseCohort, locationCohort.getCohort());
+						baseCohort = Cohort.intersect(baseCohort, locationEncounterGroup.getCohort());
 					}
 				} catch (Exception ex) {
 					throw new EvaluationException("locationFilter", ex);

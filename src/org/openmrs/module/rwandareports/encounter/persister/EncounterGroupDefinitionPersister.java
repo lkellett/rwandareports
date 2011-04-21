@@ -10,25 +10,25 @@ public interface EncounterGroupDefinitionPersister {
 
 	/**
 	 * @param id
-	 * @return the cohort definition with the given id among those managed by this persister
+	 * @return the encounterGroup definition with the given id among those managed by this persister
 	 */
 	public EncounterGroupDefinition getEncounterGroupDefinition(Integer id);
 	
 	/**
 	 * @param uuid
-	 * @return the cohort definition with the given uuid among those managed by this persister
+	 * @return the encounterGroup definition with the given uuid among those managed by this persister
 	 */
 	public EncounterGroupDefinition getEncounterGroupDefinitionByUuid(String uuid);
 	
 	/**
 	 * @param includeRetired - if true, include retired EncounterGroupDefinitions in the returned list
-	 * @return All cohort definitions whose persistence is managed by this persister
+	 * @return All encounterGroup definitions whose persistence is managed by this persister
 	 */
 	public List<EncounterGroupDefinition> getAllEncounterGroupDefinitions(boolean includeRetired);
 	
 	/**
 	 * @param includeRetired indicates whether to also include retired EncounterGroupDefinitions in the count
-	 * @return the number of saved Cohort Definitions
+	 * @return the number of saved encounterGroup Definitions
 	 */
 	public int getNumberOfEncounterGroupDefinitions(boolean includeRetired);
 	
@@ -44,16 +44,16 @@ public interface EncounterGroupDefinitionPersister {
 	
 	/**
 	 * Persists a EncounterGroupDefinition, either as a save or update.
-	 * @param cohortDefinition
+	 * @param encounterGroupDefinition
 	 * @return the EncounterGroupDefinition that was passed in
 	 */
-	public EncounterGroupDefinition saveEncounterGroupDefinition(EncounterGroupDefinition cohortDefinition);
+	public EncounterGroupDefinition saveEncounterGroupDefinition(EncounterGroupDefinition encounterGroupDefinition);
 	
 	/**
-	 * Deletes a cohort definition from the database.
-	 * @param cohortDefinition
+	 * Deletes a encounterGroup definition from the database.
+	 * @param encounterGroupDefinition
 	 */
-	public void purgeEncounterGroupDefinition(EncounterGroupDefinition cohortDefinition);
+	public void purgeEncounterGroupDefinition(EncounterGroupDefinition encounterGroupDefinition);
 	
 	
 }

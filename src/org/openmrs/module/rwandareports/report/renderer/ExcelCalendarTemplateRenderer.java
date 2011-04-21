@@ -44,8 +44,10 @@ import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
  * This is exactly the same as the ExcelTemplateRenderer, except that it will render a calendar, according to the parameters defined in @RollingDailyIndicatorReportDefinition.
  * To use this functionaliy, read the javadoc in @RollingDailyIndicatorDataSetEvaluator
  * 
- * And, to select the placement of the calendar in your report, you just need to add:  DRAW CALENDAR WIDGET HERE
+ * To select the placement of the calendar in your excel template, you just need to add:  DRAW CALENDAR WIDGET HERE
  * to the cell that you want to be the upper most left cell of your calendar.
+ * 
+ * Note, this only supports one calendar per report.
  * 
  * @author dthomas
  *

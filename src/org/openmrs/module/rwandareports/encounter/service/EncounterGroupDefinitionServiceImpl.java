@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.APIException;
 import org.openmrs.module.reporting.IllegalDatabaseAccessException;
-import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.common.ReflectionUtil;
 import org.openmrs.module.reporting.definition.DefinitionUtil;
 import org.openmrs.module.reporting.definition.service.BaseDefinitionService;
@@ -129,7 +128,7 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 		//sometimes saves definitions with just a name and description before displaying them for editing.
 		//ValidateUtil.validate(definition);
 		
-		log.debug("Saving cohort definition: " + definition + " of type " + definition.getClass());
+		log.debug("Saving definition: " + definition + " of type " + definition.getClass());
 		return (D) getPersister(definition.getClass()).saveEncounterGroupDefinition(definition);
 	}
 	
@@ -141,27 +140,22 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	}
 
 	/**
-	 * 	This is the main method which should be used to evaluate a CohortDefinition
+	 * 	This is the main method which should be used to evaluate an EncounterGroupDefinition
 	 *  - retrieves all evaluation parameter values from the class and the EvaluationContext
-	 *  - checks whether a cohort with this configuration exists in the cache (if caching is supported)
-	 *  - returns the cached cohort if found
-	 *  - otherwise, delegates to the appropriate CohortDefinitionEvaluator and evaluates the result
+	 *  - checks whether an EncoungerGroup  with this configuration exists in the cache (if caching is supported)
+	 *  - returns the cached EncounterGroup if found
+	 *  - otherwise, delegates to the appropriate DefinitionEvaluator and evaluates the result
 	 *  - caches the result (if caching is supported)
 	 * 
-	 * Implementing classes should override the evaluateCohort(EvaluationContext) method
-	 * @see getCacheKey(EvaluationContext)
-     * @see CohortDefinitionEvaluator#evaluate(EvaluationContext)
-	 * @see DefinitionService#evaluate(Definition, EvaluationContext)
 	 */
 	public EvaluatedEncounterGroup evaluate(EncounterGroupDefinition definition, EvaluationContext context) throws EvaluationException {
 		
-		// Retrieve CohortDefinitionEvaluator which can evaluate this CohortDefinition
+
 		EncounterGroupDefinitionEvaluator evaluator = HandlerUtil.getPreferredHandler(EncounterGroupDefinitionEvaluator.class, definition.getClass());
 		if (evaluator == null) {
-			throw new APIException("No CohortDefinitionEvaluator found for (" + definition.getClass() + ") " + definition.getName());
+			throw new APIException("No EncounterGroupDefinitionEvaluator found for (" + definition.getClass() + ") " + definition.getName());
 		}
-		System.out.println("HERE EncounterGroupDefinitionServiceImpl found evaluator " + evaluator.getClass().getName());
-		// Clone CohortDefinition and set all properties from the Parameters in the EvaluationContext
+		
 		
 		EncounterGroupDefinition clonedDefinition = DefinitionUtil.clone(definition);
 		for (Parameter p : clonedDefinition.getParameters()) {
@@ -175,26 +169,26 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 		// Retrieve from cache if possible, otherwise evaluate
 		EncounterGroup c = null;
 		if (context != null) {
-//			Caching caching = clonedDefinition.getClass().getAnnotation(Caching.class);
-//			if (caching != null && caching.strategy() != NoCachingStrategy.class) {
-//				try {
-//					CachingStrategy strategy = caching.strategy().newInstance();
-//					String cacheKey = strategy.getCacheKey(clonedDefinition);
-//					if (cacheKey != null) {
-//						c = (EncounterGroup) context.getFromCache(cacheKey);
-//					}
-//					if (c == null) {
+			Caching caching = clonedDefinition.getClass().getAnnotation(Caching.class);
+			if (caching != null && caching.strategy() != NoCachingStrategy.class) {
+				try {
+					CachingStrategy strategy = caching.strategy().newInstance();
+					String cacheKey = strategy.getCacheKey(clonedDefinition);
+					if (cacheKey != null) {
+						c = (EncounterGroup) context.getFromCache(cacheKey);
+					}
+					if (c == null) {
 						c = evaluator.evaluate(clonedDefinition, context);
-//						context.addToCache(cacheKey, c);
-//					}
-//				}
-//				catch (IllegalDatabaseAccessException ie) {
-//					throw ie;
-//				}
-//				catch (Exception e) {
-//					log.warn("An error occurred while attempting to access the cache.", e);
-//				}
-//			}
+						context.addToCache(cacheKey, c);
+					}
+				}
+				catch (IllegalDatabaseAccessException ie) {
+					throw ie;
+				}
+				catch (Exception e) {
+					log.warn("An error occurred while attempting to access the cache.", e);
+				}
+			}
 		}
 		if (c == null) {
 			c = evaluator.evaluate(clonedDefinition, context);
@@ -215,21 +209,21 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	}
 
 	/**
-	 * Returns the CohortDefinitionPersister for the passed CohortDefinition
+	 * Returns the EncounterGroupDefinitionPersister for the passed Definition
 	 * @param definition
-	 * @return the CohortDefinitionPersister for the passed CohortDefinition
+	 * @return the EncounterGroupDefinitionPersister for the passed EncounterGroupDefinition
 	 * @throws APIException if no matching persister is found
 	 */
 	protected EncounterGroupDefinitionPersister getPersister(Class<? extends EncounterGroupDefinition> definition) {
 		EncounterGroupDefinitionPersister persister = HandlerUtil.getPreferredHandler(EncounterGroupDefinitionPersister.class, definition);
 		if (persister == null) {
-			throw new APIException("No CohortDefinitionPersister found for <" + definition + ">");
+			throw new APIException("No DefinitionPersister found for <" + definition + ">");
 		}
 		return persister;
 	}
 	
 	/**
-	 * @return all CohortDefinitionPersisters
+	 * @return all EncounterGroupDefinitionPersister
 	 */
 	protected List<EncounterGroupDefinitionPersister> getAllPersisters() {	
 		return HandlerUtil.getHandlersForType(EncounterGroupDefinitionPersister.class, null);

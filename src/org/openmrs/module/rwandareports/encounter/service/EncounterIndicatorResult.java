@@ -50,7 +50,7 @@ private static final long serialVersionUID = 1L;
     	
 //    	Map<Integer, Number> logicVals = new HashMap<Integer, Number>(EncounterIndicatorResult.getLogicResults());
     	
-    	// Reduce each of the result cohorts as needed based on the filter Cohorts
+
     	if (filters != null) {
 	    	for (EncounterGroup filter : filters) {
 	    		if (filter != null) {

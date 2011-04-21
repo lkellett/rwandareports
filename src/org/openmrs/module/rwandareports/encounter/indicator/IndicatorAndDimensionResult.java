@@ -13,6 +13,14 @@ import org.openmrs.module.reporting.indicator.IndicatorResult;
 import org.openmrs.module.reporting.indicator.dimension.CohortDimension;
 import org.openmrs.module.rwandareports.encounter.service.EncounterIndicatorResult;
 
+/**
+ * Result class that can hold ChortIndicatorResults or EncounterIndicatorResults, the getValue() method will return the right value based on Results type.
+ * 
+ *  TODO:  this should extend CohortIndicatorAndDimensionResult from reporting module -- its basically a copy.
+ *  
+ * @author dthomas
+ *
+ */
 public class IndicatorAndDimensionResult implements IndicatorResult {
 //***** PROPERTIES *****
 	

@@ -10,7 +10,17 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.module.reporting.ReportingException;
 
-
+/**
+ * This is the basic unit of the EncounterIndicator class.  And encounter group is a group of encounters, and is designed to resemble an OpenMRS Cohort, just with Encounters.
+ * The basic unit within an EncounterGroup is an Integer[encounter_id, patient_id].  
+ * 
+ * Any query meant to return an EncounterGroup MUST return exactly two columns, first encounter_id, then patient_id
+ * 
+ * The second mandatory value is necessary so that and EncounterGroup can be intersected with a Cohort without instantiating any hibernate-managed OpenMRS objects, with minimal overhead.
+ * 
+ * @author dthomas
+ *
+ */
 public class EncounterGroup implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -109,6 +119,12 @@ public class EncounterGroup implements Serializable {
 	}
 
 
+	/**
+	 * 
+	 * @param a EncounterGroup
+	 * @param b Cohort
+	 * @return and EncounterGroup containing only Encounters for patients in the Cohort
+	 */
     public static EncounterGroup intersect(EncounterGroup a, Cohort b){
     	EncounterGroup ret = new EncounterGroup();
     	for (Integer[] memberId : a.getMemberIds()){
@@ -118,6 +134,10 @@ public class EncounterGroup implements Serializable {
     	return ret;
 	}
     
+    /**
+     * 
+     * @return a Cohort of all patients who have an encounter in this EncounterGroup
+     */
     public Cohort getCohort(){
     	Cohort cohort = new Cohort();
     	for (Integer[] i : this.memberIds){

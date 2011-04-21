@@ -30,7 +30,7 @@ public class SqlEncounterGroupDefinition extends EncounterGroupDefinition {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "SQL Cohort Query: [" + ObjectUtil.nvlStr(query, "") + "]";
+		return "SQL EncounterGroup Query: [" + ObjectUtil.nvlStr(query, "") + "]";
 	}
 	
 	//***** PROPERTY ACCESS *****
