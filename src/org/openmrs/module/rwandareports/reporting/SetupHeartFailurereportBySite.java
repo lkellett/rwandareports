@@ -95,7 +95,6 @@ public class SetupHeartFailurereportBySite {
 		h.purgeDefinition(CohortDefinition.class, "femalesDefinition");
 		h.purgeDefinition(CohortDefinition.class, "maleInFHProgramComposition");
 		h.purgeDefinition(CohortDefinition.class, "femaleInFHProgramComposition");
-		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFIndicator");
 		h.purgeDefinition(CohortDefinition.class, "patientsWithCardFormBeforeEndDate");
 		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramBeforeEndDate");
 		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramWithouCardForm");
@@ -170,6 +169,7 @@ public class SetupHeartFailurereportBySite {
 		h.purgeDefinition(CohortIndicator.class, "percentFemaleInFHProgramIndicator");
 		h.purgeDefinition(CohortIndicator.class, "medianAge");	
 		h.purgeDefinition(CohortIndicator.class, "patientsInHFIndicator");	
+		h.purgeDefinition(CohortIndicator.class, "patientsEnrolledInHFIndicator");
 		h.purgeDefinition(CohortIndicator.class, "patientsInHFProgramWithouCardFormIndicator");
 		h.purgeDefinition(CohortIndicator.class, "hfEchocardiographyPercentageIndicator");
 		h.purgeDefinition(CohortIndicator.class, "hfPatientWithoutCreatininePercentIndicator");
@@ -200,6 +200,7 @@ public class SetupHeartFailurereportBySite {
 		h.purgeDefinition(CohortIndicator.class, "percentINRALTTwoPostCardiacSugeryCohortIndicator");
 		h.purgeDefinition(CohortIndicator.class, "percentINRGTTFourPostCardiacSugeryCohortIndicator");
 		h.purgeDefinition(CohortIndicator.class, "hospitalizedDuringPeriodIndicator");
+		h.purgeDefinition(CohortIndicator.class, "heightEverCohortIndicator");
 		h.purgeDefinition(CohortIndicator.class, "patientWithoutDonneDebasePeriodIndicator");
 
 }
@@ -1052,7 +1053,7 @@ formList.add(form);
 }
 }*/
 EncounterCohortDefinition hFencounterDuringPeriod =makeEncounterCohortDefinition(encounterTypes); 
-hFencounterDuringPeriod.setName("encounterFormDuringPeriod");
+hFencounterDuringPeriod.setName("hFencounterDuringPeriod");
 hFencounterDuringPeriod.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 hFencounterDuringPeriod.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
 h.replaceCohortDefinition(hFencounterDuringPeriod);

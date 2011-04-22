@@ -89,118 +89,119 @@ public class SetupHeartFailurereportAllSites {
 		//h.purgeDefinition(CohortDefinition.class, "location: Heart Failure Patients at location");
 		
 
-		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFProgram");
-		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgram");
-		h.purgeDefinition(CohortDefinition.class, "malesDefinition");
-		h.purgeDefinition(CohortDefinition.class, "femalesDefinition");
-		h.purgeDefinition(CohortDefinition.class, "maleInFHProgramComposition");
-		h.purgeDefinition(CohortDefinition.class, "femaleInFHProgramComposition");
-		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFIndicator");
-		h.purgeDefinition(CohortDefinition.class, "patientsWithCardFormBeforeEndDate");
-		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramBeforeEndDate");
-		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramWithouCardForm");
+		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFProgramAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramAllSites");
+		h.purgeDefinition(CohortDefinition.class, "malesDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "femalesDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "maleInFHProgramCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "femaleInFHProgramCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsWithCardFormBeforeEndDateAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramBeforeEndDateAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgramWithouCardFormAllSites");
 		/*
 		h.purgeDefinition(CohortDefinition.class, "allPatientsInHF");
 		h.purgeDefinition(CohortDefinition.class, "pateintsDied");
 		h.purgeDefinition(CohortDefinition.class, "pateintsTransferedOut");
 		h.purgeDefinition(CohortDefinition.class, "pateintsCured");
 		h.purgeDefinition(CohortDefinition.class, "pateintsRefused");*/
-		h.purgeDefinition(CohortDefinition.class, "echocardiographyDuringPeriod");
-		h.purgeDefinition(CohortDefinition.class, "echocardiographyAndHFProgramComposition");
-		h.purgeDefinition(CohortDefinition.class, "patientsWithCreatinineCohortDef");
-		h.purgeDefinition(CohortDefinition.class, "hfPatientWithoutCreatinineCompositionCohortDef");
-		h.purgeDefinition(CohortDefinition.class, "cardiomyopathyDiognosis");		
-		h.purgeDefinition(CohortDefinition.class, "cardiomyopathyDiognosisAnsHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "mitralStenosisDiagnosis");
-		h.purgeDefinition(CohortDefinition.class, "mitralStenosisDiagnosisAnsHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "rheumaticHeartDiseaseDiagnosis");
-		h.purgeDefinition(CohortDefinition.class, "rheumaticHeartDiseaseDiagnosisAndHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "hypertensiveHeartDiseaseDiagnosis");
-		h.purgeDefinition(CohortDefinition.class, "hypertensiveHeartDiseaseDiagnosisAndHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "pericardialDiseaseDiagnosis");
-		h.purgeDefinition(CohortDefinition.class, "pericardialDiseaseDiagnosisAndHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "congenitalDiseaseDiagnosis");
-		h.purgeDefinition(CohortDefinition.class, "congenitalDiseaseDiagnosisAndHFProgComposition");
-		h.purgeDefinition(CohortDefinition.class, "patientsWithCreatinine");
-		h.purgeDefinition(CohortDefinition.class, "hfpatientsWithCreatinineComposition");
-		h.purgeDefinition(CohortDefinition.class, "postCardiacSurgeryCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "patientsInFamilyPlanning");
-		h.purgeDefinition(CohortDefinition.class, "lessThanFifty");
-		h.purgeDefinition(CohortDefinition.class, "patientsInHFWithoutFamilyPlanningCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onLasixAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFonLasixAtEndOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onAtenololAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFonAtenololAtEndOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onCarvedilolAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFonCarvedilolAtEndOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onAldactoneAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFonAldactoneAtEndOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onWarfarinAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFonWarfarinAtEndOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onLisinoprilAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "onCaptoprilAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFLisinoprilOrCaptoprilCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "hFAtenololAndCarvedilolCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "hFLisinoprilAndCaptoprilCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "heartRateDiseaseDuringPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "hFMitralStenosisWithHeartRateOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "onPenicillinAtEndOfPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hFRheumaticHeartDiseaseOfPeriodCompositionCohort");
-		h.purgeDefinition(CohortDefinition.class, "hFencounterDuringPeriod");
-		h.purgeDefinition(CohortDefinition.class, "patientNotSeenDuringPeriodComposition");
-		h.purgeDefinition(CohortDefinition.class, "allPatientsWhitAccompagnateur");
-		h.purgeDefinition(CohortDefinition.class, "patientWithoutAccompagnateurPeriodComposition");
-		h.purgeDefinition(CohortDefinition.class, "diedDuringPeriod");
-		h.purgeDefinition(CohortDefinition.class, "diedDuringPeriodComposition");
-		h.purgeDefinition(CohortDefinition.class, "INRLTTwoCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "INRALTTwondPostCardiacSugeryCompositionCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "INRGTFourCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "INRGTFourAndPostCardiacSugeryCompositionCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "hospitalizedDuringPeriod");
-		h.purgeDefinition(CohortDefinition.class, "hospitalizedDuringPeriodComposition");
-		h.purgeDefinition(CohortDefinition.class, "heightCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "heightEverCompositionCohortDefinition");
-		h.purgeDefinition(CohortDefinition.class, "encounterFormDuringDDBPeriod");
-		h.purgeDefinition(CohortDefinition.class, "patientWithoutDonneDebasePeriodComposition");
+		h.purgeDefinition(CohortDefinition.class, "echocardiographyDuringPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "echocardiographyAndHFProgramCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsWithCreatinineCohortDefAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hfPatientWithoutCreatinineCompositionCohortDefAllSites");
+		h.purgeDefinition(CohortDefinition.class, "cardiomyopathyDiognosisAllSites");		
+		h.purgeDefinition(CohortDefinition.class, "cardiomyopathyDiognosisAnsHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "mitralStenosisDiagnosisAllSites");
+		h.purgeDefinition(CohortDefinition.class, "mitralStenosisDiagnosisAnsHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "rheumaticHeartDiseaseDiagnosisAllSites");
+		h.purgeDefinition(CohortDefinition.class, "rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hypertensiveHeartDiseaseDiagnosisAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "pericardialDiseaseDiagnosisAllSites");
+		h.purgeDefinition(CohortDefinition.class, "pericardialDiseaseDiagnosisAndHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "congenitalDiseaseDiagnosisAllSites");
+		h.purgeDefinition(CohortDefinition.class, "congenitalDiseaseDiagnosisAndHFProgCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsWithCreatinineAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hfpatientsWithCreatinineCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "postCardiacSurgeryCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsInFamilyPlanningAllSites");
+		h.purgeDefinition(CohortDefinition.class, "lessThanFiftyAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientsInHFWithoutFamilyPlanningCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onLasixAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFonLasixAtEndOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onAtenololAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFonAtenololAtEndOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onCarvedilolAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onAldactoneAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFonAldactoneAtEndOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onWarfarinAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFonWarfarinAtEndOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onLisinoprilAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onCaptoprilAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFLisinoprilOrCaptoprilCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFAtenololAndCarvedilolCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFLisinoprilAndCaptoprilCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "heartRateDiseaseDuringPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "onPenicillinAtEndOfPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hFencounterDuringPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientNotSeenDuringPeriodCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "allPatientsWhitAccompagnateurAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientWithoutAccompagnateurPeriodCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "diedDuringPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "diedDuringPeriodCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "INRLTTwoCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "INRGTFourCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hospitalizedDuringPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "hospitalizedDuringPeriodCompositionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "heightCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "heightEverCompositionCohortDefinitionAllSites");
+		h.purgeDefinition(CohortDefinition.class, "encounterFormDuringDDBPeriodAllSites");
+		h.purgeDefinition(CohortDefinition.class, "patientWithoutDonneDebasePeriodCompositionAllSites");
 		
 			
 		
-		h.purgeDefinition(CohortIndicator.class, "percentMaleInFHProgramIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentFemaleInFHProgramIndicator");
-		h.purgeDefinition(CohortIndicator.class, "medianAge");	
-		h.purgeDefinition(CohortIndicator.class, "patientsInHFIndicator");	
-		h.purgeDefinition(CohortIndicator.class, "patientsInHFProgramWithouCardFormIndicator");
-		h.purgeDefinition(CohortIndicator.class, "hfEchocardiographyPercentageIndicator");
-		h.purgeDefinition(CohortIndicator.class, "hfPatientWithoutCreatininePercentIndicator");
-		h.purgeDefinition(CohortIndicator.class, "cardiomyopathyDiognosisAnsHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "mitralStenosisDiagnosisAnsHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "rheumaticHeartDiseaseDiagnosisAndHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "pericardialDiseaseDiagnosisAndHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "congenitalDiseaseDiagnosisAndHFProgIndicator");
-		h.purgeDefinition(CohortIndicator.class, "hfpatientsWithCreatininePercentIndicator");
-		h.purgeDefinition(CohortIndicator.class, "postCardiacSurgeryCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "patientsInHFWithoutFamilyPlanningIndicator");		
-		h.purgeDefinition(CohortIndicator.class, "onLasixAtEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onAtenololAtEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onCarvedilolAtEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onAldactoneAtEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onWarfarinAtEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onAtenololAndCarvedilolEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onCardiomyopathyHeartRatePeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onMitralStenosisHeartRatePeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "onRheumaticNotOnPenicillinPeriodCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentageOfpatientNotSeenInLastSixMonthPeriodIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentPatientWithoutAccompagnateurIndicator");
-		h.purgeDefinition(CohortIndicator.class, "diedDuringPeriodIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentINRALTTwoPostCardiacSugeryCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "percentINRGTTFourPostCardiacSugeryCohortIndicator");
-		h.purgeDefinition(CohortIndicator.class, "hospitalizedDuringPeriodIndicator");
-		h.purgeDefinition(CohortIndicator.class, "patientWithoutDonneDebasePeriodIndicator");
+		h.purgeDefinition(CohortIndicator.class, "percentMaleInFHProgramIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentFemaleInFHProgramIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "medianAgeAllSites");	
+		h.purgeDefinition(CohortIndicator.class, "patientsInHFIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "patientsEnrolledInHFIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "patientsInHFProgramWithouCardFormIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "hfEchocardiographyPercentageIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "hfPatientWithoutCreatininePercentIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "cardiomyopathyDiognosisAnsHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "mitralStenosisDiagnosisAnsHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "hfpatientsWithCreatininePercentIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "postCardiacSurgeryCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "patientsInHFWithoutFamilyPlanningIndicatorAllSites");		
+		h.purgeDefinition(CohortIndicator.class, "onLasixAtEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onAtenololAtEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onCarvedilolAtEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onAldactoneAtEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onWarfarinAtEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onMitralStenosisHeartRatePeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentPatientWithoutAccompagnateurIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "diedDuringPeriodIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "hospitalizedDuringPeriodIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "heightEverCohortIndicatorAllSites");
+		h.purgeDefinition(CohortIndicator.class, "patientWithoutDonneDebasePeriodIndicatorAllSites");
 
 }
 	
@@ -223,10 +224,10 @@ public class SetupHeartFailurereportAllSites {
 //Patient In Heart Failure Program
 		
 
-		InProgramCohortDefinition patientsInHFProgram=getInProgramCohortDefinition("patientsInHFProgram", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
-		patientsInHFProgram.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsInHFProgram.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-		h.replaceCohortDefinition(patientsInHFProgram);
+		InProgramCohortDefinition patientsInHFProgramAllSites=getInProgramCohortDefinition("patientsInHFProgramAllSites", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
+		patientsInHFProgramAllSites.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		patientsInHFProgramAllSites.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
+		h.replaceCohortDefinition(patientsInHFProgramAllSites);
 		
 		/*InProgramCohortDefinition allPatientsInHF=getInProgramCohortDefinition("allPatientsInHF", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
 		allPatientsInHF.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
@@ -267,55 +268,55 @@ public class SetupHeartFailurereportAllSites {
 
 //Gender Cohort definitions
 		
-		GenderCohortDefinition femalesDefinition=new GenderCohortDefinition();
-		femalesDefinition.setName("femalesDefinition");
-		femalesDefinition.setFemaleIncluded(true);
-		h.replaceCohortDefinition(femalesDefinition);
+		GenderCohortDefinition femalesDefinitionAllSites=new GenderCohortDefinition();
+		femalesDefinitionAllSites.setName("femalesDefinitionAllSites");
+		femalesDefinitionAllSites.setFemaleIncluded(true);
+		h.replaceCohortDefinition(femalesDefinitionAllSites);
 		
-		GenderCohortDefinition malesDefinition=new GenderCohortDefinition();
-		malesDefinition.setName("malesDefinition");
-		malesDefinition.setMaleIncluded(true);		
-		h.replaceCohortDefinition(malesDefinition);
+		GenderCohortDefinition malesDefinitionAllSites=new GenderCohortDefinition();
+		malesDefinitionAllSites.setName("malesDefinitionAllSites");
+		malesDefinitionAllSites.setMaleIncluded(true);		
+		h.replaceCohortDefinition(malesDefinitionAllSites);
 		
-		CompositionCohortDefinition maleInFHProgramComposition=new CompositionCohortDefinition();
-		maleInFHProgramComposition.setName("maleInFHProgramComposition");
-		maleInFHProgramComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		maleInFHProgramComposition.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-		maleInFHProgramComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		maleInFHProgramComposition.getSearches().put("malesDefinition",new Mapped<CohortDefinition>(malesDefinition,null));
-		maleInFHProgramComposition.setCompositionString("patientsInHFProgram AND malesDefinition");
-		h.replaceCohortDefinition(maleInFHProgramComposition);
+		CompositionCohortDefinition maleInFHProgramCompositionAllSites=new CompositionCohortDefinition();
+		maleInFHProgramCompositionAllSites.setName("maleInFHProgramCompositionAllSites");
+		maleInFHProgramCompositionAllSites.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		maleInFHProgramCompositionAllSites.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
+		maleInFHProgramCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		maleInFHProgramCompositionAllSites.getSearches().put("malesDefinition",new Mapped<CohortDefinition>(malesDefinitionAllSites,null));
+		maleInFHProgramCompositionAllSites.setCompositionString("patientsInHFProgram AND malesDefinition");
+		h.replaceCohortDefinition(maleInFHProgramCompositionAllSites);
 		
-		CompositionCohortDefinition femaleInFHProgramComposition=new CompositionCohortDefinition();
-		femaleInFHProgramComposition.setName("femaleInFHProgramComposition");
-		femaleInFHProgramComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		femaleInFHProgramComposition.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-		femaleInFHProgramComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		femaleInFHProgramComposition.getSearches().put("femalesDefinition",new Mapped<CohortDefinition>(femalesDefinition,null));
-		femaleInFHProgramComposition.setCompositionString("patientsInHFProgram AND femalesDefinition");
-		h.replaceCohortDefinition(femaleInFHProgramComposition);
+		CompositionCohortDefinition femaleInFHProgramCompositionAllSites=new CompositionCohortDefinition();
+		femaleInFHProgramCompositionAllSites.setName("femaleInFHProgramCompositionAllSites");
+		femaleInFHProgramCompositionAllSites.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		femaleInFHProgramCompositionAllSites.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
+		femaleInFHProgramCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		femaleInFHProgramCompositionAllSites.getSearches().put("femalesDefinition",new Mapped<CohortDefinition>(femalesDefinitionAllSites,null));
+		femaleInFHProgramCompositionAllSites.setCompositionString("patientsInHFProgram AND femalesDefinition");
+		h.replaceCohortDefinition(femaleInFHProgramCompositionAllSites);
 		
-		CohortIndicator percentMaleInFHProgramIndicator = CohortIndicator.newFractionIndicator
-		(null,new Mapped<CohortDefinition>(maleInFHProgramComposition, 
+		CohortIndicator percentMaleInFHProgramIndicatorAllSites = CohortIndicator.newFractionIndicator
+		(null,new Mapped<CohortDefinition>(maleInFHProgramCompositionAllSites, 
 				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
-				new Mapped<CohortDefinition>(patientsInHFProgram, 
-				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
-				null);
-		percentMaleInFHProgramIndicator.setName("percentMaleInFHProgramIndicator");
-		percentMaleInFHProgramIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		percentMaleInFHProgramIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceDefinition(percentMaleInFHProgramIndicator);
-		
-		CohortIndicator percentFemaleInFHProgramIndicator = CohortIndicator.newFractionIndicator
-		(null,new Mapped<CohortDefinition>(femaleInFHProgramComposition, 
-				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
-				new Mapped<CohortDefinition>(patientsInHFProgram, 
+				new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
 				null);
-		percentFemaleInFHProgramIndicator.setName("percentFemaleInFHProgramIndicator");
-		percentFemaleInFHProgramIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		percentFemaleInFHProgramIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceDefinition(percentFemaleInFHProgramIndicator);
+		percentMaleInFHProgramIndicatorAllSites.setName("percentMaleInFHProgramIndicatorAllSites");
+		percentMaleInFHProgramIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		percentMaleInFHProgramIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		h.replaceDefinition(percentMaleInFHProgramIndicatorAllSites);
+		
+		CohortIndicator percentFemaleInFHProgramIndicatorAllSites = CohortIndicator.newFractionIndicator
+		(null,new Mapped<CohortDefinition>(femaleInFHProgramCompositionAllSites, 
+				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
+				new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
+				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
+				null);
+		percentFemaleInFHProgramIndicatorAllSites.setName("percentFemaleInFHProgramIndicatorAllSites");
+		percentFemaleInFHProgramIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		percentFemaleInFHProgramIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		h.replaceDefinition(percentFemaleInFHProgramIndicatorAllSites);
 	
 //=========================================================================================
 //      1.2.   median age
@@ -329,11 +330,11 @@ public class SetupHeartFailurereportAllSites {
 			ls.addRule("AGE", ageRule);
 		}
             
-		CohortIndicator medianAge = CohortIndicator.newLogicIndicator("medianAge", new Mapped<CohortDefinition>(patientsInHFProgram, 
+		CohortIndicator medianAgeAllSites = CohortIndicator.newLogicIndicator("medianAgeAllSites", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 				ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null, MedianAggregator.class, "AGE");
-		medianAge.addParameter(new Parameter("startDate", "startDate", Date.class));
-		medianAge.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceDefinition(medianAge);
+		medianAgeAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		medianAgeAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		h.replaceDefinition(medianAgeAllSites);
 
 //=========================================================================================
 //      1.3.   Patients enrolled
@@ -341,28 +342,28 @@ public class SetupHeartFailurereportAllSites {
 		
 //Patient Enrolled in Heart Failure Program
 		
-		ProgramEnrollmentCohortDefinition patientsEnrolledInHFProgram=getProgramEnrollment("patientsEnrolledInHFProgram", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
-		patientsEnrolledInHFProgram.addParameter(new Parameter("enrolledOnOrAfter","enrolledOnOrAfter",Date.class));
-		patientsEnrolledInHFProgram.addParameter(new Parameter("enrolledOnOrBefore","enrolledOnOrBefore",Date.class));
-		h.replaceCohortDefinition(patientsEnrolledInHFProgram);
+		ProgramEnrollmentCohortDefinition patientsEnrolledInHFProgramAllSites=getProgramEnrollment("patientsEnrolledInHFProgramAllSites", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
+		patientsEnrolledInHFProgramAllSites.addParameter(new Parameter("enrolledOnOrAfter","enrolledOnOrAfter",Date.class));
+		patientsEnrolledInHFProgramAllSites.addParameter(new Parameter("enrolledOnOrBefore","enrolledOnOrBefore",Date.class));
+		h.replaceCohortDefinition(patientsEnrolledInHFProgramAllSites);
 		
-		CohortIndicator patientsEnrolledInHFIndicator = new CohortIndicator();
-		patientsEnrolledInHFIndicator.setName("patientsEnrolledInHFIndicator");
-		patientsEnrolledInHFIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		patientsEnrolledInHFIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		patientsEnrolledInHFIndicator.setCohortDefinition(new Mapped<CohortDefinition>(patientsEnrolledInHFProgram,ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrBefore=${endDate}")));
-		h.replaceDefinition(patientsEnrolledInHFIndicator);
+		CohortIndicator patientsEnrolledInHFIndicatorAllSites = new CohortIndicator();
+		patientsEnrolledInHFIndicatorAllSites.setName("patientsEnrolledInHFIndicatorAllSites");
+		patientsEnrolledInHFIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsEnrolledInHFIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsEnrolledInHFIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(patientsEnrolledInHFProgramAllSites,ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrBefore=${endDate}")));
+		h.replaceDefinition(patientsEnrolledInHFIndicatorAllSites);
 
 //=========================================================================================
 //      1.4.   Total number of Patient in Heart Failure
 //=========================================================================================
 
-		CohortIndicator patientsInHFIndicator = new CohortIndicator();
-		patientsInHFIndicator.setName("patientsInHFIndicator");
-		patientsInHFIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		patientsInHFIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		patientsInHFIndicator.setCohortDefinition(new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-		h.replaceDefinition(patientsInHFIndicator);
+		CohortIndicator patientsInHFIndicatorAllSites = new CohortIndicator();
+		patientsInHFIndicatorAllSites.setName("patientsInHFIndicatorAllSites");
+		patientsInHFIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsInHFIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsInHFIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+		h.replaceDefinition(patientsInHFIndicatorAllSites);
 		
 //===============================================================================
 //  2.1. number and percent of patients without a cardiology consultation
@@ -372,22 +373,22 @@ public class SetupHeartFailurereportAllSites {
 	String formid=Context.getAdministrationService().getGlobalProperty("cardiologyreporting.cardilogyConsultationFormId");
 	cardCons.add(Context.getFormService().getForm(Integer.valueOf(formid)));
 	
-	EncounterCohortDefinition patientsWithCardFormBeforeEndDate =makeEncounterCohortDefinition("patientsWithCardFormBeforeEndDate", cardCons);       
-	patientsWithCardFormBeforeEndDate.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	h.replaceCohortDefinition(patientsWithCardFormBeforeEndDate);
+	EncounterCohortDefinition patientsWithCardFormBeforeEndDateAllSites =makeEncounterCohortDefinition("patientsWithCardFormBeforeEndDateAllSites", cardCons);       
+	patientsWithCardFormBeforeEndDateAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	h.replaceCohortDefinition(patientsWithCardFormBeforeEndDateAllSites);
 	
    /* InProgramCohortDefinition patientsInHFProgramBeforeEndDate=getInProgramCohortDefinition("patientsInHFProgramBeforeEndDate", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
     patientsInHFProgramBeforeEndDate.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
     h.replaceCohortDefinition(patientsInHFProgramBeforeEndDate);
     */
-    CompositionCohortDefinition patientsInHFProgramWithouCardForm=new CompositionCohortDefinition();
-    patientsInHFProgramWithouCardForm.setName("patientsInHFProgramWithouCardForm");
-    patientsInHFProgramWithouCardForm.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-    patientsInHFProgramWithouCardForm.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-    patientsInHFProgramWithouCardForm.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-    patientsInHFProgramWithouCardForm.getSearches().put("patientsWithCardFormBeforeEndDate",new Mapped<CohortDefinition>(patientsWithCardFormBeforeEndDate,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-    patientsInHFProgramWithouCardForm.setCompositionString("patientsInHFProgram AND (NOT patientsWithCardFormBeforeEndDate)");
-	h.replaceCohortDefinition(patientsInHFProgramWithouCardForm);
+    CompositionCohortDefinition patientsInHFProgramWithouCardFormAllSites=new CompositionCohortDefinition();
+    patientsInHFProgramWithouCardFormAllSites.setName("patientsInHFProgramWithouCardFormAllSites");
+    patientsInHFProgramWithouCardFormAllSites.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+    patientsInHFProgramWithouCardFormAllSites.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
+    patientsInHFProgramWithouCardFormAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+    patientsInHFProgramWithouCardFormAllSites.getSearches().put("patientsWithCardFormBeforeEndDate",new Mapped<CohortDefinition>(patientsWithCardFormBeforeEndDateAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+    patientsInHFProgramWithouCardFormAllSites.setCompositionString("patientsInHFProgram AND (NOT patientsWithCardFormBeforeEndDate)");
+	h.replaceCohortDefinition(patientsInHFProgramWithouCardFormAllSites);
 	
 	/*CohortIndicator patientsInHFProgramWithouCardFormIndicator = new CohortIndicator();
 	patientsInHFProgramWithouCardFormIndicator.setName("patientsInHFProgramWithouCardFormIndicator");
@@ -396,16 +397,16 @@ public class SetupHeartFailurereportAllSites {
 	patientsInHFProgramWithouCardFormIndicator.setCohortDefinition(new Mapped<CohortDefinition>(patientsInHFProgramWithouCardForm,ParameterizableUtil.createParameterMappings("onOrBefore=${endDate}")));
 	h.replaceDefinition(patientsInHFProgramWithouCardFormIndicator);
 	*/
-	CohortIndicator patientsInHFProgramWithouCardFormIndicator = CohortIndicator.newFractionIndicator
-	(null,new Mapped<CohortDefinition>(patientsInHFProgramWithouCardForm, 
+	CohortIndicator patientsInHFProgramWithouCardFormIndicatorAllSites = CohortIndicator.newFractionIndicator
+	(null,new Mapped<CohortDefinition>(patientsInHFProgramWithouCardFormAllSites, 
 			ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
-			new Mapped<CohortDefinition>(patientsInHFProgram, 
+			new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 			ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
 			null);
-	patientsInHFProgramWithouCardFormIndicator.setName("patientsInHFProgramWithouCardFormIndicator");
-	patientsInHFProgramWithouCardFormIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	patientsInHFProgramWithouCardFormIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	h.replaceDefinition(patientsInHFProgramWithouCardFormIndicator);
+	patientsInHFProgramWithouCardFormIndicatorAllSites.setName("patientsInHFProgramWithouCardFormIndicatorAllSites");
+	patientsInHFProgramWithouCardFormIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	patientsInHFProgramWithouCardFormIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	h.replaceDefinition(patientsInHFProgramWithouCardFormIndicatorAllSites);
 	
 	
 // =============================================================================== 
@@ -413,48 +414,48 @@ public class SetupHeartFailurereportAllSites {
 // ===============================================================================   
 // echocardiographyDuringPeriod echocardiographyAndHFProgramComposition hfEchocardiographyPercentageIndicator
 
-      CodedObsCohortDefinition echocardiographyDuringPeriod =makeCodedObsCohortDefinition("echocardiographyDuringPeriod",HeartFailureReportConstants.DDB_ECHOCARDIOGRAPH_RESULT, HeartFailureReportConstants.NOT_DONE, SetComparator.IN, TimeModifier.ANY);		
-      h.replaceCohortDefinition(echocardiographyDuringPeriod);
+      CodedObsCohortDefinition echocardiographyDuringPeriodAllSites =makeCodedObsCohortDefinition("echocardiographyDuringPeriodAllSites",HeartFailureReportConstants.DDB_ECHOCARDIOGRAPH_RESULT, HeartFailureReportConstants.NOT_DONE, SetComparator.IN, TimeModifier.ANY);		
+      h.replaceCohortDefinition(echocardiographyDuringPeriodAllSites);
        
-      CompositionCohortDefinition echocardiographyAndHFProgramComposition = new CompositionCohortDefinition();
-      echocardiographyAndHFProgramComposition.setName("echocardiographyAndHFProgramComposition");
-      echocardiographyAndHFProgramComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-      echocardiographyAndHFProgramComposition.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-      echocardiographyAndHFProgramComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-      echocardiographyAndHFProgramComposition.getSearches().put("echocardiographyDuringPeriod", new Mapped<CohortDefinition>(echocardiographyDuringPeriod, null));
-      echocardiographyAndHFProgramComposition.setCompositionString("(patientsInHFProgram AND echocardiographyDuringPeriod");
-      h.replaceCohortDefinition(echocardiographyAndHFProgramComposition);
+      CompositionCohortDefinition echocardiographyAndHFProgramCompositionAllSites = new CompositionCohortDefinition();
+      echocardiographyAndHFProgramCompositionAllSites.setName("echocardiographyAndHFProgramCompositionAllSites");
+      echocardiographyAndHFProgramCompositionAllSites.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+      echocardiographyAndHFProgramCompositionAllSites.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
+      echocardiographyAndHFProgramCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+      echocardiographyAndHFProgramCompositionAllSites.getSearches().put("echocardiographyDuringPeriod", new Mapped<CohortDefinition>(echocardiographyDuringPeriodAllSites, null));
+      echocardiographyAndHFProgramCompositionAllSites.setCompositionString("(patientsInHFProgram AND echocardiographyDuringPeriod");
+      h.replaceCohortDefinition(echocardiographyAndHFProgramCompositionAllSites);
       
-      CohortIndicator hfEchocardiographyPercentageIndicator = CohortIndicator.newFractionIndicator("hfEchocardiographyPercentageIndicator", new Mapped<CohortDefinition>(echocardiographyAndHFProgramComposition , ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
-   		  new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-      hfEchocardiographyPercentageIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-      hfEchocardiographyPercentageIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-      h.replaceDefinition(hfEchocardiographyPercentageIndicator);
+      CohortIndicator hfEchocardiographyPercentageIndicatorAllSites = CohortIndicator.newFractionIndicator("hfEchocardiographyPercentageIndicatorAllSites", new Mapped<CohortDefinition>(echocardiographyAndHFProgramCompositionAllSites , ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), 
+   		  new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
+      hfEchocardiographyPercentageIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+      hfEchocardiographyPercentageIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+      h.replaceDefinition(hfEchocardiographyPercentageIndicatorAllSites);
 
       
 // ===============================================================================                         
 //                 2.3.  Percent without a creatinine in the last 6 months
 // ===============================================================================   
 
-      NumericObsCohortDefinition patientsWithCreatinineCohortDef=makeNumericObsCohortDefinition("patientsWithCreatinineCohortDef", HeartFailureReportConstants.SERUM_CREATININE, 0.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
-      patientsWithCreatinineCohortDef.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-      patientsWithCreatinineCohortDef.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-      h.replaceCohortDefinition(patientsWithCreatinineCohortDef);
+      NumericObsCohortDefinition patientsWithCreatinineCohortDefAllSites=makeNumericObsCohortDefinition("patientsWithCreatinineCohortDefAllSites", HeartFailureReportConstants.SERUM_CREATININE, 0.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
+      patientsWithCreatinineCohortDefAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+      patientsWithCreatinineCohortDefAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+      h.replaceCohortDefinition(patientsWithCreatinineCohortDefAllSites);
                               
-      CompositionCohortDefinition hfPatientWithoutCreatinineCompositionCohortDef = new CompositionCohortDefinition();
-      hfPatientWithoutCreatinineCompositionCohortDef.setName("hfPatientWithoutCreatinineCompositionCohortDef");
-      hfPatientWithoutCreatinineCompositionCohortDef.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-      hfPatientWithoutCreatinineCompositionCohortDef.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-      hfPatientWithoutCreatinineCompositionCohortDef.getSearches().put("patientsWithCreatinineCohortDef", new Mapped<CohortDefinition>(patientsWithCreatinineCohortDef, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-      hfPatientWithoutCreatinineCompositionCohortDef.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-      hfPatientWithoutCreatinineCompositionCohortDef.setCompositionString("patientsInHFProgram AND (NOT patientsWithCreatinineCohortDef)");
-      h.replaceCohortDefinition(hfPatientWithoutCreatinineCompositionCohortDef);
+      CompositionCohortDefinition hfPatientWithoutCreatinineCompositionCohortDefAllSites = new CompositionCohortDefinition();
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.setName("hfPatientWithoutCreatinineCompositionCohortDefAllSites");
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.getSearches().put("patientsWithCreatinineCohortDef", new Mapped<CohortDefinition>(patientsWithCreatinineCohortDefAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+      hfPatientWithoutCreatinineCompositionCohortDefAllSites.setCompositionString("patientsInHFProgram AND (NOT patientsWithCreatinineCohortDef)");
+      h.replaceCohortDefinition(hfPatientWithoutCreatinineCompositionCohortDefAllSites);
       
-      CohortIndicator hfPatientWithoutCreatininePercentIndicator = CohortIndicator.newFractionIndicator("hfPatientWithoutCreatininePercentIndicator", new Mapped<CohortDefinition>(hfPatientWithoutCreatinineCompositionCohortDef , ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m},onOrBefore=${endDate}")), 
-       		  new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-      hfPatientWithoutCreatininePercentIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-      hfPatientWithoutCreatininePercentIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-      h.replaceDefinition(hfPatientWithoutCreatininePercentIndicator);
+      CohortIndicator hfPatientWithoutCreatininePercentIndicatorAllSites = CohortIndicator.newFractionIndicator("hfPatientWithoutCreatininePercentIndicatorAllSites", new Mapped<CohortDefinition>(hfPatientWithoutCreatinineCompositionCohortDefAllSites , ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m},onOrBefore=${endDate}")), 
+       		  new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
+      hfPatientWithoutCreatininePercentIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+      hfPatientWithoutCreatininePercentIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+      h.replaceDefinition(hfPatientWithoutCreatininePercentIndicatorAllSites);
 
 //===============================================================================                 
 //   PATIENTS WHO WITH HEART FAILURE DIAGNOSIS IN THE LAST MONTH
@@ -464,75 +465,75 @@ public class SetupHeartFailurereportAllSites {
 //     2.4. Patient with Cardiomyopathy
 // ===============================================================================                 
  
-	CodedObsCohortDefinition cardiomyopathyDiognosis =makeCodedObsCohortDefinition("cardiomyopathyDiognosis", HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.CARDIOMYOPATHY, SetComparator.IN, TimeModifier.ANY);	
-	cardiomyopathyDiognosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	h.replaceCohortDefinition(cardiomyopathyDiognosis);
+	CodedObsCohortDefinition cardiomyopathyDiognosisAllSites =makeCodedObsCohortDefinition("cardiomyopathyDiognosisAllSites", HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.CARDIOMYOPATHY, SetComparator.IN, TimeModifier.ANY);	
+	cardiomyopathyDiognosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	h.replaceCohortDefinition(cardiomyopathyDiognosisAllSites);
 	
-	 CompositionCohortDefinition cardiomyopathyDiognosisAnsHFProgComposition = new CompositionCohortDefinition();
-	 cardiomyopathyDiognosisAnsHFProgComposition.setName("cardiomyopathyDiognosisAnsHFProgComposition");
-	 cardiomyopathyDiognosisAnsHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	 cardiomyopathyDiognosisAnsHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-	 cardiomyopathyDiognosisAnsHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-	 cardiomyopathyDiognosisAnsHFProgComposition.getSearches().put("cardiomyopathyDiognosis", new Mapped<CohortDefinition>(cardiomyopathyDiognosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	 cardiomyopathyDiognosisAnsHFProgComposition.setCompositionString("(patientsInHFProgram AND cardiomyopathyDiognosis");
-	 h.replaceCohortDefinition(cardiomyopathyDiognosisAnsHFProgComposition);
+	 CompositionCohortDefinition cardiomyopathyDiognosisAnsHFProgCompositionAllSites = new CompositionCohortDefinition();
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.setName("cardiomyopathyDiognosisAnsHFProgCompositionAllSites");
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.getSearches().put("cardiomyopathyDiognosis", new Mapped<CohortDefinition>(cardiomyopathyDiognosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+	 cardiomyopathyDiognosisAnsHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND cardiomyopathyDiognosis");
+	 h.replaceCohortDefinition(cardiomyopathyDiognosisAnsHFProgCompositionAllSites);
  
-	 CohortIndicator cardiomyopathyDiognosisAnsHFProgIndicator = new CohortIndicator();
-	 cardiomyopathyDiognosisAnsHFProgIndicator.setName("cardiomyopathyDiognosisAnsHFProgIndicator");
-	 cardiomyopathyDiognosisAnsHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	 cardiomyopathyDiognosisAnsHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-     cardiomyopathyDiognosisAnsHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-     h.replaceDefinition(cardiomyopathyDiognosisAnsHFProgIndicator);
+	 CohortIndicator cardiomyopathyDiognosisAnsHFProgIndicatorAllSites = new CohortIndicator();
+	 cardiomyopathyDiognosisAnsHFProgIndicatorAllSites.setName("cardiomyopathyDiognosisAnsHFProgIndicatorAllSites");
+	 cardiomyopathyDiognosisAnsHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	 cardiomyopathyDiognosisAnsHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+     cardiomyopathyDiognosisAnsHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+     h.replaceDefinition(cardiomyopathyDiognosisAnsHFProgIndicatorAllSites);
       
       
 //===============================================================================                 
 //               2.5.  PATIENTS WHICH HAVE HAD  PURE MITRAL STENOSIS
 //===============================================================================  
 
-    CodedObsCohortDefinition mitralStenosisDiagnosis =makeCodedObsCohortDefinition("mitralStenosisDiagnosis",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.MITRAL_STENOSIS, SetComparator.IN, TimeModifier.ANY);                
-    mitralStenosisDiagnosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-    h.replaceCohortDefinition(mitralStenosisDiagnosis);
+    CodedObsCohortDefinition mitralStenosisDiagnosisAllSites =makeCodedObsCohortDefinition("mitralStenosisDiagnosisAllSites",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.MITRAL_STENOSIS, SetComparator.IN, TimeModifier.ANY);                
+    mitralStenosisDiagnosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+    h.replaceCohortDefinition(mitralStenosisDiagnosisAllSites);
     
-    CompositionCohortDefinition mitralStenosisDiagnosisAnsHFProgComposition = new CompositionCohortDefinition();
-    mitralStenosisDiagnosisAnsHFProgComposition.setName("mitralStenosisDiagnosisAnsHFProgComposition");
-    mitralStenosisDiagnosisAnsHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-    mitralStenosisDiagnosisAnsHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-    mitralStenosisDiagnosisAnsHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-    mitralStenosisDiagnosisAnsHFProgComposition.getSearches().put("mitralStenosisDiagnosis", new Mapped<CohortDefinition>(mitralStenosisDiagnosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-    mitralStenosisDiagnosisAnsHFProgComposition.setCompositionString("(patientsInHFProgram AND mitralStenosisDiagnosis");
-	 h.replaceCohortDefinition(mitralStenosisDiagnosisAnsHFProgComposition);
+    CompositionCohortDefinition mitralStenosisDiagnosisAnsHFProgCompositionAllSites = new CompositionCohortDefinition();
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.setName("mitralStenosisDiagnosisAnsHFProgCompositionAllSites");
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.getSearches().put("mitralStenosisDiagnosis", new Mapped<CohortDefinition>(mitralStenosisDiagnosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+    mitralStenosisDiagnosisAnsHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND mitralStenosisDiagnosis");
+	 h.replaceCohortDefinition(mitralStenosisDiagnosisAnsHFProgCompositionAllSites);
 
-	 CohortIndicator mitralStenosisDiagnosisAnsHFProgIndicator = new CohortIndicator();
-	 mitralStenosisDiagnosisAnsHFProgIndicator.setName("mitralStenosisDiagnosisAnsHFProgIndicator");
-	 mitralStenosisDiagnosisAnsHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	 mitralStenosisDiagnosisAnsHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	 mitralStenosisDiagnosisAnsHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-    h.replaceDefinition(mitralStenosisDiagnosisAnsHFProgIndicator);
+	 CohortIndicator mitralStenosisDiagnosisAnsHFProgIndicatorAllSites = new CohortIndicator();
+	 mitralStenosisDiagnosisAnsHFProgIndicatorAllSites.setName("mitralStenosisDiagnosisAnsHFProgIndicatorAllSites");
+	 mitralStenosisDiagnosisAnsHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	 mitralStenosisDiagnosisAnsHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	 mitralStenosisDiagnosisAnsHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+    h.replaceDefinition(mitralStenosisDiagnosisAnsHFProgIndicatorAllSites);
      
       
   //===============================================================================                 
   //      2.6.  PATIENTS WHICH HAVE HAD A RHEUMATIC HEART DISEASE
   //===============================================================================  
 
-    CodedObsCohortDefinition rheumaticHeartDiseaseDiagnosis =makeCodedObsCohortDefinition("rheumaticHeartDiseaseDiagnosis",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.RHEUMATIC_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
-    rheumaticHeartDiseaseDiagnosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	h.replaceCohortDefinition(rheumaticHeartDiseaseDiagnosis);
+    CodedObsCohortDefinition rheumaticHeartDiseaseDiagnosisAllSites =makeCodedObsCohortDefinition("rheumaticHeartDiseaseDiagnosisAllSites",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.RHEUMATIC_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
+    rheumaticHeartDiseaseDiagnosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	h.replaceCohortDefinition(rheumaticHeartDiseaseDiagnosisAllSites);
 	
-    CompositionCohortDefinition rheumaticHeartDiseaseDiagnosisAndHFProgComposition = new CompositionCohortDefinition();
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.setName("rheumaticHeartDiseaseDiagnosisAndHFProgComposition");
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.getSearches().put("rheumaticHeartDiseaseDiagnosis", new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-    rheumaticHeartDiseaseDiagnosisAndHFProgComposition.setCompositionString("(patientsInHFProgram AND rheumaticHeartDiseaseDiagnosis");
-	 h.replaceCohortDefinition(rheumaticHeartDiseaseDiagnosisAndHFProgComposition);
+    CompositionCohortDefinition rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites = new CompositionCohortDefinition();
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.setName("rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites");
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("rheumaticHeartDiseaseDiagnosis", new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+    rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND rheumaticHeartDiseaseDiagnosis");
+	 h.replaceCohortDefinition(rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites);
 
-	 CohortIndicator rheumaticHeartDiseaseDiagnosisAndHFProgIndicator = new CohortIndicator();
-	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicator.setName("rheumaticHeartDiseaseDiagnosisAndHFProgIndicator");
-	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-    h.replaceDefinition(rheumaticHeartDiseaseDiagnosisAndHFProgIndicator);
+	 CohortIndicator rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites = new CohortIndicator();
+	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.setName("rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites");
+	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	 rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+    h.replaceDefinition(rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites);
      
 //===============================================================================                 
 //    2.7.  PATIENTS WHO HAVE HAD A HYPERTENSIVE HEART DISEASE
@@ -540,25 +541,25 @@ public class SetupHeartFailurereportAllSites {
     
                    
 	 
-	   CodedObsCohortDefinition hypertensiveHeartDiseaseDiagnosis =makeCodedObsCohortDefinition("hypertensiveHeartDiseaseDiagnosis",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.HYPERTENSIVE_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
-	   hypertensiveHeartDiseaseDiagnosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	   h.replaceCohortDefinition(hypertensiveHeartDiseaseDiagnosis);
+	   CodedObsCohortDefinition hypertensiveHeartDiseaseDiagnosisAllSites =makeCodedObsCohortDefinition("hypertensiveHeartDiseaseDiagnosisAllSites",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.HYPERTENSIVE_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
+	   hypertensiveHeartDiseaseDiagnosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	   h.replaceCohortDefinition(hypertensiveHeartDiseaseDiagnosisAllSites);
 	   
-	  CompositionCohortDefinition hypertensiveHeartDiseaseDiagnosisAndHFProgComposition = new CompositionCohortDefinition();
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.setName("hypertensiveHeartDiseaseDiagnosisAndHFProgComposition");
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.getSearches().put("hypertensiveHeartDiseaseDiagnosis", new Mapped<CohortDefinition>(hypertensiveHeartDiseaseDiagnosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	  hypertensiveHeartDiseaseDiagnosisAndHFProgComposition.setCompositionString("(patientsInHFProgram AND hypertensiveHeartDiseaseDiagnosis");
-		 h.replaceCohortDefinition(hypertensiveHeartDiseaseDiagnosisAndHFProgComposition);
+	  CompositionCohortDefinition hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites = new CompositionCohortDefinition();
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.setName("hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites");
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("hypertensiveHeartDiseaseDiagnosis", new Mapped<CohortDefinition>(hypertensiveHeartDiseaseDiagnosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+	  hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND hypertensiveHeartDiseaseDiagnosis");
+		 h.replaceCohortDefinition(hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites);
 
-		 CohortIndicator hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator = new CohortIndicator();
-		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator.setName("hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator");
-		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(hypertensiveHeartDiseaseDiagnosisAndHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-	    h.replaceDefinition(hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator);
+		 CohortIndicator hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites = new CohortIndicator();
+		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.setName("hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites");
+		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+		 hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(hypertensiveHeartDiseaseDiagnosisAndHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+	    h.replaceDefinition(hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites);
 	     
 		  
 // ===============================================================================                 
@@ -567,85 +568,85 @@ public class SetupHeartFailurereportAllSites {
 
 	  
 	    
-	 CodedObsCohortDefinition pericardialDiseaseDiagnosis =makeCodedObsCohortDefinition("pericardialDiseaseDiagnosis", HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.PERICARDIAL_DISEASE, SetComparator.IN, TimeModifier.ANY);	
-	 pericardialDiseaseDiagnosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	 h.replaceCohortDefinition(pericardialDiseaseDiagnosis);
+	 CodedObsCohortDefinition pericardialDiseaseDiagnosisAllSites =makeCodedObsCohortDefinition("pericardialDiseaseDiagnosisAllSites", HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.PERICARDIAL_DISEASE, SetComparator.IN, TimeModifier.ANY);	
+	 pericardialDiseaseDiagnosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	 h.replaceCohortDefinition(pericardialDiseaseDiagnosisAllSites);
 
-    CompositionCohortDefinition pericardialDiseaseDiagnosisAndHFProgComposition = new CompositionCohortDefinition();
-    pericardialDiseaseDiagnosisAndHFProgComposition.setName("pericardialDiseaseDiagnosisAndHFProgComposition");
-    pericardialDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-    pericardialDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-    pericardialDiseaseDiagnosisAndHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-    pericardialDiseaseDiagnosisAndHFProgComposition.getSearches().put("pericardialDiseaseDiagnosis", new Mapped<CohortDefinition>(pericardialDiseaseDiagnosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-    pericardialDiseaseDiagnosisAndHFProgComposition.setCompositionString("(patientsInHFProgram AND pericardialDiseaseDiagnosis");
-	h.replaceCohortDefinition(pericardialDiseaseDiagnosisAndHFProgComposition);
+    CompositionCohortDefinition pericardialDiseaseDiagnosisAndHFProgCompositionAllSites = new CompositionCohortDefinition();
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.setName("pericardialDiseaseDiagnosisAndHFProgCompositionAllSites");
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("pericardialDiseaseDiagnosis", new Mapped<CohortDefinition>(pericardialDiseaseDiagnosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+    pericardialDiseaseDiagnosisAndHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND pericardialDiseaseDiagnosis");
+	h.replaceCohortDefinition(pericardialDiseaseDiagnosisAndHFProgCompositionAllSites);
 
-	CohortIndicator pericardialDiseaseDiagnosisAndHFProgIndicator = new CohortIndicator();
-	pericardialDiseaseDiagnosisAndHFProgIndicator.setName("pericardialDiseaseDiagnosisAndHFProgIndicator");
-	pericardialDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	pericardialDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	pericardialDiseaseDiagnosisAndHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(pericardialDiseaseDiagnosisAndHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-    h.replaceDefinition(pericardialDiseaseDiagnosisAndHFProgIndicator);
+	CohortIndicator pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites = new CohortIndicator();
+	pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites.setName("pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites");
+	pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(pericardialDiseaseDiagnosisAndHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+    h.replaceDefinition(pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites);
      			 
 // ===============================================================================                 
 //         2.9. PATIENTS WHO HAVE HAD A CONGENITAL HEART DISEASE
 // ===============================================================================  
 
-	 CodedObsCohortDefinition congenitalDiseaseDiagnosis =makeCodedObsCohortDefinition("congenitalDiseaseDiagnosis",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.CONGENITAL_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
-	 congenitalDiseaseDiagnosis.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	 h.replaceCohortDefinition(congenitalDiseaseDiagnosis);
+	 CodedObsCohortDefinition congenitalDiseaseDiagnosisAllSites =makeCodedObsCohortDefinition("congenitalDiseaseDiagnosisAllSites",HeartFailureReportConstants.HEART_FAILURE_DIAGNOSIS, HeartFailureReportConstants.CONGENITAL_HEART_DISEASE, SetComparator.IN, TimeModifier.ANY);
+	 congenitalDiseaseDiagnosisAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	 h.replaceCohortDefinition(congenitalDiseaseDiagnosisAllSites);
 		  
-	CompositionCohortDefinition congenitalDiseaseDiagnosisAndHFProgComposition = new CompositionCohortDefinition();
-	congenitalDiseaseDiagnosisAndHFProgComposition.setName("congenitalDiseaseDiagnosisAndHFProgComposition");
-	congenitalDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	congenitalDiseaseDiagnosisAndHFProgComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-	congenitalDiseaseDiagnosisAndHFProgComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-	congenitalDiseaseDiagnosisAndHFProgComposition.getSearches().put("congenitalDiseaseDiagnosis", new Mapped<CohortDefinition>(congenitalDiseaseDiagnosis, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	congenitalDiseaseDiagnosisAndHFProgComposition.setCompositionString("(patientsInHFProgram AND congenitalDiseaseDiagnosis");
-	h.replaceCohortDefinition(congenitalDiseaseDiagnosisAndHFProgComposition);
+	CompositionCohortDefinition congenitalDiseaseDiagnosisAndHFProgCompositionAllSites = new CompositionCohortDefinition();
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.setName("congenitalDiseaseDiagnosisAndHFProgCompositionAllSites");
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.getSearches().put("congenitalDiseaseDiagnosis", new Mapped<CohortDefinition>(congenitalDiseaseDiagnosisAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+	congenitalDiseaseDiagnosisAndHFProgCompositionAllSites.setCompositionString("(patientsInHFProgram AND congenitalDiseaseDiagnosis");
+	h.replaceCohortDefinition(congenitalDiseaseDiagnosisAndHFProgCompositionAllSites);
 
-	 CohortIndicator congenitalDiseaseDiagnosisAndHFProgIndicator = new CohortIndicator();
-	 congenitalDiseaseDiagnosisAndHFProgIndicator.setName("congenitalDiseaseDiagnosisAndHFProgIndicator");
-	 congenitalDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	 congenitalDiseaseDiagnosisAndHFProgIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	 congenitalDiseaseDiagnosisAndHFProgIndicator.setCohortDefinition(new Mapped<CohortDefinition>(congenitalDiseaseDiagnosisAndHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-	 h.replaceDefinition(congenitalDiseaseDiagnosisAndHFProgIndicator);
+	 CohortIndicator congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites = new CohortIndicator();
+	 congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites.setName("congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites");
+	 congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	 congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	 congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(congenitalDiseaseDiagnosisAndHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+	 h.replaceDefinition(congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites);
    	 
 // ========================================================================================                        
 //   2.10. Parcent with creatinine > 200
 // ========================================================================================  
 	 
 	 
-	NumericObsCohortDefinition patientsWithCreatinine=makeNumericObsCohortDefinition("patientsWithCreatinine", HeartFailureReportConstants.SERUM_CREATININE, 200.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
-	patientsWithCreatinine.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-    h.replaceCohortDefinition(patientsWithCreatinine);
+	NumericObsCohortDefinition patientsWithCreatinineAllSites=makeNumericObsCohortDefinition("patientsWithCreatinineAllSites", HeartFailureReportConstants.SERUM_CREATININE, 200.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
+	patientsWithCreatinineAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+    h.replaceCohortDefinition(patientsWithCreatinineAllSites);
     
-	CompositionCohortDefinition hfpatientsWithCreatinineComposition = new CompositionCohortDefinition();
-	hfpatientsWithCreatinineComposition.setName("hfpatientsWithCreatinineComposition");
-	hfpatientsWithCreatinineComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-	hfpatientsWithCreatinineComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	hfpatientsWithCreatinineComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-	hfpatientsWithCreatinineComposition.getSearches().put("patientsWithCreatinine", new Mapped<CohortDefinition>(patientsWithCreatinine,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	hfpatientsWithCreatinineComposition.setCompositionString("patientsInHFProgram AND patientsWithCreatinine");
-	h.replaceCohortDefinition(hfpatientsWithCreatinineComposition);
+	CompositionCohortDefinition hfpatientsWithCreatinineCompositionAllSites = new CompositionCohortDefinition();
+	hfpatientsWithCreatinineCompositionAllSites.setName("hfpatientsWithCreatinineCompositionAllSites");
+	hfpatientsWithCreatinineCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+	hfpatientsWithCreatinineCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	hfpatientsWithCreatinineCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+	hfpatientsWithCreatinineCompositionAllSites.getSearches().put("patientsWithCreatinine", new Mapped<CohortDefinition>(patientsWithCreatinineAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+	hfpatientsWithCreatinineCompositionAllSites.setCompositionString("patientsInHFProgram AND patientsWithCreatinine");
+	h.replaceCohortDefinition(hfpatientsWithCreatinineCompositionAllSites);
       
        
-    CohortIndicator hfpatientsWithCreatininePercentIndicator = CohortIndicator.newFractionIndicator("hfpatientsWithCreatininePercentIndicator", new Mapped<CohortDefinition>(hfpatientsWithCreatinineComposition , 
-       		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+    CohortIndicator hfpatientsWithCreatininePercentIndicatorAllSites = CohortIndicator.newFractionIndicator("hfpatientsWithCreatininePercentIndicatorAllSites", new Mapped<CohortDefinition>(hfpatientsWithCreatinineCompositionAllSites , 
+       		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 	              ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-    hfpatientsWithCreatininePercentIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-    hfpatientsWithCreatininePercentIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-    h.replaceDefinition(hfpatientsWithCreatininePercentIndicator);
+    hfpatientsWithCreatininePercentIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+    hfpatientsWithCreatininePercentIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+    h.replaceDefinition(hfpatientsWithCreatininePercentIndicatorAllSites);
     
     
 //======================================================================================================                       
 //   2.11. number post-cardiac surgery
 //====================================================================================================== 
    
-    PatientStateCohortDefinition postCardiacSurgeryCohortDefinition=makePatientStateCohortDefinition("postCardiacSurgeryCohortDefinition", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID, HeartFailureReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_UUID, HeartFailureReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_POST_OPERATIVE_STATE_UUID);
-    postCardiacSurgeryCohortDefinition.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
-    postCardiacSurgeryCohortDefinition.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
-    h.replaceCohortDefinition(postCardiacSurgeryCohortDefinition);
+    PatientStateCohortDefinition postCardiacSurgeryCohortDefinitionAllSites=makePatientStateCohortDefinition("postCardiacSurgeryCohortDefinitionAllSites", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID, HeartFailureReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_UUID, HeartFailureReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_POST_OPERATIVE_STATE_UUID);
+    postCardiacSurgeryCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
+    postCardiacSurgeryCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
+    h.replaceCohortDefinition(postCardiacSurgeryCohortDefinitionAllSites);
     
    /* PatientStateCohortDefinition completedPostCardiacSurgeryBeforePeriod=MakeCohortDefinitionUtil.makePatientStateCohortDefinition("Patients who completed POST CARDIAC SURGERY STATE before the period", CardiologyReportConstants.HEART_FAILURE_PROGRAM_UUID, CardiologyReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_UUID, CardiologyReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_POST_OPERATIVE_STATE_UUID, CardiologyReportConstants.HEART_FAILURE_PROGRAM_CONCEPT_UUID, CardiologyReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_CONCEPT_UUID, CardiologyReportConstants.HEART_FAILURE_PROGRAM_SURGERY_STATUS_WORKFLOW_POST_OPERATIVE_STATE_CONCEPT_UUID);
     completedPostCardiacSurgeryBeforePeriod.addParameter(new Parameter("endedOnOrBefore", "endedOnOrBefore", Date.class));
@@ -665,43 +666,43 @@ public class SetupHeartFailurereportAllSites {
     postCardiacCompositionCohort.setCompositionString("postCardiacSurgery AND (NOT startedPostCardiacSurgeryAfterPeriod) AND (NOT completedPostCardiacSurgeryBeforePeriod)");
 */
   
-    CohortIndicator postCardiacSurgeryCohortIndicator = new CohortIndicator();
-    postCardiacSurgeryCohortIndicator.setName("postCardiacSurgeryCohortIndicator");
-    postCardiacSurgeryCohortIndicator.addParameter(new Parameter("startDate", "startDate",Date.class));
-    postCardiacSurgeryCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-    postCardiacSurgeryCohortIndicator.setCohortDefinition(new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinition,ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate}")));
-    h.replaceDefinition(postCardiacSurgeryCohortIndicator);
+    CohortIndicator postCardiacSurgeryCohortIndicatorAllSites = new CohortIndicator();
+    postCardiacSurgeryCohortIndicatorAllSites.setName("postCardiacSurgeryCohortIndicatorAllSites");
+    postCardiacSurgeryCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate",Date.class));
+    postCardiacSurgeryCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+    postCardiacSurgeryCohortIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinitionAllSites,ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate}")));
+    h.replaceDefinition(postCardiacSurgeryCohortIndicatorAllSites);
  
 
 //================================================                        
 //   3.4. in the subgroup (female < age 50), percent not on family planning
 // ================================================  
   
-    NumericObsCohortDefinition patientsInFamilyPlanning =makeNumericObsCohortDefinition("patientsInFamilyPlanning",HeartFailureReportConstants.PATIENT_USING_FAMILY_PLANNING,1.0, RangeComparator.EQUAL, TimeModifier.LAST);       
-	patientsInFamilyPlanning.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	h.replaceCohortDefinition(patientsInFamilyPlanning);
+    NumericObsCohortDefinition patientsInFamilyPlanningAllSites =makeNumericObsCohortDefinition("patientsInFamilyPlanningAllSites",HeartFailureReportConstants.PATIENT_USING_FAMILY_PLANNING,1.0, RangeComparator.EQUAL, TimeModifier.LAST);       
+	patientsInFamilyPlanningAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	h.replaceCohortDefinition(patientsInFamilyPlanningAllSites);
 	
-	AgeCohortDefinition lessThanFifty = new AgeCohortDefinition(null, 50, null); 
-	 lessThanFifty.setName("lessThanFifty");
-	 h.replaceCohortDefinition(lessThanFifty);
+	AgeCohortDefinition lessThanFiftyAllSites = new AgeCohortDefinition(null, 50, null); 
+	 lessThanFiftyAllSites.setName("lessThanFiftyAllSites");
+	 h.replaceCohortDefinition(lessThanFiftyAllSites);
 	 
-	 CompositionCohortDefinition patientsInHFWithoutFamilyPlanningCompositionCohort = new CompositionCohortDefinition();
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.setName("patientsInHFWithoutFamilyPlanningCompositionCohort");
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("patientsInFamilyPlanning", new Mapped<CohortDefinition>(patientsInFamilyPlanning,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("femalesDefinition", new Mapped<CohortDefinition>(femalesDefinition,null));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.getSearches().put("lessThanFifty", new Mapped<CohortDefinition>(lessThanFifty,null));
-	 patientsInHFWithoutFamilyPlanningCompositionCohort.setCompositionString("patientsInHFProgram AND femalesDefinition AND lessThanFifty AND (NOT patientsInFamilyPlanning)");
-	 h.replaceCohortDefinition(patientsInHFWithoutFamilyPlanningCompositionCohort);
+	 CompositionCohortDefinition patientsInHFWithoutFamilyPlanningCompositionCohortAllSites = new CompositionCohortDefinition();
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.setName("patientsInHFWithoutFamilyPlanningCompositionCohortAllSites");
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.getSearches().put("patientsInFamilyPlanning", new Mapped<CohortDefinition>(patientsInFamilyPlanningAllSites,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.getSearches().put("femalesDefinition", new Mapped<CohortDefinition>(femalesDefinitionAllSites,null));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.getSearches().put("lessThanFifty", new Mapped<CohortDefinition>(lessThanFiftyAllSites,null));
+	 patientsInHFWithoutFamilyPlanningCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND femalesDefinition AND lessThanFifty AND (NOT patientsInFamilyPlanning)");
+	 h.replaceCohortDefinition(patientsInHFWithoutFamilyPlanningCompositionCohortAllSites);
 	 
-	CohortIndicator patientsInHFWithoutFamilyPlanningIndicator = CohortIndicator.newFractionIndicator("patientsInHFWithoutFamilyPlanningIndicator", new Mapped<CohortDefinition>(patientsInHFWithoutFamilyPlanningCompositionCohort , 
-	  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+	CohortIndicator patientsInHFWithoutFamilyPlanningIndicatorAllSites = CohortIndicator.newFractionIndicator("patientsInHFWithoutFamilyPlanningIndicatorAllSites", new Mapped<CohortDefinition>(patientsInHFWithoutFamilyPlanningCompositionCohortAllSites , 
+	  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 	  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-	patientsInHFWithoutFamilyPlanningIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-	patientsInHFWithoutFamilyPlanningIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	h.replaceDefinition(patientsInHFWithoutFamilyPlanningIndicator);
+	patientsInHFWithoutFamilyPlanningIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+	patientsInHFWithoutFamilyPlanningIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	h.replaceDefinition(patientsInHFWithoutFamilyPlanningIndicatorAllSites);
 	
 //================================================                        
 //   Different CARDIAC Drugs order
@@ -719,111 +720,111 @@ public class SetupHeartFailurereportAllSites {
 // ================================================                        
 //  3.5. Patients LASIX COHORT
 // ================================================  
-   DrugsActiveCohortDefinition onLasixAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-   onLasixAtEndOfPeriod.setName("onLasixAtEndOfPeriod");
-   onLasixAtEndOfPeriod.setDrugs(onFurosemideRegimen);
-   onLasixAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-   h.replaceCohortDefinition(onLasixAtEndOfPeriod);
+   DrugsActiveCohortDefinition onLasixAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+   onLasixAtEndOfPeriodAllSites.setName("onLasixAtEndOfPeriodAllSites");
+   onLasixAtEndOfPeriodAllSites.setDrugs(onFurosemideRegimen);
+   onLasixAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+   h.replaceCohortDefinition(onLasixAtEndOfPeriodAllSites);
 
-   CompositionCohortDefinition hFonLasixAtEndOfPeriodCompositionCohort = new CompositionCohortDefinition();
-   hFonLasixAtEndOfPeriodCompositionCohort.setName("hFonLasixAtEndOfPeriodCompositionCohort");
-   hFonLasixAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-   hFonLasixAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-   hFonLasixAtEndOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-   hFonLasixAtEndOfPeriodCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-   hFonLasixAtEndOfPeriodCompositionCohort.getSearches().put("onLasixAtEndOfPeriod", new Mapped<CohortDefinition>(onLasixAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-   hFonLasixAtEndOfPeriodCompositionCohort.setCompositionString("patientsInHFProgram AND onLasixAtEndOfPeriod");
-   h.replaceCohortDefinition(hFonLasixAtEndOfPeriodCompositionCohort);
+   CompositionCohortDefinition hFonLasixAtEndOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.setName("hFonLasixAtEndOfPeriodCompositionCohortAllSites");
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.getSearches().put("onLasixAtEndOfPeriod", new Mapped<CohortDefinition>(onLasixAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+   hFonLasixAtEndOfPeriodCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND onLasixAtEndOfPeriod");
+   h.replaceCohortDefinition(hFonLasixAtEndOfPeriodCompositionCohortAllSites);
    
-   CohortIndicator onLasixAtEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onLasixAtEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFonLasixAtEndOfPeriodCompositionCohort , 
-     		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+   CohortIndicator onLasixAtEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onLasixAtEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFonLasixAtEndOfPeriodCompositionCohortAllSites , 
+     		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
 	              ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-    onLasixAtEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-    onLasixAtEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-    h.replaceDefinition(onLasixAtEndOfPeriodCohortIndicator);
+    onLasixAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+    onLasixAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+    h.replaceDefinition(onLasixAtEndOfPeriodCohortIndicatorAllSites);
 
 
 // ================================================                        
 //  3.6. Patients on Atenolol COHORT
 // ================================================ 
     
-DrugsActiveCohortDefinition onAtenololAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-onAtenololAtEndOfPeriod.setName("onAtenololAtEndOfPeriod");
-onAtenololAtEndOfPeriod.setDrugs(onAtenololRegimen);
-onAtenololAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-h.replaceCohortDefinition(onAtenololAtEndOfPeriod);
+DrugsActiveCohortDefinition onAtenololAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+onAtenololAtEndOfPeriodAllSites.setName("onAtenololAtEndOfPeriodAllSites");
+onAtenololAtEndOfPeriodAllSites.setDrugs(onAtenololRegimen);
+onAtenololAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+h.replaceCohortDefinition(onAtenololAtEndOfPeriodAllSites);
 
-CompositionCohortDefinition hFonAtenololAtEndOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFonAtenololAtEndOfPeriodCompositionCohort.setName("hFonAtenololAtEndOfPeriodCompositionCohort");
-hFonAtenololAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFonAtenololAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFonAtenololAtEndOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFonAtenololAtEndOfPeriodCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFonAtenololAtEndOfPeriodCompositionCohort.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFonAtenololAtEndOfPeriodCompositionCohort.setCompositionString("patientsInHFProgram AND onAtenololAtEndOfPeriod");
-h.replaceCohortDefinition(hFonAtenololAtEndOfPeriodCompositionCohort);
+CompositionCohortDefinition hFonAtenololAtEndOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.setName("hFonAtenololAtEndOfPeriodCompositionCohortAllSites");
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFonAtenololAtEndOfPeriodCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND onAtenololAtEndOfPeriod");
+h.replaceCohortDefinition(hFonAtenololAtEndOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onAtenololAtEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onAtenololAtEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFonAtenololAtEndOfPeriodCompositionCohort , 
-  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onAtenololAtEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onAtenololAtEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFonAtenololAtEndOfPeriodCompositionCohortAllSites , 
+  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
              ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onAtenololAtEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onAtenololAtEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onAtenololAtEndOfPeriodCohortIndicator);
+onAtenololAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onAtenololAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onAtenololAtEndOfPeriodCohortIndicatorAllSites);
 
 // ================================================                        
 //  3.7. Patients Carvedilol COHORT
 // ================================================   
 
-DrugsActiveCohortDefinition onCarvedilolAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-onCarvedilolAtEndOfPeriod.setName("onCarvedilolAtEndOfPeriod");
-onCarvedilolAtEndOfPeriod.setDrugs(onCarvedilolRegimen);
-onCarvedilolAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-h.replaceCohortDefinition(onCarvedilolAtEndOfPeriod);
+DrugsActiveCohortDefinition onCarvedilolAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+onCarvedilolAtEndOfPeriodAllSites.setName("onCarvedilolAtEndOfPeriodAllSites");
+onCarvedilolAtEndOfPeriodAllSites.setDrugs(onCarvedilolRegimen);
+onCarvedilolAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+h.replaceCohortDefinition(onCarvedilolAtEndOfPeriodAllSites);
 
-CompositionCohortDefinition hFonCarvedilolAtEndOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFonCarvedilolAtEndOfPeriodCompositionCohort.setName("hFonCarvedilolAtEndOfPeriodCompositionCohort");
-hFonCarvedilolAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFonCarvedilolAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFonCarvedilolAtEndOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFonCarvedilolAtEndOfPeriodCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFonCarvedilolAtEndOfPeriodCompositionCohort.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFonCarvedilolAtEndOfPeriodCompositionCohort.setCompositionString("patientsInHFProgram AND onCarvedilolAtEndOfPeriod");
-h.replaceCohortDefinition(hFonCarvedilolAtEndOfPeriodCompositionCohort);
+CompositionCohortDefinition hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.setName("hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites");
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND onCarvedilolAtEndOfPeriod");
+h.replaceCohortDefinition(hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onCarvedilolAtEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onCarvedilolAtEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFonCarvedilolAtEndOfPeriodCompositionCohort , 
-  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onCarvedilolAtEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onCarvedilolAtEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFonCarvedilolAtEndOfPeriodCompositionCohortAllSites , 
+  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
              ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onCarvedilolAtEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onCarvedilolAtEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onCarvedilolAtEndOfPeriodCohortIndicator);
+onCarvedilolAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onCarvedilolAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onCarvedilolAtEndOfPeriodCohortIndicatorAllSites);
            
 // ================================================                        
 //  3.8. Patients Aldactone COHORT
 // ================================================   
 
 
-DrugsActiveCohortDefinition onAldactoneAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-onAldactoneAtEndOfPeriod.setName("onAldactoneAtEndOfPeriod");
-onAldactoneAtEndOfPeriod.setDrugs(onAldactoneRegimen);
-onAldactoneAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-h.replaceCohortDefinition(onAldactoneAtEndOfPeriod);
+DrugsActiveCohortDefinition onAldactoneAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+onAldactoneAtEndOfPeriodAllSites.setName("onAldactoneAtEndOfPeriodAllSites");
+onAldactoneAtEndOfPeriodAllSites.setDrugs(onAldactoneRegimen);
+onAldactoneAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+h.replaceCohortDefinition(onAldactoneAtEndOfPeriodAllSites);
 
-CompositionCohortDefinition hFonAldactoneAtEndOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFonAldactoneAtEndOfPeriodCompositionCohort.setName("hFonAldactoneAtEndOfPeriodCompositionCohort");
-hFonAldactoneAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFonAldactoneAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFonAldactoneAtEndOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFonAldactoneAtEndOfPeriodCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFonAldactoneAtEndOfPeriodCompositionCohort.getSearches().put("onAldactoneAtEndOfPeriod", new Mapped<CohortDefinition>(onAldactoneAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFonAldactoneAtEndOfPeriodCompositionCohort.setCompositionString("patientsInHFProgram AND onAldactoneAtEndOfPeriod");
-h.replaceCohortDefinition(hFonAldactoneAtEndOfPeriodCompositionCohort);
+CompositionCohortDefinition hFonAldactoneAtEndOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.setName("hFonAldactoneAtEndOfPeriodCompositionCohortAllSites");
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.getSearches().put("onAldactoneAtEndOfPeriod", new Mapped<CohortDefinition>(onAldactoneAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFonAldactoneAtEndOfPeriodCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND onAldactoneAtEndOfPeriod");
+h.replaceCohortDefinition(hFonAldactoneAtEndOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onAldactoneAtEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onAldactoneAtEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFonAldactoneAtEndOfPeriodCompositionCohort , 
-  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onAldactoneAtEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onAldactoneAtEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFonAldactoneAtEndOfPeriodCompositionCohortAllSites , 
+  		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
              ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onAldactoneAtEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onAldactoneAtEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onAldactoneAtEndOfPeriodCohortIndicator);               
+onAldactoneAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onAldactoneAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onAldactoneAtEndOfPeriodCohortIndicatorAllSites);               
                       
   
                       
@@ -833,37 +834,37 @@ h.replaceDefinition(onAldactoneAtEndOfPeriodCohortIndicator);
 
                                         
  /*Lisinopril*/
-  DrugsActiveCohortDefinition onLisinoprilAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-  onLisinoprilAtEndOfPeriod.setName("onLisinoprilAtEndOfPeriod");
-  onLisinoprilAtEndOfPeriod.setDrugs(onLisinoprilRegimen);
-  onLisinoprilAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-  h.replaceCohortDefinition(onLisinoprilAtEndOfPeriod);
+  DrugsActiveCohortDefinition onLisinoprilAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+  onLisinoprilAtEndOfPeriodAllSites.setName("onLisinoprilAtEndOfPeriodAllSites");
+  onLisinoprilAtEndOfPeriodAllSites.setDrugs(onLisinoprilRegimen);
+  onLisinoprilAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+  h.replaceCohortDefinition(onLisinoprilAtEndOfPeriodAllSites);
  
                                
 /* Captopril*/
-    DrugsActiveCohortDefinition onCaptoprilAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-    onCaptoprilAtEndOfPeriod.setName("onCaptoprilAtEndOfPeriod");
-    onCaptoprilAtEndOfPeriod.setDrugs(onCaptoprilRegimen);
-    onCaptoprilAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-    h.replaceCohortDefinition(onCaptoprilAtEndOfPeriod);
+    DrugsActiveCohortDefinition onCaptoprilAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+    onCaptoprilAtEndOfPeriodAllSites.setName("onCaptoprilAtEndOfPeriodAllSites");
+    onCaptoprilAtEndOfPeriodAllSites.setDrugs(onCaptoprilRegimen);
+    onCaptoprilAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+    h.replaceCohortDefinition(onCaptoprilAtEndOfPeriodAllSites);
      
-CompositionCohortDefinition hFLisinoprilOrCaptoprilCompositionCohort = new CompositionCohortDefinition();
-hFLisinoprilOrCaptoprilCompositionCohort.setName("hFLisinoprilOrCaptoprilCompositionCohort");
-hFLisinoprilOrCaptoprilCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFLisinoprilOrCaptoprilCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFLisinoprilOrCaptoprilCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFLisinoprilOrCaptoprilCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFLisinoprilOrCaptoprilCompositionCohort.getSearches().put("onLisinoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onLisinoprilAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFLisinoprilOrCaptoprilCompositionCohort.getSearches().put("onCaptoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onCaptoprilAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFLisinoprilOrCaptoprilCompositionCohort.setCompositionString("patientsInHFProgram AND (onLisinoprilAtEndOfPeriod OR onCaptoprilAtEndOfPeriod)");
-h.replaceCohortDefinition(hFLisinoprilOrCaptoprilCompositionCohort);
+CompositionCohortDefinition hFLisinoprilOrCaptoprilCompositionCohortAllSites = new CompositionCohortDefinition();
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.setName("hFLisinoprilOrCaptoprilCompositionCohortAllSites");
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.getSearches().put("onLisinoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onLisinoprilAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.getSearches().put("onCaptoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onCaptoprilAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFLisinoprilOrCaptoprilCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND (onLisinoprilAtEndOfPeriod OR onCaptoprilAtEndOfPeriod)");
+h.replaceCohortDefinition(hFLisinoprilOrCaptoprilCompositionCohortAllSites);
 
-CohortIndicator onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFLisinoprilOrCaptoprilCompositionCohort , 
-		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFLisinoprilOrCaptoprilCompositionCohortAllSites , 
+		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator);
+onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites);
                         
                      
                              
@@ -872,23 +873,23 @@ h.replaceDefinition(onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator);
 //================================================   	                                                
 
 
-CompositionCohortDefinition hFAtenololAndCarvedilolCompositionCohort = new CompositionCohortDefinition();
-hFAtenololAndCarvedilolCompositionCohort.setName("hFAtenololAndCarvedilolCompositionCohort");
-hFAtenololAndCarvedilolCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFAtenololAndCarvedilolCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFAtenololAndCarvedilolCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFAtenololAndCarvedilolCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFAtenololAndCarvedilolCompositionCohort.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFAtenololAndCarvedilolCompositionCohort.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFAtenololAndCarvedilolCompositionCohort.setCompositionString("patientsInHFProgram AND (onAtenololAtEndOfPeriod AND onCarvedilolAtEndOfPeriod)");
-h.replaceCohortDefinition(hFAtenololAndCarvedilolCompositionCohort);
+CompositionCohortDefinition hFAtenololAndCarvedilolCompositionCohortAllSites = new CompositionCohortDefinition();
+hFAtenololAndCarvedilolCompositionCohortAllSites.setName("hFAtenololAndCarvedilolCompositionCohortAllSites");
+hFAtenololAndCarvedilolCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFAtenololAndCarvedilolCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFAtenololAndCarvedilolCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFAtenololAndCarvedilolCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFAtenololAndCarvedilolCompositionCohortAllSites.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFAtenololAndCarvedilolCompositionCohortAllSites.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFAtenololAndCarvedilolCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND (onAtenololAtEndOfPeriod AND onCarvedilolAtEndOfPeriod)");
+h.replaceCohortDefinition(hFAtenololAndCarvedilolCompositionCohortAllSites);
 
-CohortIndicator onAtenololAndCarvedilolEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onAtenololAndCarvedilolEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFAtenololAndCarvedilolCompositionCohort , 
-		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFAtenololAndCarvedilolCompositionCohortAllSites , 
+		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onAtenololAndCarvedilolEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onAtenololAndCarvedilolEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onAtenololAndCarvedilolEndOfPeriodCohortIndicator);
+onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites);
      
           
 
@@ -897,51 +898,51 @@ h.replaceDefinition(onAtenololAndCarvedilolEndOfPeriodCohortIndicator);
 //================================================   	                                                
 
 
-CompositionCohortDefinition hFLisinoprilAndCaptoprilCompositionCohort = new CompositionCohortDefinition();
-hFLisinoprilAndCaptoprilCompositionCohort.setName("hFLisinoprilAndCaptoprilCompositionCohort");
-hFLisinoprilAndCaptoprilCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFLisinoprilAndCaptoprilCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFLisinoprilAndCaptoprilCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFLisinoprilAndCaptoprilCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFLisinoprilAndCaptoprilCompositionCohort.getSearches().put("onLisinoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onLisinoprilAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFLisinoprilAndCaptoprilCompositionCohort.getSearches().put("onCaptoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onCaptoprilAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFLisinoprilAndCaptoprilCompositionCohort.setCompositionString("patientsInHFProgram AND (onLisinoprilAtEndOfPeriod AND onCaptoprilAtEndOfPeriod)");
-h.replaceCohortDefinition(hFLisinoprilAndCaptoprilCompositionCohort);
+CompositionCohortDefinition hFLisinoprilAndCaptoprilCompositionCohortAllSites = new CompositionCohortDefinition();
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.setName("hFLisinoprilAndCaptoprilCompositionCohortAllSites");
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.getSearches().put("onLisinoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onLisinoprilAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.getSearches().put("onCaptoprilAtEndOfPeriod", new Mapped<CohortDefinition>(onCaptoprilAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFLisinoprilAndCaptoprilCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND (onLisinoprilAtEndOfPeriod AND onCaptoprilAtEndOfPeriod)");
+h.replaceCohortDefinition(hFLisinoprilAndCaptoprilCompositionCohortAllSites);
 
-CohortIndicator onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFLisinoprilAndCaptoprilCompositionCohort , 
-		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFLisinoprilAndCaptoprilCompositionCohortAllSites , 
+		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator);
+onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites);
      
 //================================================                        
 //3.12. Patients on wafarin COHORT
 //================================================ 
 
 
-DrugsActiveCohortDefinition onWarfarinAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-onWarfarinAtEndOfPeriod.setName("onWarfarinAtEndOfPeriod");
-onWarfarinAtEndOfPeriod.setDrugs(onWarfarinRegimen);
-onWarfarinAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-h.replaceCohortDefinition(onWarfarinAtEndOfPeriod);
+DrugsActiveCohortDefinition onWarfarinAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+onWarfarinAtEndOfPeriodAllSites.setName("onWarfarinAtEndOfPeriodAllSites");
+onWarfarinAtEndOfPeriodAllSites.setDrugs(onWarfarinRegimen);
+onWarfarinAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+h.replaceCohortDefinition(onWarfarinAtEndOfPeriodAllSites);
 
-CompositionCohortDefinition hFonWarfarinAtEndOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFonWarfarinAtEndOfPeriodCompositionCohort.setName("hFonWarfarinAtEndOfPeriodCompositionCohort");
-hFonWarfarinAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFonWarfarinAtEndOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFonWarfarinAtEndOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFonWarfarinAtEndOfPeriodCompositionCohort.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFonWarfarinAtEndOfPeriodCompositionCohort.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFonWarfarinAtEndOfPeriodCompositionCohort.setCompositionString("patientsInHFProgram AND onWarfarinAtEndOfPeriod");
-h.replaceCohortDefinition(hFonWarfarinAtEndOfPeriodCompositionCohort);
+CompositionCohortDefinition hFonWarfarinAtEndOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.setName("hFonWarfarinAtEndOfPeriodCompositionCohortAllSites");
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFonWarfarinAtEndOfPeriodCompositionCohortAllSites.setCompositionString("patientsInHFProgram AND onWarfarinAtEndOfPeriod");
+h.replaceCohortDefinition(hFonWarfarinAtEndOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onWarfarinAtEndOfPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onWarfarinAtEndOfPeriodCohortIndicator", new Mapped<CohortDefinition>(hFonWarfarinAtEndOfPeriodCompositionCohort , 
-		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram, 
+CohortIndicator onWarfarinAtEndOfPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onWarfarinAtEndOfPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFonWarfarinAtEndOfPeriodCompositionCohortAllSites , 
+		  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites, 
          ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onWarfarinAtEndOfPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onWarfarinAtEndOfPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onWarfarinAtEndOfPeriodCohortIndicator);
+onWarfarinAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onWarfarinAtEndOfPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onWarfarinAtEndOfPeriodCohortIndicatorAllSites);
 
 
 // ===================================================================================                       
@@ -949,77 +950,77 @@ h.replaceDefinition(onWarfarinAtEndOfPeriodCohortIndicator);
 // =================================================================================== 
 
 
- NumericObsCohortDefinition heartRateDiseaseDuringPeriod=makeNumericObsCohortDefinition("heartRateDiseaseDuringPeriod", HeartFailureReportConstants.PULSE, 60.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
- h.replaceCohortDefinition(heartRateDiseaseDuringPeriod);
+ NumericObsCohortDefinition heartRateDiseaseDuringPeriodAllSites=makeNumericObsCohortDefinition("heartRateDiseaseDuringPeriodAllSites", HeartFailureReportConstants.PULSE, 60.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
+ h.replaceCohortDefinition(heartRateDiseaseDuringPeriodAllSites);
  
-CompositionCohortDefinition hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.setName("hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort");
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.getSearches().put("cardiomyopathyDiognosisAnsHFProgComposition", new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));  
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.getSearches().put("heartRateDiseaseDuringPeriod", new Mapped<CohortDefinition>(heartRateDiseaseDuringPeriod,null));
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort.setCompositionString("cardiomyopathyDiognosisAnsHFProgComposition AND (heartRateDiseaseDuringPeriod AND (NOT onCarvedilolAtEndOfPeriod))");
-h.replaceCohortDefinition(hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort);
+CompositionCohortDefinition hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.setName("hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites");
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("cardiomyopathyDiognosisAnsHFProgComposition", new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));  
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("heartRateDiseaseDuringPeriod", new Mapped<CohortDefinition>(heartRateDiseaseDuringPeriodAllSites,null));
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("onCarvedilolAtEndOfPeriod", new Mapped<CohortDefinition>(onCarvedilolAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites.setCompositionString("cardiomyopathyDiognosisAnsHFProgComposition AND (heartRateDiseaseDuringPeriod AND (NOT onCarvedilolAtEndOfPeriod))");
+h.replaceCohortDefinition(hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onCardiomyopathyHeartRatePeriodCohortIndicator = CohortIndicator.newFractionIndicator("onCardiomyopathyHeartRatePeriodCohortIndicator", new Mapped<CohortDefinition>(hFCardiomyopathyWithHeartRateOfPeriodCompositionCohort , 
-	   ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgComposition, 
+CohortIndicator onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFCardiomyopathyWithHeartRateOfPeriodCompositionCohortAllSites , 
+	   ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(cardiomyopathyDiognosisAnsHFProgCompositionAllSites, 
      ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onCardiomyopathyHeartRatePeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onCardiomyopathyHeartRatePeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onCardiomyopathyHeartRatePeriodCohortIndicator);
+onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites);
 
 
 //===================================================================================                       
 //   3.2. in the subgroup of mitral stenosis percent with heart rate >60 not Atenolol
 // ===================================================================================  
 
- CompositionCohortDefinition hFMitralStenosisWithHeartRateOfPeriodCompositionCohort = new CompositionCohortDefinition();
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.setName("hFMitralStenosisWithHeartRateOfPeriodCompositionCohort");
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.getSearches().put("mitralStenosisDiagnosisAnsHFProgComposition", new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));  
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.getSearches().put("heartRateDiseaseDuringPeriod", new Mapped<CohortDefinition>(heartRateDiseaseDuringPeriod,null));
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
- hFMitralStenosisWithHeartRateOfPeriodCompositionCohort.setCompositionString("mitralStenosisDiagnosisAnsHFProgComposition AND  (heartRateDiseaseDuringPeriod AND (NOT onAtenololAtEndOfPeriod))");
- h.replaceCohortDefinition(hFMitralStenosisWithHeartRateOfPeriodCompositionCohort);
+ CompositionCohortDefinition hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.setName("hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites");
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("mitralStenosisDiagnosisAnsHFProgComposition", new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));  
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("heartRateDiseaseDuringPeriod", new Mapped<CohortDefinition>(heartRateDiseaseDuringPeriodAllSites,null));
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.getSearches().put("onAtenololAtEndOfPeriod", new Mapped<CohortDefinition>(onAtenololAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+ hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites.setCompositionString("mitralStenosisDiagnosisAnsHFProgComposition AND  (heartRateDiseaseDuringPeriod AND (NOT onAtenololAtEndOfPeriod))");
+ h.replaceCohortDefinition(hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites);
  
-CohortIndicator onMitralStenosisHeartRatePeriodCohortIndicator = CohortIndicator.newFractionIndicator("onMitralStenosisHeartRatePeriodCohortIndicator", new Mapped<CohortDefinition>(hFMitralStenosisWithHeartRateOfPeriodCompositionCohort , 
-	   ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgComposition, 
+CohortIndicator onMitralStenosisHeartRatePeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onMitralStenosisHeartRatePeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFMitralStenosisWithHeartRateOfPeriodCompositionCohortAllSites , 
+	   ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(mitralStenosisDiagnosisAnsHFProgCompositionAllSites, 
         ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onMitralStenosisHeartRatePeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onMitralStenosisHeartRatePeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onMitralStenosisHeartRatePeriodCohortIndicator);
+onMitralStenosisHeartRatePeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onMitralStenosisHeartRatePeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onMitralStenosisHeartRatePeriodCohortIndicatorAllSites);
 
 // ===================================================================================                       
 //   3.3. in the subgroup of rheumatic heart disease percent not penicillin
 // ===================================================================================  
 
 
-DrugsActiveCohortDefinition onPenicillinAtEndOfPeriod = new DrugsActiveCohortDefinition();          
-onPenicillinAtEndOfPeriod.setName("onPenicillinAtEndOfPeriod");
-onPenicillinAtEndOfPeriod.setDrugs(onPenicillinRegimen);
-onPenicillinAtEndOfPeriod.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-h.replaceCohortDefinition(onPenicillinAtEndOfPeriod);
+DrugsActiveCohortDefinition onPenicillinAtEndOfPeriodAllSites = new DrugsActiveCohortDefinition();          
+onPenicillinAtEndOfPeriodAllSites.setName("onPenicillinAtEndOfPeriodAllSites");
+onPenicillinAtEndOfPeriodAllSites.setDrugs(onPenicillinRegimen);
+onPenicillinAtEndOfPeriodAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+h.replaceCohortDefinition(onPenicillinAtEndOfPeriodAllSites);
 
-CompositionCohortDefinition hFRheumaticHeartDiseaseOfPeriodCompositionCohort = new CompositionCohortDefinition();
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.setName("hFRheumaticHeartDiseaseOfPeriodCompositionCohort");
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.getSearches().put("rheumaticHeartDiseaseDiagnosisAndHFProgComposition", new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.getSearches().put("onPenicillinAtEndOfPeriod", new Mapped<CohortDefinition>(onPenicillinAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-hFRheumaticHeartDiseaseOfPeriodCompositionCohort.setCompositionString("rheumaticHeartDiseaseDiagnosisAndHFProgComposition AND (NOT onPenicillinAtEndOfPeriod)");
-h.replaceCohortDefinition(hFRheumaticHeartDiseaseOfPeriodCompositionCohort);
+CompositionCohortDefinition hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites = new CompositionCohortDefinition();
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.setName("hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites");
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.getSearches().put("rheumaticHeartDiseaseDiagnosisAndHFProgComposition", new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.getSearches().put("onPenicillinAtEndOfPeriod", new Mapped<CohortDefinition>(onPenicillinAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites.setCompositionString("rheumaticHeartDiseaseDiagnosisAndHFProgComposition AND (NOT onPenicillinAtEndOfPeriod)");
+h.replaceCohortDefinition(hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites);
 
-CohortIndicator onRheumaticNotOnPenicillinPeriodCohortIndicator = CohortIndicator.newFractionIndicator("onRheumaticNotOnPenicillinPeriodCohortIndicator", new Mapped<CohortDefinition>(hFRheumaticHeartDiseaseOfPeriodCompositionCohort , 
-           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgComposition, 
+CohortIndicator onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites", new Mapped<CohortDefinition>(hFRheumaticHeartDiseaseOfPeriodCompositionCohortAllSites , 
+           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(rheumaticHeartDiseaseDiagnosisAndHFProgCompositionAllSites, 
           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
-onRheumaticNotOnPenicillinPeriodCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-onRheumaticNotOnPenicillinPeriodCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(onRheumaticNotOnPenicillinPeriodCohortIndicator);
+onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites);
 
 
 // ====================================================================            
@@ -1051,90 +1052,90 @@ formList.add(form);
 }
 }
 }*/
-EncounterCohortDefinition hFencounterDuringPeriod =makeEncounterCohortDefinition(encounterTypes); 
-hFencounterDuringPeriod.setName("encounterFormDuringPeriod");
-hFencounterDuringPeriod.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hFencounterDuringPeriod.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-h.replaceCohortDefinition(hFencounterDuringPeriod);
+EncounterCohortDefinition hFencounterDuringPeriodAllSites =makeEncounterCohortDefinition(encounterTypes); 
+hFencounterDuringPeriodAllSites.setName("hFencounterDuringPeriodAllSites");
+hFencounterDuringPeriodAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hFencounterDuringPeriodAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+h.replaceCohortDefinition(hFencounterDuringPeriodAllSites);
 
-CompositionCohortDefinition patientNotSeenDuringPeriodComposition = new CompositionCohortDefinition();
-patientNotSeenDuringPeriodComposition.setName("patientNotSeenDuringPeriodComposition");
-patientNotSeenDuringPeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));                       
-patientNotSeenDuringPeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-patientNotSeenDuringPeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-patientNotSeenDuringPeriodComposition.getSearches().put("hFencounterDuringPeriod", new Mapped<CohortDefinition>(hFencounterDuringPeriod, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-patientNotSeenDuringPeriodComposition.setCompositionString("patientsInHFProgram AND (NOT hFencounterDuringPeriod)");
-h.replaceCohortDefinition(patientNotSeenDuringPeriodComposition);
+CompositionCohortDefinition patientNotSeenDuringPeriodCompositionAllSites = new CompositionCohortDefinition();
+patientNotSeenDuringPeriodCompositionAllSites.setName("patientNotSeenDuringPeriodCompositionAllSites");
+patientNotSeenDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));                       
+patientNotSeenDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+patientNotSeenDuringPeriodCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+patientNotSeenDuringPeriodCompositionAllSites.getSearches().put("hFencounterDuringPeriod", new Mapped<CohortDefinition>(hFencounterDuringPeriodAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+patientNotSeenDuringPeriodCompositionAllSites.setCompositionString("patientsInHFProgram AND (NOT hFencounterDuringPeriod)");
+h.replaceCohortDefinition(patientNotSeenDuringPeriodCompositionAllSites);
 
-CohortIndicator percentageOfpatientNotSeenInLastSixMonthPeriodIndicator = CohortIndicator.newFractionIndicator("percentageOfpatientNotSeenInLastSixMonthPeriodIndicator", new Mapped<CohortDefinition>(patientNotSeenDuringPeriodComposition,
-        ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram,
+CohortIndicator percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites = CohortIndicator.newFractionIndicator("percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites", new Mapped<CohortDefinition>(patientNotSeenDuringPeriodCompositionAllSites,
+        ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites,
         ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);      
- percentageOfpatientNotSeenInLastSixMonthPeriodIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
- percentageOfpatientNotSeenInLastSixMonthPeriodIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
- h.replaceDefinition(percentageOfpatientNotSeenInLastSixMonthPeriodIndicator);
+ percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+ percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+ h.replaceDefinition(percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites);
 
 
  // ====================================================================            
  //  4.2. Percent and number of patients not seen in the last 3 months
  // ====================================================================
 
- CohortIndicator percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator = CohortIndicator.newFractionIndicator("percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator", new Mapped<CohortDefinition>(patientNotSeenDuringPeriodComposition,
-	        ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram,
+ CohortIndicator percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites = CohortIndicator.newFractionIndicator("percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites", new Mapped<CohortDefinition>(patientNotSeenDuringPeriodCompositionAllSites,
+	        ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m},onOrBefore=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites,
 	        ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);      
- percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
- percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-	 h.replaceDefinition(percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator);
+ percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+ percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+	 h.replaceDefinition(percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites);
 
 
 //======================================================================	
 //	      4.3.    number of patients without an accompagnateur
 //======================================================================
 	
- SqlCohortDefinition allPatientsWhitAccompagnateur = new SqlCohortDefinition("SELECT DISTINCT person_b FROM relationship WHERE relationship='1' and date_created<= :endDate and voided=0");
- allPatientsWhitAccompagnateur.setName("allPatientsWhitAccompagnateur");
- allPatientsWhitAccompagnateur.addParameter(new Parameter("endDate","endDate",Date.class));  
- h.replaceCohortDefinition(allPatientsWhitAccompagnateur);
+ SqlCohortDefinition allPatientsWhitAccompagnateurAllSites = new SqlCohortDefinition("SELECT DISTINCT person_b FROM relationship WHERE relationship='1' and date_created<= :endDate and voided=0");
+ allPatientsWhitAccompagnateurAllSites.setName("allPatientsWhitAccompagnateurAllSites");
+ allPatientsWhitAccompagnateurAllSites.addParameter(new Parameter("endDate","endDate",Date.class));  
+ h.replaceCohortDefinition(allPatientsWhitAccompagnateurAllSites);
  
- CompositionCohortDefinition patientWithoutAccompagnateurPeriodComposition = new CompositionCohortDefinition();
- patientWithoutAccompagnateurPeriodComposition.setName("patientWithoutAccompagnateurPeriodComposition");
- patientWithoutAccompagnateurPeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
- patientWithoutAccompagnateurPeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
- patientWithoutAccompagnateurPeriodComposition.addParameter(new Parameter("endDate", "endDate", Date.class));
- patientWithoutAccompagnateurPeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
- patientWithoutAccompagnateurPeriodComposition.getSearches().put("allPatientsWhitAccompagnateur", new Mapped<CohortDefinition>(allPatientsWhitAccompagnateur, ParameterizableUtil.createParameterMappings("endDate=${endDate}")));
- patientWithoutAccompagnateurPeriodComposition.setCompositionString("(patientsInHFProgram AND (NOT allPatientsWhitAccompagnateur)");        
- h.replaceCohortDefinition(patientWithoutAccompagnateurPeriodComposition);
+ CompositionCohortDefinition patientWithoutAccompagnateurPeriodCompositionAllSites = new CompositionCohortDefinition();
+ patientWithoutAccompagnateurPeriodCompositionAllSites.setName("patientWithoutAccompagnateurPeriodCompositionAllSites");
+ patientWithoutAccompagnateurPeriodCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+ patientWithoutAccompagnateurPeriodCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+ patientWithoutAccompagnateurPeriodCompositionAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+ patientWithoutAccompagnateurPeriodCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+ patientWithoutAccompagnateurPeriodCompositionAllSites.getSearches().put("allPatientsWhitAccompagnateur", new Mapped<CohortDefinition>(allPatientsWhitAccompagnateurAllSites, ParameterizableUtil.createParameterMappings("endDate=${endDate}")));
+ patientWithoutAccompagnateurPeriodCompositionAllSites.setCompositionString("(patientsInHFProgram AND (NOT allPatientsWhitAccompagnateur)");        
+ h.replaceCohortDefinition(patientWithoutAccompagnateurPeriodCompositionAllSites);
 
- CohortIndicator percentPatientWithoutAccompagnateurIndicator = CohortIndicator.newFractionIndicator("percentPatientWithoutAccompagnateurIndicator", new Mapped<CohortDefinition>(patientWithoutAccompagnateurPeriodComposition,
-         ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},endDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgram,
+ CohortIndicator percentPatientWithoutAccompagnateurIndicatorAllSites = CohortIndicator.newFractionIndicator("percentPatientWithoutAccompagnateurIndicatorAllSites", new Mapped<CohortDefinition>(patientWithoutAccompagnateurPeriodCompositionAllSites,
+         ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate},endDate=${endDate}")), new Mapped<CohortDefinition>(patientsInHFProgramAllSites,
          ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")), null);       
- percentPatientWithoutAccompagnateurIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
- percentPatientWithoutAccompagnateurIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
- h.replaceDefinition(percentPatientWithoutAccompagnateurIndicator);
+ percentPatientWithoutAccompagnateurIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+ percentPatientWithoutAccompagnateurIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+ h.replaceDefinition(percentPatientWithoutAccompagnateurIndicatorAllSites);
 
 //==================================================
 //      5.1. PATIENTS WHO DIED DURING PERIOD 
 // ===================================================              
 
-CodedObsCohortDefinition diedDuringPeriod =makeCodedObsCohortDefinition("diedDuringPeriod",HeartFailureReportConstants.REASON_FOR_EXITING_CARE, HeartFailureReportConstants.PATIENT_DIED, SetComparator.IN, TimeModifier.LAST);                
-diedDuringPeriod.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-diedDuringPeriod.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-h.replaceCohortDefinition(diedDuringPeriod);
+CodedObsCohortDefinition diedDuringPeriodAllSites =makeCodedObsCohortDefinition("diedDuringPeriodAllSites",HeartFailureReportConstants.REASON_FOR_EXITING_CARE, HeartFailureReportConstants.PATIENT_DIED, SetComparator.IN, TimeModifier.LAST);                
+diedDuringPeriodAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+diedDuringPeriodAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+h.replaceCohortDefinition(diedDuringPeriodAllSites);
 
-CompositionCohortDefinition diedDuringPeriodComposition = new CompositionCohortDefinition();
-diedDuringPeriodComposition.setName("diedDuringPeriodComposition");
-diedDuringPeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-diedDuringPeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-diedDuringPeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-diedDuringPeriodComposition.getSearches().put("diedDuringPeriod", new Mapped<CohortDefinition>(diedDuringPeriod, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-diedDuringPeriodComposition.setCompositionString("(patientsInHFProgram AND diedDuringPeriod");
+CompositionCohortDefinition diedDuringPeriodCompositionAllSites = new CompositionCohortDefinition();
+diedDuringPeriodCompositionAllSites.setName("diedDuringPeriodCompositionAllSites");
+diedDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+diedDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+diedDuringPeriodCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+diedDuringPeriodCompositionAllSites.getSearches().put("diedDuringPeriod", new Mapped<CohortDefinition>(diedDuringPeriodAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+diedDuringPeriodCompositionAllSites.setCompositionString("(patientsInHFProgram AND diedDuringPeriod");
 
-CohortIndicator diedDuringPeriodIndicator = new CohortIndicator();
-diedDuringPeriodIndicator.setName("diedDuringPeriodIndicator");
-diedDuringPeriodIndicator.addParameter(new Parameter("startDate", "startDate",Date.class));
-diedDuringPeriodIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-diedDuringPeriodIndicator.setCohortDefinition(new Mapped<CohortDefinition>(diedDuringPeriodComposition, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-h.replaceDefinition(diedDuringPeriodIndicator);
+CohortIndicator diedDuringPeriodIndicatorAllSites = new CohortIndicator();
+diedDuringPeriodIndicatorAllSites.setName("diedDuringPeriodIndicatorAllSites");
+diedDuringPeriodIndicatorAllSites.addParameter(new Parameter("startDate", "startDate",Date.class));
+diedDuringPeriodIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+diedDuringPeriodIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(diedDuringPeriodCompositionAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
+h.replaceDefinition(diedDuringPeriodIndicatorAllSites);
     
 
 
@@ -1143,60 +1144,60 @@ h.replaceDefinition(diedDuringPeriodIndicator);
 // ===============================================================================  
 
 
-NumericObsCohortDefinition INRLTTwoCohortDefinition=makeNumericObsCohortDefinition("INRLTTwoCohortDefinition", HeartFailureReportConstants.INTERNATIONAL_NORMALIZED_RATIO,2.0, RangeComparator.LESS_THAN, TimeModifier.LAST);
-INRLTTwoCohortDefinition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-INRLTTwoCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-h.replaceCohortDefinition(INRLTTwoCohortDefinition);
+NumericObsCohortDefinition INRLTTwoCohortDefinitionAllSites=makeNumericObsCohortDefinition("INRLTTwoCohortDefinitionAllSites", HeartFailureReportConstants.INTERNATIONAL_NORMALIZED_RATIO,2.0, RangeComparator.LESS_THAN, TimeModifier.LAST);
+INRLTTwoCohortDefinitionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+INRLTTwoCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+h.replaceCohortDefinition(INRLTTwoCohortDefinitionAllSites);
 
-CompositionCohortDefinition INRALTTwondPostCardiacSugeryCompositionCohortDefinition = new CompositionCohortDefinition();
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.setName("INRALTTwondPostCardiacSugeryCompositionCohortDefinition");
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));          		
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.getSearches().put("postCardiacSurgeryCohortDefinition", new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinition, ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startedOnOrAfter},startedOnOrBefore=${startedOnOrBefore}")));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.getSearches().put("INRLTTwoCohortDefinition", new Mapped<CohortDefinition>(INRLTTwoCohortDefinition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-INRALTTwondPostCardiacSugeryCompositionCohortDefinition.setCompositionString("INRLTTwoCohortDefinition AND postCardiacSurgeryCohortDefinition AND onWarfarinAtEndOfPeriod");
-h.replaceCohortDefinition(INRALTTwondPostCardiacSugeryCompositionCohortDefinition);
+CompositionCohortDefinition INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites = new CompositionCohortDefinition();
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.setName("INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites");
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));          		
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("postCardiacSurgeryCohortDefinition", new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinitionAllSites, ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startedOnOrAfter},startedOnOrBefore=${startedOnOrBefore}")));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("INRLTTwoCohortDefinition", new Mapped<CohortDefinition>(INRLTTwoCohortDefinitionAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites.setCompositionString("INRLTTwoCohortDefinition AND postCardiacSurgeryCohortDefinition AND onWarfarinAtEndOfPeriod");
+h.replaceCohortDefinition(INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites);
 
-CohortIndicator percentINRALTTwoPostCardiacSugeryCohortIndicator = CohortIndicator.newFractionIndicator("percentINRALTTwoPostCardiacSugeryCohortIndicator", new Mapped<CohortDefinition>(INRALTTwondPostCardiacSugeryCompositionCohortDefinition,
-      ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate},onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinition,
+CohortIndicator percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites", new Mapped<CohortDefinition>(INRALTTwondPostCardiacSugeryCompositionCohortDefinitionAllSites,
+      ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate},onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinitionAllSites,
       ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate}")), null);       
-percentINRALTTwoPostCardiacSugeryCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-percentINRALTTwoPostCardiacSugeryCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(percentINRALTTwoPostCardiacSugeryCohortIndicator);
+percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites);
 
 // ===============================================================================                        
 //   5.3. Percent of patients in the subgroup (post-cardiac surgery) and on warfarin with INR > 4
 // ===============================================================================  
 
-NumericObsCohortDefinition INRGTFourCohortDefinition=makeNumericObsCohortDefinition("INRGTFourCohortDefinition", HeartFailureReportConstants.INTERNATIONAL_NORMALIZED_RATIO,4.0, RangeComparator.GREATER_EQUAL, TimeModifier.LAST);
-INRGTFourCohortDefinition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-INRGTFourCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-h.replaceCohortDefinition(INRGTFourCohortDefinition);
+NumericObsCohortDefinition INRGTFourCohortDefinitionAllSites=makeNumericObsCohortDefinition("INRGTFourCohortDefinitionAllSites", HeartFailureReportConstants.INTERNATIONAL_NORMALIZED_RATIO,4.0, RangeComparator.GREATER_EQUAL, TimeModifier.LAST);
+INRGTFourCohortDefinitionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+INRGTFourCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+h.replaceCohortDefinition(INRGTFourCohortDefinitionAllSites);
 
-CompositionCohortDefinition INRGTFourAndPostCardiacSugeryCompositionCohortDefinition = new CompositionCohortDefinition();
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.setName("INRGTFourAndPostCardiacSugeryCompositionCohortDefinition");
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));          		
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriod,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.getSearches().put("postCardiacSurgeryCohortDefinition", new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinition, ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startedOnOrAfter},startedOnOrBefore=${startedOnOrBefore}")));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.getSearches().put("INRGTFourCohortDefinition", new Mapped<CohortDefinition>(INRGTFourCohortDefinition, 
+CompositionCohortDefinition INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites = new CompositionCohortDefinition();
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.setName("INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites");
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrAfter", "startedOnOrAfter", Date.class));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("startedOnOrBefore", "startedOnOrBefore", Date.class));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));          		
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("onWarfarinAtEndOfPeriod", new Mapped<CohortDefinition>(onWarfarinAtEndOfPeriodAllSites,ParameterizableUtil.createParameterMappings("asOfDate=${asOfDate}")));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("postCardiacSurgeryCohortDefinition", new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinitionAllSites, ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startedOnOrAfter},startedOnOrBefore=${startedOnOrBefore}")));
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.getSearches().put("INRGTFourCohortDefinition", new Mapped<CohortDefinition>(INRGTFourCohortDefinitionAllSites, 
 		ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-INRGTFourAndPostCardiacSugeryCompositionCohortDefinition.setCompositionString("INRGTFourCohortDefinition AND postCardiacSurgeryCohortDefinition AND onWarfarinAtEndOfPeriod");
-h.replaceCohortDefinition(INRGTFourAndPostCardiacSugeryCompositionCohortDefinition);
+INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites.setCompositionString("INRGTFourCohortDefinition AND postCardiacSurgeryCohortDefinition AND onWarfarinAtEndOfPeriod");
+h.replaceCohortDefinition(INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites);
 
-CohortIndicator percentINRGTTFourPostCardiacSugeryCohortIndicator = CohortIndicator.newFractionIndicator("percentINRGTTFourPostCardiacSugeryCohortIndicator", new Mapped<CohortDefinition>(INRGTFourAndPostCardiacSugeryCompositionCohortDefinition,
-      ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate},onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinition,
+CohortIndicator percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites = CohortIndicator.newFractionIndicator("percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites", new Mapped<CohortDefinition>(INRGTFourAndPostCardiacSugeryCompositionCohortDefinitionAllSites,
+      ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate},onOrAfter=${startDate},onOrBefore=${endDate},asOfDate=${endDate}")), new Mapped<CohortDefinition>(postCardiacSurgeryCohortDefinitionAllSites,
       ParameterizableUtil.createParameterMappings("startedOnOrAfter=${startDate},startedOnOrBefore=${endDate}")), null);       
-percentINRGTTFourPostCardiacSugeryCohortIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
-percentINRGTTFourPostCardiacSugeryCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-h.replaceDefinition(percentINRGTTFourPostCardiacSugeryCohortIndicator);
+percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate", Date.class));
+percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+h.replaceDefinition(percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites);
 
 
 
@@ -1204,54 +1205,54 @@ h.replaceDefinition(percentINRGTTFourPostCardiacSugeryCohortIndicator);
 //5.4. PATIENTS WHO HAD A HOSPITALIZATION IN THE PAST MONTH
 //===============================================================================                 
 
- CodedObsCohortDefinition hospitalizedDuringPeriod =makeCodedObsCohortDefinition("hospitalizedDuringPeriod",HeartFailureReportConstants.DISPOSITION, HeartFailureReportConstants.ADMIT_TO_HOSPITAL, SetComparator.IN, TimeModifier.LAST);                
- hospitalizedDuringPeriod.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
- hospitalizedDuringPeriod.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
- h.replaceCohortDefinition(hospitalizedDuringPeriod);
+ CodedObsCohortDefinition hospitalizedDuringPeriodAllSites =makeCodedObsCohortDefinition("hospitalizedDuringPeriodAllSites",HeartFailureReportConstants.DISPOSITION, HeartFailureReportConstants.ADMIT_TO_HOSPITAL, SetComparator.IN, TimeModifier.LAST);                
+ hospitalizedDuringPeriodAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+ hospitalizedDuringPeriodAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+ h.replaceCohortDefinition(hospitalizedDuringPeriodAllSites);
 
 
-CompositionCohortDefinition hospitalizedDuringPeriodComposition = new CompositionCohortDefinition();
-hospitalizedDuringPeriodComposition.setName("hospitalizedDuringPeriodComposition");
-hospitalizedDuringPeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-hospitalizedDuringPeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-hospitalizedDuringPeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hospitalizedDuringPeriodComposition.getSearches().put("hospitalizedDuringPeriod", new Mapped<CohortDefinition>(hospitalizedDuringPeriod, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-hospitalizedDuringPeriodComposition.setCompositionString("(patientsInHFProgram AND hospitalizedDuringPeriod");
-h.replaceCohortDefinition(hospitalizedDuringPeriodComposition);
+CompositionCohortDefinition hospitalizedDuringPeriodCompositionAllSites = new CompositionCohortDefinition();
+hospitalizedDuringPeriodCompositionAllSites.setName("hospitalizedDuringPeriodCompositionAllSites");
+hospitalizedDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+hospitalizedDuringPeriodCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+hospitalizedDuringPeriodCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hospitalizedDuringPeriodCompositionAllSites.getSearches().put("hospitalizedDuringPeriod", new Mapped<CohortDefinition>(hospitalizedDuringPeriodAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+hospitalizedDuringPeriodCompositionAllSites.setCompositionString("(patientsInHFProgram AND hospitalizedDuringPeriod");
+h.replaceCohortDefinition(hospitalizedDuringPeriodCompositionAllSites);
 
- CohortIndicator hospitalizedDuringPeriodIndicator = new CohortIndicator();
- hospitalizedDuringPeriodIndicator.setName("hospitalizedDuringPeriodIndicator");
- hospitalizedDuringPeriodIndicator.addParameter(new Parameter("startDate", "startDate",Date.class));
- hospitalizedDuringPeriodIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
- hospitalizedDuringPeriodIndicator.setCohortDefinition(new Mapped<CohortDefinition>(hospitalizedDuringPeriodComposition, 
+ CohortIndicator hospitalizedDuringPeriodIndicatorAllSites = new CohortIndicator();
+ hospitalizedDuringPeriodIndicatorAllSites.setName("hospitalizedDuringPeriodIndicatorAllSites");
+ hospitalizedDuringPeriodIndicatorAllSites.addParameter(new Parameter("startDate", "startDate",Date.class));
+ hospitalizedDuringPeriodIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+ hospitalizedDuringPeriodIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(hospitalizedDuringPeriodCompositionAllSites, 
           ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-h.replaceDefinition(hospitalizedDuringPeriodIndicator);
+h.replaceDefinition(hospitalizedDuringPeriodIndicatorAllSites);
 
 //===============================================================================                   
 //
 //   6.1.  number of patients without a height ever
 //
 // ===============================================================================  
-        NumericObsCohortDefinition heightCohortDefinition=makeNumericObsCohortDefinition("heightCohortDefinition", HeartFailureReportConstants.HEIGHT_CM,0.0, RangeComparator.GREATER_EQUAL, TimeModifier.ANY);
-        heightCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-        h.replaceCohortDefinition(heightCohortDefinition);
+        NumericObsCohortDefinition heightCohortDefinitionAllSites=makeNumericObsCohortDefinition("heightCohortDefinitionAllSites", HeartFailureReportConstants.HEIGHT_CM,0.0, RangeComparator.GREATER_EQUAL, TimeModifier.ANY);
+        heightCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+        h.replaceCohortDefinition(heightCohortDefinitionAllSites);
         
-        CompositionCohortDefinition heightEverCompositionCohortDefinition = new CompositionCohortDefinition();
-        heightEverCompositionCohortDefinition.setName("heightEverCompositionCohortDefinition");
-        heightEverCompositionCohortDefinition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-        heightEverCompositionCohortDefinition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-        heightEverCompositionCohortDefinition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-        heightEverCompositionCohortDefinition.getSearches().put("heightCohortDefinition", new Mapped<CohortDefinition>(heightCohortDefinition, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
-        heightEverCompositionCohortDefinition.setCompositionString("(patientsInHFProgram AND (NOT heightCohortDefinition)");
-        h.replaceCohortDefinition(heightEverCompositionCohortDefinition);     
+        CompositionCohortDefinition heightEverCompositionCohortDefinitionAllSites = new CompositionCohortDefinition();
+        heightEverCompositionCohortDefinitionAllSites.setName("heightEverCompositionCohortDefinitionAllSites");
+        heightEverCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+        heightEverCompositionCohortDefinitionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+        heightEverCompositionCohortDefinitionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+        heightEverCompositionCohortDefinitionAllSites.getSearches().put("heightCohortDefinition", new Mapped<CohortDefinition>(heightCohortDefinitionAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+        heightEverCompositionCohortDefinitionAllSites.setCompositionString("(patientsInHFProgram AND (NOT heightCohortDefinition)");
+        h.replaceCohortDefinition(heightEverCompositionCohortDefinitionAllSites);     
         
-        CohortIndicator heightEverCohortIndicator = new CohortIndicator();
-        heightEverCohortIndicator.setName("heightEverCohortIndicator");
-        heightEverCohortIndicator.addParameter(new Parameter("startDate", "startDate",Date.class));
-        heightEverCohortIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
-        heightEverCohortIndicator.setCohortDefinition(new Mapped<CohortDefinition>(heightEverCompositionCohortDefinition, 
+        CohortIndicator heightEverCohortIndicatorAllSites = new CohortIndicator();
+        heightEverCohortIndicatorAllSites.setName("heightEverCohortIndicatorAllSites");
+        heightEverCohortIndicatorAllSites.addParameter(new Parameter("startDate", "startDate",Date.class));
+        heightEverCohortIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+        heightEverCohortIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(heightEverCompositionCohortDefinitionAllSites, 
                  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}")));
-        h.replaceDefinition(heightEverCohortIndicator);
+        h.replaceDefinition(heightEverCohortIndicatorAllSites);
                 
 // ===============================================================================                 
 //  37. NUMBER OF  PATIENTS WITHOUT A DONNE DE BASE 
@@ -1261,71 +1262,71 @@ h.replaceDefinition(hospitalizedDuringPeriodIndicator);
   String donnDeBaseFormid=Context.getAdministrationService().getGlobalProperty("cardiologyreporting.hFDonneDeBaseFormId");
   donnDeBase.add(Context.getFormService().getForm(Integer.valueOf(donnDeBaseFormid)));
 	  
-  EncounterCohortDefinition encounterFormDuringDDBPeriod =makeEncounterCohortDefinition("encounterFormDuringDDBPeriod",donnDeBase);       
-  encounterFormDuringDDBPeriod.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-  h.replaceCohortDefinition(encounterFormDuringDDBPeriod);
+  EncounterCohortDefinition encounterFormDuringDDBPeriodAllSites =makeEncounterCohortDefinition("encounterFormDuringDDBPeriodAllSites",donnDeBase);       
+  encounterFormDuringDDBPeriodAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+  h.replaceCohortDefinition(encounterFormDuringDDBPeriodAllSites);
    
- CompositionCohortDefinition patientWithoutDonneDebasePeriodComposition = new CompositionCohortDefinition();
- patientWithoutDonneDebasePeriodComposition.setName("patientWithoutDonneDebasePeriodComposition");
- patientWithoutDonneDebasePeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));                        
- patientWithoutDonneDebasePeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
- patientWithoutDonneDebasePeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
- patientWithoutDonneDebasePeriodComposition.getSearches().put("encounterFormDuringDDBPeriod", new Mapped<CohortDefinition>(encounterFormDuringDDBPeriod, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
- patientWithoutDonneDebasePeriodComposition.setCompositionString("(patientsInHFProgram AND (NOT encounterFormDuringDDBPeriod)");  
- h.replaceCohortDefinition(patientWithoutDonneDebasePeriodComposition);   	
+ CompositionCohortDefinition patientWithoutDonneDebasePeriodCompositionAllSites = new CompositionCohortDefinition();
+ patientWithoutDonneDebasePeriodCompositionAllSites.setName("patientWithoutDonneDebasePeriodCompositionAllSites");
+ patientWithoutDonneDebasePeriodCompositionAllSites.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));                        
+ patientWithoutDonneDebasePeriodCompositionAllSites.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+ patientWithoutDonneDebasePeriodCompositionAllSites.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgramAllSites,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+ patientWithoutDonneDebasePeriodCompositionAllSites.getSearches().put("encounterFormDuringDDBPeriod", new Mapped<CohortDefinition>(encounterFormDuringDDBPeriodAllSites, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore}")));
+ patientWithoutDonneDebasePeriodCompositionAllSites.setCompositionString("(patientsInHFProgram AND (NOT encounterFormDuringDDBPeriod)");  
+ h.replaceCohortDefinition(patientWithoutDonneDebasePeriodCompositionAllSites);   	
     	 
- CohortIndicator patientWithoutDonneDebasePeriodIndicator = new CohortIndicator();
- patientWithoutDonneDebasePeriodIndicator.setName("patientWithoutDonneDebasePeriodIndicator");
- patientWithoutDonneDebasePeriodIndicator.addParameter(new Parameter("startDate", "startDate",Date.class));
- patientWithoutDonneDebasePeriodIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
- patientWithoutDonneDebasePeriodIndicator.setCohortDefinition(new Mapped<CohortDefinition>(patientWithoutDonneDebasePeriodComposition, 
+ CohortIndicator patientWithoutDonneDebasePeriodIndicatorAllSites = new CohortIndicator();
+ patientWithoutDonneDebasePeriodIndicatorAllSites.setName("patientWithoutDonneDebasePeriodIndicatorAllSites");
+ patientWithoutDonneDebasePeriodIndicatorAllSites.addParameter(new Parameter("startDate", "startDate",Date.class));
+ patientWithoutDonneDebasePeriodIndicatorAllSites.addParameter(new Parameter("endDate", "endDate", Date.class));
+ patientWithoutDonneDebasePeriodIndicatorAllSites.setCohortDefinition(new Mapped<CohortDefinition>(patientWithoutDonneDebasePeriodCompositionAllSites, 
  ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}"))); 
- h.replaceDefinition(patientWithoutDonneDebasePeriodIndicator);
+ h.replaceDefinition(patientWithoutDonneDebasePeriodIndicatorAllSites);
 
 //Add global filters to the report
         
-		rd.addIndicator("1.1.m", "% of Male", percentMaleInFHProgramIndicator);
-		rd.addIndicator("1.1.f", "% of Female", percentFemaleInFHProgramIndicator);
-		rd.addIndicator("1.2", "Median Age", medianAge);
-		rd.addIndicator("1.3", "Number of new patients enrolled in reporting period", patientsEnrolledInHFIndicator);
-		rd.addIndicator("1.4", "Total number of Patients", patientsInHFIndicator);
+		rd.addIndicator("1.1.m", "% of Male", percentMaleInFHProgramIndicatorAllSites);
+		rd.addIndicator("1.1.f", "% of Female", percentFemaleInFHProgramIndicatorAllSites);
+		rd.addIndicator("1.2", "Median Age", medianAgeAllSites);
+		rd.addIndicator("1.3", "Number of new patients enrolled in reporting period", patientsEnrolledInHFIndicatorAllSites);
+		rd.addIndicator("1.4", "Total number of Patients", patientsInHFIndicatorAllSites);
 		
-		rd.addIndicator("2.1", "Number and percent of patients without a cardiology consultation", patientsInHFProgramWithouCardFormIndicator);
-		rd.addIndicator("2.2", "Number and percent of patients without a preliminary echocardiographic diagnosis", hfEchocardiographyPercentageIndicator);
-		rd.addIndicator("2.3", "Percent without a creatinine in the last 6 months", hfPatientWithoutCreatininePercentIndicator);
-		rd.addIndicator("2.4", "Number of patients with Cardiomyopathy", cardiomyopathyDiognosisAnsHFProgIndicator);
-		rd.addIndicator("2.5", "Number of patients with pure mitral stenosis", mitralStenosisDiagnosisAnsHFProgIndicator);
-		rd.addIndicator("2.6", "Number of patients with other rheumatic heart disease", rheumaticHeartDiseaseDiagnosisAndHFProgIndicator);
-		rd.addIndicator("2.7", "Number of patients with hypertensive heart disease", hypertensiveHeartDiseaseDiagnosisAndHFProgIndicator);
-		rd.addIndicator("2.8", "Number of patients with pericardial disease", pericardialDiseaseDiagnosisAndHFProgIndicator);
-		rd.addIndicator("2.9", "Number of patients with congenital heart disease", congenitalDiseaseDiagnosisAndHFProgIndicator);
-		rd.addIndicator("2.10", "Percent of patients with creatinine > 200", hfpatientsWithCreatininePercentIndicator);
-		rd.addIndicator("2.11", "Number of patients in post-cardiac surgery", postCardiacSurgeryCohortIndicator);	
+		rd.addIndicator("2.1", "Number and percent of patients without a cardiology consultation", patientsInHFProgramWithouCardFormIndicatorAllSites);
+		rd.addIndicator("2.2", "Number and percent of patients without a preliminary echocardiographic diagnosis", hfEchocardiographyPercentageIndicatorAllSites);
+		rd.addIndicator("2.3", "Percent without a creatinine in the last 6 months", hfPatientWithoutCreatininePercentIndicatorAllSites);
+		rd.addIndicator("2.4", "Number of patients with Cardiomyopathy", cardiomyopathyDiognosisAnsHFProgIndicatorAllSites);
+		rd.addIndicator("2.5", "Number of patients with pure mitral stenosis", mitralStenosisDiagnosisAnsHFProgIndicatorAllSites);
+		rd.addIndicator("2.6", "Number of patients with other rheumatic heart disease", rheumaticHeartDiseaseDiagnosisAndHFProgIndicatorAllSites);
+		rd.addIndicator("2.7", "Number of patients with hypertensive heart disease", hypertensiveHeartDiseaseDiagnosisAndHFProgIndicatorAllSites);
+		rd.addIndicator("2.8", "Number of patients with pericardial disease", pericardialDiseaseDiagnosisAndHFProgIndicatorAllSites);
+		rd.addIndicator("2.9", "Number of patients with congenital heart disease", congenitalDiseaseDiagnosisAndHFProgIndicatorAllSites);
+		rd.addIndicator("2.10", "Percent of patients with creatinine > 200", hfpatientsWithCreatininePercentIndicatorAllSites);
+		rd.addIndicator("2.11", "Number of patients in post-cardiac surgery", postCardiacSurgeryCohortIndicatorAllSites);	
 	
-		rd.addIndicator("3.1", "In the subgroup (cardiomyopathy): percent of Patients with heart rate > 60 at last visit not on carvedilol", onCardiomyopathyHeartRatePeriodCohortIndicator);
-		rd.addIndicator("3.2", "in the subgroup (mitral stenosis): percent of Patients with heart rate > 60 at last visit not on atenolol", onMitralStenosisHeartRatePeriodCohortIndicator);
-		rd.addIndicator("3.3", "in the subgroup (rheumatic heart disease): percent not on penicillin",onRheumaticNotOnPenicillinPeriodCohortIndicator);		
-		rd.addIndicator("3.4", "In the subgroup (female < age 50), percent of patients not on family planning", patientsInHFWithoutFamilyPlanningIndicator);
-		rd.addIndicator("3.5", "Percent of Patients on lasix", onLasixAtEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.6", "Percent of Patients on atenolol", onAtenololAtEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.7", "Percent of Patients on carvedilol", onCarvedilolAtEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.8", "Percent of Patients on aldactone", onAldactoneAtEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.9", "Percent of Patients on lisinopril or captopril", onLisinoprilOrCaptoprilEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.10", "Percent of Patients on atenolol and carvedilol", onAtenololAndCarvedilolEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.11", "Percent of Patients on lisinopril and captopril", onLisinoprilAndCaptoprilEndOfPeriodCohortIndicator);
-		rd.addIndicator("3.12", "Percent and number of Patients on warfarin", onWarfarinAtEndOfPeriodCohortIndicator);
+		rd.addIndicator("3.1", "In the subgroup (cardiomyopathy): percent of Patients with heart rate > 60 at last visit not on carvedilol", onCardiomyopathyHeartRatePeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.2", "in the subgroup (mitral stenosis): percent of Patients with heart rate > 60 at last visit not on atenolol", onMitralStenosisHeartRatePeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.3", "in the subgroup (rheumatic heart disease): percent not on penicillin",onRheumaticNotOnPenicillinPeriodCohortIndicatorAllSites);		
+		rd.addIndicator("3.4", "In the subgroup (female < age 50), percent of patients not on family planning", patientsInHFWithoutFamilyPlanningIndicatorAllSites);
+		rd.addIndicator("3.5", "Percent of Patients on lasix", onLasixAtEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.6", "Percent of Patients on atenolol", onAtenololAtEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.7", "Percent of Patients on carvedilol", onCarvedilolAtEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.8", "Percent of Patients on aldactone", onAldactoneAtEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.9", "Percent of Patients on lisinopril or captopril", onLisinoprilOrCaptoprilEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.10", "Percent of Patients on atenolol and carvedilol", onAtenololAndCarvedilolEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.11", "Percent of Patients on lisinopril and captopril", onLisinoprilAndCaptoprilEndOfPeriodCohortIndicatorAllSites);
+		rd.addIndicator("3.12", "Percent and number of Patients on warfarin", onWarfarinAtEndOfPeriodCohortIndicatorAllSites);
 		
-		rd.addIndicator("4.1","Percent and number of patients not seen in the last 6 months",percentageOfpatientNotSeenInLastSixMonthPeriodIndicator);
-		rd.addIndicator("4.2","Percent and number of patients not seen in the last 3 months",percentageOfpatientNotSeenInLastThreeMonthPeriodIndicator);
-		rd.addIndicator("4.3","Number of patients without an accompagnateur", percentPatientWithoutAccompagnateurIndicator);
+		rd.addIndicator("4.1","Percent and number of patients not seen in the last 6 months",percentageOfpatientNotSeenInLastSixMonthPeriodIndicatorAllSites);
+		rd.addIndicator("4.2","Percent and number of patients not seen in the last 3 months",percentageOfpatientNotSeenInLastThreeMonthPeriodIndicatorAllSites);
+		rd.addIndicator("4.3","Number of patients without an accompagnateur", percentPatientWithoutAccompagnateurIndicatorAllSites);
 		
-		rd.addIndicator("5.1", "Number of people who have ever been in the heart failure program who died in report window", diedDuringPeriodIndicator);
-		rd.addIndicator("5.2", "Percent of patients in the subgroup (post-cardiac surgery) and on warfarin with INR < 2", percentINRALTTwoPostCardiacSugeryCohortIndicator);
-		rd.addIndicator("5.3", "Percent of patients in the subgroup (post-cardiac surgery) and on warfarin with INR > 4", percentINRGTTFourPostCardiacSugeryCohortIndicator);
-		rd.addIndicator("5.4", "Number of hospitalizations in reporting window", hospitalizedDuringPeriodIndicator);
+		rd.addIndicator("5.1", "Number of people who have ever been in the heart failure program who died in report window", diedDuringPeriodIndicatorAllSites);
+		rd.addIndicator("5.2", "Percent of patients in the subgroup (post-cardiac surgery) and on warfarin with INR < 2", percentINRALTTwoPostCardiacSugeryCohortIndicatorAllSites);
+		rd.addIndicator("5.3", "Percent of patients in the subgroup (post-cardiac surgery) and on warfarin with INR > 4", percentINRGTTFourPostCardiacSugeryCohortIndicatorAllSites);
+		rd.addIndicator("5.4", "Number of hospitalizations in reporting window", hospitalizedDuringPeriodIndicatorAllSites);
 		
-		rd.addIndicator("6.1", "number of patients without a height ever", heightEverCohortIndicator);
-		rd.addIndicator("6.2", "number of patients without a donne de base (intake form)", patientWithoutDonneDebasePeriodIndicator);
+		rd.addIndicator("6.1", "number of patients without a height ever", heightEverCohortIndicatorAllSites);
+		rd.addIndicator("6.2", "number of patients without a donne de base (intake form)", patientWithoutDonneDebasePeriodIndicatorAllSites);
 
 		//rd.setBaseCohortDefinition(h.cohortDefinition("location: Heart Failure Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
