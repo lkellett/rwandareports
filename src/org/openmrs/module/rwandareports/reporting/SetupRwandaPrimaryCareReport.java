@@ -35,6 +35,7 @@ import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefin
 import org.openmrs.module.rwandareports.encounter.definition.SqlEncounterGroupDefinition;
 import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
 import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
+import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
 public class SetupRwandaPrimaryCareReport {
 	protected final static Log log = LogFactory
@@ -712,14 +713,14 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("patientsWithTemperatureInVitals");
 		patientsUnder5WithoutTemperatureInVitals
 				.setQuery("select distinct encounterQuery.encounter_id,  encounterQuery.patient_id from (select e.encounter_id, e.patient_id from encounter e, person p, patient pa where e.encounter_id not in (select e.encounter_id from encounter e, obs o where e.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.encounter_id = o.encounter_id and o.voided = 0 and o.concept_id = "
-						+ PrimaryCareReportConstants.TEMPERATURE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE)
 						+ " and e.encounter_type = "
 						+ vitalsEncTypeId
 						+ ") and e.voided = 0 and encounter_type = "
 						+ vitalsEncTypeId
-						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5	and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate UNION select e.encounter_id, e.patient_id from encounter e left join (select encounter_id, encounter_datetime from encounter e where encounter_type = "
+						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5	and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate UNION select e.encounter_id, e.patient_id from encounter e left join (select encounter_id, patient_id, encounter_datetime from encounter e where encounter_type = "
 						+ vitalsEncTypeId
-						+ " and voided = 0 and encounter_datetime > :startDate and encounter_datetime <= :endDate) eTmp on (date(e.encounter_datetime) = date(eTmp.encounter_datetime)), person p, patient pa where eTmp.encounter_id is null and e.encounter_type = "
+						+ " and voided = 0 and encounter_datetime > :startDate and encounter_datetime <= :endDate) eTmp on eTmp.patient_id = e.patient_id, person p, patient pa where eTmp.encounter_id is null and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and e.patient_id = p.person_id and p.voided = 0 and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate ) encounterQuery");
 		patientsUnder5WithoutTemperatureInVitals.addParameter(new Parameter(
@@ -843,18 +844,16 @@ public class SetupRwandaPrimaryCareReport {
 		h.replaceDefinition(patientsWithoutTemperatureInVitalsIndicator);
 */
 		
-		 EncounterIndicator
-		 patientsWithoutTemperatureInVitalsIndicator=EncounterIndicator
-		 .newFractionIndicator
-		 ("patientsWithoutTemperatureInVitalsIndicator",new
-		 Mapped<SqlEncounterGroupDefinition
-		 >(patientsUnder5WithoutTemperatureInVitals,
-		 ParameterizableUtil.createParameterMappings
-		 ("startDate=${startDate},endDate=${endDate}")), new
-		 Mapped<SqlEncounterGroupDefinition>(patientsUnder5InRegistration,
-		 ParameterizableUtil
-		 .createParameterMappings("startDate=${startDate},endDate=${endDate}"
-		 )), null);
+		 EncounterIndicator patientsWithoutTemperatureInVitalsIndicator = EncounterIndicator.newFractionIndicator
+			 ("patientsWithoutTemperatureInVitalsIndicator",new
+			 Mapped<SqlEncounterGroupDefinition
+			 >(patientsUnder5WithoutTemperatureInVitals,
+			 ParameterizableUtil.createParameterMappings
+			 ("startDate=${startDate},endDate=${endDate}")), new
+			 Mapped<SqlEncounterGroupDefinition>(patientsUnder5InRegistration,
+			 ParameterizableUtil
+			 .createParameterMappings("startDate=${startDate},endDate=${endDate}"
+			 )), null);
 		 patientsWithoutTemperatureInVitalsIndicator.addParameter(new
 		 Parameter("startDate", "startDate", Date.class));
 		 patientsWithoutTemperatureInVitalsIndicator.addParameter(new
@@ -3459,7 +3458,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestPrimCare.setName("femalePatientsrequestPrimCare");
 		femalePatientsrequestPrimCare
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3490,7 +3489,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestPrimCare.setName("malePatientsrequestPrimCare");
 		malePatientsrequestPrimCare
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3522,9 +3521,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestVCTProgram");
 		femalePatientRequestVCTProgram
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.VCT_PROGRAM_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.VCT_PROGRAM)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3554,9 +3553,9 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientRequestVCTProgram.setName("malePatientRequestVCTProgram");
 		malePatientRequestVCTProgram
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.VCT_PROGRAM_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.VCT_PROGRAM)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3588,9 +3587,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("patientRequestAntenatalClinic");
 		femalePatientRequestAntenatalClinic
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.ANTENATAL_CLINIC_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.ANTENATAL_CLINIC)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3621,9 +3620,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestAntenatalClinic");
 		malePatientRequestAntenatalClinic
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.ANTENATAL_CLINIC_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.ANTENATAL_CLINIC)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3654,9 +3653,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalepatientRequestFamilyPlaningServices");
 		femalepatientRequestFamilyPlaningServices
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.FAMILY_PLANNING_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.FAMILY_PLANNING_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3687,9 +3686,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malepatientRequestFamilyPlaningServices");
 		malepatientRequestFamilyPlaningServices
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid( PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.FAMILY_PLANNING_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.FAMILY_PLANNING_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3721,9 +3720,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestMutuelleService");
 		femalePatientRequestMutuelleService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.MUTUELLE_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.MUTUELLE_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3755,9 +3754,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestMutuelleService");
 		malePatientRequestMutuelleService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.MUTUELLE_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.MUTUELLE_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3789,9 +3788,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestAccountingOfficeService");
 		femalePatientRequestAccountingOfficeService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.ACCOUNTING_OFFICE_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.ACCOUNTING_OFFICE_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3823,9 +3822,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestAccountingOfficeService");
 		malePatientRequestAccountingOfficeService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.ACCOUNTING_OFFICE_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.ACCOUNTING_OFFICE_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3858,9 +3857,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestAdultIllnessService");
 		femalePatientRequestAdultIllnessService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_ADULT_ILLNESS_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_ADULT_ILLNESS_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3892,9 +3891,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestAdultIllnessService");
 		malePatientRequestAdultIllnessService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_ADULT_ILLNESS_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_ADULT_ILLNESS_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3927,9 +3926,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestChildIllnessService");
 		femalePatientRequestChildIllnessService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_CHILDHOOD_ILLNESS_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_CHILDHOOD_ILLNESS)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3961,9 +3960,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestChildIllnessService");
 		malePatientRequestChildIllnessService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_CHILDHOOD_ILLNESS_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INTEGRATED_MANAGEMENT_OF_CHILDHOOD_ILLNESS)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -3996,9 +3995,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestInfectiousDiseasesService");
 		femalePatientRequestInfectiousDiseasesService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INFECTIOUS_DISEASES_CLINIC_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INFECTIOUS_DISEASES_CLINIC_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4032,9 +4031,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestInfectiousDiseasesService");
 		malePatientRequestInfectiousDiseasesService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.INFECTIOUS_DISEASES_CLINIC_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.INFECTIOUS_DISEASES_CLINIC_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4066,9 +4065,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestSocialWorkerService");
 		femalePatientRequestSocialWorkerService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.SOCIAL_WORKER_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.SOCIAL_WORKER_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4099,9 +4098,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestSocialWorkerService");
 		malePatientRequestSocialWorkerService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.SOCIAL_WORKER_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.SOCIAL_WORKER_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4134,9 +4133,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestPMTCTService");
 		femalePatientRequestPMTCTService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid( PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4168,9 +4167,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestPMTCTService");
 		malePatientRequestPMTCTService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PREVENTION_OF_MOTHER_TO_CHILD_TRANSMISSION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4201,9 +4200,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestLabService");
 		femalePatientRequestLabService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.LABORATORY_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.LABORATORY_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4232,9 +4231,9 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientRequestLabService.setName("malePatientRequestLabService");
 		malePatientRequestLabService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.LABORATORY_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.LABORATORY_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4265,9 +4264,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestPharmacyService");
 		femalePatientRequestPharmacyService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.PHARMACY_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PHARMACY_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4299,9 +4298,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestPharmacyService");
 		malePatientRequestPharmacyService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.PHARMACY_SERVICES_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PHARMACY_SERVICES)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4331,9 +4330,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestMaternityService");
 		femalePatientRequestMaternityService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.MATERNITY_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.MATERNITY_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4365,9 +4364,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestMaternityService");
 		malePatientRequestMaternityService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.MATERNITY_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.MATERNITY_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4399,9 +4398,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestHospitalizationService");
 		femalePatientRequestHospitalizationService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.HOSPITALIZATION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.HOSPITALIZATION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4433,9 +4432,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestHospitalizationService");
 		malePatientRequestHospitalizationService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.HOSPITALIZATION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.HOSPITALIZATION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4467,9 +4466,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("femalePatientRequestVaccinationService");
 		femalePatientRequestVaccinationService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.VACCINATION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.VACCINATION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -4501,9 +4500,9 @@ public class SetupRwandaPrimaryCareReport {
 				.setName("malePatientRequestVaccinationService");
 		malePatientRequestVaccinationService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
-						+ PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.PRIMARY_CARE_SERVICE_REQUESTED)
 						+ " and o.value_coded="
-						+ PrimaryCareReportConstants.VACCINATION_SERVICE_ID
+						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.VACCINATION_SERVICE)
 						+ " and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.encounter_type = "
 						+ registrationEncTypeId
 						+ " and e.voided = 0 and o.voided = 0 and p.voided = 0 and e.location_id = :location");
@@ -6392,7 +6391,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		rd.addIndicator(
 				"2.1",
-				"Percent of patients who do not have an observation for temperature in the vitals",
+				"Percent of patients under 5 who do not have an observation for temperature in the vitals",
 				patientsWithoutTemperatureInVitalsIndicator);
 		/*rd.addIndicator(
 				"2.2",

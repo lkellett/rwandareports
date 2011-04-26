@@ -4,6 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.openmrs.Concept;
+import org.openmrs.api.context.Context;
+
 public class RwandaReportsUtil {
 	
 	/**
@@ -37,5 +40,13 @@ public class RwandaReportsUtil {
 			return false;
 		return true;
 			
+	}
+	
+	public static Integer getConceptIdFromUuid(String uuid){
+		Concept c = Context.getConceptService().getConceptByUuid(uuid);
+		if (c != null)
+			return c.getConceptId();
+		else 
+			throw new IllegalArgumentException("Unable to find concept for uuid " + uuid + ".  Take a look at PrimaryCareReportConstants in RwandaReports module to see what's missing or wrong.");		
 	}
 }

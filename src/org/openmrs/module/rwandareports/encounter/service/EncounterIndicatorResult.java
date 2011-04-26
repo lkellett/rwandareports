@@ -45,7 +45,7 @@ private static final long serialVersionUID = 1L;
     	
     	IndicatorType type = encounterIndicatorResult.getDefinition().getType();
     	EncounterGroup numerator = encounterIndicatorResult.getEncounterGroup();
-    	EncounterGroup denominator = encounterIndicatorResult.getEncounterGroup();
+    	EncounterGroup denominator = encounterIndicatorResult.getDenominatorEncounterGroup();
     	
     	
 //    	Map<Integer, Number> logicVals = new HashMap<Integer, Number>(EncounterIndicatorResult.getLogicResults());
