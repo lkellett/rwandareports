@@ -9,7 +9,7 @@ public class PrimaryCareReportConstants {
 	public static final String MEDIPLAN="df1b90ba-1903-438d-8de3-2676bcf8bed3";				//6956
 	public static final String CORAR="61d2c4cf-1513-48d4-8ee8-e1899ccc1431";				//6957
 	public static final String NONE="3cd743f8-26fe-102b-80cb-0017a47871b2";					//1107
-	public static final String TEMPERATURE = "0b749047-ce9f-102d-8af6-d98b2d3eb0b6";
+	public static final String TEMPERATURE ="3ce939d2-26fe-102b-80cb-0017a47871b2";        //5088
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "2cda28df-2fe7-42e0-bb2f-376c9f803537";		//6702
 	public static final String VCT_PROGRAM = "3cdc8426-26fe-102b-80cb-0017a47871b2";							//1649
 	public static final String ANTENATAL_CLINIC = "3ce1e268-26fe-102b-80cb-0017a47871b2";						//2232
