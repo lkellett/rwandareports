@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.query.db.hibernate;
+package org.openmrs.module.rwandareports.objectgroup.query.db.hibernate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,13 +18,13 @@ import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterException;
 import org.openmrs.module.reporting.report.util.SqlUtils;
-import org.openmrs.module.rwandareports.encounter.EncounterGroup;
-import org.openmrs.module.rwandareports.encounter.query.db.EncounterGroupQueryServiceDAO;
+import org.openmrs.module.rwandareports.objectgroup.ObjectGroup;
+import org.openmrs.module.rwandareports.objectgroup.query.db.ObjectGroupQueryServiceDAO;
 
-public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQueryServiceDAO {
+public class HibernateObjectGroupQueryServiceDAO implements ObjectGroupQueryServiceDAO {
 	
 	
-	protected static final Log log = LogFactory.getLog(HibernateEncounterGroupQueryServiceDAO.class);
+	protected static final Log log = LogFactory.getLog(HibernateObjectGroupQueryServiceDAO.class);
 
 	/**
 	 * Hibernate session factory
@@ -35,7 +35,7 @@ public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQue
 		this.sessionFactory = sessionFactory;
 	}
 	
-	public EncounterGroup executeSqlQuery(String sqlQuery, Map<String, Object> paramMap) { 
+	public ObjectGroup executeSqlQuery(String sqlQuery, Map<String, Object> paramMap) { 
 		try { 			
 			validateSqlQuery(sqlQuery, paramMap);
 			
@@ -52,10 +52,10 @@ public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQue
 	 * This need to be a separate method so we can call it from both the 
 	 * executeSqlQuery() and validateSqlQuery() methods 
 	 */
-	private EncounterGroup executeQuery(Query query) { 
+	private ObjectGroup executeQuery(Query query) { 
 		try { 			
 				
-			return new EncounterGroup(query.list());
+			return new ObjectGroup(query.list());
 		} 
 		catch (HibernateException e) { 
 			throw new ParameterException("Error while executing SQL query [" + query.getQueryString() + "]: " + e.getMessage() + ".  See tomcat log file for more details.", e);
@@ -94,9 +94,9 @@ public class HibernateEncounterGroupQueryServiceDAO implements EncounterGroupQue
 							"Please provide a real value or use the 'IS NULL' constraint in your query (e.g. 'table.columnName IS NULL').");					
 				}
 				
-				// EncounterGroup (needs to be first, otherwise it will resolve as OpenmrsObject)
-				if (EncounterGroup.class.isAssignableFrom(paramValue.getClass())) { 
-					query.setParameterList(paramName, ((EncounterGroup) paramValue).getMemberIds());				
+				// ObjectGroup (needs to be first, otherwise it will resolve as OpenmrsObject)
+				if (ObjectGroup.class.isAssignableFrom(paramValue.getClass())) { 
+					query.setParameterList(paramName, ((ObjectGroup) paramValue).getMemberIds());				
 				}
 				// OpenmrsObject (e.g. Location)
 				else if (OpenmrsObject.class.isAssignableFrom(paramValue.getClass())) { 					

@@ -1,7 +1,6 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +13,10 @@ import org.openmrs.Location;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
-import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -31,9 +28,9 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.PrimaryCareReportConstants;
-import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
-import org.openmrs.module.rwandareports.encounter.definition.SqlEncounterGroupDefinition;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
+import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.definition.SqlObjectGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
 import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
@@ -509,158 +506,158 @@ public class SetupRwandaPrimaryCareReport {
 		h.purgeDefinition(CohortIndicator.class,
 				"peakHoursAndPeakDaysIndicator");
 
-		h.purgeDefinition(EncounterGroupDefinition.class, "peakHours");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class, "peakHours");
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientsrequestPrimCare");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientsrequestPrimCare");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestVCTProgram");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestVCTProgram");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestAntenatalClinic");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestAntenatalClinic");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malepatientRequestFamilyPlaningServices");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalepatientRequestFamilyPlaningServices");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestMutuelleService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestMutuelleService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestAccountingOfficeService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestAccountingOfficeService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestAdultIllnessService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestChildIllnessService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestInfectiousDiseasesService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestSocialWorkerService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestAdultIllnessService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestChildIllnessService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestInfectiousDiseasesService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestSocialWorkerService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestPMTCTService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestLabService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestPharmacyService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestMaternityService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestHospitalizationService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"femalePatientRequestVaccinationService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestPMTCTService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestLabService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestPharmacyService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestMaternityService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestHospitalizationService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 				"malePatientRequestVaccinationService");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 		"patientsUnder5WithTemperatureGreaterThanNormalInVitals");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 		"patientsUnder5WithTemperatureInVitals");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 		"patientsUnder5WithoutTemperatureInVitals");
-		h.purgeDefinition(EncounterGroupDefinition.class,
+		h.purgeDefinition(ObjectGroupDefinition.class,
 		"patientsUnder5InRegistration");
 		
-		
+		h.purgeDefinition(ObjectGroupDefinition.class, "ageBreakdownByGender");
 		   
 
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"peakHoursAndPeakDaysIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestPrimCareInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestPrimCareInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestVCTProgramInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestVCTProgramInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestAntenatalClinicInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestAntenatalClinicInRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestFamilyPlaningServicesRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestFamilyPlaningServicesRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestMutuelleServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestMutuelleServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestAccountingOfficeServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestAccountingOfficeServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestAdultIllnessServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestAdultIllnessServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestAccountingOfficeServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestAccountingOfficeServiceRegistrationIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestChildIllnessServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestChildIllnessServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestInfectiousDiseasesServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestInfectiousDiseasesServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestSocialWorkerServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestSocialWorkerServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestPMTCTServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestPMTCTServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestLabServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestLabServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestPharmacyServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestPharmacyServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestMaternityServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestMaternityServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestHospitalizationServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestHospitalizationServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"femalePatientsrequestVaccinationServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 				"malePatientsrequestVaccinationServiceIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 		"allRegisteredPatientsWithTemperatureGreaterThanNormalInVitalsIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 		"patientsWithTemperatureGreaterThanNormalInVitalsIndicator");
-		h.purgeDefinition(EncounterIndicator.class,
+		h.purgeDefinition(ObjectGroupIndicator.class,
 		"patientsWithoutTemperatureInVitalsIndicator");		 
 		
 		
@@ -723,53 +720,57 @@ public class SetupRwandaPrimaryCareReport {
 		// 2nd Question
 		// ======================================================================================
 
-		// 2.1 Percent of patients who do not have an observation for
-		// temperature in the vitals
+		// 2.1 Percent of patients who DO have an observation for
+		// temperature in the vitals  (changed from no not have a change, hence the slightly misnamed vars
 	
 		
-		SqlEncounterGroupDefinition patientsUnder5WithoutTemperatureInVitals = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition patientsUnder5WithoutTemperatureInVitals = new SqlObjectGroupDefinition();
 		patientsUnder5WithoutTemperatureInVitals
 				.setName("patientsUnder5WithoutTemperatureInVitals");
-		patientsUnder5WithoutTemperatureInVitals
-				.setQuery("select distinct encounterQuery.encounter_id,  encounterQuery.patient_id from (select e.encounter_id, e.patient_id from encounter e, person p, patient pa where e.encounter_id not in (select e.encounter_id from encounter e, obs o where e.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.encounter_id = o.encounter_id and o.voided = 0 and o.concept_id = "
-						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE)
-						+ " and e.encounter_type = "
-						+ vitalsEncTypeId
-						+ ") and e.voided = 0 and encounter_type = "
-						+ vitalsEncTypeId
-						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5	and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate UNION select e.encounter_id, e.patient_id from encounter e left join (select encounter_id, patient_id, encounter_datetime from encounter e where encounter_type = "
-						+ vitalsEncTypeId
-						+ " and voided = 0 and encounter_datetime > :startDate and encounter_datetime <= :endDate) eTmp on eTmp.patient_id = e.patient_id, person p, patient pa where eTmp.encounter_id is null and e.encounter_type = "
-						+ registrationEncTypeId
-						+ " and e.voided = 0 and e.patient_id = p.person_id and p.voided = 0 and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate ) encounterQuery");
+//		patientsUnder5WithoutTemperatureInVitals
+//				.setQuery(
+//						"select distinct encounterQuery.encounter_id,  encounterQuery.patient_id from (select e.encounter_id, e.patient_id from encounter e, person p, patient pa where e.encounter_id not in (select e.encounter_id from encounter e, obs o where e.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.encounter_id = o.encounter_id and o.voided = 0 and o.concept_id = "
+//						+ RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE)
+//						+ " and e.encounter_type = "
+//						+ vitalsEncTypeId
+//						+ ") and e.voided = 0 and encounter_type = "
+//						+ vitalsEncTypeId
+//						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5	and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate UNION select e.encounter_id, e.patient_id from encounter e left join (select encounter_id, patient_id, encounter_datetime from encounter e where encounter_type = "
+//						+ vitalsEncTypeId
+//						+ " and voided = 0 and encounter_datetime > :startDate and encounter_datetime <= :endDate) eTmp on eTmp.patient_id = e.patient_id, person p, patient pa where eTmp.encounter_id is null and e.encounter_type = "
+//						+ registrationEncTypeId
+//						+ " and e.voided = 0 and e.patient_id = p.person_id and p.voided = 0 and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate ) encounterQuery" +
+//
+//								"");
+		patientsUnder5WithoutTemperatureInVitals.setQuery("select distinct e.encounter_id, e.patient_id from encounter e left join ( select distinct  e.encounter_id, e.patient_id, e.encounter_datetime from encounter e, person p, patient pa, obs o where e.encounter_id = o.encounter_id and o.voided = 0 and o.concept_id =  " + RwandaReportsUtil.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE) + " and e.encounter_type =  " + vitalsEncTypeId + " and e.voided = 0 and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5	and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.location_id = :location) eTmp on eTmp.patient_id = e.patient_id, person p, patient pat where day(eTmp.encounter_datetime) = day(e.encounter_datetime) and e.encounter_type = " + registrationEncTypeId + " and e.voided = 0 and p.voided = 0 and pat.voided = 0 and e.patient_id = p.person_id and p.person_id = pat.patient_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.location_id = :location");
 		patientsUnder5WithoutTemperatureInVitals.addParameter(new Parameter(
 				"startDate", "startDate", Date.class));
 		patientsUnder5WithoutTemperatureInVitals.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(patientsUnder5WithoutTemperatureInVitals);
+		h.replaceObjectGroupDefinition(patientsUnder5WithoutTemperatureInVitals);
 
 	
 
-		SqlEncounterGroupDefinition patientsUnder5InRegistration = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition patientsUnder5InRegistration = new SqlObjectGroupDefinition();
 		patientsUnder5InRegistration.setName("patientsUnder5InRegistration");
 
 		patientsUnder5InRegistration
-				.setQuery("select e.encounter_id, e.patient_id from encounter e, person p, patient pa where e.voided = 0 and e.encounter_type = "+registrationEncTypeId+" and e.patient_id = p.person_id and p.voided = 0 and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and e.patient_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate");
+				.setQuery("select e.encounter_id, e.patient_id from encounter e, person p, patient pa where e.voided = 0 and e.encounter_type = "+registrationEncTypeId+" and e.patient_id = p.person_id and p.voided = 0 and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and e.patient_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.location_id = :location");
 
 		patientsUnder5InRegistration.addParameter(new Parameter("startDate",
 				"startDate", Date.class));
 		patientsUnder5InRegistration.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(patientsUnder5InRegistration);
+		h.replaceObjectGroupDefinition(patientsUnder5InRegistration);
 
 			
-		 EncounterIndicator patientsWithoutTemperatureInVitalsIndicator = EncounterIndicator.newFractionIndicator
+		 ObjectGroupIndicator patientsWithoutTemperatureInVitalsIndicator = ObjectGroupIndicator.newFractionIndicator
 			 ("patientsWithoutTemperatureInVitalsIndicator",new
-			 Mapped<SqlEncounterGroupDefinition
+			 Mapped<SqlObjectGroupDefinition
 			 >(patientsUnder5WithoutTemperatureInVitals,
 			 ParameterizableUtil.createParameterMappings
 			 ("startDate=${startDate},endDate=${endDate}")), new
-			 Mapped<SqlEncounterGroupDefinition>(patientsUnder5InRegistration,
+			 Mapped<SqlObjectGroupDefinition>(patientsUnder5InRegistration,
 			 ParameterizableUtil
 			 .createParameterMappings("startDate=${startDate},endDate=${endDate}"
 			 )), null);
@@ -783,7 +784,7 @@ public class SetupRwandaPrimaryCareReport {
 
 // temperature, and actually had a fever (were sick, temperature was higher than normal)
 	
-		 SqlEncounterGroupDefinition patientsUnder5WithTemperatureGreaterThanNormalInVitals = new SqlEncounterGroupDefinition();
+		 SqlObjectGroupDefinition patientsUnder5WithTemperatureGreaterThanNormalInVitals = new SqlObjectGroupDefinition();
 		patientsUnder5WithTemperatureGreaterThanNormalInVitals
 				.setName("patientsUnder5WithTemperatureGreaterThanNormalInVitals");
 		patientsUnder5WithTemperatureGreaterThanNormalInVitals
@@ -792,31 +793,31 @@ public class SetupRwandaPrimaryCareReport {
 								.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE)
 						+ " and o.value_numeric > 37.0 and e.encounter_type = "
 						+ vitalsEncTypeId
-						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate");
+						+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.location_id = :location");
 		patientsUnder5WithTemperatureGreaterThanNormalInVitals.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientsUnder5WithTemperatureGreaterThanNormalInVitals.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(patientsUnder5WithTemperatureGreaterThanNormalInVitals);
+		h.replaceObjectGroupDefinition(patientsUnder5WithTemperatureGreaterThanNormalInVitals);
 
 		
-		SqlEncounterGroupDefinition patientsUnder5WithTemperatureInVitals=new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition patientsUnder5WithTemperatureInVitals=new SqlObjectGroupDefinition();
 		patientsUnder5WithTemperatureInVitals.setName("patientsUnder5WithTemperatureInVitals");
 		patientsUnder5WithTemperatureInVitals.setQuery("select e.encounter_id, e.patient_id from encounter e, person p,patient pa,obs o where e.voided = 0 and e.encounter_id = o.encounter_id and o.voided = 0 and o.concept_id = "
 				+ RwandaReportsUtil
 				.getConceptIdFromUuid(PrimaryCareReportConstants.TEMPERATURE)
 		+ " and e.encounter_type = "
 		+ vitalsEncTypeId
-		+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate");
+		+ " and e.patient_id = p.person_id and (YEAR(:endDate)-YEAR(p.birthdate)) - (RIGHT(:endDate,5)<RIGHT(p.birthdate,5)) < 5 and p.voided = 0 and p.person_id = pa.patient_id and pa.voided = 0 and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and e.location_id = :location");
 		patientsUnder5WithTemperatureInVitals.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientsUnder5WithTemperatureInVitals.addParameter(new Parameter("endDate", "endDate", Date.class));
 		
 		
-		EncounterIndicator patientsWithTemperatureGreaterThanNormalInVitalsIndicator = EncounterIndicator.newFractionIndicator
+		ObjectGroupIndicator patientsWithTemperatureGreaterThanNormalInVitalsIndicator = ObjectGroupIndicator.newFractionIndicator
 		 ("patientsWithTemperatureGreaterThanNormalInVitalsIndicator",new
-		 Mapped<SqlEncounterGroupDefinition
+		 Mapped<SqlObjectGroupDefinition
 		 >(patientsUnder5WithTemperatureGreaterThanNormalInVitals,
 		 ParameterizableUtil.createParameterMappings
 		 ("startDate=${startDate},endDate=${endDate}")), new
-		 Mapped<SqlEncounterGroupDefinition>(patientsUnder5WithTemperatureInVitals,
+		 Mapped<SqlObjectGroupDefinition>(patientsUnder5WithTemperatureInVitals,
 		 ParameterizableUtil
 		 .createParameterMappings("startDate=${startDate},endDate=${endDate}"
 		 )), null);
@@ -830,13 +831,13 @@ public class SetupRwandaPrimaryCareReport {
 // 2.3 Percent of all registered patients under 5 who had a fever
 
 	
-		EncounterIndicator allRegisteredPatientsWithTemperatureGreaterThanNormalInVitalsIndicator = EncounterIndicator.newFractionIndicator
+		ObjectGroupIndicator allRegisteredPatientsWithTemperatureGreaterThanNormalInVitalsIndicator = ObjectGroupIndicator.newFractionIndicator
 		 ("allRegisteredPatientsWithTemperatureGreaterThanNormalInVitalsIndicator",new
-		 Mapped<SqlEncounterGroupDefinition
+		 Mapped<SqlObjectGroupDefinition
 		 >(patientsUnder5WithTemperatureGreaterThanNormalInVitals,
 		 ParameterizableUtil.createParameterMappings
 		 ("startDate=${startDate},endDate=${endDate}")), new
-		 Mapped<SqlEncounterGroupDefinition>(patientsUnder5InRegistration,
+		 Mapped<SqlObjectGroupDefinition>(patientsUnder5InRegistration,
 		 ParameterizableUtil
 		 .createParameterMappings("startDate=${startDate},endDate=${endDate}"
 		 )), null);
@@ -852,7 +853,7 @@ public class SetupRwandaPrimaryCareReport {
 		// ========================================================================
 
 		// 8 to 10, monday to friday
-		SqlEncounterGroupDefinition peakHours = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition peakHours = new SqlObjectGroupDefinition();
 		peakHours.setName("peakHours");
 		peakHours
 				.setQuery("select distinct encounter_id, patient_id from encounter where TIME(encounter_datetime) >= :startTime and TIME(encounter_datetime) <= :endTime and WEEKDAY(encounter_datetime) <=4  and encounter_datetime>= :startDate and encounter_datetime<= :endDate and encounter_type = "
@@ -864,19 +865,19 @@ public class SetupRwandaPrimaryCareReport {
 		peakHours.addParameter(new Parameter("startTime", "startTime",
 				Date.class));
 		peakHours.addParameter(new Parameter("endTime", "endTime", Date.class));
-		h.replaceEncounterGroupDefinition(peakHours);
+		h.replaceObjectGroupDefinition(peakHours);
 
 		// number of weekdays between startDate and stopDate / 2
 
-		EncounterIndicator peakHoursAndPeakDaysIndicator = EncounterIndicator
+		ObjectGroupIndicator peakHoursAndPeakDaysIndicator = ObjectGroupIndicator
 				.newDailyDivisionIndicator(
 						"peakHoursIndicator",
-						new Mapped<EncounterGroupDefinition>(
+						new Mapped<ObjectGroupDefinition>(
 								peakHours,
 								ParameterizableUtil
 										.createParameterMappings("startDate=${startDate},endDate=${endDate},startTime=08:00:00,endTime=10:00:00")),
 						Integer.valueOf(2),
-						EncounterIndicator.IndicatorType.PER_WEEKDAYS, null);
+						ObjectGroupIndicator.IndicatorType.PER_WEEKDAYS, null);
 		peakHoursAndPeakDaysIndicator.setName("peakHoursAndPeakDaysIndicator");
 		peakHoursAndPeakDaysIndicator.addParameter(new Parameter("startDate",
 				"startDate", Date.class));
@@ -1375,7 +1376,7 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithOneVisit
 				.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,count(e.encounter_type) as timesofregistration FROM encounter e where e.encounter_type="
 						+ registrationEncTypeId
-						+ " and e.voided=0 group by e.patient_id) as patientregistrationtimes where timesofregistration=1 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+						+ " and e.voided=0 and e.location_id = :location group by e.patient_id) as patientregistrationtimes where timesofregistration=1 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
 		patientsWithOneVisit.addParameter(new Parameter("startDate",
 				"startDate", Date.class));
 		patientsWithOneVisit.addParameter(new Parameter("endDate", "endDate",
@@ -1387,7 +1388,7 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithTwoVisits
 				.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,count(e.encounter_type) as timesofregistration FROM encounter e where e.encounter_type="
 						+ registrationEncTypeId
-						+ " and e.voided=0 group by e.patient_id) as patientregistrationtimes where timesofregistration=2 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+						+ " and e.voided=0 and e.location_id = :location group by e.patient_id) as patientregistrationtimes where timesofregistration=2 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
 		patientsWithTwoVisits.addParameter(new Parameter("startDate",
 				"startDate", Date.class));
 		patientsWithTwoVisits.addParameter(new Parameter("endDate", "endDate",
@@ -1399,7 +1400,7 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithThreeVisits
 				.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,count(e.encounter_type) as timesofregistration FROM encounter e where e.encounter_type="
 						+ registrationEncTypeId
-						+ " and e.voided=0 group by e.patient_id) as patientregistrationtimes where timesofregistration=3 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+						+ " and e.voided=0 and e.location_id = :location group by e.patient_id) as patientregistrationtimes where timesofregistration=3 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
 		patientsWithThreeVisits.addParameter(new Parameter("startDate",
 				"startDate", Date.class));
 		patientsWithThreeVisits.addParameter(new Parameter("endDate",
@@ -1412,7 +1413,7 @@ public class SetupRwandaPrimaryCareReport {
 		patientsWithGreaterThanThreeVisits
 				.setQuery("select distinct patient_id from (SELECT e.patient_id,e.encounter_datetime,count(e.encounter_type) as timesofregistration FROM encounter e where e.encounter_type="
 						+ registrationEncTypeId
-						+ " and e.voided=0 group by e.patient_id) as patientregistrationtimes where timesofregistration>3 and encounter_datetime>= :startDate and encounter_datetime<= :endDate");
+						+ " and e.voided=0 and e.location_id = :location group by e.patient_id) as patientregistrationtimes where timesofregistration>3 and encounter_datetime>= :startDate and encounter_datetime<= :endDate ");
 		patientsWithGreaterThanThreeVisits.addParameter(new Parameter(
 				"startDate", "startDate", Date.class));
 		patientsWithGreaterThanThreeVisits.addParameter(new Parameter(
@@ -2675,7 +2676,7 @@ public class SetupRwandaPrimaryCareReport {
 		// ========================================================================
 
 		
-		SqlEncounterGroupDefinition ageBreakdownByGender = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition ageBreakdownByGender = new SqlObjectGroupDefinition();
 		ageBreakdownByGender.setName("ageBreakdownByGender");
 		ageBreakdownByGender
 				.setQuery("select e.encounter_id, e.patient_id from encounter e, person p, patient pat  where e.voided = 0 and p.voided = 0 and pat.voided = 0  and e.encounter_type = "+registrationEncTypeId+"  and e.patient_id = p.person_id and e.patient_id = pat.patient_id and (YEAR(e.encounter_datetime)-YEAR(p.birthdate)) - (RIGHT(e.encounter_datetime,5)<RIGHT(p.birthdate,5)) < :maxAgeExclusive and (YEAR(e.encounter_datetime)-YEAR(p.birthdate)) - (RIGHT(e.encounter_datetime,5)<RIGHT(p.birthdate,5)) >= :minAgeInclusive and e.encounter_datetime > :startDate and e.encounter_datetime <= :endDate and p.gender = :gender and e.location_id = :location");
@@ -2689,13 +2690,13 @@ public class SetupRwandaPrimaryCareReport {
 				"minAgeInclusive", Integer.class));
 		ageBreakdownByGender.addParameter(new Parameter("gender",
 				"gender", String.class));
-		h.replaceEncounterGroupDefinition(ageBreakdownByGender);
+		h.replaceObjectGroupDefinition(ageBreakdownByGender);
 		
 //		"6.1.m", "Male with age (0-1)",
 //		maleWithRegistrationAndAgeZeroToOneIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeZeroToOneIndicator = EncounterIndicator.newCountIndicator("Male with age (0-1)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=1,minAgeInclusive=0,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeZeroToOneIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (0-1)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=1,minAgeInclusive=0,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeZeroToOneIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeZeroToOneIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2704,8 +2705,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.1.f", "Female with age (0-1)",
 //		femaleWithRegistrationAndAgeZeroToOneIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeZeroToOneIndicator = EncounterIndicator.newCountIndicator("Female with age (0-1)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=1,minAgeInclusive=0,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeZeroToOneIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (0-1)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=1,minAgeInclusive=0,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeZeroToOneIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeZeroToOneIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2715,8 +2716,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.2.m", "Male with age (1-2)",
 //		maleWithRegistrationAndAgeOneToTwoIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeOneToTwoIndicator = EncounterIndicator.newCountIndicator("Male with age (1-2)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=2,minAgeInclusive=1,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeOneToTwoIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (1-2)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=2,minAgeInclusive=1,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeOneToTwoIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeOneToTwoIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2725,8 +2726,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.2.f", "Female with age (1-2)",
 //		femaleWithRegistrationAndAgeOneToTwoIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeOneToTwoIndicator = EncounterIndicator.newCountIndicator("Female with age (1-2)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=2,minAgeInclusive=1,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeOneToTwoIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (1-2)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=2,minAgeInclusive=1,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeOneToTwoIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeOneToTwoIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2737,8 +2738,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.3.m", "Male with age (2-3)",
 //		maleWithRegistrationAndAgeTwoToThreeIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeTwoToThreeIndicator = EncounterIndicator.newCountIndicator("Male with age (2-3)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=3,minAgeInclusive=2,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeTwoToThreeIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (2-3)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=3,minAgeInclusive=2,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeTwoToThreeIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeTwoToThreeIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2749,8 +2750,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.3.f", "Female with age (2-3)",
 //		femaleWithRegistrationAndAgeTwoToThreeIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeTwoToThreeIndicator = EncounterIndicator.newCountIndicator("Female with age (2-3)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=3,minAgeInclusive=2,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeTwoToThreeIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (2-3)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=3,minAgeInclusive=2,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeTwoToThreeIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeTwoToThreeIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2760,8 +2761,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.4.m", "Male with age (3-4)",
 //		maleWithRegistrationAndAgeThreeToFourIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeThreeToFourIndicator = EncounterIndicator.newCountIndicator("Male with age (3-4)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=4,minAgeInclusive=3,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeThreeToFourIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (3-4)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=4,minAgeInclusive=3,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeThreeToFourIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeThreeToFourIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2771,8 +2772,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.4.f", "Female with age (3-4)",
 //		femaleWithRegistrationAndAgeThreeToFourIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeThreeToFourIndicator = EncounterIndicator.newCountIndicator("Female with age (3-4)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=4,minAgeInclusive=3,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeThreeToFourIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (3-4)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=4,minAgeInclusive=3,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeThreeToFourIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeThreeToFourIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2782,8 +2783,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.5.m", "Male with age (4-5)",
 //		maleWithRegistrationAndAgeFourToFiveIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeFourToFiveIndicator = EncounterIndicator.newCountIndicator("Male with age (4-5)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=5,minAgeInclusive=4,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeFourToFiveIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (4-5)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=5,minAgeInclusive=4,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeFourToFiveIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeFourToFiveIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2793,8 +2794,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.5.f", "Female with age (4-5)",
 //		femaleWithRegistrationAndAgeFourToFiveIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeFourToFiveIndicator = EncounterIndicator.newCountIndicator("Female with age (4-5)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=5,minAgeInclusive=4,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeFourToFiveIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (4-5)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=5,minAgeInclusive=4,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeFourToFiveIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeFourToFiveIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2804,8 +2805,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.6.m", "Male with age (5-15)",
 //		maleWithRegistrationAndAgeFiveToFifteenIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeFiveToFifteenIndicator = EncounterIndicator.newCountIndicator("Male with age (5-15)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=15,minAgeInclusive=5,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeFiveToFifteenIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (5-15)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=15,minAgeInclusive=5,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeFiveToFifteenIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeFiveToFifteenIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2815,8 +2816,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.6.f", "Female with age (5-15)",
 //		femaleWithRegistrationAndAgeFiveToFifteenIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeFiveToFifteenIndicator = EncounterIndicator.newCountIndicator("Female with age (5-15)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=15,minAgeInclusive=5,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeFiveToFifteenIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (5-15)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=15,minAgeInclusive=5,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeFiveToFifteenIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeFiveToFifteenIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2825,8 +2826,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.7.m", "Male with age (15+)",
 //		maleWithRegistrationAndAgeFifteenAndPlusIndicator);
 		
-		EncounterIndicator maleWithRegistrationAndAgeFifteenAndPlusIndicator = EncounterIndicator.newCountIndicator("Male with age (15+)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=150,minAgeInclusive=15,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator maleWithRegistrationAndAgeFifteenAndPlusIndicator = ObjectGroupIndicator.newCountIndicator("Male with age (15+)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=M,maxAgeExclusive=150,minAgeInclusive=15,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		maleWithRegistrationAndAgeFifteenAndPlusIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		maleWithRegistrationAndAgeFifteenAndPlusIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2836,8 +2837,8 @@ public class SetupRwandaPrimaryCareReport {
 //rd.addIndicator("6.7.f", "Female with age (15+)",
 //		femaleWithRegistrationAndAgeFifteenAndPlusIndicator);
 		
-		EncounterIndicator femaleWithRegistrationAndAgeFifteenAndPlusIndicator = EncounterIndicator.newCountIndicator("Female with age (15+)", 
-				new Mapped<SqlEncounterGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=150,minAgeInclusive=15,startDate=${startDate},endDate=${endDate}")), 
+		ObjectGroupIndicator femaleWithRegistrationAndAgeFifteenAndPlusIndicator = ObjectGroupIndicator.newCountIndicator("Female with age (15+)", 
+				new Mapped<SqlObjectGroupDefinition>(ageBreakdownByGender, ParameterizableUtil.createParameterMappings("gender=F,maxAgeExclusive=150,minAgeInclusive=15,startDate=${startDate},endDate=${endDate}")), 
 				null);
 		femaleWithRegistrationAndAgeFifteenAndPlusIndicator.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femaleWithRegistrationAndAgeFifteenAndPlusIndicator.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -2851,7 +2852,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.1.f Female Total number of patient requested primary care
 
-		SqlEncounterGroupDefinition femalePatientsrequestPrimCare = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientsrequestPrimCare = new SqlObjectGroupDefinition();
 		femalePatientsrequestPrimCare.setName("femalePatientsrequestPrimCare");
 		femalePatientsrequestPrimCare
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='F' and o.concept_id="
@@ -2863,9 +2864,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		femalePatientsrequestPrimCare.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientsrequestPrimCare);
+		h.replaceObjectGroupDefinition(femalePatientsrequestPrimCare);
 
-		EncounterIndicator femalePatientsrequestPrimCareInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestPrimCareInRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestPrimCareInRegistrationIndicator
 				.setName("femalePatientsrequestPrimCareInRegistrationIndicator");
 		femalePatientsrequestPrimCareInRegistrationIndicator
@@ -2874,7 +2875,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestPrimCareInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestPrimCareInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientsrequestPrimCare,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -2882,7 +2883,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.1.m Female Total number of patient requested primary care
 
-		SqlEncounterGroupDefinition malePatientsrequestPrimCare = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientsrequestPrimCare = new SqlObjectGroupDefinition();
 		malePatientsrequestPrimCare.setName("malePatientsrequestPrimCare");
 		malePatientsrequestPrimCare
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
@@ -2894,9 +2895,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		malePatientsrequestPrimCare.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientsrequestPrimCare);
+		h.replaceObjectGroupDefinition(malePatientsrequestPrimCare);
 
-		EncounterIndicator malePatientsrequestPrimCareInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestPrimCareInRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestPrimCareInRegistrationIndicator
 				.setName("malePatientsrequestPrimCareInRegistrationIndicator");
 		malePatientsrequestPrimCareInRegistrationIndicator
@@ -2905,7 +2906,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestPrimCareInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestPrimCareInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientsrequestPrimCare,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -2913,7 +2914,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.2.f Female Number of patients requested VCT PROGRAM
 
-		SqlEncounterGroupDefinition femalePatientRequestVCTProgram = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestVCTProgram = new SqlObjectGroupDefinition();
 		femalePatientRequestVCTProgram
 				.setName("femalePatientRequestVCTProgram");
 		femalePatientRequestVCTProgram
@@ -2928,9 +2929,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		femalePatientRequestVCTProgram.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestVCTProgram);
+		h.replaceObjectGroupDefinition(femalePatientRequestVCTProgram);
 
-		EncounterIndicator femalePatientsrequestVCTProgramInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestVCTProgramInRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestVCTProgramInRegistrationIndicator
 				.setName("femalePatientsrequestVCTProgramInRegistrationIndicator");
 		femalePatientsrequestVCTProgramInRegistrationIndicator
@@ -2939,14 +2940,14 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestVCTProgramInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestVCTProgramInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestVCTProgram,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(femalePatientsrequestVCTProgramInRegistrationIndicator);
 
 		// 7.2.m Male Number of patients requested VCT PROGRAM
-		SqlEncounterGroupDefinition malePatientRequestVCTProgram = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestVCTProgram = new SqlObjectGroupDefinition();
 		malePatientRequestVCTProgram.setName("malePatientRequestVCTProgram");
 		malePatientRequestVCTProgram
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
@@ -2960,9 +2961,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		malePatientRequestVCTProgram.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestVCTProgram);
+		h.replaceObjectGroupDefinition(malePatientRequestVCTProgram);
 
-		EncounterIndicator malePatientsrequestVCTProgramInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestVCTProgramInRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestVCTProgramInRegistrationIndicator
 				.setName("malePatientsrequestVCTProgramInRegistrationIndicator");
 		malePatientsrequestVCTProgramInRegistrationIndicator
@@ -2971,7 +2972,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestVCTProgramInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestVCTProgramInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestVCTProgram,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -2979,7 +2980,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.3.f Female Number of patients requested ANTENATAL CLINIC
 
-		SqlEncounterGroupDefinition femalePatientRequestAntenatalClinic = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestAntenatalClinic = new SqlObjectGroupDefinition();
 		femalePatientRequestAntenatalClinic
 				.setName("patientRequestAntenatalClinic");
 		femalePatientRequestAntenatalClinic
@@ -2994,9 +2995,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestAntenatalClinic.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestAntenatalClinic);
+		h.replaceObjectGroupDefinition(femalePatientRequestAntenatalClinic);
 
-		EncounterIndicator femalePatientsrequestAntenatalClinicInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestAntenatalClinicInRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestAntenatalClinicInRegistrationIndicator
 				.setName("femalePatientsrequestAntenatalClinicInRegistrationIndicator");
 		femalePatientsrequestAntenatalClinicInRegistrationIndicator
@@ -3005,14 +3006,14 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestAntenatalClinicInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestAntenatalClinicInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestAntenatalClinic,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(femalePatientsrequestAntenatalClinicInRegistrationIndicator);
 
 		// 7.3.m Male Number of patients requested ANTENATAL CLINIC
-		SqlEncounterGroupDefinition malePatientRequestAntenatalClinic = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestAntenatalClinic = new SqlObjectGroupDefinition();
 		malePatientRequestAntenatalClinic
 				.setName("malePatientRequestAntenatalClinic");
 		malePatientRequestAntenatalClinic
@@ -3027,9 +3028,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestAntenatalClinic.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestAntenatalClinic);
+		h.replaceObjectGroupDefinition(malePatientRequestAntenatalClinic);
 
-		EncounterIndicator malePatientsrequestAntenatalClinicInRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestAntenatalClinicInRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestAntenatalClinicInRegistrationIndicator
 				.setName("malePatientsrequestAntenatalClinicInRegistrationIndicator");
 		malePatientsrequestAntenatalClinicInRegistrationIndicator
@@ -3038,14 +3039,14 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestAntenatalClinicInRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestAntenatalClinicInRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestAntenatalClinic,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(malePatientsrequestAntenatalClinicInRegistrationIndicator);
 
 		// 7.4.f Female Number of patients requested FAMILY PLANNING SERVICES
-		SqlEncounterGroupDefinition femalepatientRequestFamilyPlaningServices = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalepatientRequestFamilyPlaningServices = new SqlObjectGroupDefinition();
 		femalepatientRequestFamilyPlaningServices
 				.setName("femalepatientRequestFamilyPlaningServices");
 		femalepatientRequestFamilyPlaningServices
@@ -3060,9 +3061,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalepatientRequestFamilyPlaningServices.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalepatientRequestFamilyPlaningServices);
+		h.replaceObjectGroupDefinition(femalepatientRequestFamilyPlaningServices);
 
-		EncounterIndicator femalePatientsrequestFamilyPlaningServicesRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestFamilyPlaningServicesRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestFamilyPlaningServicesRegistrationIndicator
 				.setName("femalePatientsrequestFamilyPlaningServicesRegistrationIndicator");
 		femalePatientsrequestFamilyPlaningServicesRegistrationIndicator
@@ -3071,14 +3072,14 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestFamilyPlaningServicesRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestFamilyPlaningServicesRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalepatientRequestFamilyPlaningServices,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(femalePatientsrequestFamilyPlaningServicesRegistrationIndicator);
 
 		// 7.4.m Male Number of patients requested FAMILY PLANNING SERVICES
-		SqlEncounterGroupDefinition malepatientRequestFamilyPlaningServices = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malepatientRequestFamilyPlaningServices = new SqlObjectGroupDefinition();
 		malepatientRequestFamilyPlaningServices
 				.setName("malepatientRequestFamilyPlaningServices");
 		malepatientRequestFamilyPlaningServices
@@ -3093,9 +3094,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malepatientRequestFamilyPlaningServices.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malepatientRequestFamilyPlaningServices);
+		h.replaceObjectGroupDefinition(malepatientRequestFamilyPlaningServices);
 
-		EncounterIndicator malePatientsrequestFamilyPlaningServicesRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestFamilyPlaningServicesRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestFamilyPlaningServicesRegistrationIndicator
 				.setName("malePatientsrequestFamilyPlaningServicesRegistrationIndicator");
 		malePatientsrequestFamilyPlaningServicesRegistrationIndicator
@@ -3104,7 +3105,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestFamilyPlaningServicesRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestFamilyPlaningServicesRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malepatientRequestFamilyPlaningServices,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3112,7 +3113,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.5.f Female Number of patients requested MUTUELLE SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestMutuelleService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestMutuelleService = new SqlObjectGroupDefinition();
 		femalePatientRequestMutuelleService
 				.setName("femalePatientRequestMutuelleService");
 		femalePatientRequestMutuelleService
@@ -3127,9 +3128,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestMutuelleService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestMutuelleService);
+		h.replaceObjectGroupDefinition(femalePatientRequestMutuelleService);
 
-		EncounterIndicator femalePatientsrequestMutuelleServiceRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestMutuelleServiceRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestMutuelleServiceRegistrationIndicator
 				.setName("femalePatientsrequestMutuelleServiceRegistrationIndicator");
 		femalePatientsrequestMutuelleServiceRegistrationIndicator
@@ -3138,7 +3139,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestMutuelleServiceRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestMutuelleServiceRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestMutuelleService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3146,7 +3147,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.5.m Male Number of patients requested MUTUELLE SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestMutuelleService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestMutuelleService = new SqlObjectGroupDefinition();
 		malePatientRequestMutuelleService
 				.setName("malePatientRequestMutuelleService");
 		malePatientRequestMutuelleService
@@ -3161,9 +3162,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestMutuelleService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestMutuelleService);
+		h.replaceObjectGroupDefinition(malePatientRequestMutuelleService);
 
-		EncounterIndicator malePatientsrequestMutuelleServiceRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestMutuelleServiceRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestMutuelleServiceRegistrationIndicator
 				.setName("malePatientsrequestMutuelleServiceRegistrationIndicator");
 		malePatientsrequestMutuelleServiceRegistrationIndicator
@@ -3172,7 +3173,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestMutuelleServiceRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestMutuelleServiceRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestMutuelleService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3180,7 +3181,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.6.f Female Number of patients requested ACCOUNTING OFFICE SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestAccountingOfficeService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestAccountingOfficeService = new SqlObjectGroupDefinition();
 		femalePatientRequestAccountingOfficeService
 				.setName("femalePatientRequestAccountingOfficeService");
 		femalePatientRequestAccountingOfficeService
@@ -3195,9 +3196,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestAccountingOfficeService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestAccountingOfficeService);
+		h.replaceObjectGroupDefinition(femalePatientRequestAccountingOfficeService);
 
-		EncounterIndicator femalePatientsrequestAccountingOfficeServiceRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestAccountingOfficeServiceRegistrationIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestAccountingOfficeServiceRegistrationIndicator
 				.setName("femalePatientsrequestAccountingOfficeServiceRegistrationIndicator");
 		femalePatientsrequestAccountingOfficeServiceRegistrationIndicator
@@ -3206,7 +3207,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestAccountingOfficeServiceRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestAccountingOfficeServiceRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestAccountingOfficeService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3214,7 +3215,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.6.m Male Number of patients requested ACCOUNTING OFFICE SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestAccountingOfficeService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestAccountingOfficeService = new SqlObjectGroupDefinition();
 		malePatientRequestAccountingOfficeService
 				.setName("malePatientRequestAccountingOfficeService");
 		malePatientRequestAccountingOfficeService
@@ -3229,9 +3230,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestAccountingOfficeService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestAccountingOfficeService);
+		h.replaceObjectGroupDefinition(malePatientRequestAccountingOfficeService);
 
-		EncounterIndicator malePatientsrequestAccountingOfficeServiceRegistrationIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestAccountingOfficeServiceRegistrationIndicator = new ObjectGroupIndicator();
 		malePatientsrequestAccountingOfficeServiceRegistrationIndicator
 				.setName("malePatientsrequestAccountingOfficeServiceRegistrationIndicator");
 		malePatientsrequestAccountingOfficeServiceRegistrationIndicator
@@ -3240,7 +3241,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestAccountingOfficeServiceRegistrationIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestAccountingOfficeServiceRegistrationIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestAccountingOfficeService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3249,7 +3250,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.7.f Female Number of patients requested INTEGRATED MANAGEMENT OF
 		// ADULT ILLNESS SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestAdultIllnessService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestAdultIllnessService = new SqlObjectGroupDefinition();
 		femalePatientRequestAdultIllnessService
 				.setName("femalePatientRequestAdultIllnessService");
 		femalePatientRequestAdultIllnessService
@@ -3264,9 +3265,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestAdultIllnessService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestAdultIllnessService);
+		h.replaceObjectGroupDefinition(femalePatientRequestAdultIllnessService);
 
-		EncounterIndicator femalePatientsrequestAdultIllnessServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestAdultIllnessServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestAdultIllnessServiceIndicator
 				.setName("femalePatientsrequestAdultIllnessServiceIndicator");
 		femalePatientsrequestAdultIllnessServiceIndicator
@@ -3275,7 +3276,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestAdultIllnessServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestAdultIllnessServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestAdultIllnessService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3283,7 +3284,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.7.m Male Number of patients requested INTEGRATED MANAGEMENT OF
 		// ADULT ILLNESS SERVICE
-		SqlEncounterGroupDefinition malePatientRequestAdultIllnessService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestAdultIllnessService = new SqlObjectGroupDefinition();
 		malePatientRequestAdultIllnessService
 				.setName("malePatientRequestAdultIllnessService");
 		malePatientRequestAdultIllnessService
@@ -3298,9 +3299,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestAdultIllnessService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestAdultIllnessService);
+		h.replaceObjectGroupDefinition(malePatientRequestAdultIllnessService);
 
-		EncounterIndicator malePatientsrequestAdultIllnessServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestAdultIllnessServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestAdultIllnessServiceIndicator
 				.setName("malePatientsrequestAdultIllnessServiceIndicator");
 		malePatientsrequestAdultIllnessServiceIndicator
@@ -3309,7 +3310,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestAdultIllnessServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestAdultIllnessServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestAdultIllnessService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3318,7 +3319,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.8.f Female Number of patients requested INTEGRATED MANAGEMENT OF
 		// CHILDHOOD ILLNESS Service
 
-		SqlEncounterGroupDefinition femalePatientRequestChildIllnessService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestChildIllnessService = new SqlObjectGroupDefinition();
 		femalePatientRequestChildIllnessService
 				.setName("femalePatientRequestChildIllnessService");
 		femalePatientRequestChildIllnessService
@@ -3333,9 +3334,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestChildIllnessService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestChildIllnessService);
+		h.replaceObjectGroupDefinition(femalePatientRequestChildIllnessService);
 
-		EncounterIndicator femalePatientsrequestChildIllnessServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestChildIllnessServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestChildIllnessServiceIndicator
 				.setName("femalePatientsrequestChildIllnessServiceIndicator");
 		femalePatientsrequestChildIllnessServiceIndicator
@@ -3344,7 +3345,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestChildIllnessServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestChildIllnessServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestChildIllnessService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3352,7 +3353,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.8.m Male Number of patients requested INTEGRATED MANAGEMENT OF
 		// CHILDHOOD ILLNESS Service
-		SqlEncounterGroupDefinition malePatientRequestChildIllnessService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestChildIllnessService = new SqlObjectGroupDefinition();
 		malePatientRequestChildIllnessService
 				.setName("malePatientRequestChildIllnessService");
 		malePatientRequestChildIllnessService
@@ -3367,9 +3368,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestChildIllnessService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestChildIllnessService);
+		h.replaceObjectGroupDefinition(malePatientRequestChildIllnessService);
 
-		EncounterIndicator malePatientsrequestChildIllnessServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestChildIllnessServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestChildIllnessServiceIndicator
 				.setName("malePatientsrequestChildIllnessServiceIndicator");
 		malePatientsrequestChildIllnessServiceIndicator
@@ -3378,7 +3379,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestChildIllnessServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestChildIllnessServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestChildIllnessService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3387,7 +3388,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.9.f Female Number of patients requested INFECTIOUS DISEASES CLINIC
 		// SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestInfectiousDiseasesService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestInfectiousDiseasesService = new SqlObjectGroupDefinition();
 		femalePatientRequestInfectiousDiseasesService
 				.setName("femalePatientRequestInfectiousDiseasesService");
 		femalePatientRequestInfectiousDiseasesService
@@ -3403,9 +3404,9 @@ public class SetupRwandaPrimaryCareReport {
 						Date.class));
 		femalePatientRequestInfectiousDiseasesService
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestInfectiousDiseasesService);
+		h.replaceObjectGroupDefinition(femalePatientRequestInfectiousDiseasesService);
 
-		EncounterIndicator femalePatientsrequestInfectiousDiseasesServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestInfectiousDiseasesServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestInfectiousDiseasesServiceIndicator
 				.setName("femalePatientsrequestInfectiousDiseasesServiceIndicator");
 		femalePatientsrequestInfectiousDiseasesServiceIndicator
@@ -3414,7 +3415,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestInfectiousDiseasesServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestInfectiousDiseasesServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestInfectiousDiseasesService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3423,7 +3424,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.9.m Male Number of patients requested INFECTIOUS DISEASES CLINIC
 		// SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestInfectiousDiseasesService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestInfectiousDiseasesService = new SqlObjectGroupDefinition();
 		malePatientRequestInfectiousDiseasesService
 				.setName("malePatientRequestInfectiousDiseasesService");
 		malePatientRequestInfectiousDiseasesService
@@ -3438,9 +3439,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestInfectiousDiseasesService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestInfectiousDiseasesService);
+		h.replaceObjectGroupDefinition(malePatientRequestInfectiousDiseasesService);
 
-		EncounterIndicator malePatientsrequestInfectiousDiseasesServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestInfectiousDiseasesServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestInfectiousDiseasesServiceIndicator
 				.setName("malePatientsrequestInfectiousDiseasesServiceIndicator");
 		malePatientsrequestInfectiousDiseasesServiceIndicator
@@ -3449,7 +3450,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestInfectiousDiseasesServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestInfectiousDiseasesServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestInfectiousDiseasesService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3457,7 +3458,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.10.f Female Number of patients requested SOCIAL WORKER SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestSocialWorkerService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestSocialWorkerService = new SqlObjectGroupDefinition();
 		femalePatientRequestSocialWorkerService
 				.setName("femalePatientRequestSocialWorkerService");
 		femalePatientRequestSocialWorkerService
@@ -3472,9 +3473,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestSocialWorkerService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestSocialWorkerService);
+		h.replaceObjectGroupDefinition(femalePatientRequestSocialWorkerService);
 
-		EncounterIndicator femalePatientsrequestSocialWorkerServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestSocialWorkerServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestSocialWorkerServiceIndicator
 				.setName("femalePatientsrequestSocialWorkerServiceIndicator");
 		femalePatientsrequestSocialWorkerServiceIndicator
@@ -3483,14 +3484,14 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestSocialWorkerServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestSocialWorkerServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestSocialWorkerService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(femalePatientsrequestSocialWorkerServiceIndicator);
 
 		// 7.10.m Male Number of patients requested SOCIAL WORKER SERVICE
-		SqlEncounterGroupDefinition malePatientRequestSocialWorkerService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestSocialWorkerService = new SqlObjectGroupDefinition();
 		malePatientRequestSocialWorkerService
 				.setName("malePatientRequestSocialWorkerService");
 		malePatientRequestSocialWorkerService
@@ -3505,9 +3506,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestSocialWorkerService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestSocialWorkerService);
+		h.replaceObjectGroupDefinition(malePatientRequestSocialWorkerService);
 
-		EncounterIndicator malePatientsrequestSocialWorkerServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestSocialWorkerServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestSocialWorkerServiceIndicator
 				.setName("malePatientsrequestSocialWorkerServiceIndicator");
 		malePatientsrequestSocialWorkerServiceIndicator
@@ -3516,7 +3517,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestSocialWorkerServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestSocialWorkerServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestSocialWorkerService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3525,7 +3526,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.11.f Female Number of patients requested PREVENTION OF MOTHER TO
 		// CHILD TRANSMISSION SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestPMTCTService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestPMTCTService = new SqlObjectGroupDefinition();
 		femalePatientRequestPMTCTService
 				.setName("femalePatientRequestPMTCTService");
 		femalePatientRequestPMTCTService
@@ -3540,9 +3541,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestPMTCTService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestPMTCTService);
+		h.replaceObjectGroupDefinition(femalePatientRequestPMTCTService);
 
-		EncounterIndicator femalePatientsrequestPMTCTServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestPMTCTServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestPMTCTServiceIndicator
 				.setName("femalePatientsrequestPMTCTServiceIndicator");
 		femalePatientsrequestPMTCTServiceIndicator.addParameter(new Parameter(
@@ -3550,7 +3551,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestPMTCTServiceIndicator.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
 		femalePatientsrequestPMTCTServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestPMTCTService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3559,7 +3560,7 @@ public class SetupRwandaPrimaryCareReport {
 		// 7.11.f Male Number of patients requested PREVENTION OF MOTHER TO
 		// CHILD TRANSMISSION SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestPMTCTService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestPMTCTService = new SqlObjectGroupDefinition();
 		malePatientRequestPMTCTService
 				.setName("malePatientRequestPMTCTService");
 		malePatientRequestPMTCTService
@@ -3574,9 +3575,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		malePatientRequestPMTCTService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestPMTCTService);
+		h.replaceObjectGroupDefinition(malePatientRequestPMTCTService);
 
-		EncounterIndicator malePatientsrequestPMTCTServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestPMTCTServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestPMTCTServiceIndicator
 				.setName("malePatientsrequestPMTCTServiceIndicator");
 		malePatientsrequestPMTCTServiceIndicator.addParameter(new Parameter(
@@ -3584,7 +3585,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestPMTCTServiceIndicator.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
 		malePatientsrequestPMTCTServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestPMTCTService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3592,7 +3593,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.12.f. Female Number of patients requested LABORATORY SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestLabService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestLabService = new SqlObjectGroupDefinition();
 		femalePatientRequestLabService
 				.setName("femalePatientRequestLabService");
 		femalePatientRequestLabService
@@ -3607,9 +3608,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		femalePatientRequestLabService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestLabService);
+		h.replaceObjectGroupDefinition(femalePatientRequestLabService);
 
-		EncounterIndicator femalePatientsrequestLabServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestLabServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestLabServiceIndicator
 				.setName("femalePatientsrequestLabServiceIndicator");
 		femalePatientsrequestLabServiceIndicator.addParameter(new Parameter(
@@ -3617,14 +3618,14 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestLabServiceIndicator.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
 		femalePatientsrequestLabServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestLabService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(femalePatientsrequestLabServiceIndicator);
 
 		// 7.12.m Male Number of patients requested LABORATORY SERVICE
-		SqlEncounterGroupDefinition malePatientRequestLabService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestLabService = new SqlObjectGroupDefinition();
 		malePatientRequestLabService.setName("malePatientRequestLabService");
 		malePatientRequestLabService
 				.setQuery("select distinct e.encounter_id, e.patient_id from encounter e,obs o,person p where e.patient_id=p.person_id and e.patient_id=o.person_id and p.gender='M' and o.concept_id="
@@ -3638,9 +3639,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", Date.class));
 		malePatientRequestLabService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestLabService);
+		h.replaceObjectGroupDefinition(malePatientRequestLabService);
 
-		EncounterIndicator malePatientsrequestLabServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestLabServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestLabServiceIndicator
 				.setName("malePatientsrequestLabServiceIndicator");
 		malePatientsrequestLabServiceIndicator.addParameter(new Parameter(
@@ -3648,7 +3649,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestLabServiceIndicator.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
 		malePatientsrequestLabServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestLabService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3656,7 +3657,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.13.f. Female Number of patients requested PHARMACY SERVICES
 
-		SqlEncounterGroupDefinition femalePatientRequestPharmacyService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestPharmacyService = new SqlObjectGroupDefinition();
 		femalePatientRequestPharmacyService
 				.setName("femalePatientRequestPharmacyService");
 		femalePatientRequestPharmacyService
@@ -3671,9 +3672,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestPharmacyService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestPharmacyService);
+		h.replaceObjectGroupDefinition(femalePatientRequestPharmacyService);
 
-		EncounterIndicator femalePatientsrequestPharmacyServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestPharmacyServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestPharmacyServiceIndicator
 				.setName("femalePatientsrequestPharmacyServiceIndicator");
 		femalePatientsrequestPharmacyServiceIndicator
@@ -3682,7 +3683,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestPharmacyServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestPharmacyServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestPharmacyService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3690,7 +3691,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.13.m Male Number of patients requested PHARMACY SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestPharmacyService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestPharmacyService = new SqlObjectGroupDefinition();
 		malePatientRequestPharmacyService
 				.setName("malePatientRequestPharmacyService");
 		malePatientRequestPharmacyService
@@ -3705,9 +3706,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestPharmacyService.addParameter(new Parameter("endDate",
 				"endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestPharmacyService);
+		h.replaceObjectGroupDefinition(malePatientRequestPharmacyService);
 
-		EncounterIndicator malePatientsrequestPharmacyServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestPharmacyServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestPharmacyServiceIndicator
 				.setName("malePatientsrequestPharmacyServiceIndicator");
 		malePatientsrequestPharmacyServiceIndicator.addParameter(new Parameter(
@@ -3715,14 +3716,14 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestPharmacyServiceIndicator.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
 		malePatientsrequestPharmacyServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestPharmacyService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		h.replaceDefinition(malePatientsrequestPharmacyServiceIndicator);
 		// 7.14.f. Female Number of patients requested MATERNITY SERVICES
 
-		SqlEncounterGroupDefinition femalePatientRequestMaternityService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestMaternityService = new SqlObjectGroupDefinition();
 		femalePatientRequestMaternityService
 				.setName("femalePatientRequestMaternityService");
 		femalePatientRequestMaternityService
@@ -3737,9 +3738,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestMaternityService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestMaternityService);
+		h.replaceObjectGroupDefinition(femalePatientRequestMaternityService);
 
-		EncounterIndicator femalePatientsrequestMaternityServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestMaternityServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestMaternityServiceIndicator
 				.setName("femalePatientsrequestMaternityServiceIndicator");
 		femalePatientsrequestMaternityServiceIndicator
@@ -3748,7 +3749,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestMaternityServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestMaternityServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestMaternityService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3756,7 +3757,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.14.m Male Number of patients requested MATERNITY SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestMaternityService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestMaternityService = new SqlObjectGroupDefinition();
 		malePatientRequestMaternityService
 				.setName("malePatientRequestMaternityService");
 		malePatientRequestMaternityService
@@ -3771,9 +3772,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestMaternityService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestMaternityService);
+		h.replaceObjectGroupDefinition(malePatientRequestMaternityService);
 
-		EncounterIndicator malePatientsrequestMaternityServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestMaternityServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestMaternityServiceIndicator
 				.setName("malePatientsrequestMaternityServiceIndicator");
 		malePatientsrequestMaternityServiceIndicator
@@ -3782,7 +3783,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestMaternityServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestMaternityServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestMaternityService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3790,7 +3791,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.15.f Female Number of patients requested HOSPITALIZATION SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestHospitalizationService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestHospitalizationService = new SqlObjectGroupDefinition();
 		femalePatientRequestHospitalizationService
 				.setName("femalePatientRequestHospitalizationService");
 		femalePatientRequestHospitalizationService
@@ -3805,9 +3806,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestHospitalizationService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestHospitalizationService);
+		h.replaceObjectGroupDefinition(femalePatientRequestHospitalizationService);
 
-		EncounterIndicator femalePatientsrequestHospitalizationServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestHospitalizationServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestHospitalizationServiceIndicator
 				.setName("femalePatientsrequestHospitalizationServiceIndicator");
 		femalePatientsrequestHospitalizationServiceIndicator
@@ -3816,7 +3817,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestHospitalizationServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestHospitalizationServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestHospitalizationService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3824,7 +3825,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.15.m Male Number of patients requested HOSPITALIZATION SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestHospitalizationService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestHospitalizationService = new SqlObjectGroupDefinition();
 		malePatientRequestHospitalizationService
 				.setName("malePatientRequestHospitalizationService");
 		malePatientRequestHospitalizationService
@@ -3839,9 +3840,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestHospitalizationService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestHospitalizationService);
+		h.replaceObjectGroupDefinition(malePatientRequestHospitalizationService);
 
-		EncounterIndicator malePatientsrequestHospitalizationServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestHospitalizationServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestHospitalizationServiceIndicator
 				.setName("malePatientsrequestHospitalizationServiceIndicator");
 		malePatientsrequestHospitalizationServiceIndicator
@@ -3850,7 +3851,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestHospitalizationServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestHospitalizationServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestHospitalizationService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3858,7 +3859,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.16.f Female Number of patients requested VACCINATION SERVICE
 
-		SqlEncounterGroupDefinition femalePatientRequestVaccinationService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition femalePatientRequestVaccinationService = new SqlObjectGroupDefinition();
 		femalePatientRequestVaccinationService
 				.setName("femalePatientRequestVaccinationService");
 		femalePatientRequestVaccinationService
@@ -3873,9 +3874,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		femalePatientRequestVaccinationService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(femalePatientRequestVaccinationService);
+		h.replaceObjectGroupDefinition(femalePatientRequestVaccinationService);
 
-		EncounterIndicator femalePatientsrequestVaccinationServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator femalePatientsrequestVaccinationServiceIndicator = new ObjectGroupIndicator();
 		femalePatientsrequestVaccinationServiceIndicator
 				.setName("femalePatientsrequestVaccinationServiceIndicator");
 		femalePatientsrequestVaccinationServiceIndicator
@@ -3884,7 +3885,7 @@ public class SetupRwandaPrimaryCareReport {
 		femalePatientsrequestVaccinationServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		femalePatientsrequestVaccinationServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						femalePatientRequestVaccinationService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));
@@ -3892,7 +3893,7 @@ public class SetupRwandaPrimaryCareReport {
 
 		// 7.16.m Male Number of patients requested VACCINATION SERVICE
 
-		SqlEncounterGroupDefinition malePatientRequestVaccinationService = new SqlEncounterGroupDefinition();
+		SqlObjectGroupDefinition malePatientRequestVaccinationService = new SqlObjectGroupDefinition();
 		malePatientRequestVaccinationService
 				.setName("malePatientRequestVaccinationService");
 		malePatientRequestVaccinationService
@@ -3907,9 +3908,9 @@ public class SetupRwandaPrimaryCareReport {
 				"startDate", "startDate", Date.class));
 		malePatientRequestVaccinationService.addParameter(new Parameter(
 				"endDate", "endDate", Date.class));
-		h.replaceEncounterGroupDefinition(malePatientRequestVaccinationService);
+		h.replaceObjectGroupDefinition(malePatientRequestVaccinationService);
 
-		EncounterIndicator malePatientsrequestVaccinationServiceIndicator = new EncounterIndicator();
+		ObjectGroupIndicator malePatientsrequestVaccinationServiceIndicator = new ObjectGroupIndicator();
 		malePatientsrequestVaccinationServiceIndicator
 				.setName("malePatientsrequestVaccinationServiceIndicator");
 		malePatientsrequestVaccinationServiceIndicator
@@ -3918,7 +3919,7 @@ public class SetupRwandaPrimaryCareReport {
 		malePatientsrequestVaccinationServiceIndicator
 				.addParameter(new Parameter("endDate", "endDate", Date.class));
 		malePatientsrequestVaccinationServiceIndicator
-				.setEncounterGroupDefinition(new Mapped<SqlEncounterGroupDefinition>(
+				.setObjectGroupDefinition(new Mapped<SqlObjectGroupDefinition>(
 						malePatientRequestVaccinationService,
 						ParameterizableUtil
 								.createParameterMappings("startDate=${startDate},endDate=${endDate}")));

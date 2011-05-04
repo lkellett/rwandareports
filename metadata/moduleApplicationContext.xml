@@ -32,13 +32,13 @@
      <bean parent="serviceContext">
 		<property name="moduleService">
 			<list merge="true">
-				<value>org.openmrs.module.rwandareports.encounter.query.service.EncounterGroupQueryService</value> 
+				<value>org.openmrs.module.rwandareports.objectgroup.query.service.ObjectGroupQueryService</value> 
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.module.rwandareports.encounter.query.service.EncounterGroupQueryServiceImpl">
+						<bean class="org.openmrs.module.rwandareports.objectgroup.query.service.ObjectGroupQueryServiceImpl">
 							<property name="dao">
-								<bean class="org.openmrs.module.rwandareports.encounter.query.db.hibernate.HibernateEncounterGroupQueryServiceDAO">
+								<bean class="org.openmrs.module.rwandareports.objectgroup.query.db.hibernate.HibernateObjectGroupQueryServiceDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
 								</bean>
 							</property>
@@ -59,11 +59,11 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list merge="true">
-				<value>org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionService</value> 
+				<value>org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupDefinitionService</value> 
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionServiceImpl"></bean>
+						<bean class="org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupDefinitionServiceImpl"></bean>
 					</property>
 					<property name="preInterceptors">
 						<ref bean="serviceInterceptors" />
@@ -87,7 +87,7 @@
 		<bean parent="serializedObjectDAO">
 		<property name="supportedTypes">
 			<list merge="true">
-				<value>org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition</value>
+				<value>org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition</value>
 			</list>
 		</property>
 	</bean>	

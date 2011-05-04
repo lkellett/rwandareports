@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.definition;
+package org.openmrs.module.rwandareports.objectgroup.definition;
 
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
@@ -6,7 +6,7 @@ import org.openmrs.module.reporting.definition.configuration.ConfigurationProper
 
 
 
-public class SqlEncounterGroupDefinition extends EncounterGroupDefinition {
+public class SqlObjectGroupDefinition extends ObjectGroupDefinition {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -14,7 +14,7 @@ public class SqlEncounterGroupDefinition extends EncounterGroupDefinition {
 	private String query;
 	
 
-	public SqlEncounterGroupDefinition() {
+	public SqlObjectGroupDefinition() {
 		super();
 	}
 	
@@ -22,7 +22,7 @@ public class SqlEncounterGroupDefinition extends EncounterGroupDefinition {
 	 * 
 	 * @param sqlQuery
 	 */
-	public SqlEncounterGroupDefinition(String query) { 
+	public SqlObjectGroupDefinition(String query) { 
 		this.query = query;
 	}
 	
@@ -30,7 +30,7 @@ public class SqlEncounterGroupDefinition extends EncounterGroupDefinition {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "SQL EncounterGroup Query: [" + ObjectUtil.nvlStr(query, "") + "]";
+		return "SQL ObjectGroup Query: [" + ObjectUtil.nvlStr(query, "") + "]";
 	}
 	
 	//***** PROPERTY ACCESS *****

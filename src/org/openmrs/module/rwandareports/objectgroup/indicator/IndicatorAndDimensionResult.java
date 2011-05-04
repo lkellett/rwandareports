@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.indicator;
+package org.openmrs.module.rwandareports.objectgroup.indicator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +11,10 @@ import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.indicator.CohortIndicatorResult;
 import org.openmrs.module.reporting.indicator.IndicatorResult;
 import org.openmrs.module.reporting.indicator.dimension.CohortDimension;
-import org.openmrs.module.rwandareports.encounter.service.EncounterIndicatorResult;
+import org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupIndicatorResult;
 
 /**
- * Result class that can hold ChortIndicatorResults or EncounterIndicatorResults, the getValue() method will return the right value based on Results type.
+ * Result class that can hold ChortIndicatorResults or ObjectGroupIndicatorResults, the getValue() method will return the right value based on Results type.
  * 
  *  TODO:  this should extend CohortIndicatorAndDimensionResult from reporting module -- its basically a copy.
  *  
@@ -27,7 +27,7 @@ public class IndicatorAndDimensionResult implements IndicatorResult {
 	
 	private EvaluationContext context;
 	private CohortIndicatorResult cohortIndicatorResult;
-	private EncounterIndicatorResult encounterIndicatorResult;
+	private ObjectGroupIndicatorResult objectGroupIndicatorResult;
 	private Map<CohortDimension, String> dimensions = new HashMap<CohortDimension, String>();
 	private Map<CohortDimension, Cohort> dimensionResults = new HashMap<CohortDimension, Cohort>();
 	
@@ -39,8 +39,8 @@ public class IndicatorAndDimensionResult implements IndicatorResult {
 	public IndicatorAndDimensionResult(IndicatorResult indicatorResult, EvaluationContext context) {
 		if (indicatorResult instanceof CohortIndicatorResult)
 			this.cohortIndicatorResult = (CohortIndicatorResult) indicatorResult;
-		 else if (indicatorResult instanceof EncounterIndicatorResult)
-			this.encounterIndicatorResult = (EncounterIndicatorResult) indicatorResult;
+		 else if (indicatorResult instanceof ObjectGroupIndicatorResult)
+			this.objectGroupIndicatorResult = (ObjectGroupIndicatorResult) indicatorResult;
 		 else
 			 throw new RuntimeException("Found unsupported IndicatorResult type.");
 		this.context = context;
@@ -113,8 +113,8 @@ public class IndicatorAndDimensionResult implements IndicatorResult {
 		if (this.cohortIndicatorResult != null)
 			return CohortIndicatorResult.getResultValue(cohortIndicatorResult, calculateDimensionCohort());
 		else
-			return EncounterIndicatorResult.getResultValue(encounterIndicatorResult);
-		//TODO:  add args above if you ever want to do encounter dimensions
+			return ObjectGroupIndicatorResult.getResultValue(objectGroupIndicatorResult);
+		//TODO:  add args above if you ever want to do object dimensions
     }
 	
 	/**
@@ -200,14 +200,15 @@ public class IndicatorAndDimensionResult implements IndicatorResult {
 		this.context = context;
 	}
 
-	public EncounterIndicatorResult getEncounterIndicatorResult() {
-		return encounterIndicatorResult;
+	public ObjectGroupIndicatorResult getObjectGroupIndicatorResult() {
+		return objectGroupIndicatorResult;
 	}
 
-	public void setEncounterIndicatorResult(
-			EncounterIndicatorResult encounterIndicatorResult) {
-		this.encounterIndicatorResult = encounterIndicatorResult;
+	public void setObjectGroupIndicatorResult(
+			ObjectGroupIndicatorResult objectGroupIndicatorResult) {
+		this.objectGroupIndicatorResult = objectGroupIndicatorResult;
 	}
+
 	
 	
 }

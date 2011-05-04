@@ -33,10 +33,10 @@ import org.openmrs.module.reporting.indicator.dimension.service.DimensionService
 import org.openmrs.module.reporting.indicator.service.IndicatorService;
 import org.openmrs.module.rwandareports.dataset.RollingDailyIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.RollingDailyIndicatorDataSetDefinition.RwandaReportsIndicatorAndDimensionColumn;
-import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
-import org.openmrs.module.rwandareports.encounter.definition.SqlEncounterGroupDefinition;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
-import org.openmrs.module.rwandareports.encounter.indicator.IndicatorAndDimensionResult;
+import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.definition.SqlObjectGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.indicator.IndicatorAndDimensionResult;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
 import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
@@ -56,7 +56,7 @@ import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
  * for COHORT: not yet implemented
  * 
  * dsd.getBaseRollingQueryExtension() is retrieved from the RollingDailyPeriodIndicatorReportDefinition itself.  getBaseRollingQueryExtension retrieves the last piece of the query that is used to define a dynamic indicator for each calendar day in the calendar renderer.
- * For example, if the calendar type is ENCOUNTER, you might set baseRollingQueryExtension to be ' and encounter_type = 8' to limit the encounter query used to build the calendar day EncounterGroups.
+ * For example, if the calendar type is ENCOUNTER, you might set baseRollingQueryExtension to be ' and encounter_type = 8' to limit the encounter query used to build the calendar day ObjectGroups.
  * 
  * However, regular cohort or encounter indicators are run normally.
  * 
@@ -103,7 +103,7 @@ public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 						
 						if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER || dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER_AND_OBS){
 			        		//build the  definition
-			        		SqlEncounterGroupDefinition encQuery=new SqlEncounterGroupDefinition();
+			        		SqlObjectGroupDefinition encQuery=new SqlObjectGroupDefinition();
 			        		encQuery.setName("query" + sdfIndicatorVar.format(weeklyCal.getTime()));
 			        		if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER)
 			        			encQuery.setQuery("select distinct e.encounter_id, e.patient_id from encounter e, patient p, person per where  e.voided=0 and e.encounter_datetime >= :calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + " and e.encounter_datetime< :calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) +  " and e.location_id = :location and e.patient_id = p.patient_id and p.voided = 0 and e.patient_id = per.person_id and per.voided = 0 " + dsd.getBaseRollingQueryExtension());
@@ -115,15 +115,15 @@ public class RollingDailyIndicatorDataSetEvaluator implements DataSetEvaluator {
 			        		encQuery.addParameter(new Parameter("calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
 			        		
 			        		
-			        		EncounterIndicator dailyEncIndicator = EncounterIndicator.newCountIndicator("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), 
-									new Mapped<EncounterGroupDefinition>(encQuery, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime()))), 
+			        		ObjectGroupIndicator dailyEncIndicator = ObjectGroupIndicator.newCountIndicator("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), 
+									new Mapped<ObjectGroupDefinition>(encQuery, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime()))), 
 									null);
 			        		dailyEncIndicator.setDescription("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()));
 			        		dailyEncIndicator.addParameter(new Parameter("calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
 			        		dailyEncIndicator.addParameter(new Parameter("calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), "calEndDate" + sdfIndicatorVar.format(weeklyCal.getTime()), Date.class));
 			        		dailyEncIndicator.setAggregator(CountAggregator.class);
 							
-							Mapped<EncounterIndicator> m = new Mapped<EncounterIndicator>(dailyEncIndicator, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime())) );
+							Mapped<ObjectGroupIndicator> m = new Mapped<ObjectGroupIndicator>(dailyEncIndicator, ParameterizableUtil.createParameterMappings("location=${location},calStartDate" + sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(weeklyCal.getTime())+",calEndDate"+ sdfIndicatorVar.format(weeklyCal.getTime()) + "="+databaseFormat.format(endDateCal.getTime())) );
 							dsd.addColumn("cal_" + sdfIndicatorVar.format(weeklyCal.getTime()), "Number of registrations on " + Context.getDateFormat().format(weeklyCal.getTime()), m, new HashMap<String,String>());
 							
 						} else if (dsd.getRollingBaseReportQueryType() == RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.COHORT){

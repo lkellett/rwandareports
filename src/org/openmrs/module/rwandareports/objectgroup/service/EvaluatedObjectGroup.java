@@ -1,13 +1,13 @@
-package org.openmrs.module.rwandareports.encounter.service;
+package org.openmrs.module.rwandareports.objectgroup.service;
 
 import java.util.HashSet;
 
 import org.openmrs.module.reporting.evaluation.Evaluated;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
-import org.openmrs.module.rwandareports.encounter.EncounterGroup;
-import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.ObjectGroup;
+import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
 
-public class EvaluatedEncounterGroup extends EncounterGroup implements Evaluated<EncounterGroupDefinition> {
+public class EvaluatedObjectGroup extends ObjectGroup implements Evaluated<ObjectGroupDefinition> {
 
 	
 private static final long serialVersionUID = 1L;
@@ -16,7 +16,7 @@ private static final long serialVersionUID = 1L;
 	// PROPERTIES
 	//***********************
 	
-	private EncounterGroupDefinition definition;
+	private ObjectGroupDefinition definition;
 	private EvaluationContext context;
 	
 	//***********************
@@ -26,14 +26,14 @@ private static final long serialVersionUID = 1L;
 	/**
 	 * Default Constructor
 	 */
-	public EvaluatedEncounterGroup() {
+	public EvaluatedObjectGroup() {
 		super();
 	}
 	
 	/**
 	 * Full Constructor
 	 */
-	public EvaluatedEncounterGroup(EncounterGroup c, EncounterGroupDefinition definition, EvaluationContext context) {
+	public EvaluatedObjectGroup(ObjectGroup c, ObjectGroupDefinition definition, EvaluationContext context) {
 		super(c == null ? new HashSet<Integer[]>() : c.getMemberIds());
 		this.definition = definition;
 		this.context = context;
@@ -46,14 +46,14 @@ private static final long serialVersionUID = 1L;
 	/**
 	 * @return the definition
 	 */
-	public EncounterGroupDefinition getDefinition() {
+	public ObjectGroupDefinition getDefinition() {
 		return definition;
 	}
 
 	/**
 	 * @param definition the definition to set
 	 */
-	public void setDefinition(EncounterGroupDefinition definition) {
+	public void setDefinition(ObjectGroupDefinition definition) {
 		this.definition = definition;
 	}
 

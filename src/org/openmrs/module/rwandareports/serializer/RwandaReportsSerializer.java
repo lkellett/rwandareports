@@ -16,7 +16,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * This is basically a copy of the ReportingFramework serializer object.  This loads in the applicationContext.xml file.
- * Only necessary in order to register EncounterGroupDefinitionConverter 
+ * Only necessary in order to register ObjectGroupDefinitionConverter 
  * @author dthomas
  *
  */
@@ -49,7 +49,7 @@ private static ThreadLocal<DataHolder> cache = new ThreadLocal<DataHolder>();
 	    Mapper mapper = xstream.getMapper();
 	    ConverterLookup converterLookup = xstream.getConverterLookup();
 
-	    xstream.registerConverter(new EncounterGroupDefinitionConverter(mapper, converterLookup));
+	    xstream.registerConverter(new ObjectGroupDefinitionConverter(mapper, converterLookup));
 
 	}
 	

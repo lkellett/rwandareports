@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.service;
+package org.openmrs.module.rwandareports.objectgroup.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ import org.openmrs.module.reporting.evaluation.caching.CachingStrategy;
 import org.openmrs.module.reporting.evaluation.caching.NoCachingStrategy;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
-import org.openmrs.module.rwandareports.encounter.EncounterGroup;
-import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
-import org.openmrs.module.rwandareports.encounter.persister.EncounterGroupDefinitionPersister;
-import org.openmrs.module.rwandareports.encounter.query.EncounterGroupDefinitionEvaluator;
+import org.openmrs.module.rwandareports.objectgroup.ObjectGroup;
+import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.persister.ObjectGroupDefinitionPersister;
+import org.openmrs.module.rwandareports.objectgroup.query.ObjectGroupDefinitionEvaluator;
 import org.openmrs.util.HandlerUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,30 +32,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<EncounterGroupDefinition> implements EncounterGroupDefinitionService {
+public class ObjectGroupDefinitionServiceImpl extends BaseDefinitionService<ObjectGroupDefinition> implements ObjectGroupDefinitionService {
 	
-	private static Log log = LogFactory.getLog(EncounterGroupDefinitionServiceImpl.class);
+	private static Log log = LogFactory.getLog(ObjectGroupDefinitionServiceImpl.class);
 	
 	/**
 	 * @see DefinitionService#getDefinitionType()
 	 */
-	public Class<EncounterGroupDefinition> getDefinitionType() {
-		return EncounterGroupDefinition.class;
+	public Class<ObjectGroupDefinition> getDefinitionType() {
+		return ObjectGroupDefinition.class;
 	}
 
 	/**
 	 * @see DefinitionService#getDefinitionTypes()z
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Class<? extends EncounterGroupDefinition>> getDefinitionTypes() {
-		List<Class<? extends EncounterGroupDefinition>> ret = new ArrayList<Class<? extends EncounterGroupDefinition>>();
-		for (EncounterGroupDefinitionEvaluator e : HandlerUtil.getHandlersForType(EncounterGroupDefinitionEvaluator.class, null)) {
+	public List<Class<? extends ObjectGroupDefinition>> getDefinitionTypes() {
+		List<Class<? extends ObjectGroupDefinition>> ret = new ArrayList<Class<? extends ObjectGroupDefinition>>();
+		for (ObjectGroupDefinitionEvaluator e : HandlerUtil.getHandlersForType(ObjectGroupDefinitionEvaluator.class, null)) {
 			Handler handlerAnnotation = e.getClass().getAnnotation(Handler.class);
 			if (handlerAnnotation != null) {
 				Class<?>[] types = handlerAnnotation.supports();
 				if (types != null) {
 					for (Class<?> type : types) {
-						ret.add((Class<? extends EncounterGroupDefinition>) type);
+						ret.add((Class<? extends ObjectGroupDefinition>) type);
 					}
 				}
 			}
@@ -67,16 +67,16 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	 * @see DefinitionService#getDefinition(Class, Integer)
 	 */
 	@SuppressWarnings("unchecked")
-	public <D extends EncounterGroupDefinition> D getDefinition(Class<D> type, Integer id) throws APIException {
-		return (D) getPersister(type).getEncounterGroupDefinition(id);
+	public <D extends ObjectGroupDefinition> D getDefinition(Class<D> type, Integer id) throws APIException {
+		return (D) getPersister(type).getObjectGroupDefinition(id);
 	}
 	
 	/**
 	 * @see DefinitionService#getDefinitionByUuid(String)
 	 */
-	public EncounterGroupDefinition getDefinitionByUuid(String uuid) throws APIException {
-		for (EncounterGroupDefinitionPersister p : getAllPersisters()) {
-			EncounterGroupDefinition cd = p.getEncounterGroupDefinitionByUuid(uuid);
+	public ObjectGroupDefinition getDefinitionByUuid(String uuid) throws APIException {
+		for (ObjectGroupDefinitionPersister p : getAllPersisters()) {
+			ObjectGroupDefinition cd = p.getObjectGroupDefinitionByUuid(uuid);
 			if (cd != null) {
 				return cd;
 			}
@@ -87,10 +87,10 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	/**
 	 * @see DefinitionService#getAllDefinitions(boolean)
 	 */
-	public List<EncounterGroupDefinition> getAllDefinitions(boolean includeRetired) {
-		List<EncounterGroupDefinition> ret = new ArrayList<EncounterGroupDefinition>();
-		for (EncounterGroupDefinitionPersister p : getAllPersisters()) {
-			ret.addAll(p.getAllEncounterGroupDefinitions(includeRetired));
+	public List<ObjectGroupDefinition> getAllDefinitions(boolean includeRetired) {
+		List<ObjectGroupDefinition> ret = new ArrayList<ObjectGroupDefinition>();
+		for (ObjectGroupDefinitionPersister p : getAllPersisters()) {
+			ret.addAll(p.getAllObjectGroupDefinitions(includeRetired));
 		}
 		return ret;
 	}
@@ -100,8 +100,8 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	 */
 	public int getNumberOfDefinitions(boolean includeRetired) {
 		int i = 0;
-		for (EncounterGroupDefinitionPersister p : getAllPersisters()) {
-			i += p.getNumberOfEncounterGroupDefinitions(includeRetired);
+		for (ObjectGroupDefinitionPersister p : getAllPersisters()) {
+			i += p.getNumberOfObjectGroupDefinitions(includeRetired);
 		}
 		return i;
 	}
@@ -109,10 +109,10 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	/**
 	 * @see DefinitionService#getDefinitions(String, boolean)
 	 */
-	public List<EncounterGroupDefinition> getDefinitions(String name, boolean exactMatchOnly) {
-		List<EncounterGroupDefinition> ret = new ArrayList<EncounterGroupDefinition>();
-		for (EncounterGroupDefinitionPersister p : getAllPersisters()) {
-			ret.addAll(p.getEncounterGroupDefinitions(name, exactMatchOnly));
+	public List<ObjectGroupDefinition> getDefinitions(String name, boolean exactMatchOnly) {
+		List<ObjectGroupDefinition> ret = new ArrayList<ObjectGroupDefinition>();
+		for (ObjectGroupDefinitionPersister p : getAllPersisters()) {
+			ret.addAll(p.getObjectGroupDefinitions(name, exactMatchOnly));
 		}
 		return ret;
 	}
@@ -122,42 +122,42 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	 */
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public <D extends EncounterGroupDefinition> D saveDefinition(D definition) throws APIException {
+	public <D extends ObjectGroupDefinition> D saveDefinition(D definition) throws APIException {
 		
 		//We would like to validate definitions before saving them, but currently the UI workflow 
 		//sometimes saves definitions with just a name and description before displaying them for editing.
 		//ValidateUtil.validate(definition);
 		
 		log.debug("Saving definition: " + definition + " of type " + definition.getClass());
-		return (D) getPersister(definition.getClass()).saveEncounterGroupDefinition(definition);
+		return (D) getPersister(definition.getClass()).saveObjectGroupDefinition(definition);
 	}
 	
 	/**
 	 * @see DefinitionService#purgeDefinition(Definition)
 	 */
-	public void purgeDefinition(EncounterGroupDefinition definition) {
-		getPersister(definition.getClass()).purgeEncounterGroupDefinition(definition);
+	public void purgeDefinition(ObjectGroupDefinition definition) {
+		getPersister(definition.getClass()).purgeObjectGroupDefinition(definition);
 	}
 
 	/**
-	 * 	This is the main method which should be used to evaluate an EncounterGroupDefinition
+	 * 	This is the main method which should be used to evaluate an ObjectGroupDefinition
 	 *  - retrieves all evaluation parameter values from the class and the EvaluationContext
 	 *  - checks whether an EncoungerGroup  with this configuration exists in the cache (if caching is supported)
-	 *  - returns the cached EncounterGroup if found
+	 *  - returns the cached ObjectGroup if found
 	 *  - otherwise, delegates to the appropriate DefinitionEvaluator and evaluates the result
 	 *  - caches the result (if caching is supported)
 	 * 
 	 */
-	public EvaluatedEncounterGroup evaluate(EncounterGroupDefinition definition, EvaluationContext context) throws EvaluationException {
+	public EvaluatedObjectGroup evaluate(ObjectGroupDefinition definition, EvaluationContext context) throws EvaluationException {
 		
 
-		EncounterGroupDefinitionEvaluator evaluator = HandlerUtil.getPreferredHandler(EncounterGroupDefinitionEvaluator.class, definition.getClass());
+		ObjectGroupDefinitionEvaluator evaluator = HandlerUtil.getPreferredHandler(ObjectGroupDefinitionEvaluator.class, definition.getClass());
 		if (evaluator == null) {
-			throw new APIException("No EncounterGroupDefinitionEvaluator found for (" + definition.getClass() + ") " + definition.getName());
+			throw new APIException("No ObjectGroupDefinitionEvaluator found for (" + definition.getClass() + ") " + definition.getName());
 		}
 		
 		
-		EncounterGroupDefinition clonedDefinition = DefinitionUtil.clone(definition);
+		ObjectGroupDefinition clonedDefinition = DefinitionUtil.clone(definition);
 		for (Parameter p : clonedDefinition.getParameters()) {
 			Object value = p.getDefaultValue();
 			if (context != null && context.containsParameter(p.getName())) {
@@ -167,7 +167,7 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 		}
 		
 		// Retrieve from cache if possible, otherwise evaluate
-		EncounterGroup c = null;
+		ObjectGroup c = null;
 		if (context != null) {
 			Caching caching = clonedDefinition.getClass().getAnnotation(Caching.class);
 			if (caching != null && caching.strategy() != NoCachingStrategy.class) {
@@ -175,7 +175,7 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 					CachingStrategy strategy = caching.strategy().newInstance();
 					String cacheKey = strategy.getCacheKey(clonedDefinition);
 					if (cacheKey != null) {
-						c = (EncounterGroup) context.getFromCache(cacheKey);
+						c = (ObjectGroup) context.getFromCache(cacheKey);
 					}
 					if (c == null) {
 						c = evaluator.evaluate(clonedDefinition, context);
@@ -194,28 +194,28 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 			c = evaluator.evaluate(clonedDefinition, context);
 		}
 		if (context != null && context.getBaseCohort() != null && c != null) {
-			c = EncounterGroup.intersect(c, context.getBaseCohort());
+			c = ObjectGroup.intersect(c, context.getBaseCohort());
 		}
 		
-		return new EvaluatedEncounterGroup(c, clonedDefinition, context);
+		return new EvaluatedObjectGroup(c, clonedDefinition, context);
 	}
 
 	/**
 	 * @see BaseDefinitionService#evaluate(Mapped, EvaluationContext)
 	 */
 	@Override
-	public EvaluatedEncounterGroup evaluate(Mapped<? extends EncounterGroupDefinition> definition, EvaluationContext context) throws EvaluationException {
-		return (EvaluatedEncounterGroup) super.evaluate(definition, context);
+	public EvaluatedObjectGroup evaluate(Mapped<? extends ObjectGroupDefinition> definition, EvaluationContext context) throws EvaluationException {
+		return (EvaluatedObjectGroup) super.evaluate(definition, context);
 	}
 
 	/**
-	 * Returns the EncounterGroupDefinitionPersister for the passed Definition
+	 * Returns the ObjectGroupDefinitionPersister for the passed Definition
 	 * @param definition
-	 * @return the EncounterGroupDefinitionPersister for the passed EncounterGroupDefinition
+	 * @return the ObjectGroupDefinitionPersister for the passed ObjectGroupDefinition
 	 * @throws APIException if no matching persister is found
 	 */
-	protected EncounterGroupDefinitionPersister getPersister(Class<? extends EncounterGroupDefinition> definition) {
-		EncounterGroupDefinitionPersister persister = HandlerUtil.getPreferredHandler(EncounterGroupDefinitionPersister.class, definition);
+	protected ObjectGroupDefinitionPersister getPersister(Class<? extends ObjectGroupDefinition> definition) {
+		ObjectGroupDefinitionPersister persister = HandlerUtil.getPreferredHandler(ObjectGroupDefinitionPersister.class, definition);
 		if (persister == null) {
 			throw new APIException("No DefinitionPersister found for <" + definition + ">");
 		}
@@ -223,10 +223,10 @@ public class EncounterGroupDefinitionServiceImpl extends BaseDefinitionService<E
 	}
 	
 	/**
-	 * @return all EncounterGroupDefinitionPersister
+	 * @return all ObjectGroupDefinitionPersister
 	 */
-	protected List<EncounterGroupDefinitionPersister> getAllPersisters() {	
-		return HandlerUtil.getHandlersForType(EncounterGroupDefinitionPersister.class, null);
+	protected List<ObjectGroupDefinitionPersister> getAllPersisters() {	
+		return HandlerUtil.getHandlersForType(ObjectGroupDefinitionPersister.class, null);
 	}
 		
 }

@@ -1,25 +1,25 @@
-package org.openmrs.module.rwandareports.encounter.service;
+package org.openmrs.module.rwandareports.objectgroup.service;
 
 import org.openmrs.module.reporting.common.Fraction;
 import org.openmrs.module.reporting.evaluation.Evaluated;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.indicator.IndicatorResult;
-import org.openmrs.module.rwandareports.encounter.EncounterGroup;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator.IndicatorType;
+import org.openmrs.module.rwandareports.objectgroup.ObjectGroup;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator.IndicatorType;
 
-public class EncounterIndicatorResult implements IndicatorResult {
+public class ObjectGroupIndicatorResult implements IndicatorResult {
 	
 	
 private static final long serialVersionUID = 1L;
     
     //***** PROPERTIES *****
 
-    private EncounterIndicator indicator;
+    private ObjectGroupIndicator indicator;
     private EvaluationContext context;
     
-    private EncounterGroup encounterGroup;
-    private EncounterGroup denominatorEncounterGroup;
+    private ObjectGroup objectGroup;
+    private ObjectGroup denominatorObjectGroup;
     private int perDay = 1;
     private int numDays;
     //private Map<Integer, Number> logicResults = new HashMap<Integer, Number>(); // patient id -> logic value
@@ -29,7 +29,7 @@ private static final long serialVersionUID = 1L;
     /**
      * Default Constructor
      */
-    public EncounterIndicatorResult() {
+    public ObjectGroupIndicatorResult() {
     	super();
     }
     
@@ -41,22 +41,22 @@ private static final long serialVersionUID = 1L;
 		this.numDays = numDays;
 	}
 
-	public static Number getResultValue(EncounterIndicatorResult encounterIndicatorResult, EncounterGroup...filters) {
+	public static Number getResultValue(ObjectGroupIndicatorResult objectGroupIndicatorResult, ObjectGroup...filters) {
     	
-    	IndicatorType type = encounterIndicatorResult.getDefinition().getType();
-    	EncounterGroup numerator = encounterIndicatorResult.getEncounterGroup();
-    	EncounterGroup denominator = encounterIndicatorResult.getDenominatorEncounterGroup();
+    	IndicatorType type = objectGroupIndicatorResult.getDefinition().getType();
+    	ObjectGroup numerator = objectGroupIndicatorResult.getObjectGroup();
+    	ObjectGroup denominator = objectGroupIndicatorResult.getDenominatorObjectGroup();
     	
     	
-//    	Map<Integer, Number> logicVals = new HashMap<Integer, Number>(EncounterIndicatorResult.getLogicResults());
+//    	Map<Integer, Number> logicVals = new HashMap<Integer, Number>(ObjectGroupIndicatorResult.getLogicResults());
     	
 
     	if (filters != null) {
-	    	for (EncounterGroup filter : filters) {
+	    	for (ObjectGroup filter : filters) {
 	    		if (filter != null) {
-		    		numerator = EncounterGroup.intersect(numerator, filter);
+		    		numerator = ObjectGroup.intersect(numerator, filter);
 		    		if (type == IndicatorType.FRACTION) {
-		    			denominator = EncounterGroup.intersect(denominator, filter);
+		    			denominator = ObjectGroup.intersect(denominator, filter);
 		    		}
 //		    		else if (type == IndicatorType.LOGIC) {
 //		    			logicVals.keySet().retainAll(filter.getMemberIds());
@@ -73,12 +73,12 @@ private static final long serialVersionUID = 1L;
     	}
     	else if (type == IndicatorType.PER_DAY || type == IndicatorType.PER_WEEKDAYS){
     		int n = numerator.getSize();
-    		return new Fraction(n, (encounterIndicatorResult.getNumDays() * encounterIndicatorResult.getPerDay()));
+    		return new Fraction(n, (objectGroupIndicatorResult.getNumDays() * objectGroupIndicatorResult.getPerDay()));
     	}
     	
     	
 //    	else if (type == IndicatorType.LOGIC) {
-//    		Class<? extends Aggregator> aggregator = EncounterIndicatorResult.getDefinition().getAggregator();
+//    		Class<? extends Aggregator> aggregator = ObjectGroupIndicatorResult.getDefinition().getAggregator();
 //        	if (aggregator == null) {
 //        		aggregator = CountAggregator.class;
 //        	}
@@ -101,7 +101,7 @@ private static final long serialVersionUID = 1L;
      * @see IndicatorResult#getValue()
      */
     public Number getValue() {
-    	return EncounterIndicatorResult.getResultValue(this);
+    	return ObjectGroupIndicatorResult.getResultValue(this);
     }
     
 	/** 
@@ -118,21 +118,21 @@ private static final long serialVersionUID = 1L;
 	/**
 	 * @see Evaluated#getDefinition()
 	 */
-	public EncounterIndicator getDefinition() {
+	public ObjectGroupIndicator getDefinition() {
 		return indicator;
 	}
 
 	/**
 	 * @return the indicator
 	 */
-	public EncounterIndicator getIndicator() {
+	public ObjectGroupIndicator getIndicator() {
 		return indicator;
 	}
 
 	/**
 	 * @param indicator the indicator to set
 	 */
-	public void setIndicator(EncounterIndicator indicator) {
+	public void setIndicator(ObjectGroupIndicator indicator) {
 		this.indicator = indicator;
 	}
 
@@ -150,21 +150,31 @@ private static final long serialVersionUID = 1L;
 		this.context = context;
 	}
 
-	public EncounterGroup getEncounterGroup() {
-		return encounterGroup;
+
+
+	public ObjectGroup getObjectGroup() {
+		return objectGroup;
 	}
 
-	public void setEncounterGroup(EncounterGroup encounterGroup) {
-		this.encounterGroup = encounterGroup;
+	public void setObjectGroup(ObjectGroup objectGroup) {
+		this.objectGroup = objectGroup;
 	}
 
-	public EncounterGroup getDenominatorEncounterGroup() {
-		return denominatorEncounterGroup;
+	public void setPerDay(int perDay) {
+		this.perDay = perDay;
 	}
 
-	public void setDenominatorEncounterGroup(
-			EncounterGroup denominatorEncounterGroup) {
-		this.denominatorEncounterGroup = denominatorEncounterGroup;
+	public void setNumDays(int numDays) {
+		this.numDays = numDays;
+	}
+
+	public ObjectGroup getDenominatorObjectGroup() {
+		return denominatorObjectGroup;
+	}
+
+	public void setDenominatorObjectGroup(
+			ObjectGroup denominatorObjectGroup) {
+		this.denominatorObjectGroup = denominatorObjectGroup;
 	}
 
 //	/**

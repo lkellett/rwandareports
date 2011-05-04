@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter;
+package org.openmrs.module.rwandareports.objectgroup;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -11,17 +11,17 @@ import org.openmrs.Cohort;
 import org.openmrs.module.reporting.ReportingException;
 
 /**
- * This is the basic unit of the EncounterIndicator class.  And encounter group is a group of encounters, and is designed to resemble an OpenMRS Cohort, just with Encounters.
- * The basic unit within an EncounterGroup is an Integer[encounter_id, patient_id].  
+ * This is the basic unit of the ObjectGroupIndicator class.  And object group is a group of objects, and is designed to resemble an OpenMRS Cohort, just with ObjectGroups.
+ * The basic unit within an ObjectGroup is an Integer[object_id, patient_id].  
  * 
- * Any query meant to return an EncounterGroup MUST return exactly two columns, first encounter_id, then patient_id
+ * Any query meant to return an ObjectGroup MUST return exactly two columns, first object_id, then patient_id
  * 
- * The second mandatory value is necessary so that and EncounterGroup can be intersected with a Cohort without instantiating any hibernate-managed OpenMRS objects, with minimal overhead.
+ * The second mandatory value is necessary so that and ObjectGroup can be intersected with a Cohort without instantiating any hibernate-managed OpenMRS objects, with minimal overhead.
  * 
  * @author dthomas
  *
  */
-public class EncounterGroup implements Serializable {
+public class ObjectGroup implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,35 +32,35 @@ public class EncounterGroup implements Serializable {
 	private String description;
 	
 	/**
-	 * Expects a group of [encounterId,patientId].
+	 * Expects a group of [objectId,patientId].
 	 */
 	private Set<Integer[]> memberIds;
 	
 	
-	public EncounterGroup() {
+	public ObjectGroup() {
 		memberIds = new HashSet<Integer[]>();
 	}
 	
 	/**
 	 * 
-	 * Sets up the EncounterGroup with encounterGroup members.  Each member is an Integer[], first position is encounter_id, second position is patient_id 
+	 * Sets up the ObjectGroup with objectGroup members.  Each member is an Integer[], first position is object_id, second position is patient_id 
 	 * 
 	 * @param rows
 	 */
-	public EncounterGroup(List<Object[]> rows){
+	public ObjectGroup(List<Object[]> rows){
 		if (memberIds == null)
 			memberIds = new HashSet<Integer[]>();
 		for (int i = 0; i < rows.size(); i++){
 			Object[] oSet = rows.get(i);
 			//TODO:  make length variable so that you can return obs values, etc...   ??
 			if (oSet.length != 2)
-				throw new ReportingException("Encounter Query must return exactly 2 rows:  encounter_id, patient_id");
+				throw new ReportingException("ObjectGroup Query must return exactly 2 rows:  id, patient_id");
 			Integer[] member = {(Integer) oSet[0], (Integer) oSet[1]};
 			memberIds.add(member);
 		}
 	}
 	
-	public EncounterGroup(Set<Integer[]> members){
+	public ObjectGroup(Set<Integer[]> members){
 		memberIds = members;
 	}
 
@@ -108,8 +108,8 @@ public class EncounterGroup implements Serializable {
 		return size();
 	}
 	
-	public static EncounterGroup intersect(EncounterGroup a, EncounterGroup b) {
-		EncounterGroup ret = new EncounterGroup();
+	public static ObjectGroup intersect(ObjectGroup a, ObjectGroup b) {
+		ObjectGroup ret = new ObjectGroup();
 		ret.setName("(" + (a == null ? "NULL" : a.getName()) + " * " + (b == null ? "NULL" : b.getName()) + ")");
 		if (a != null && b != null) {
 			ret.getMemberIds().addAll(a.getMemberIds());
@@ -121,12 +121,12 @@ public class EncounterGroup implements Serializable {
 
 	/**
 	 * 
-	 * @param a EncounterGroup
+	 * @param a ObjectGroup
 	 * @param b Cohort
-	 * @return and EncounterGroup containing only Encounters for patients in the Cohort
+	 * @return and ObjectGroup containing only ObjectGroups for patients in the Cohort
 	 */
-    public static EncounterGroup intersect(EncounterGroup a, Cohort b){
-    	EncounterGroup ret = new EncounterGroup();
+    public static ObjectGroup intersect(ObjectGroup a, Cohort b){
+    	ObjectGroup ret = new ObjectGroup();
     	for (Integer[] memberId : a.getMemberIds()){
     		if (b.getMemberIds().contains(memberId[1]))
     			ret.addMemberId(memberId);
@@ -136,7 +136,7 @@ public class EncounterGroup implements Serializable {
     
     /**
      * 
-     * @return a Cohort of all patients who have an encounter in this EncounterGroup
+     * @return a Cohort of all patients who have an object in this ObjectGroup
      */
     public Cohort getCohort(){
     	Cohort cohort = new Cohort();

@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.indicator;
+package org.openmrs.module.rwandareports.objectgroup.indicator;
 
 import java.util.Map;
 
@@ -7,11 +7,11 @@ import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.BaseIndicator;
 import org.openmrs.module.reporting.indicator.aggregation.Aggregator;
-import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefinition;
+import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
 
 /**
  * 
- * Represents an Indicator that can be built out of EncounterGroups.
+ * Represents an Indicator that can be built out of ObjectGroups.
  * 
  * Behaves similarly to a CohortIndicator, except that there is additional 'per day' functionality, that allows you to put a number of days in the denominator, thus creating a 'per day' indicator
  * Additionally, there is a perHourDenominator property that allows you to multiply the denominator by a number of hours, creating the possibility of a 'per hour' indicator
@@ -19,7 +19,7 @@ import org.openmrs.module.rwandareports.encounter.definition.EncounterGroupDefin
  * @author dthomas
  *
  */
-public class EncounterIndicator extends BaseIndicator {
+public class ObjectGroupIndicator extends BaseIndicator {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,9 +36,9 @@ public class EncounterIndicator extends BaseIndicator {
     //***** PROPERTIES *****
     
     private IndicatorType type = IndicatorType.COUNT;
-    private Mapped<? extends EncounterGroupDefinition> encounterGroupDefinition;
-    private Mapped<? extends EncounterGroupDefinition> denominator;
-    private Mapped<? extends EncounterGroupDefinition> locationFilter;
+    private Mapped<? extends ObjectGroupDefinition> objectGroupDefinition;
+    private Mapped<? extends ObjectGroupDefinition> denominator;
+    private Mapped<? extends ObjectGroupDefinition> locationFilter;
     private Integer perHourDenominator = 1;
 
 
@@ -58,7 +58,7 @@ public class EncounterIndicator extends BaseIndicator {
     /**
      * Default Constructor
      */
-    public EncounterIndicator() {
+    public ObjectGroupIndicator() {
     	super();
     	addParameter(ReportingConstants.LOCATION_PARAMETER);
     }
@@ -66,7 +66,7 @@ public class EncounterIndicator extends BaseIndicator {
     /**
      * Default Constructor with name
      */
-    public EncounterIndicator(String name) {
+    public ObjectGroupIndicator(String name) {
     	this();
     	setName(name);
     }
@@ -76,12 +76,12 @@ public class EncounterIndicator extends BaseIndicator {
     /**
      * Constructs a new Count Indicator
      */
-    public static EncounterIndicator newCountIndicator(String name,
-    												Mapped<? extends EncounterGroupDefinition> encounterGroupDefinition, 
-    												Mapped<? extends EncounterGroupDefinition> locationFilter) {
-    	EncounterIndicator ci = new EncounterIndicator(name);
+    public static ObjectGroupIndicator newCountIndicator(String name,
+    												Mapped<? extends ObjectGroupDefinition> objectGroupDefinition, 
+    												Mapped<? extends ObjectGroupDefinition> locationFilter) {
+    	ObjectGroupIndicator ci = new ObjectGroupIndicator(name);
     	ci.setType(IndicatorType.COUNT);
-    	ci.setEncounterGroupDefinition(encounterGroupDefinition);
+    	ci.setObjectGroupDefinition(objectGroupDefinition);
     	ci.setLocationFilter(locationFilter);
     	return ci;
     }
@@ -89,13 +89,13 @@ public class EncounterIndicator extends BaseIndicator {
     /**
      * Constructs a new Fraction Indicator
      */
-    public static EncounterIndicator newFractionIndicator(String name,
-    												   Mapped<? extends EncounterGroupDefinition> numerator, 
-    												   Mapped<? extends EncounterGroupDefinition> denominator, 
-    												   Mapped<? extends EncounterGroupDefinition> locationFilter) {
-    	EncounterIndicator ci = new EncounterIndicator(name);
+    public static ObjectGroupIndicator newFractionIndicator(String name,
+    												   Mapped<? extends ObjectGroupDefinition> numerator, 
+    												   Mapped<? extends ObjectGroupDefinition> denominator, 
+    												   Mapped<? extends ObjectGroupDefinition> locationFilter) {
+    	ObjectGroupIndicator ci = new ObjectGroupIndicator(name);
     	ci.setType(IndicatorType.FRACTION);
-    	ci.setEncounterGroupDefinition(numerator);
+    	ci.setObjectGroupDefinition(numerator);
     	ci.setDenominator(denominator);
     	ci.setLocationFilter(locationFilter);
     	return ci;
@@ -104,13 +104,13 @@ public class EncounterIndicator extends BaseIndicator {
     /**
      * Constructs a new Fraction Indicator
      */
-    public static EncounterIndicator newDailyDivisionIndicator(String name,
-    												   Mapped<? extends EncounterGroupDefinition> numerator, 
-    												   Integer perHourDenominator,  EncounterIndicator.IndicatorType type,
-    												   Mapped<? extends EncounterGroupDefinition> locationFilter) {
-    	EncounterIndicator ci = new EncounterIndicator(name);
+    public static ObjectGroupIndicator newDailyDivisionIndicator(String name,
+    												   Mapped<? extends ObjectGroupDefinition> numerator, 
+    												   Integer perHourDenominator,  ObjectGroupIndicator.IndicatorType type,
+    												   Mapped<? extends ObjectGroupDefinition> locationFilter) {
+    	ObjectGroupIndicator ci = new ObjectGroupIndicator(name);
     	ci.setType(type);
-    	ci.setEncounterGroupDefinition(numerator);
+    	ci.setObjectGroupDefinition(numerator);
     	ci.setPerHourDenominator(perHourDenominator);
     	ci.setLocationFilter(locationFilter);
     	return ci;
@@ -119,14 +119,14 @@ public class EncounterIndicator extends BaseIndicator {
 //    /**
 //     * Constructs a new Logic Indicator
 //     */
-//    public static EncounterIndicator newLogicIndicator(String name,
-//    												Mapped<? extends EncounterGroupDefinition> encounterGroupDefinition,  
-//    												Mapped<? extends EncounterGroupDefinition> locationFilter,
+//    public static ObjectGroupIndicator newLogicIndicator(String name,
+//    												Mapped<? extends ObjectGroupDefinition> encounterGroupDefinition,  
+//    												Mapped<? extends ObjectGroupDefinition> locationFilter,
 //    												Class<? extends Aggregator> aggregator,
 //    												String logicExpression) {
-//    	EncounterIndicator ci = new EncounterIndicator(name);
+//    	ObjectGroupIndicator ci = new ObjectGroupIndicator(name);
 //    	ci.setType(IndicatorType.LOGIC);
-//    	ci.setEncounterGroupDefinition(encounterGroupDefinition);
+//    	ci.setObjectGroupDefinition(encounterGroupDefinition);
 //    	ci.setLocationFilter(locationFilter);
 //    	ci.setAggregator(aggregator);
 //    	//ci.setLogicExpression(logicExpression);
@@ -159,57 +159,57 @@ public class EncounterIndicator extends BaseIndicator {
 	/**
      * @return the EcounterGroupDefinition
      */
-    public Mapped<? extends EncounterGroupDefinition> getEncounterGroupDefinition() {
-    	return encounterGroupDefinition;
+    public Mapped<? extends ObjectGroupDefinition> getObjectGroupDefinition() {
+    	return objectGroupDefinition;
     }
 
 	/**
      * @param EcounterGroupDefinition the EcounterGroupDefinition to set
      */
-    public void setEncounterGroupDefinition(Mapped<? extends EncounterGroupDefinition> encounterGroupDefinition) {
-    	this.encounterGroupDefinition = encounterGroupDefinition;
+    public void setObjectGroupDefinition(Mapped<? extends ObjectGroupDefinition> objectGroupDefinition) {
+    	this.objectGroupDefinition = objectGroupDefinition;
     }
     
     /**
      * @param EcounterGroupDefinition the EcounterGroupDefinition to set
      */
-    public void setEncounterGroupDefinition(EncounterGroupDefinition encounterGroupDefinition, Map<String, Object> mappings) {
-    	this.encounterGroupDefinition = new Mapped<EncounterGroupDefinition>(encounterGroupDefinition, mappings);
+    public void setObjectGroupDefinition(ObjectGroupDefinition objectGroupDefinition, Map<String, Object> mappings) {
+    	this.objectGroupDefinition = new Mapped<ObjectGroupDefinition>(objectGroupDefinition, mappings);
     }
     
     /**
      * @param EcounterGroupDefinition the EcounterGroupDefinition to set
      */
-    public void setEncounterGroupDefinition(EncounterGroupDefinition encounterGroupDefinition, String mappings) {
+    public void setObjectGroupDefinition(ObjectGroupDefinition objectGroupDefinition, String mappings) {
     	Map<String, Object> m = ParameterizableUtil.createParameterMappings(mappings);
-    	setEncounterGroupDefinition(encounterGroupDefinition, m);
+    	setObjectGroupDefinition(objectGroupDefinition, m);
     }
     
     /**
 	 * @return the denominator
 	 */
-	public Mapped<? extends EncounterGroupDefinition> getDenominator() {
+	public Mapped<? extends ObjectGroupDefinition> getDenominator() {
 		return denominator;
 	}
 
 	/**
 	 * @param denominator the denominator to set
 	 */
-	public void setDenominator(Mapped<? extends EncounterGroupDefinition> denominator) {
+	public void setDenominator(Mapped<? extends ObjectGroupDefinition> denominator) {
 		this.denominator = denominator;
 	}
 
     /**
      * @param denominator the denominator to set
      */
-    public void setDenominator(EncounterGroupDefinition denominator, Map<String, Object> mappings) {
-    	this.denominator = new Mapped<EncounterGroupDefinition>(denominator, mappings);
+    public void setDenominator(ObjectGroupDefinition denominator, Map<String, Object> mappings) {
+    	this.denominator = new Mapped<ObjectGroupDefinition>(denominator, mappings);
     }
     
     /**
      * @param denominator the denominator to set
      */
-    public void setDenominator(EncounterGroupDefinition denominator, String mappings) {
+    public void setDenominator(ObjectGroupDefinition denominator, String mappings) {
     	Map<String, Object> m = ParameterizableUtil.createParameterMappings(mappings);
     	setDenominator(denominator, m);
     }
@@ -217,28 +217,28 @@ public class EncounterIndicator extends BaseIndicator {
 	/**
 	 * @return the locationFilter
 	 */
-	public Mapped<? extends EncounterGroupDefinition> getLocationFilter() {
+	public Mapped<? extends ObjectGroupDefinition> getLocationFilter() {
 		return locationFilter;
 	}
 
 	/**
 	 * @param locationFilter the locationFilter to set
 	 */
-	public void setLocationFilter(Mapped<? extends EncounterGroupDefinition> locationFilter) {
+	public void setLocationFilter(Mapped<? extends ObjectGroupDefinition> locationFilter) {
 		this.locationFilter = locationFilter;
 	}
 
     /**
      * @param locationFilter the locationFilter to set
      */
-    public void setLocationFilter(EncounterGroupDefinition locationFilter, Map<String, Object> mappings) {
-    	this.locationFilter = new Mapped<EncounterGroupDefinition>(locationFilter, mappings);
+    public void setLocationFilter(ObjectGroupDefinition locationFilter, Map<String, Object> mappings) {
+    	this.locationFilter = new Mapped<ObjectGroupDefinition>(locationFilter, mappings);
     }
     
     /**
      * @param locationFilter the locationFilter to set
      */
-    public void setLocationFilter(EncounterGroupDefinition locationFilter, String mappings) {
+    public void setLocationFilter(ObjectGroupDefinition locationFilter, String mappings) {
     	Map<String, Object> m = ParameterizableUtil.createParameterMappings(mappings);
     	setLocationFilter(locationFilter, m);
     }

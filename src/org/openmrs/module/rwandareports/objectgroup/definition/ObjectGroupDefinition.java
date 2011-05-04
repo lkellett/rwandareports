@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.definition;
+package org.openmrs.module.rwandareports.objectgroup.definition;
 
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationPropertyCachingStrategy;
@@ -7,7 +7,7 @@ import org.openmrs.module.reporting.evaluation.caching.Caching;
 
 
 @Caching(strategy=ConfigurationPropertyCachingStrategy.class)
-public abstract class EncounterGroupDefinition extends BaseDefinition {
+public abstract class ObjectGroupDefinition extends BaseDefinition {
 	
 	//***** PROPERTIES *****
 
@@ -18,7 +18,7 @@ public abstract class EncounterGroupDefinition extends BaseDefinition {
     /**
      * Default Constructor
      */
-    public EncounterGroupDefinition() {
+    public ObjectGroupDefinition() {
     	super();
     }
     

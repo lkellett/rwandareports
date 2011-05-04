@@ -10,7 +10,8 @@ import org.openmrs.module.reporting.indicator.dimension.CohortDefinitionDimensio
 import org.openmrs.module.reporting.indicator.util.IndicatorUtil;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.rwandareports.dataset.RollingDailyIndicatorDataSetDefinition;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
+import org.openmrs.module.rwandareports.dataset.evaluator.RollingDailyIndicatorDataSetEvaluator;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
@@ -35,9 +36,6 @@ public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefiniti
 		 
 		private String baseRollingQueryExtension = "";
 		private RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType rollingBaseReportQueryType = RollingBaseReportQueryType.NONE;
-
-
-
 
 
 		public RollingDailyPeriodIndicatorReportDefinition(){
@@ -99,8 +97,8 @@ public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefiniti
 			getIndicatorDataSetDefinition().addColumn(key, displayName, m, dimensionOptions);		
 		} 
 		
-		public void addIndicator(String key, String displayName, EncounterIndicator indicator, Map<String,String> dimensionOptions) { 
-			Mapped<EncounterIndicator> m = new Mapped<EncounterIndicator>(indicator, IndicatorUtil.getDefaultParameterMappings());
+		public void addIndicator(String key, String displayName, ObjectGroupIndicator indicator, Map<String,String> dimensionOptions) { 
+			Mapped<ObjectGroupIndicator> m = new Mapped<ObjectGroupIndicator>(indicator, IndicatorUtil.getDefaultParameterMappings());
 			getIndicatorDataSetDefinition().addColumn(key, displayName, m, dimensionOptions);		
 		} 
 		
@@ -136,7 +134,7 @@ public class RollingDailyPeriodIndicatorReportDefinition  extends ReportDefiniti
 		}
 		
 		
-		public void addIndicator(String uniqueName, String displayName, EncounterIndicator indicator) {				
+		public void addIndicator(String uniqueName, String displayName, ObjectGroupIndicator indicator) {				
 			addIndicator(uniqueName, displayName, indicator, new HashMap<String,String>());
 		}
 		 

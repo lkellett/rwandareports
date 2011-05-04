@@ -17,7 +17,7 @@ import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndi
 import org.openmrs.util.OpenmrsUtil;
 
 /**
- * a DataSetDefinition class for daily rolling reports.  supports Calendar creation, Cohort and Encounter indicators
+ * a DataSetDefinition class for daily rolling reports.  supports Calendar creation, Cohort and ObjectGroup indicators
  * 
  * @see RollingDailyPeriodIndicatorReportDefinition @see RollingDailyIndicatorDataSetEvaluator for more information
  * @author dthomas

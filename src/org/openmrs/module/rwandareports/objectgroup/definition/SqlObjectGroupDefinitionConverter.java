@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.definition;
+package org.openmrs.module.rwandareports.objectgroup.definition;
 
 import java.util.List;
 
@@ -14,16 +14,16 @@ import org.openmrs.module.reporting.definition.service.SerializedDefinitionServi
 
 
 @Handler
-public class SqlEncounterGroupDefinitionConverter implements DefinitionConverter{
+public class SqlObjectGroupDefinitionConverter implements DefinitionConverter{
 		
-	protected static Log log = LogFactory.getLog(SqlEncounterGroupDefinitionConverter.class);
+	protected static Log log = LogFactory.getLog(SqlObjectGroupDefinitionConverter.class);
 
 	/**
 	 * @see DefinitionConverter#getInvalidDefinitions()
 	 */
 	public List<SerializedObject> getInvalidDefinitions() {
     	SerializedDefinitionService service = Context.getService(SerializedDefinitionService.class);
-    	return service.getInvalidDefinitions(SqlEncounterGroupDefinition.class, true);
+    	return service.getInvalidDefinitions(SqlObjectGroupDefinition.class, true);
 	}
 	
 	/**
@@ -51,8 +51,8 @@ public class SqlEncounterGroupDefinitionConverter implements DefinitionConverter
 			Context.getService(SerializedDefinitionService.class).saveSerializedDefinition(so);
 			
 			// Confirm this works
-			SqlEncounterGroupDefinition scd = DefinitionContext.getDefinitionByUuid(SqlEncounterGroupDefinition.class, so.getUuid());
-			log.info("Successfully converted SqlEncounterGroupDefinition named '" + scd.getName() + "' to new format");
+			SqlObjectGroupDefinition scd = DefinitionContext.getDefinitionByUuid(SqlObjectGroupDefinition.class, so.getUuid());
+			log.info("Successfully converted SqlObjectGroupDefinition named '" + scd.getName() + "' to new format");
 			return true;
 		}
 		catch (Exception e) {

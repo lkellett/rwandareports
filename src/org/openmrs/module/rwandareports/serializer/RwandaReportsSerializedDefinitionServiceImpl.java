@@ -25,7 +25,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.reporting.definition.DefinitionSummary;
 import org.openmrs.module.reporting.definition.service.SerializedDefinitionService;
 import org.openmrs.module.reporting.evaluation.Definition;
-import org.openmrs.module.rwandareports.encounter.persister.EncounterGroupDefinitionPersister;
+import org.openmrs.module.rwandareports.objectgroup.persister.ObjectGroupDefinitionPersister;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -187,7 +187,7 @@ public class RwandaReportsSerializedDefinitionServiceImpl extends BaseOpenmrsSer
 	}
 
 	/**
-     * @see EncounterGroupDefinitionPersister#getEncounterGroupDefinitionByName(String, boolean)
+     * @see ObjectGroupDefinitionPersister#getObjectGroupDefinitionByName(String, boolean)
      */
 	public <T extends Definition> List<T> getDefinitions(Class<T> definitionType, String name, boolean exactMatchOnly) {
     	List<T> ret = new ArrayList<T>();

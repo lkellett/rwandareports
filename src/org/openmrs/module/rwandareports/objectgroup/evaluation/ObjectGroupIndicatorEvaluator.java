@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.encounter.evaluation;
+package org.openmrs.module.rwandareports.objectgroup.evaluation;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,23 +14,23 @@ import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.indicator.Indicator;
 import org.openmrs.module.reporting.indicator.IndicatorResult;
 import org.openmrs.module.reporting.indicator.evaluator.IndicatorEvaluator;
-import org.openmrs.module.rwandareports.encounter.EncounterGroup;
-import org.openmrs.module.rwandareports.encounter.indicator.EncounterIndicator;
-import org.openmrs.module.rwandareports.encounter.service.EncounterGroupDefinitionService;
-import org.openmrs.module.rwandareports.encounter.service.EncounterIndicatorResult;
+import org.openmrs.module.rwandareports.objectgroup.ObjectGroup;
+import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
+import org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupDefinitionService;
+import org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupIndicatorResult;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
 
-@Handler(supports={EncounterIndicator.class})
-public class EncounterIndicatorEvaluator implements IndicatorEvaluator {
+@Handler(supports={ObjectGroupIndicator.class})
+public class ObjectGroupIndicatorEvaluator implements IndicatorEvaluator {
 	
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	
-	private int calculateDateDiff(EncounterIndicator.IndicatorType type, Date startDate, Date endDate){
+	private int calculateDateDiff(ObjectGroupIndicator.IndicatorType type, Date startDate, Date endDate){
 		if (type == null || startDate == null || endDate == null)
-			throw new RuntimeException("To do this type of report, you must provide a startdate, enddate, and encounterIndicator type.");
-		if (type == EncounterIndicator.IndicatorType.PER_DAY){
+			throw new RuntimeException("To do this type of report, you must provide a startdate, enddate, and objectGroupIndicator type.");
+		if (type == ObjectGroupIndicator.IndicatorType.PER_DAY){
 			return (int) (((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)));		
 		} else {
 			 Calendar cal = new GregorianCalendar();
@@ -49,9 +49,9 @@ public class EncounterIndicatorEvaluator implements IndicatorEvaluator {
 	}
 	
 	 public IndicatorResult evaluate(Indicator indicator, EvaluationContext context) throws EvaluationException {
-		    EncounterIndicator cid = (EncounterIndicator) indicator;
+		    ObjectGroupIndicator cid = (ObjectGroupIndicator) indicator;
 	    	
-		    EncounterIndicatorResult result = new EncounterIndicatorResult();
+		    ObjectGroupIndicatorResult result = new ObjectGroupIndicatorResult();
 		    result.setPerDay(cid.getPerHourDenominator());
 	    	result.setContext(context);
 	    	result.setIndicator(cid);
@@ -61,26 +61,26 @@ public class EncounterIndicatorEvaluator implements IndicatorEvaluator {
 	    	Date startDate = (Date) context.getParameterValue("startDate");
 	    	Date endDate = (Date) context.getParameterValue("endDate");
 	    	
-	    	if (cid.getType() == EncounterIndicator.IndicatorType.PER_DAY || cid.getType() == EncounterIndicator.IndicatorType.PER_WEEKDAYS){
+	    	if (cid.getType() == ObjectGroupIndicator.IndicatorType.PER_DAY || cid.getType() == ObjectGroupIndicator.IndicatorType.PER_WEEKDAYS){
 	    		result.setNumDays(calculateDateDiff(cid.getType(), startDate, endDate));
 	    	} 
 	    	
 
 
 			
-			EncounterGroupDefinitionService cds = Context.getService(EncounterGroupDefinitionService.class);
+			ObjectGroupDefinitionService cds = Context.getService(ObjectGroupDefinitionService.class);
 			
 			
-//			//resets the base cohort to be all people in the encounterGroup
+//			//resets the base cohort to be all people in the objectGroup
 			Cohort baseCohort = context.getBaseCohort();
 			if (cid.getLocationFilter() != null) {
 				try {
-					EncounterGroup locationEncounterGroup = cds.evaluate(cid.getLocationFilter(), context);
+					ObjectGroup locationObjectGroup = cds.evaluate(cid.getLocationFilter(), context);
 					if (baseCohort == null) {
-						baseCohort = locationEncounterGroup.getCohort();
+						baseCohort = locationObjectGroup.getCohort();
 					}
 					else {
-						baseCohort = Cohort.intersect(baseCohort, locationEncounterGroup.getCohort());
+						baseCohort = Cohort.intersect(baseCohort, locationObjectGroup.getCohort());
 					}
 				} catch (Exception ex) {
 					throw new EvaluationException("locationFilter", ex);
@@ -90,25 +90,25 @@ public class EncounterIndicatorEvaluator implements IndicatorEvaluator {
 //			// Set Definition Denominator and further restrict base cohort
 			if (cid.getDenominator() != null) {
 				try {
-					EncounterGroup denominatorEncounterGroup = cds.evaluate(cid.getDenominator(), context);
+					ObjectGroup denominatorObjectGroup = cds.evaluate(cid.getDenominator(), context);
 					if (baseCohort != null) {
-						denominatorEncounterGroup = EncounterGroup.intersect(denominatorEncounterGroup, baseCohort);
+						denominatorObjectGroup = ObjectGroup.intersect(denominatorObjectGroup, baseCohort);
 					}
-					baseCohort = denominatorEncounterGroup.getCohort();
-					result.setDenominatorEncounterGroup(denominatorEncounterGroup);
+					baseCohort = denominatorObjectGroup.getCohort();
+					result.setDenominatorObjectGroup(denominatorObjectGroup);
 				} catch (Exception ex) {
 					throw new EvaluationException("denominator", ex);
 				}
 			}
 //			
 //			// Definition Cohort / Numerator
-			EncounterGroup encounterGroup;
+			ObjectGroup objectGroup;
 			try {
-				encounterGroup = cds.evaluate(cid.getEncounterGroupDefinition(), context);
+				objectGroup = cds.evaluate(cid.getObjectGroupDefinition(), context);
 				if (baseCohort != null) {
-					 encounterGroup = EncounterGroup.intersect(encounterGroup, baseCohort);
+					 objectGroup = ObjectGroup.intersect(objectGroup, baseCohort);
 				}
-				result.setEncounterGroup(encounterGroup);
+				result.setObjectGroup(objectGroup);
 			} catch (Exception ex) {
 				throw new EvaluationException("numerator/cohort", ex);
 			}
