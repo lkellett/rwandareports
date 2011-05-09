@@ -14,7 +14,7 @@ private String lastVist;
 		else if(lastEncounterName.equals("PEDIATRIC RETURN VISIT"))
 			lastVist="PEDI RETURN";
 		else
-			lastEncounterName=lastVist;
+			lastVist=lastEncounterName;
 		return lastVist;
 	}
 
