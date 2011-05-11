@@ -368,6 +368,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
+		lastEncounterType.setEncounterTypes(clinicalEncounterTypesWithoutLabTest);
 		lastEncounterType.setFilter(new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(lastEncounterType,new HashMap<String, Object>());
