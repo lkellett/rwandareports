@@ -40,7 +40,6 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ReturnVisitDate;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
-import org.openmrs.module.rwandareports.filter.AccompagnateurFilter;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
@@ -358,13 +357,9 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition3.addColumn(stOfPatient,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(stOfPatient,new HashMap<String, Object>());
 		
-		
-		
-		
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
-		lastEncounterType.setEncounterTypes(clinicalEncounterTypesWithoutLabTest);
 		lastEncounterType.setFilter(new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(lastEncounterType,new HashMap<String, Object>());

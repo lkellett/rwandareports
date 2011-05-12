@@ -27,11 +27,11 @@ import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.reportingobjectgroup.objectgroup.definition.ObjectGroupDefinition;
+import org.openmrs.module.reportingobjectgroup.objectgroup.definition.SqlObjectGroupDefinition;
+import org.openmrs.module.reportingobjectgroup.objectgroup.indicator.ObjectGroupIndicator;
+import org.openmrs.module.reportingobjectgroup.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 import org.openmrs.module.rwandareports.PrimaryCareReportConstants;
-import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
-import org.openmrs.module.rwandareports.objectgroup.definition.SqlObjectGroupDefinition;
-import org.openmrs.module.rwandareports.objectgroup.indicator.ObjectGroupIndicator;
-import org.openmrs.module.rwandareports.report.definition.RollingDailyPeriodIndicatorReportDefinition;
 import org.openmrs.module.rwandareports.util.RwandaReportsUtil;
 
 public class SetupRwandaPrimaryCareReport {

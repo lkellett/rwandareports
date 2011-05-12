@@ -52,5 +52,6 @@
 	<classpathentry kind="lib" path="/home/dthomas/workspace/openmrs-1.6.x/lib/junit/hsqldb-1.8.0.10.jar"/>
 	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.6.3.18038-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/serialization.xstream-0.2.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/reportingobjectgroup-1.0.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

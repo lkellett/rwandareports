@@ -36,9 +36,9 @@ import org.openmrs.module.reporting.report.renderer.ExcelTemplateRenderer;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.module.rowperpatientreports.renderer.RowPerPatientExcelTemplateRenderer;
-import org.openmrs.module.rwandareports.objectgroup.definition.ObjectGroupDefinition;
-import org.openmrs.module.rwandareports.objectgroup.service.ObjectGroupDefinitionService;
-import org.openmrs.module.rwandareports.report.renderer.ExcelCalendarTemplateRenderer;
+import org.openmrs.module.reportingobjectgroup.objectgroup.definition.ObjectGroupDefinition;
+import org.openmrs.module.reportingobjectgroup.objectgroup.service.ObjectGroupDefinitionService;
+import org.openmrs.module.reportingobjectgroup.report.renderer.ExcelCalendarTemplateRenderer;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 

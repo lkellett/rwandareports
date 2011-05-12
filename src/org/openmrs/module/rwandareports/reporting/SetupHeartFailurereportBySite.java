@@ -90,8 +90,6 @@ public class SetupHeartFailurereportBySite {
 		
 
 		h.purgeDefinition(CohortDefinition.class, "patientsEnrolledInHFProgram");
-		h.purgeDefinition(CohortDefinition.class, "anyPatientsInHFProgram");
-		h.purgeDefinition(CohortDefinition.class, "notExitedFromCare");
 		h.purgeDefinition(CohortDefinition.class, "patientsInHFProgram");
 		h.purgeDefinition(CohortDefinition.class, "malesDefinition");
 		h.purgeDefinition(CohortDefinition.class, "femalesDefinition");
@@ -165,7 +163,7 @@ public class SetupHeartFailurereportBySite {
 		h.purgeDefinition(CohortDefinition.class, "encounterFormDuringDDBPeriod");
 		h.purgeDefinition(CohortDefinition.class, "patientWithoutDonneDebasePeriodComposition");
 		
-				
+			
 		
 		h.purgeDefinition(CohortIndicator.class, "percentMaleInFHProgramIndicator");
 		h.purgeDefinition(CohortIndicator.class, "percentFemaleInFHProgramIndicator");
@@ -225,23 +223,10 @@ public class SetupHeartFailurereportBySite {
 
 //Patient In Heart Failure Program
 		
-		InProgramCohortDefinition anyPatientsInHFProgram=getInProgramCohortDefinition("anyPatientsInHFProgram", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
-		anyPatientsInHFProgram.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		anyPatientsInHFProgram.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-		h.replaceCohortDefinition(anyPatientsInHFProgram);
-		
-		CodedObsCohortDefinition notExitedFromCare = new CodedObsCohortDefinition();
-		notExitedFromCare.setName("Patients who have not exited from care");
-		notExitedFromCare.setTimeModifier(TimeModifier.NO);
-		notExitedFromCare.setQuestion(Context.getConceptService().getConceptByName("REASON FOR EXITING CARE"));
-		
-		CompositionCohortDefinition patientsInHFProgram=new CompositionCohortDefinition();
-		patientsInHFProgram.setName("patientsInHFProgram");
+
+		InProgramCohortDefinition patientsInHFProgram=getInProgramCohortDefinition("patientsInHFProgram", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
 		patientsInHFProgram.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
 		patientsInHFProgram.addParameter(new Parameter("onOrBefore","onOrBefore",Date.class));
-		patientsInHFProgram.getSearches().put("anyPatientsInHFProgram", new Mapped<CohortDefinition>(anyPatientsInHFProgram,ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsInHFProgram.getSearches().put("notExitedFromCare",new Mapped<CohortDefinition>(notExitedFromCare,null));
-		patientsInHFProgram.setCompositionString("anyPatientsInHFProgram AND notExitedFromCare");
 		h.replaceCohortDefinition(patientsInHFProgram);
 		
 		/*InProgramCohortDefinition allPatientsInHF=getInProgramCohortDefinition("allPatientsInHF", HeartFailureReportConstants.HEART_FAILURE_PROGRAM_UUID);
@@ -1141,9 +1126,9 @@ CompositionCohortDefinition diedDuringPeriodComposition = new CompositionCohortD
 diedDuringPeriodComposition.setName("diedDuringPeriodComposition");
 diedDuringPeriodComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 diedDuringPeriodComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-diedDuringPeriodComposition.getSearches().put("anyPatientsInHFProgram", new Mapped<CohortDefinition>(anyPatientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
+diedDuringPeriodComposition.getSearches().put("patientsInHFProgram", new Mapped<CohortDefinition>(patientsInHFProgram, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
 diedDuringPeriodComposition.getSearches().put("diedDuringPeriod", new Mapped<CohortDefinition>(diedDuringPeriod, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter},onOrBefore=${onOrBefore}")));
-diedDuringPeriodComposition.setCompositionString("(anyPatientsInHFProgram AND diedDuringPeriod");
+diedDuringPeriodComposition.setCompositionString("(patientsInHFProgram AND diedDuringPeriod");
 
 CohortIndicator diedDuringPeriodIndicator = new CohortIndicator();
 diedDuringPeriodIndicator.setName("diedDuringPeriodIndicator");
