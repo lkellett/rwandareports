@@ -80,7 +80,28 @@ public class SetupPediatricLateVisitAndCD4Report {
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Pediatric Late Visit And CD4 Data Set");
 		
+		
+		h.purgeDefinition(PatientDataSetDefinition.class, "Pedi ART late visit dataset definition");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Pedi Pre-ART late visit dataset definition");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Pedi HIV late CD4 count dataset definition");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Pedi HIV lost to follow-up dataset definition");
+		          
 		h.purgeDefinition(CohortDefinition.class, "location: HIV Pedi Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "pediHivProgramCohort");
+		h.purgeDefinition(CohortDefinition.class, "pediOnARTStatusCohort");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsNotVoided");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithAnyEncounterNotVoided");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithClinicalEncounters");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithAnyEncounterInOneYear");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithClinicalEncountersWithoutLabTest");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithoutClinicalEncounters");
+		h.purgeDefinition(CohortDefinition.class, "pediFollowingStatusCohort");
+		h.purgeDefinition(CohortDefinition.class, "pediCD4CohortDefinition");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithouthCD4RecordComposition");
+		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithoutEncountersInPastYear");
+		h.purgeDefinition(CohortDefinition.class, "");
+		
+		      	
 	}
 	
 	
@@ -106,36 +127,38 @@ public class SetupPediatricLateVisitAndCD4Report {
 		//====================================================================
 		
 		
-		// Create Adult ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition1 = new PatientDataSetDefinition();
-		dataSetDefinition1.setName(reportDefinition.getName() + " Data Set");
+		// Create Pedi ART late visit dataset definition 
+		PatientDataSetDefinition pediatricARTLateVisitDataSet = new PatientDataSetDefinition();
+		pediatricARTLateVisitDataSet.setName("Pedi ART late visit dataset definition");
 		
-		// Create Adult Pre-ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition2 = new PatientDataSetDefinition();
-		dataSetDefinition2.setName(reportDefinition.getName() + " Data Set");
+		// Create Pedi Pre-ART late visit dataset definition 
+		PatientDataSetDefinition pediatricPreARTLateVisitDataSet = new PatientDataSetDefinition();
+		pediatricPreARTLateVisitDataSet.setName("Pedi Pre-ART late visit dataset definition");
 		
-		//Create Adult HIV late CD4 count dataset definition
-		PatientDataSetDefinition dataSetDefinition3 = new PatientDataSetDefinition();
-		dataSetDefinition3.setName(reportDefinition.getName() + " Data Set");
+		//Create Pedi HIV late CD4 count dataset definition
+		PatientDataSetDefinition pediatricHIVLateCD4CountDataSet = new PatientDataSetDefinition();
+		pediatricHIVLateCD4CountDataSet.setName("Pedi HIV late CD4 count dataset definition");
 		
-		//Create HIV lost to follow-up dataset definition
-		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
-		dataSetDefinition4.setName(reportDefinition.getName() + " Data Set");
+		//Create Pedi HIV lost to follow-up dataset definition
+		PatientDataSetDefinition pediatricHIVLostToFollowupDatSet = new PatientDataSetDefinition();
+		pediatricHIVLostToFollowupDatSet.setName("Pedi HIV lost to follow-up dataset definition");
 		
 		
 		
-		//Adult HIV program Cohort definition
-		InProgramCohortDefinition adultHivProgramCohort = new InProgramCohortDefinition();
-		adultHivProgramCohort.addParameter(new Parameter("onDate","On Date",Date.class));
+		//Pedi HIV program Cohort definition
+		InProgramCohortDefinition pediHivProgramCohort = new InProgramCohortDefinition();
+		pediHivProgramCohort.setName("pediHivProgramCohort");
+		pediHivProgramCohort.addParameter(new Parameter("onDate","On Date",Date.class));
 		List<Program> programs = new ArrayList<Program>();
-		Program hadultHivProgram = Context.getProgramWorkflowService().getProgram(Integer.parseInt(Context.getAdministrationService().getGlobalProperty("hiv.programid.pediatric")));
-		programs.add(hadultHivProgram);
-		adultHivProgramCohort.setPrograms(programs);
+		Program pediHivProgram = Context.getProgramWorkflowService().getProgram(Integer.parseInt(Context.getAdministrationService().getGlobalProperty("hiv.programid.pediatric")));
+		programs.add(pediHivProgram);
+		pediHivProgramCohort.setPrograms(programs);
+		h.replaceCohortDefinition(pediHivProgramCohort);
 		
-		dataSetDefinition1.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
-		dataSetDefinition2.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
-		dataSetDefinition3.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
-		dataSetDefinition4.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+		pediatricARTLateVisitDataSet.addFilter(pediHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+		pediatricPreARTLateVisitDataSet.addFilter(pediHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+		pediatricHIVLateCD4CountDataSet.addFilter(pediHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+		pediatricHIVLostToFollowupDatSet.addFilter(pediHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
 		/*
 		SqlCohortDefinition patientDied=new SqlCohortDefinition("SELECT DISTINCT person_id FROM obs o WHERE o.concept_id='1811'");
@@ -154,10 +177,11 @@ public class SetupPediatricLateVisitAndCD4Report {
 		
 		// ON ANTIRETROVIRALS state cohort definition.
 			
-		InStateCohortDefinition onARTStatusCohort = new InStateCohortDefinition();
-		onARTStatusCohort.addParameter(new Parameter("onDate","On Date",Date.class));
+		InStateCohortDefinition pediOnARTStatusCohort = new InStateCohortDefinition();
+		pediOnARTStatusCohort.setName("pediOnARTStatusCohort");
+		pediOnARTStatusCohort.addParameter(new Parameter("onDate","On Date",Date.class));
 		List<ProgramWorkflowState> states = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow txStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID);
+		ProgramWorkflow txStatus = pediHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID);
 		
 		ProgramWorkflowState onART = null;
 		if(txStatus != null)
@@ -166,23 +190,27 @@ public class SetupPediatricLateVisitAndCD4Report {
 			if(onART != null)
 			{
 				states.add(onART);
-				onARTStatusCohort.setStates(states);
-				dataSetDefinition1.addFilter(onARTStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				pediOnARTStatusCohort.setStates(states);
+				pediatricARTLateVisitDataSet.addFilter(pediOnARTStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 				
 			}
 		}
+		h.replaceCohortDefinition(pediOnARTStatusCohort);
 		
 		
 		
 				
-		SqlCohortDefinition patientsNotVoided = new SqlCohortDefinition("select distinct p.patient_id from patient p where p.voided=0");
-		dataSetDefinition1.addFilter(patientsNotVoided,new HashMap<String, Object>());
-		dataSetDefinition2.addFilter(patientsNotVoided,new HashMap<String, Object>());
-		dataSetDefinition3.addFilter(patientsNotVoided,new HashMap<String, Object>());
-		dataSetDefinition4.addFilter(patientsNotVoided,new HashMap<String, Object>());
+		SqlCohortDefinition pediPatientsNotVoided = new SqlCohortDefinition("select distinct p.patient_id from patient p where p.voided=0");
+		pediPatientsNotVoided.setName("pediPatientsNotVoided");
+		h.replaceCohortDefinition(pediPatientsNotVoided);
+		pediatricARTLateVisitDataSet.addFilter(pediPatientsNotVoided,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addFilter(pediPatientsNotVoided,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addFilter(pediPatientsNotVoided,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addFilter(pediPatientsNotVoided,new HashMap<String, Object>());
 		
-		
-		SqlCohortDefinition patientsWithAnyEncounterNotVoided = new SqlCohortDefinition("select distinct e.patient_id from encounter e where e.voided=0");
+		SqlCohortDefinition pediPatientsWithAnyEncounterNotVoided = new SqlCohortDefinition("select distinct e.patient_id from encounter e where e.voided=0");
+		pediPatientsWithAnyEncounterNotVoided.setName("pediPatientsWithAnyEncounterNotVoided");
+		h.replaceCohortDefinition(pediPatientsWithAnyEncounterNotVoided);
 		
 		String clinicalEncTypesIds=Context.getAdministrationService().getGlobalProperty("ClinicalencounterTypeIds.labTestIncl");
 		String[] clinicalEncTypesIdsList=clinicalEncTypesIds.split(",");
@@ -194,20 +222,24 @@ public class SetupPediatricLateVisitAndCD4Report {
 		if(clinicalEncounterTypes==null||clinicalEncounterTypes.size()==0)
 			throw new RuntimeException("Are you sure the global property ClinicalencounterTypeIds.labTestIncl is set correctly?");
 		
-		EncounterCohortDefinition patientsWithClinicalEncounters=new EncounterCohortDefinition();
-		patientsWithClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsWithClinicalEncounters.setEncounterTypeList(clinicalEncounterTypes);
 		
-		CompositionCohortDefinition patientsWithAnyEncounterInOneYear=new CompositionCohortDefinition();
-		patientsWithAnyEncounterInOneYear.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsWithAnyEncounterInOneYear.getSearches().put("patientsWithAnyEncounterNotVoided", new Mapped<CohortDefinition>(patientsWithAnyEncounterNotVoided,null));
-		patientsWithAnyEncounterInOneYear.getSearches().put("patientsWithAnyEncounter", new Mapped<CohortDefinition>(patientsWithClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
-		patientsWithAnyEncounterInOneYear.setCompositionString("patientsWithAnyEncounterNotVoided AND patientsWithAnyEncounter");
+		EncounterCohortDefinition pediPatientsWithClinicalEncounters=new EncounterCohortDefinition();
+		pediPatientsWithClinicalEncounters.setName("pediPatientsWithClinicalEncounters");
+		pediPatientsWithClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediPatientsWithClinicalEncounters.setEncounterTypeList(clinicalEncounterTypes);
+		h.replaceCohortDefinition(pediPatientsWithClinicalEncounters);
 		
+		CompositionCohortDefinition pediPatientsWithAnyEncounterInOneYear=new CompositionCohortDefinition();
+		pediPatientsWithAnyEncounterInOneYear.setName("pediPatientsWithAnyEncounterInOneYear");
+		pediPatientsWithAnyEncounterInOneYear.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediPatientsWithAnyEncounterInOneYear.getSearches().put("pediPatientsWithAnyEncounterNotVoided", new Mapped<CohortDefinition>(pediPatientsWithAnyEncounterNotVoided,null));
+		pediPatientsWithAnyEncounterInOneYear.getSearches().put("patientsWithAnyEncounter", new Mapped<CohortDefinition>(pediPatientsWithClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
+		pediPatientsWithAnyEncounterInOneYear.setCompositionString("pediPatientsWithAnyEncounterNotVoided AND patientsWithAnyEncounter");
+		h.replaceCohortDefinition(pediPatientsWithAnyEncounterInOneYear);
 		
-		dataSetDefinition1.addFilter(patientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
-		dataSetDefinition2.addFilter(patientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
-		dataSetDefinition3.addFilter(patientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
+		pediatricARTLateVisitDataSet.addFilter(pediPatientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
+		pediatricPreARTLateVisitDataSet.addFilter(pediPatientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
+		pediatricHIVLateCD4CountDataSet.addFilter(pediPatientsWithAnyEncounterInOneYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
 	
 		
 		
@@ -221,15 +253,21 @@ public class SetupPediatricLateVisitAndCD4Report {
 			clinicalEncounterTypesWithoutLabTest.add(Context.getEncounterService().getEncounterType(Integer.parseInt(id)));
 		}
 		
-		EncounterCohortDefinition patientsWithClinicalEncountersWithoutLabTest=new EncounterCohortDefinition();
-		patientsWithClinicalEncountersWithoutLabTest.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsWithClinicalEncountersWithoutLabTest.setEncounterTypeList(clinicalEncounterTypesWithoutLabTest);
+		EncounterCohortDefinition pediPatientsWithClinicalEncountersWithoutLabTest=new EncounterCohortDefinition();
+		pediPatientsWithClinicalEncountersWithoutLabTest.setName("pediPatientsWithClinicalEncountersWithoutLabTest");
+		pediPatientsWithClinicalEncountersWithoutLabTest.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediPatientsWithClinicalEncountersWithoutLabTest.setEncounterTypeList(clinicalEncounterTypesWithoutLabTest);
+		h.replaceCohortDefinition(pediPatientsWithClinicalEncountersWithoutLabTest);
 		
-		CompositionCohortDefinition patientsWithoutClinicalEncounters=new CompositionCohortDefinition();
-		patientsWithoutClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsWithoutClinicalEncounters.getSearches().put("patientsWithClinicalEncountersWithoutLabTest", new Mapped<CohortDefinition>(patientsWithClinicalEncountersWithoutLabTest,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
-		patientsWithoutClinicalEncounters.setCompositionString("NOT patientsWithClinicalEncountersWithoutLabTest");
-		dataSetDefinition1.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m}"));
+		CompositionCohortDefinition pediPatientsWithoutClinicalEncounters=new CompositionCohortDefinition();
+		pediPatientsWithoutClinicalEncounters.setName("pediPatientsWithoutClinicalEncounters");
+		pediPatientsWithoutClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediPatientsWithoutClinicalEncounters.getSearches().put("pediPatientsWithClinicalEncountersWithoutLabTest", new Mapped<CohortDefinition>(pediPatientsWithClinicalEncountersWithoutLabTest,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
+		pediPatientsWithoutClinicalEncounters.setCompositionString("NOT pediPatientsWithClinicalEncountersWithoutLabTest");
+		h.replaceCohortDefinition(pediPatientsWithoutClinicalEncounters);
+		
+		
+		pediatricARTLateVisitDataSet.addFilter(pediPatientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m}"));
 				
 		
 		//==================================================================
@@ -239,25 +277,26 @@ public class SetupPediatricLateVisitAndCD4Report {
 		// Following state cohort definition.
 		
 		
-		InStateCohortDefinition followingStatusCohort = new InStateCohortDefinition();
-		followingStatusCohort.addParameter(new Parameter("onDate","On date",Date.class));
+		InStateCohortDefinition pediFollowingStatusCohort = new InStateCohortDefinition();
+		pediFollowingStatusCohort.setName("pediFollowingStatusCohort");
+		pediFollowingStatusCohort.addParameter(new Parameter("onDate","On date",Date.class));
 		List<ProgramWorkflowState> followingstates = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow followingtxStatus = hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID);
+		ProgramWorkflow followingtxStatus = pediHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID);
 		
 		ProgramWorkflowState following = null;
-		if(txStatus != null)
+		if(followingtxStatus != null)
 		{
 			following = followingtxStatus.getState(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.FOLLOWING_UUID));
 			if(following != null)
 			{
 				followingstates.add(following);
-				followingStatusCohort.setStates(followingstates);
-				dataSetDefinition2.addFilter(followingStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				pediFollowingStatusCohort.setStates(followingstates);
+				pediatricPreARTLateVisitDataSet.addFilter(pediFollowingStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 			}
 		}		
-		
+		h.replaceCohortDefinition(pediFollowingStatusCohort);
 		// Patients without Any clinical Encounter(Test lab excluded) in last six months.
-		dataSetDefinition2.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
+		pediatricPreARTLateVisitDataSet.addFilter(pediPatientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
 		
 			
 			
@@ -266,18 +305,22 @@ public class SetupPediatricLateVisitAndCD4Report {
 		//                 3. Pediatric HIV late CD4 count
 		//==================================================================
 		
-		NumericObsCohortDefinition cd4CohortDefinition=new NumericObsCohortDefinition();
-		cd4CohortDefinition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		cd4CohortDefinition.setQuestion(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
-		cd4CohortDefinition.setTimeModifier(TimeModifier.ANY);
-		cd4CohortDefinition.setOperator1(null);
+		NumericObsCohortDefinition pediCD4CohortDefinition=new NumericObsCohortDefinition();
+		pediCD4CohortDefinition.setName("pediCD4CohortDefinition");
+		pediCD4CohortDefinition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediCD4CohortDefinition.setQuestion(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
+		pediCD4CohortDefinition.setTimeModifier(TimeModifier.ANY);
+		pediCD4CohortDefinition.setOperator1(null);
+		h.replaceCohortDefinition(pediCD4CohortDefinition);
 		
-		CompositionCohortDefinition patientsWithouthCD4RecordComposition=new CompositionCohortDefinition();
-		patientsWithouthCD4RecordComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
-		patientsWithouthCD4RecordComposition.getSearches().put("cd4CohortDefinition", new Mapped<CohortDefinition>(cd4CohortDefinition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
-		patientsWithouthCD4RecordComposition.setCompositionString("NOT cd4CohortDefinition");
+		CompositionCohortDefinition pediPatientsWithouthCD4RecordComposition=new CompositionCohortDefinition();
+		pediPatientsWithouthCD4RecordComposition.setName("pediPatientsWithouthCD4RecordComposition");
+		pediPatientsWithouthCD4RecordComposition.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		pediPatientsWithouthCD4RecordComposition.getSearches().put("cd4CohortDefinition", new Mapped<CohortDefinition>(pediCD4CohortDefinition,ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
+		pediPatientsWithouthCD4RecordComposition.setCompositionString("NOT cd4CohortDefinition");
+		h.replaceCohortDefinition(pediPatientsWithouthCD4RecordComposition);
 		
-		dataSetDefinition3.addFilter(patientsWithouthCD4RecordComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
+		pediatricHIVLateCD4CountDataSet.addFilter(pediPatientsWithouthCD4RecordComposition,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
 		
 
 		//==================================================================
@@ -289,12 +332,13 @@ public class SetupPediatricLateVisitAndCD4Report {
 		
 		//SqlCohortDefinition patientsWithoutEncountersInPastYear = new SqlCohortDefinition("select distinct p.patient_id from patient p, encounter e1 where p.patient_id = e1.patient_id and e1.voided = 0 and p.voided = 0 and e1.encounter_datetime < '"+sdf1.format(dateOneYearAgo)+"' and p.patient_id not in (select patient_id from encounter where encounter_datetime >= '"+sdf1.format(dateOneYearAgo)+"' and voided = 0)");
 		//SqlCohortDefinition patientsWithEncountersInPastYear = new SqlCohortDefinition("select distinct p.patient_id from patient p, encounter e1 where p.patient_id = e1.patient_id and e1.voided = 0 and p.voided = 0 and e1.encounter_datetime >= '"+sdf1.format(dateOneYearAgo)+"'");
-		InverseCohortDefinition patientsWithoutEncountersInPastYear=new InverseCohortDefinition(patientsWithClinicalEncounters);
-		dataSetDefinition4.addFilter(patientsWithoutEncountersInPastYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));		
+		InverseCohortDefinition pediPatientsWithoutEncountersInPastYear=new InverseCohortDefinition(pediPatientsWithClinicalEncounters);
+		pediPatientsWithoutEncountersInPastYear.setName("pediPatientsWithoutEncountersInPastYear");
+		h.replaceCohortDefinition(pediPatientsWithoutEncountersInPastYear);
 		
+		pediatricHIVLostToFollowupDatSet.addFilter(pediPatientsWithoutEncountersInPastYear,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));		
 		
-		
-		
+					
 		//==================================================================
 		//                 Columns of report settings
 		//==================================================================
@@ -305,123 +349,127 @@ public class SetupPediatricLateVisitAndCD4Report {
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
 		imbId.setName("IMB ID");
 		imbId.setDescription("IMB ID");
-		dataSetDefinition1.addColumn(imbId,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(imbId,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(imbId,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(imbId,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(imbId,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(imbId,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(imbId,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(imbId,new HashMap<String, Object>());
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		givenName.setName("First Name");
 		givenName.setDescription("First Name");
-		dataSetDefinition1.addColumn(givenName,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(givenName,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(givenName,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(givenName,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(givenName,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(givenName,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(givenName,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(givenName,new HashMap<String, Object>());
 		
 		PatientProperty familyName = new PatientProperty("familyName");
 		familyName.setName("Last Name");
 		familyName.setDescription("Last Name");
-		dataSetDefinition1.addColumn(familyName,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(familyName,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(familyName,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(familyName,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(familyName,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(familyName,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(familyName,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(familyName,new HashMap<String, Object>());
 		
 		PatientProperty gender = new PatientProperty("gender");
 		gender.setName("Sex");
 		gender.setDescription("Sex");
-		dataSetDefinition1.addColumn(gender,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(gender,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(gender,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(gender,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(gender,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(gender,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(gender,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(gender,new HashMap<String, Object>());
 		
 		PatientDateOfBirth birthdate = new PatientDateOfBirth();
 		birthdate.setName("Date of Birth");
 		birthdate.setDescription("Date of Birth");
-		dataSetDefinition1.addColumn(birthdate,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(birthdate,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(birthdate,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(birthdate,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(birthdate,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(birthdate,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(birthdate,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(birthdate,new HashMap<String, Object>());
 		
 		
 		StateOfPatient txGroup=new StateOfPatient();
-		txGroup.setPatientProgram(hadultHivProgram);
-		txGroup.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_GROUP_ID));
+		txGroup.setPatientProgram(pediHivProgram);
+		txGroup.setPatienProgramWorkflow(pediHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_GROUP_ID));
 		txGroup.setName("Group");
 		txGroup.setDescription("Group");
 		txGroup.setFilter(new GroupStateFilter());
-		dataSetDefinition1.addColumn(txGroup,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(txGroup,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(txGroup,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(txGroup,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(txGroup,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(txGroup,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(txGroup,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(txGroup,new HashMap<String, Object>());
 				
 		StateOfPatient stOfPatient=new StateOfPatient();
-		stOfPatient.setPatientProgram(hadultHivProgram);
-		stOfPatient.setPatienProgramWorkflow(hadultHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID));
+		stOfPatient.setPatientProgram(pediHivProgram);
+		stOfPatient.setPatienProgramWorkflow(pediHivProgram.getWorkflow(LateVisitAndCD4ReportConstant.PEDI_TREATMENT_STATUS_ID));
 		stOfPatient.setName("Treatment");
 		stOfPatient.setDescription("Treatment");
 		stOfPatient.setFilter(new TreatmentStateFilter());
-		dataSetDefinition1.addColumn(stOfPatient,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(stOfPatient,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(stOfPatient,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(stOfPatient,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(stOfPatient,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(stOfPatient,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(stOfPatient,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(stOfPatient,new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
 		lastEncounterType.setDescription("Last visit type");
 		lastEncounterType.setFilter(new LastEncounterFilter());
-		dataSetDefinition1.addColumn(lastEncounterType,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(lastEncounterType,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(lastEncounterType,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(lastEncounterType,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(lastEncounterType,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(lastEncounterType,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(lastEncounterType,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(lastEncounterType,new HashMap<String, Object>());
 		
 		
 		ReturnVisitDate returnVisitDate=new ReturnVisitDate();
 		returnVisitDate.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.RETURN_VISIT_DATE_UUID));
 		returnVisitDate.setName("Date of missed appointment");
 		returnVisitDate.setDescription("Date of missed appointment");
-		dataSetDefinition1.addColumn(returnVisitDate,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(returnVisitDate,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(returnVisitDate,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(returnVisitDate,new HashMap<String, Object>());
 		
 		
 		MostRecentObservation cd4Count=new MostRecentObservation();
 		cd4Count.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
 		cd4Count.setName("Most recent CD4");
 		cd4Count.setDescription("Most recent CD4");
-		dataSetDefinition1.addColumn(cd4Count,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(cd4Count,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(cd4Count,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(cd4Count,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(cd4Count,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(cd4Count,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(cd4Count,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(cd4Count,new HashMap<String, Object>());
 		
 		PatientRelationship accompagnateur=new PatientRelationship();
 		accompagnateur.setRelationshipTypeId(LateVisitAndCD4ReportConstant.RELATIONSHIP_TYPE_ID);
 		accompagnateur.setName("Accompagnateur");
 		accompagnateur.setDescription("Accompagnateur");
-		dataSetDefinition1.addColumn(accompagnateur,new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(accompagnateur,new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(accompagnateur,new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(accompagnateur,new HashMap<String, Object>());
+		pediatricARTLateVisitDataSet.addColumn(accompagnateur,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(accompagnateur,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(accompagnateur,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(accompagnateur,new HashMap<String, Object>());
 		
 				
-		dataSetDefinition1.addParameter(new Parameter("location", "Location", Location.class));
-		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
-		dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));
-		dataSetDefinition4.addParameter(new Parameter("location", "Location", Location.class));
+		pediatricARTLateVisitDataSet.addParameter(new Parameter("location", "Location", Location.class));
+		pediatricPreARTLateVisitDataSet.addParameter(new Parameter("location", "Location", Location.class));
+		pediatricHIVLateCD4CountDataSet.addParameter(new Parameter("location", "Location", Location.class));
+		pediatricHIVLostToFollowupDatSet.addParameter(new Parameter("location", "Location", Location.class));
 		
 		
-		dataSetDefinition1.addParameter(new Parameter("endDate", "End Date", Location.class));
-		dataSetDefinition2.addParameter(new Parameter("endDate", "End Date", Location.class));
-		dataSetDefinition3.addParameter(new Parameter("endDate", "End Date", Location.class));
-		dataSetDefinition4.addParameter(new Parameter("endDate", "End Date", Location.class));
+		pediatricARTLateVisitDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
+		pediatricPreARTLateVisitDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
+		pediatricHIVLateCD4CountDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
+		pediatricHIVLostToFollowupDatSet.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
+		h.replaceDefinition(pediatricARTLateVisitDataSet);
+		h.replaceDefinition(pediatricPreARTLateVisitDataSet);
+		h.replaceDefinition(pediatricHIVLateCD4CountDataSet);
+		h.replaceDefinition(pediatricHIVLostToFollowupDatSet);
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
 		mappings.put("endDate", "${endDate}");
 		
-		reportDefinition.addDataSetDefinition("PediatricARTLateVisit", dataSetDefinition1, mappings);
-		reportDefinition.addDataSetDefinition("PediatricPreARTLateVisit", dataSetDefinition2, mappings);
-		reportDefinition.addDataSetDefinition("PediatricHIVLateCD4Count", dataSetDefinition3, mappings);
-		reportDefinition.addDataSetDefinition("PediatricHIVLostToFollowup", dataSetDefinition4, mappings);
+		reportDefinition.addDataSetDefinition("PediatricARTLateVisit", pediatricARTLateVisitDataSet, mappings);
+		reportDefinition.addDataSetDefinition("PediatricPreARTLateVisit", pediatricPreARTLateVisitDataSet, mappings);
+		reportDefinition.addDataSetDefinition("PediatricHIVLateCD4Count", pediatricHIVLateCD4CountDataSet, mappings);
+		reportDefinition.addDataSetDefinition("PediatricHIVLostToFollowup", pediatricHIVLostToFollowupDatSet, mappings);
 		
 	}
 	
