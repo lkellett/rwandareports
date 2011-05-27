@@ -376,6 +376,24 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.ddrConcept</property>
+		<defaultValue>968</defaultValue>
+		<description>The id of the concept for the DDR concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dpaConcept</property>
+		<defaultValue>5596</defaultValue>
+		<description>The id of the concept for the DPA concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.positiveHivTestConcept</property>
+		<defaultValue>703</defaultValue>
+		<description>The id of the concept for the positive HIV test result</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.birthWeightConcept</property>
 		<defaultValue>5916</defaultValue>
 		<description>The id of the concept for the Birth date</description>
