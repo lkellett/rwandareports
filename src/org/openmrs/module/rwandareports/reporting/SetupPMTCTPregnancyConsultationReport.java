@@ -50,7 +50,9 @@ import org.openmrs.module.rwandareports.customcalculators.StartOfARTForThisPMTCT
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.comparator.PMTCTDataSetRowComparator;
 import org.openmrs.module.rwandareports.filter.DiscordantCoupleFilter;
-import org.openmrs.module.rwandareports.filter.RemoveTimestampFilter;
+import org.openmrs.module.rwandareports.filter.DrugNameFilter;
+import org.openmrs.module.rwandareports.filter.RemoveDecimalFilter;
+import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 
 public class SetupPMTCTPregnancyConsultationReport {
 	
@@ -141,6 +143,9 @@ public class SetupPMTCTPregnancyConsultationReport {
 		infantId.addPatientDataDefinition(pcId, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(infantId, new HashMap<String,Object>());
 		
+		DateFormatFilter dateFilter = new DateFormatFilter();
+		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
+		
 		FirstRecordedObservationWithCodedConceptAnswer diagnosisDate = new FirstRecordedObservationWithCodedConceptAnswer();
 		diagnosisDate.setName("hivDiagnosis");
 		diagnosisDate.setDescription("hivDiagnosis");
@@ -148,6 +153,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		Concept answer = Context.getConceptService().getConcept(Integer.valueOf(properties.get("POSITIVE_HIV_RESULT_CONCEPT")));
 		diagnosisDate.setAnswerRequired(answer);
 		diagnosisDate.setQuestion(question);
+		diagnosisDate.setDateFormat("dd-MMM-yyyy");
 		dataSetDefinition.addColumn(diagnosisDate, new HashMap<String, Object>());
 		
 		MostRecentObservation ddr = new MostRecentObservation();
@@ -155,6 +161,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		ddr.setConcept(ddrConcept);
 		ddr.setName("ddr");
 		ddr.setDescription("ddr");
+		ddr.setFilter(dateFilter);
 		dataSetDefinition.addColumn(ddr, new HashMap<String, Object>());
 		
 		MostRecentObservation dpa = new MostRecentObservation();
@@ -162,13 +169,15 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dpa.setConcept(dpaConcept);
 		dpa.setName("dpa");
 		dpa.setDescription("dpa");
-		dpa.setFilter(new RemoveTimestampFilter());
+		dpa.setFilter(dateFilter);
 		dataSetDefinition.addColumn(dpa, new HashMap<String, Object>());
 		
 		MostRecentObservation cd4Test = new MostRecentObservation();
 		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
 		cd4Test.setConcept(cd4Concept);
 		cd4Test.setName("CD4Test");
+		cd4Test.setFilter(new RemoveDecimalFilter());
+		cd4Test.setDateFormat("dd-MMM-yyyy");
 		dataSetDefinition.addColumn(cd4Test, new HashMap<String, Object>());
 		
 		PatientRelationship accomp = new PatientRelationship();
@@ -178,10 +187,31 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.addColumn(accomp, new HashMap<String,Object>());
 		
 		PatientAddress address = new PatientAddress();
-		address.setName("Address");
+		address.setName("Sector");
 		address.setIncludeCountry(false);
 		address.setIncludeProvince(false);
+		address.setIncludeDistrict(false);
+		address.setIncludeCell(false);
+		address.setIncludeUmudugudu(false);
 		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
+		
+		PatientAddress address2 = new PatientAddress();
+		address2.setName("Cell");
+		address2.setIncludeCountry(false);
+		address2.setIncludeProvince(false);
+		address2.setIncludeDistrict(false);
+		address2.setIncludeSector(false);
+		address2.setIncludeUmudugudu(false);
+		dataSetDefinition.addColumn(address2, new HashMap<String,Object>());
+		
+		PatientAddress address3 = new PatientAddress();
+		address3.setName("Umudugudu");
+		address3.setIncludeCountry(false);
+		address3.setIncludeProvince(false);
+		address3.setIncludeDistrict(false);
+		address3.setIncludeSector(false);
+		address3.setIncludeCell(false);
+		dataSetDefinition.addColumn(address3, new HashMap<String,Object>());
 		
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
@@ -190,6 +220,8 @@ public class SetupPMTCTPregnancyConsultationReport {
 		artDrugs.setName("Regimen");
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);
+		artDrugs.setDateFormat("dd-MMM-yyyy");
+		artDrugs.setDrugFilter(new DrugNameFilter());
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String,Object>());
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
@@ -197,6 +229,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		nextVisit.setConcept(nextVisitConcept);
 		nextVisit.setName("nextVisit");
 		nextVisit.setDescription("nextVisit");
+		nextVisit.setFilter(dateFilter);
 		dataSetDefinition.addColumn(nextVisit, new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions gestationalAge = new CustomCalculationBasedOnMultiplePatientDataDefinitions();

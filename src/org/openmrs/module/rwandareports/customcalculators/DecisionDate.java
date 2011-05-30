@@ -46,6 +46,8 @@ public class DecisionDate implements CustomCalculation{
 					decisionDate.add(Calendar.WEEK_OF_YEAR, 12);
 					
 					desDate.setValue(decisionDate.getTime());
+					
+					desDate.setFormat("dd-MMM-yyyy");
 				}
 			}
 		}
