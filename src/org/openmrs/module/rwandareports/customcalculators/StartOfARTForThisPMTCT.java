@@ -3,6 +3,7 @@ package org.openmrs.module.rwandareports.customcalculators;
 import java.util.List;
 
 import org.openmrs.DrugOrder;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
 import org.openmrs.module.rowperpatientreports.patientdata.result.AllDrugOrdersResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.DateResult;
@@ -10,7 +11,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataRes
 
 public class StartOfARTForThisPMTCT implements CustomCalculation{
 
-	public PatientDataResult calculateResult(List<PatientDataResult> results) {
+	public PatientDataResult calculateResult(List<PatientDataResult> results, EvaluationContext context) {
 		
 		DateResult pmtctStart = null;
 		AllDrugOrdersResult allDrugs = null;

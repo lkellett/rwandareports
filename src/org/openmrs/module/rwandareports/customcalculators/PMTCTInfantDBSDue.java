@@ -9,6 +9,7 @@ import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
 import org.openmrs.module.rowperpatientreports.patientdata.result.EncounterResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
@@ -20,7 +21,7 @@ public class PMTCTInfantDBSDue implements CustomCalculation{
 	
 	private static Concept labTestDate = Context.getConceptService().getConcept(new Integer(Context.getAdministrationService().getGlobalProperty("reports.labTestDateConcept")));
 
-	public PatientDataResult calculateResult(List<PatientDataResult> results) {
+	public PatientDataResult calculateResult(List<PatientDataResult> results, EvaluationContext context) {
 		
 		EncounterResult encounter = null;
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.DrugOrder;
+import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
 import org.openmrs.module.rowperpatientreports.patientdata.result.AllDrugOrdersResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.DateResult;
@@ -17,7 +18,7 @@ public class ArtTakenDuringBreastFeeding implements CustomCalculation{
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
-	public PatientDataResult calculateResult(List<PatientDataResult> results) {
+	public PatientDataResult calculateResult(List<PatientDataResult> results, EvaluationContext context) {
 		
 		PatientPropertyResult birthDate = null;
 		DateResult dateWeaned = null;

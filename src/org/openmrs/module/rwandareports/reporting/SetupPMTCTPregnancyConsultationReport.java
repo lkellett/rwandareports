@@ -95,6 +95,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		reportDefinition.setName("PMTCT Pregnancy consultation");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
+		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -108,6 +109,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 	{
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
+		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
 		
@@ -122,6 +124,18 @@ public class SetupPMTCTPregnancyConsultationReport {
 		}
 		inPMTCTProgram.setPrograms(programs);
 		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
+		
+		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
+		
+		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
+		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
+		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
+		dueThatWeek.setTimeModifier(TimeModifier.ANY);
+		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
+		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
+		dueThatWeek.setName("patients due that week");
+		dueThatWeek.setGroupingConcept(nextVisitConcept);
+		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
@@ -213,6 +227,15 @@ public class SetupPMTCTPregnancyConsultationReport {
 		address3.setIncludeCell(false);
 		dataSetDefinition.addColumn(address3, new HashMap<String,Object>());
 		
+		PatientAddress address4 = new PatientAddress();
+		address4.setName("District");
+		address4.setIncludeCountry(false);
+		address4.setIncludeProvince(false);
+		address4.setIncludeSector(false);
+		address4.setIncludeCell(false);
+		address4.setIncludeUmudugudu(false);
+		dataSetDefinition.addColumn(address4, new HashMap<String,Object>());
+		
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
@@ -224,7 +247,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 		artDrugs.setDrugFilter(new DrugNameFilter());
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String,Object>());
 		
-		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		MostRecentObservation nextVisit = new MostRecentObservation();
 		nextVisit.setConcept(nextVisitConcept);
 		nextVisit.setName("nextVisit");
@@ -249,10 +271,12 @@ public class SetupPMTCTPregnancyConsultationReport {
 		CustomCalculationBasedOnMultiplePatientDataDefinitions bOrF = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		bOrF.setName("bOrF");
 		bOrF.addPatientDataToBeEvaluated(decisionDate, new HashMap<String, Object>());
+		bOrF.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
 		bOrF.setCalculator(new BreastFeedingOrFormula());
 		dataSetDefinition.addColumn(bOrF, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
+		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
 	}
