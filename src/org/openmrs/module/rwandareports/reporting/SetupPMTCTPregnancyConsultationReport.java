@@ -86,7 +86,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "PMTCT Pregnancy consultation Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "PMTCTPregLocation: Patients at location");
 	}
 	
 	
@@ -96,7 +96,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTPregLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -288,8 +288,8 @@ public class SetupPMTCTPregnancyConsultationReport {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
-		location.setName("location: Patients at location");
-		location.addParameter(new Parameter("location", "location", Location.class));
+		location.setName("PMTCTPregLocation: Patients at location");
+		location.addParameter(new Parameter("PMTCTPregLocation", "location", Location.class));
 		h.replaceCohortDefinition(location);
 		
 	}

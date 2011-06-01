@@ -58,14 +58,30 @@ public class SetupHivArtRegisterReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "HIVArtTemplate.xls_", null);
+		if(pedi)
+		{
+			h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "PediHIVArtTemplate.xls_", null);
+		}
+		else
+		{
+			h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "HIVArtTemplate.xls_", null);
+		}
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("HIVArtTemplate.xls_".equals(rd.getName())) {
-				rs.purgeReportDesign(rd);
+			if(pedi)
+			{
+				if ("PediHIVArtTemplate.xls_".equals(rd.getName())) {
+					rs.purgeReportDesign(rd);
+				}
+			}
+			else
+			{
+				if ("HIVArtTemplate.xls_".equals(rd.getName())) {
+					rs.purgeReportDesign(rd);
+				}
 			}
 		}
 		if(pedi)
@@ -86,7 +102,14 @@ public class SetupHivArtRegisterReport {
 			h.purgeDefinition(HIVARTRegisterDataSetDefinition2.class, "Adult HIV ART Register Data Set");
 		}
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		if(pedi)
+		{
+			h.purgeDefinition(CohortDefinition.class, "PediRegisterLocation: Patients at location");
+		}
+		else
+		{
+			h.purgeDefinition(CohortDefinition.class, "HIVRegisterLocation: Patients at location");
+		}
 	}
 	
 	
@@ -94,7 +117,7 @@ public class SetupHivArtRegisterReport {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		if(pedi)
 		{
-			reportDefinition.setName("Peid HIV ART Register");
+			reportDefinition.setName("Pedi HIV ART Register");
 		}
 		else
 		{
@@ -102,7 +125,14 @@ public class SetupHivArtRegisterReport {
 		}
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		if(pedi)
+		{
+			reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PediRegisterLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		}
+		else
+		{
+			reportDefinition.setBaseCohortDefinition(h.cohortDefinition("HIVRegisterLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		}
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -120,7 +150,7 @@ public class SetupHivArtRegisterReport {
 		if(pedi)
 		{
 			InProgramCohortDefinition inPediHIVProgram = new InProgramCohortDefinition();
-			inPediHIVProgram.setName("hiv: In Peid HIV Programs");
+			inPediHIVProgram.setName("hiv: In Pedi HIV Programs");
 			List<Program> hivPrograms = new ArrayList<Program>();
 			Program pedi = Context.getProgramWorkflowService().getProgramByName(properties.get("PEDI_HIV_PROGRAM"));
 			if(pedi != null)
@@ -348,7 +378,14 @@ public class SetupHivArtRegisterReport {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
-		location.setName("location: Patients at location");
+		if(pedi)
+		{
+			location.setName("PediRegisterLocation: Patients at location");
+		}
+		else
+		{
+			location.setName("HIVRegisterLocation: Patients at location");
+		}
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
 		

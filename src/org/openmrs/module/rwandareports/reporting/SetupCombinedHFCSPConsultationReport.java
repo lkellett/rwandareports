@@ -84,7 +84,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "Combined HFCSP consultation Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "PMTCTCombinedLocation: Patients at location");
 	}
 	
 	
@@ -93,9 +93,9 @@ public class SetupCombinedHFCSPConsultationReport {
 		reportDefinition.setName("Combined HFCSP consultation");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class,  properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
+		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class,  properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTCombinedLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -336,7 +336,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
-		location.setName("location: Patients at location");
+		location.setName("PMTCTCombinedLocation: Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
 		

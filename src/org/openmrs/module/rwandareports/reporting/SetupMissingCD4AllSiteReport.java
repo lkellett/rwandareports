@@ -43,7 +43,6 @@ public class SetupMissingCD4AllSiteReport {
 		
 		setUpGlobalProperties();
 		
-		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
 		h.createRowPerPatientXlsOverview(rd, "MissingCD4ReportAllSiteTemplate.xls", "XlsMissingCD4ReportAllSiteTemplate", null);
 	}
@@ -278,18 +277,7 @@ public class SetupMissingCD4AllSiteReport {
 		reportDefinition.addDataSetDefinition("NoResult", noResultDataSet, mappings1);
 	}
 	
-	
-	
-	private void createCohortDefinitions() {
-		
-		SqlCohortDefinition location = new SqlCohortDefinition();
-		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
-		location.setName("location: Patients at location");
-		location.addParameter(new Parameter("location", "location", Location.class));
-		h.replaceCohortDefinition(location);
-		
-	}
+
 	
 	
 	

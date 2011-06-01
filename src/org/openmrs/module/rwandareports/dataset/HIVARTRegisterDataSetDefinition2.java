@@ -20,6 +20,7 @@ import org.openmrs.Patient;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.BaseDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.evaluator.SimplePatientDataSetEvaluator;
+import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
 
 /**
@@ -32,11 +33,13 @@ public class HIVARTRegisterDataSetDefinition2 extends BaseDataSetDefinition {
 
 	private static final long serialVersionUID = 6405583324151111487L;
 	
+	@ConfigurationProperty
 	private List<PatientData> columns;
 	
+	@ConfigurationProperty
 	private List<CohortDefinition> filters;
 	
-	private Patient patient;
+	
 	
 	
 	/**
@@ -70,22 +73,6 @@ public class HIVARTRegisterDataSetDefinition2 extends BaseDataSetDefinition {
      */
     public void setColumns(List<PatientData> columns) {
     	this.columns = columns;
-    }
-
-	
-    /**
-     * @return the patient
-     */
-    public Patient getPatient() {
-    	return patient;
-    }
-
-	
-    /**
-     * @param patient the patient to set
-     */
-    public void setPatient(Patient patient) {
-    	this.patient = patient;
     }
 
 	

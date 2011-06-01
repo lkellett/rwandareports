@@ -80,7 +80,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		reportDefinition.setName("Formula Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
+	//	reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
