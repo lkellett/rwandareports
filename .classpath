@@ -47,9 +47,9 @@
 	<classpathentry kind="lib" path="lib-common/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.6.3.18038-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/serialization.xstream-0.2.5.jar"/>
-	<classpathentry kind="lib" path="lib-common/reportingobjectgroup-1.0.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/junit/hsqldb-1.8.0.10.jar" sourcepath="/openmrs-source/hsqldb_1_8_0_9.zip"/>
 	<classpathentry kind="lib" path="lib-common/reporting-0.6.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/rowperpatientreports-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/reportingobjectgroup-1.02.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
