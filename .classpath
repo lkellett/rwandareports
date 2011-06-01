@@ -13,7 +13,6 @@
 	<classpathentry kind="lib" path="lib-common/spring-webmvc.jar"/>
 	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.6.2.15605-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/htmlwidgets-1.5.0.jar"/>
-	<classpathentry kind="lib" path="lib-common/rowperpatientreports-0.0.1.jar" sourcepath="/RowPerPatientReports"/>
 	<classpathentry kind="lib" path="lib-common/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.3.18847-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/logic-0.4.jar"/>
@@ -51,5 +50,6 @@
 	<classpathentry kind="lib" path="lib-common/reportingobjectgroup-1.0.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/junit/hsqldb-1.8.0.10.jar" sourcepath="/openmrs-source/hsqldb_1_8_0_9.zip"/>
 	<classpathentry kind="lib" path="lib-common/reporting-0.6.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/rowperpatientreports-1.0.0.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

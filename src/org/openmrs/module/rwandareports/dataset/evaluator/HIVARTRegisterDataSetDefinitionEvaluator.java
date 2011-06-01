@@ -89,7 +89,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 	 * @see DataSetEvaluator#evaluate(DataSetDefinition, EvaluationContext)
 	 * @should evaluate a PatientDataSetDefinition
 	 */
-	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) {
+	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) throws EvaluationException{
 		
 		SimpleDataSet dataSet = new SimpleDataSet(dataSetDefinition, context);
 		HIVARTRegisterDataSetDefinition definition = (HIVARTRegisterDataSetDefinition) dataSetDefinition;
@@ -134,12 +134,18 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 				pd.setPatient(p);
 				pd.setPatientId(p.getPatientId());
 				long startTime = System.currentTimeMillis();
-				PatientDataResult patientDataResult = Context.getService(PatientDataService.class).evaluate(pd, context);
+				PatientDataResult patientDataResult;
+				try {
+					patientDataResult = Context.getService(PatientDataService.class).evaluate(pd, context);
+					DataSetColumn c = new DataSetColumn(patientDataResult.getName(), patientDataResult.getDescription(), patientDataResult.getColumnClass());
+					row.addColumnValue(c, patientDataResult);
+				} catch (EvaluationException e) {
+					log.debug("Error evaluating dataSet", e);
+				}
 				long timeTake = System.currentTimeMillis() - startTime;
 				log.info(pd.getName() + ": " + timeTake);
 				
-				DataSetColumn c = new DataSetColumn(patientDataResult.getName(), patientDataResult.getDescription(), patientDataResult.getColumnClass());
-				row.addColumnValue(c, patientDataResult);
+				
 			}
 			dataSet.addRow(row);
 		}

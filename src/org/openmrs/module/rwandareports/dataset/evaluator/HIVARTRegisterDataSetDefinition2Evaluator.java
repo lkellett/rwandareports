@@ -90,7 +90,7 @@ public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluat
 	 * @see DataSetEvaluator#evaluate(DataSetDefinition, EvaluationContext)
 	 * @should evaluate a PatientDataSetDefinition
 	 */
-	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) {
+	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) throws EvaluationException{
 		
 		SimpleDataSet dataSet = new SimpleDataSet(dataSetDefinition, context);
 		HIVARTRegisterDataSetDefinition2 definition = (HIVARTRegisterDataSetDefinition2) dataSetDefinition;
