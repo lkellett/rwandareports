@@ -42,6 +42,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rwandareports.customcalculators.Alerts;
 import org.openmrs.module.rwandareports.customcalculators.BreastFeedingOrFormula;
 import org.openmrs.module.rwandareports.customcalculators.DecisionDate;
 import org.openmrs.module.rwandareports.customcalculators.GestationalAge;
@@ -134,7 +135,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
 		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
 		dueThatWeek.setName("patients due that week");
-		dueThatWeek.setGroupingConcept(nextVisitConcept);
+		dueThatWeek.setQuestion(nextVisitConcept);
 		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
@@ -274,6 +275,13 @@ public class SetupPMTCTPregnancyConsultationReport {
 		bOrF.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
 		bOrF.setCalculator(new BreastFeedingOrFormula());
 		dataSetDefinition.addColumn(bOrF, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		alert.setName("alert");
+		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(gestationalAge, new HashMap<String, Object>());
+		alert.setCalculator(new Alerts());
+		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("date", "${date}");

@@ -55,7 +55,7 @@ public class Alerts implements CustomCalculation{
 						{
 							alerts.append(", ");
 						}
-						alerts.append("Last CD4 test was over 6 months ago");
+						alerts.append("Last CD4 > 6 months");
 					}
 				}
 			}
@@ -66,7 +66,7 @@ public class Alerts implements CustomCalculation{
 				{
 					int gestationalAge = Integer.parseInt(result.getValue().toString());
 					
-					if(gestationalAge > 38)
+					if(gestationalAge > 38 && gestationalAge < 40)
 					{
 						if(alerts.length() > 0)
 						{
@@ -80,7 +80,7 @@ public class Alerts implements CustomCalculation{
 						{
 							alerts.append(", ");
 						}
-						alerts.append("Overdue");
+						alerts.append("Post term");
 					}	
 				}
 			}
