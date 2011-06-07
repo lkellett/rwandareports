@@ -20,6 +20,7 @@ public class BreastFeedingOrFormula implements CustomCalculation{
 	public PatientDataResult calculateResult(List<PatientDataResult> results, EvaluationContext context) {
 
 		PatientAttributeResult bOrF = new PatientAttributeResult(null, null);
+		bOrF.setValue("");
 		
 		Date date = (Date)context.getParameterValue("date");
 		
@@ -51,13 +52,12 @@ public class BreastFeedingOrFormula implements CustomCalculation{
 			{
 				ObservationResult cd4 = (ObservationResult)result;
 				
-				if(cd4.getValue() != null)
+				if(cd4.getValue() != null && cd4.getValue().trim().length() > 0)
 				{
 					try{
 						int cd4Val = Integer.parseInt(cd4.getValue());
 						if(cd4Val < 350)
 						{
-							bOrF.setValue(null);
 							return bOrF;
 						}
 					} catch(Exception e)

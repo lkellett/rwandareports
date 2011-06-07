@@ -29,7 +29,7 @@ public class Alerts implements CustomCalculation{
 			{
 				ObservationResult cd4 = (ObservationResult)result;
 				
-				if(cd4.getValue() != null)
+				if(cd4.getValue() != null && cd4.getValue().trim().length() > 0)
 				{
 					int cd4Val = Integer.parseInt(cd4.getValue());
 					if(cd4Val < 350)
@@ -38,7 +38,7 @@ public class Alerts implements CustomCalculation{
 						{
 							alerts.append(", ");
 						}
-						alerts.append("Low CD4 count");
+						alerts.append("Low CD4");
 					}
 				}
 				
@@ -55,7 +55,7 @@ public class Alerts implements CustomCalculation{
 						{
 							alerts.append(", ");
 						}
-						alerts.append("Last CD4 > 6 months");
+						alerts.append("Late CD4");
 					}
 				}
 			}
