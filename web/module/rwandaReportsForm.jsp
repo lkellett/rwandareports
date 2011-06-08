@@ -30,6 +30,10 @@ border: 1px solid blue;
 font-weight: bold;
 background-color: #B0C4DE;
 }
+.tabletd{
+font-weight: bold;
+background-color: #EEE;
+}
 
 .alt { background-color: #B0C4DE; }
 .altodd { background-color: #EEE; }
@@ -54,20 +58,13 @@ $(document).ready(function(){
 <h2>Register Reports for IMB Rwanda</h2>
 <table class="reports" style="width:100%;">
 <tr class="tableheaders">
-<td></td>
+<td>Categories</td>
 <td>Report Name</td>
 <td>Run</td>
 <td colspan="2"><center>Action</center></td>
 </tr>
-<tr class="tableheaders">
-<td>PIH Reports</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td rowspan="2" class="tabletd">PIH Reports</td>
 <td>PIH Quarterly Cross Site Indicator Report	
 </td>
 <td>Central</td>
@@ -75,145 +72,95 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossSiteIndicator.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
-<td></td>
 <td>PIH Quarterly Cross for individual Site Indicator Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossRegionIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossRegionIndicator.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
-<tr class="tableheaders">
-<td>Registers</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td rowspan="3" class="tabletd">Registers</td>
 <td>Adult HIV Art Register report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_adulthivartregister.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_adulthivartregister.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Pedi HIV Art Register report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pedihivartregister.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pedihivartregister.form" onclick=msgrem(this)>Remove</a></td>	
-</tr><tr>
-<td></td>
+</tr>
+<tr>
 <td>TRAC Mother-Infant Pair Follow-up Register report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctregister.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctregister.form" onclick=msgrem(this)>Remove</a></td>	 
 </tr>
 <tr>
-<tr class="tableheaders">
-<td>PMTCT Reports</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<td></td>
+<td rowspan="4" class="tabletd">PMTCT Reports</td>
 <td>Combined HFCSP Consultation Sheet</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_combinedHSCSPConsultation.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Food Distribution</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFoodDistributionSheet.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFoodDistributionSheet.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Formula Distribution</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctFormulaDistributionSheet.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctFormulaDistributionSheet.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Pregnancy Consultation Sheet</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctPregnancyConsultationSheet.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctPregnancyConsultationSheet.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
-<tr class="tableheaders">
-<td>Patient Follow-up</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td rowspan="2" class="tabletd">Patient Follow-up</td>
 <td>Adult Late Visit And CD4</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_adultLatevisitAndCD4.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_adultLatevisitAndCD4.form" onclick=msgrem(this)>Remove</a></td>	
 </tr><tr>
-<td></td>
 <td>Pediatric Late Visit And CD4</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pediatricLatevisitAndCD4.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pediatricLatevisitAndCD4.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
-<tr class="tableheaders">
-<td>Primary Care</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td class="tabletd">Primary Care</td>
 <td>Primary Care Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_rwandaPrimaryCareReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_rwandaPrimaryCareReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
-<tr class="tableheaders">
-<td>Heart Failure</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td rowspan="2" class="tabletd">Heart Failure</td>
 <td>Heart Failure Report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Heart Failure Report for all sites</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReportAllSites.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReportAllSites.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
-<tr class="tableheaders">
-<td>Data Quality</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 <tr>
-<td></td>
+<td rowspan="2" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4Report.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td></td>
 <td>Missing CD4 Report for all sites</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4AllSiteReport.form" onclick=msgreg(this)>(Re) register</a></td>
