@@ -66,7 +66,7 @@ public class Alerts implements CustomCalculation{
 				{
 					int gestationalAge = Integer.parseInt(result.getValue().toString());
 					
-					if(gestationalAge > 38 && gestationalAge < 40)
+					if(gestationalAge > 37 && gestationalAge < 41)
 					{
 						if(alerts.length() > 0)
 						{

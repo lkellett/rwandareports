@@ -58,6 +58,7 @@ public class BreastFeedingOrFormula implements CustomCalculation{
 						int cd4Val = Integer.parseInt(cd4.getValue());
 						if(cd4Val < 350)
 						{
+							bOrF.setValue("");
 							return bOrF;
 						}
 					} catch(Exception e)

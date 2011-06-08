@@ -479,7 +479,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 		
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location");
 		location.setName("location: HIV Pedi Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);

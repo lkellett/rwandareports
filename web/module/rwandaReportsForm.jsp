@@ -166,6 +166,12 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4AllSiteReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4AllSiteReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
+<tr>
+<td>Data Quality per site</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReport.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
 </table>
 <%@ include file="/WEB-INF/template/footer.jsp"%>
 

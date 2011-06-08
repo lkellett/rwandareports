@@ -377,7 +377,7 @@ public class SetupHivArtRegisterReport {
 		
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location");
 		if(pedi)
 		{
 			location.setName("PediRegisterLocation: Patients at location");

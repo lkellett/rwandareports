@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>
@@ -427,6 +427,12 @@
 		<property>reports.weanedConcept</property>
 		<defaultValue>1152</defaultValue>
 		<description>The id of the concept for the weaned concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dataqualitymultipleencounters</property>
+		<defaultValue>1,2,3,4,6,7</defaultValue>
+		<description>Used by the data quality report to find patients that have multiple encounters on the same day, this should be a list of encounter type ids</description>
 	</globalProperty>
 	
 	<!-- /Rwanda Report Module Properties -->

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Concept;
-import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
@@ -26,34 +25,26 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstRecordedObservationWithCodedConceptAnswer;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAgeInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.customcalculators.Alerts;
 import org.openmrs.module.rwandareports.customcalculators.BreastFeedingOrFormula;
+import org.openmrs.module.rwandareports.customcalculators.DDR;
+import org.openmrs.module.rwandareports.customcalculators.DPA;
 import org.openmrs.module.rwandareports.customcalculators.DecisionDate;
 import org.openmrs.module.rwandareports.customcalculators.GestationalAge;
-import org.openmrs.module.rwandareports.customcalculators.PMTCTInfantDBSDue;
-import org.openmrs.module.rwandareports.customcalculators.StartOfARTForThisPMTCT;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.comparator.PMTCTDataSetRowComparator;
-import org.openmrs.module.rwandareports.filter.DiscordantCoupleFilter;
+import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.RemoveDecimalFilter;
-import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 
 public class SetupPMTCTPregnancyConsultationReport {
 	
@@ -177,7 +168,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 		ddr.setName("ddr");
 		ddr.setDescription("ddr");
 		ddr.setFilter(dateFilter);
-		dataSetDefinition.addColumn(ddr, new HashMap<String, Object>());
 		
 		MostRecentObservation dpa = new MostRecentObservation();
 		Concept dpaConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("DPA_CONCEPT")));
@@ -185,7 +175,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dpa.setName("dpa");
 		dpa.setDescription("dpa");
 		dpa.setFilter(dateFilter);
-		dataSetDefinition.addColumn(dpa, new HashMap<String, Object>());
 		
 		MostRecentObservation cd4Test = new MostRecentObservation();
 		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
@@ -269,6 +258,22 @@ public class SetupPMTCTPregnancyConsultationReport {
 		decisionDate.setCalculator(new DecisionDate());
 		dataSetDefinition.addColumn(decisionDate, new HashMap<String, Object>());
 		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions ddrDate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		ddrDate.addPatientDataToBeEvaluated(ddr, new HashMap<String, Object>());
+		ddrDate.addPatientDataToBeEvaluated(dpa, new HashMap<String, Object>());
+		ddrDate.setName("ddrCalc");
+		ddrDate.setDescription("ddrCalc");
+		ddrDate.setCalculator(new DDR());
+		dataSetDefinition.addColumn(ddrDate, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions dpaDate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		dpaDate.addPatientDataToBeEvaluated(ddr, new HashMap<String, Object>());
+		dpaDate.addPatientDataToBeEvaluated(dpa, new HashMap<String, Object>());
+		dpaDate.setName("dpaCalc");
+		dpaDate.setDescription("dpaCalc");
+		dpaDate.setCalculator(new DPA());
+		dataSetDefinition.addColumn(dpaDate, new HashMap<String, Object>());
+		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions bOrF = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		bOrF.setName("bOrF");
 		bOrF.addPatientDataToBeEvaluated(decisionDate, new HashMap<String, Object>());
@@ -295,7 +300,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
+		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pa.voided = 0 and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.value = :location");
 		location.setName("PMTCTPregLocation: Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
