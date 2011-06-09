@@ -24,21 +24,11 @@ public class DPA implements CustomCalculation{
 		StringBuffer dpaOutput = new StringBuffer();
 		dpaOutput.append(" ");
 		
+		boolean needToFind = true;
+		
 		
 		for(PatientDataResult result: results)
 		{
-			if(result.getName().equals("dpa"))
-			{
-				ObservationResult dpaResult = (ObservationResult)result;
-				
-				if(dpaResult.getValue() != null && dpaResult.getValue().trim().length() > 0)
-				{
-					dpaOutput.append("R: ");
-					dpaOutput.append(dpaResult.getValue());
-					dpaOutput.append(" ");
-				}
-			}
-			
 			if(result.getName().equals("ddr"))
 			{
 				ObservationResult ddrResult = (ObservationResult)result;
@@ -52,11 +42,30 @@ public class DPA implements CustomCalculation{
 						ddrDate.setTime(sdf.parse(ddrResult.getValue().trim()));
 						ddrDate.add(Calendar.DAY_OF_YEAR, 280);
 						
-						dpaOutput.append("C: ");
+						//dpaOutput.append("C: ");
 						dpaOutput.append(sdf.format(ddrDate.getTime()));
 						dpaOutput.append(" ");
+						needToFind = false;
 					}catch (ParseException e) {
 						log.debug("Unable to parse DDR date", e);
+					}
+				}
+			}
+		}
+		
+		if(needToFind)
+		{
+			for(PatientDataResult result: results)
+			{
+				if(result.getName().equals("dpa"))
+				{
+					ObservationResult dpaResult = (ObservationResult)result;
+					
+					if(dpaResult.getValue() != null && dpaResult.getValue().trim().length() > 0)
+					{
+						//dpaOutput.append("R: ");
+						dpaOutput.append(dpaResult.getValue());
+						dpaOutput.append(" ");
 					}
 				}
 			}

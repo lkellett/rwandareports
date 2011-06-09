@@ -34,7 +34,7 @@ public class DDR implements CustomCalculation{
 				
 				if(ddrResult.getValue() != null && ddrResult.getValue().trim().length() > 0)
 				{
-					ddrOutput.append("R: ");
+					//ddrOutput.append("R: ");
 					ddrOutput.append(ddrResult.getValue());
 					ddrOutput.append(" ");
 					needToCal = false;
@@ -59,7 +59,7 @@ public class DDR implements CustomCalculation{
 							dpaDate.setTime(sdf.parse(dpaResult.getValue().trim()));
 							dpaDate.add(Calendar.DAY_OF_YEAR, -280);
 							
-							ddrOutput.append("C: ");
+							//ddrOutput.append("C: ");
 							ddrOutput.append(sdf.format(dpaDate.getTime()));
 							ddrOutput.append(" ");
 						}catch (ParseException e) {
