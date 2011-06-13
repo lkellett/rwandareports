@@ -8,7 +8,8 @@ public class PMTCTDbsTestOrderedFilter implements ResultFilter {
 	private String initialConceptName;
 	private String confirmConceptName;
 	
-	public String filter(String obsResult) {
+	public Object filter(Object value) {
+		String obsResult = (String)value;
 		if(obsResult.contains(initialConceptName + ":") || obsResult.contains(confirmConceptName + ":"))
 		{
 			return "Yes";

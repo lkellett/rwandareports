@@ -10,7 +10,8 @@ public class DateFormatFilter implements ResultFilter {
 	
 	private String finalDateFormat = null;
 	
-	public String filter(String result) {
+	public Object filter(Object value) {
+		String result = (String)value;
 		if(result != null && result.indexOf("00:") > -1)
 		{
 			result = result.substring(0, result.indexOf("00:")).trim();

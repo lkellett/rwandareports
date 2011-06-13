@@ -5,7 +5,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 
 public class GroupStateFilter implements ResultFilter {
 	
-	public String filter(String state) {
+	public Object filter(Object value) {
+		String state = (String)value;
 		String[] wordsState = state.split(" ");
 		return wordsState[(wordsState.length)-1];
 	}

@@ -8,7 +8,8 @@ public class DiscordantCoupleFilter implements ResultFilter {
 	
 	private String workflowName = Context.getAdministrationService().getGlobalProperty("reports.pmtctDiscordantCoupleWorkflowState");
 	
-	public String filter(String state) {
+	public Object filter(Object value) {
+		String state = (String)value;
 		if(state.toLowerCase().contains(workflowName.toLowerCase()))
 		{
 			return "Yes";

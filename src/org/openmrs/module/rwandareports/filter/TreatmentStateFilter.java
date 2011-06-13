@@ -4,7 +4,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 
 public class TreatmentStateFilter implements ResultFilter {
   private String stateResult;
-	public String filter(String treatmentState) {
+  public Object filter(Object value) {
+		String treatmentState = (String)value;
 		
 		if(treatmentState.equals("ON ANTIRETROVIRALS"))			
 			stateResult="ART";

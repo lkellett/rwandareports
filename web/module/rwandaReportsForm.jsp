@@ -97,6 +97,13 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctregister.form" onclick=msgrem(this)>Remove</a></td>	 
 </tr>
 <tr>
+<td class="tabletd">Adult HIV Program</td>
+<td>Adult HIV Consultation Sheet</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_adultHIVConsultationSheet.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_adultHIVConsultationSheet.form" onclick=msgrem(this)>Remove</a></td>	 
+</tr>
+<tr>
 <td rowspan="4" class="tabletd">PMTCT Reports</td>
 <td>Combined HFCSP Consultation Sheet</td>
 <td>At site</td>
@@ -154,7 +161,7 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReportAllSites.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">Data Quality</td>
+<td rowspan="3" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>

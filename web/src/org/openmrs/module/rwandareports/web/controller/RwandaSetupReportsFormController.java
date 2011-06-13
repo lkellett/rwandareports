@@ -1,6 +1,7 @@
 package org.openmrs.module.rwandareports.web.controller;
 
 import org.openmrs.module.rwandareports.reporting.Helper;
+import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
@@ -131,6 +132,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_pmtctPregnancyConsultationSheet")
 	public ModelAndView removePmtctPregnanacyConsultation() throws Exception {
 		new SetupPMTCTPregnancyConsultationReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_adultHIVConsultationSheet")
+	public ModelAndView registerAdultHIVConsultationSheet() throws Exception {
+		new SetupAdultHIVConsultationSheet(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_adultHIVConsultationSheet")
+	public ModelAndView removeAdultHIVConsultationSheet() throws Exception {
+		new SetupAdultHIVConsultationSheet(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

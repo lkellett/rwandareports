@@ -6,7 +6,8 @@ public class DrugNameFilter implements ResultFilter {
 	
 	private String finalDateFormat = null;
 	
-	public String filter(String result) {
+	public Object filter(Object value) {
+		String result = (String)value;
 		
 		while(result.indexOf("(") > -1)
 		{

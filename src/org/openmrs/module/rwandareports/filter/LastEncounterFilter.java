@@ -4,7 +4,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 
 public class LastEncounterFilter implements ResultFilter {
 private String lastVist;
-	public String filter(String lastEncounterName) {
+public Object filter(Object value) {
+	String lastEncounterName = (String)value;
 		if(lastEncounterName.equals("ADULT INITIAL VISIT"))
 			lastVist="ADULT INITIAL";
 		else if(lastEncounterName.equals("ADULT RETURN VISIT"))
