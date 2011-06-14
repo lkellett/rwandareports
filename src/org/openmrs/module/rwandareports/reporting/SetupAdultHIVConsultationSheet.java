@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -31,11 +32,11 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIde
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rwandareports.customcalculators.ArtDetails;
-import org.openmrs.module.rwandareports.customcalculators.GestationalAge;
 import org.openmrs.module.rwandareports.customcalculators.HIVAdultAlerts;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
+import org.openmrs.module.rwandareports.filter.ObservationFilter;
 
 public class SetupAdultHIVConsultationSheet {
 	
@@ -80,6 +81,12 @@ public class SetupAdultHIVConsultationSheet {
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
 		reportDefinition.addParameter(new Parameter("date", "Date", Date.class));
 		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class));
+		//This is waiting on changes to the reporting framework to allow for filtering of the state parameter
+		//so the user is only presented with the treatment group options
+		Properties stateProperties = new Properties();
+		stateProperties.setProperty("Program", properties.get("ADULT_HIV_PROGRAM"));
+		stateProperties.setProperty("Workflow", properties.get("TREATMENT_STATUS"));
+		//reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("AdultHIVLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -143,6 +150,7 @@ public class SetupAdultHIVConsultationSheet {
 		weight.setName("weightObs");
 		weight.setFilter(new LastThreeObsFilter());
 		weight.setDateFormat("ddMMMyy");
+		weight.setOutputFilter(new ObservationFilter());
 		dataSetDefinition.addColumn(weight, new HashMap<String,Object>());
 		
 		AllObservationValues cd4Test = new AllObservationValues();
@@ -151,6 +159,7 @@ public class SetupAdultHIVConsultationSheet {
 		cd4Test.setName("CD4Test");
 		cd4Test.setFilter(new LastThreeObsFilter());
 		cd4Test.setDateFormat("ddMMMyy");
+		cd4Test.setOutputFilter(new ObservationFilter());
 		dataSetDefinition.addColumn(cd4Test, new HashMap<String, Object>());
 		
 		PatientRelationship accomp = new PatientRelationship();
@@ -184,6 +193,8 @@ public class SetupAdultHIVConsultationSheet {
 		CurrentOrdersRestrictedByConceptSet tbTreatment = new CurrentOrdersRestrictedByConceptSet();
 		tbTreatment.setName("TB Treatment");
 		tbTreatment.setDescription("TB Treatment");
+		tbTreatment.setDrugFilter(new DrugNameFilter());
+		tbTreatment.setDateFormat("ddMMMyy");
 		Concept tbDrugConcept = Context.getConceptService().getConcept(new Integer(properties.get("TB_TREATMENT_CONCEPT")));
 		tbTreatment.setDrugConceptSetConcept(tbDrugConcept);
 		dataSetDefinition.addColumn(tbTreatment, new HashMap<String,Object>());
@@ -223,6 +234,12 @@ public class SetupAdultHIVConsultationSheet {
 		
 		String adultHIVId = Context.getAdministrationService().getGlobalProperty("hiv.programid.adult");
 		properties.put("ADULT_HIV_PROGRAM_ID", adultHIVId);
+		
+		String adultHIV = Context.getAdministrationService().getGlobalProperty("reports.hivprogramname");
+		properties.put("ADULT_HIV_PROGRAM", adultHIV);
+		
+		String treatmentStatus = Context.getAdministrationService().getGlobalProperty("reports.hivtreatmentstatus");
+		properties.put("TREATMENT_STATUS", treatmentStatus);
 		
 		String weightConcept = Context.getAdministrationService().getGlobalProperty("reports.weightConcept");
 		properties.put("WEIGHT_CONCEPT", weightConcept);

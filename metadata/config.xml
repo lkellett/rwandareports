@@ -218,7 +218,7 @@
 	
 	<globalProperty>
 		<property>reports.tbTreatmentConcept</property>
-		<defaultValue>3014</defaultValue>
+		<defaultValue>1156</defaultValue>
 		<description>
 			The concept id of all the TB Treatment drug concept set 
 		</description>
