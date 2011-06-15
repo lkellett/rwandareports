@@ -75,12 +75,20 @@ public class ArtDetails implements CustomCalculation{
 				resultString.append(order.getDose());
 				resultString.append(" ");
 				String units = order.getUnits();
-				units = units.replace("tab(s)", "Co");
-				resultString.append(units);
+				if(units != null)
+				{
+					units = units.replace("tab(s)", "Co");
+					resultString.append(units);
+				}
+				
 				resultString.append(",");
 				String freq = order.getFrequency();
-				freq = freq.replace("day x 7 days/week", "j");
-				resultString.append(freq);
+				if(freq != null)
+				{
+					freq = freq.replace("day x 7 days/week", "j");
+					resultString.append(freq);
+				}
+				
 				resultString.append(")");
 				resultString.append("\n");
 			}

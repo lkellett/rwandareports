@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -27,6 +28,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirth;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
@@ -69,9 +71,9 @@ public class SetupPMTCTFormulaDistributionReport {
 		}
 		h.purgeDefinition(ReportDefinition.class, "Formula Package Distribution");
 		
-		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "Formula Package Distribution Data Set");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Formula Package Distribution Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "FPDlocation: Patients at location");
 	}
 	
 	
@@ -80,9 +82,13 @@ public class SetupPMTCTFormulaDistributionReport {
 		reportDefinition.setName("Formula Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-	//	reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
+		Properties stateProperties = new Properties();
+		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+	//	reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("FPDlocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -183,7 +189,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
 		
-		PatientProperty birthdate = new PatientProperty("birthdate");
+		DateOfBirth birthdate = new DateOfBirth();
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
@@ -222,7 +228,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		
 		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
 		
-		//h.replaceDataSetDefinition(dataSetDefinition);
+		h.replaceDataSetDefinition(dataSetDefinition);
 	}
 	
 	private void createCohortDefinitions() {
@@ -230,7 +236,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location");
-		location.setName("location: Patients at location");
+		location.setName("FPDlocation: Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
 	}

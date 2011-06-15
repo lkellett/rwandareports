@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -25,6 +26,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirth;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
@@ -67,9 +69,9 @@ public class SetupPMTCTFoodDistributionReport {
 		}
 		h.purgeDefinition(ReportDefinition.class, "Food Package Distribution");
 		
-		h.purgeDefinition(HIVARTRegisterDataSetDefinition.class, "Food Package Distribution Data Set");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Food Package Distribution Data Set");
 		
-		h.purgeDefinition(CohortDefinition.class, "location: Patients at location");
+		h.purgeDefinition(CohortDefinition.class, "FPlocation: Patients at location");
 	}
 	
 	
@@ -78,9 +80,13 @@ public class SetupPMTCTFoodDistributionReport {
 		reportDefinition.setName("Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-	//	reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
+		Properties stateProperties = new Properties();
+		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
-		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("location: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("FPlocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
 		
@@ -162,7 +168,7 @@ public class SetupPMTCTFoodDistributionReport {
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
 		
-		PatientProperty birthdate = new PatientProperty("birthdate");
+		DateOfBirth birthdate = new DateOfBirth();
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
@@ -193,15 +199,13 @@ public class SetupPMTCTFoodDistributionReport {
 		address.setIncludeProvince(false);
 		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
 		
-		//dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
 		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
 		
-		//h.replaceDataSetDefinition(dataSetDefinition);
+		h.replaceDataSetDefinition(dataSetDefinition);
 	}
 	
 	private void createCohortDefinitions() {
@@ -209,7 +213,7 @@ public class SetupPMTCTFoodDistributionReport {
 		SqlCohortDefinition location = new SqlCohortDefinition();
 		location
 		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location");
-		location.setName("location: Patients at location");
+		location.setName("FPlocation: Patients at location");
 		location.addParameter(new Parameter("location", "location", Location.class));
 		h.replaceCohortDefinition(location);
 	}
