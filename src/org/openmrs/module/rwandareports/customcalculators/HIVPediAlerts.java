@@ -9,12 +9,11 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
-import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 
-public class HIVAdultAlerts implements CustomCalculation{
+public class HIVPediAlerts implements CustomCalculation{
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
@@ -29,68 +28,30 @@ public class HIVAdultAlerts implements CustomCalculation{
 			
 			if(result.getName().equals("CD4Test"))
 			{
-				AllObservationValuesResult cd4 = (AllObservationValuesResult)result;
+				ObservationResult cd4 = (ObservationResult)result;
 				
-				if(cd4.getValue() != null)
+				if(cd4.getValue() == null)
 				{
-					int decline = calculateDecline(cd4.getValue());
+					alerts.append(" No CD4 recorded ");
+				}
+				else
+				{
+					Date dateCd4 = cd4.getDateOfObservation();
+					Date date = Calendar.getInstance().getTime();
 					
-					if(decline > 0)
+					int diff = calculateMonthsDifference(date, dateCd4);
+					
+					if(diff > 12)
 					{
-						alerts.append(" CD4 decline(");
-						alerts.append(decline);
-						alerts.append(") ");
+						alerts.append(" very late CD4 ");
 					}
-					
-					Obs lastCd4 = null;
-					
-					if(cd4.getValue().size() > 0)
+					else if(diff > 6)
 					{
-						lastCd4 = cd4.getValue().get(cd4.getValue().size()-1);
-					}
-					
-					if(lastCd4 == null)
-					{
-						alerts.append(" No CD4 recorded ");
-					}
-					else
-					{
-						Date dateCd4 = lastCd4.getObsDatetime();
-						Date date = Calendar.getInstance().getTime();
-						
-						int diff = calculateMonthsDifference(date, dateCd4);
-						
-						if(diff > 12)
-						{
-							alerts.append(" very late CD4 ");
-						}
-						else if(diff > 6)
-						{
-							alerts.append(" late CD4");
-						}
-						
+						alerts.append(" late CD4");
 					}
 				}	
 			}
-			
-			if(result.getName().equals("weightObs"))
-			{
-				AllObservationValuesResult wt = (AllObservationValuesResult)result;
-				
-				if(wt.getValue() != null)
-				{
-					int decline = calculateDecline(wt.getValue());
-					
-					if(decline > 0)
-					{
-						alerts.append(" wt decline(");
-						alerts.append(decline);
-						alerts.append(") ");
-					}
-				}
-			}
 		}
-		
 		alert.setValue(alerts.toString());
 		return alert;
 	}

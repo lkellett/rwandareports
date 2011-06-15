@@ -49,6 +49,22 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.hivworkflowstatusinformed</property>
+		<defaultValue>INFORMED STATUS</defaultValue>
+		<description>
+			The workflow status that is used to determine if patients have been informed of diagnosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivworkflowstatuscounselling</property>
+		<defaultValue>COUNSELING GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the counselling group for the patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.hivtreatmentstatus</property>
 		<defaultValue>TREATMENT GROUP</defaultValue>
 		<description>
@@ -69,6 +85,14 @@
 		<defaultValue>5089</defaultValue>
 		<description>
 			The concept id of the weight concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heightConcept</property>
+		<defaultValue>5090</defaultValue>
+		<description>
+			The concept id of the height concept
 		</description>
 	</globalProperty>
 	
@@ -346,7 +370,7 @@
 	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.viralLoadConcept</property>
+		<property>t</property>
 		<defaultValue>856</defaultValue>
 		<description>The id of the concept for the Viral Load test</description>
 	</globalProperty>

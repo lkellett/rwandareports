@@ -14,6 +14,7 @@ import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionRepo
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTRegisterReport;
+import org.openmrs.module.rwandareports.reporting.SetupPediHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
@@ -132,6 +133,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_pmtctPregnancyConsultationSheet")
 	public ModelAndView removePmtctPregnanacyConsultation() throws Exception {
 		new SetupPMTCTPregnancyConsultationReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_pediHIVConsultationSheet")
+	public ModelAndView registerPediHIVConsultationSheet() throws Exception {
+		new SetupPediHIVConsultationSheet(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_pediHIVConsultationSheet")
+	public ModelAndView removePediHIVConsultationSheet() throws Exception {
+		new SetupPediHIVConsultationSheet(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
