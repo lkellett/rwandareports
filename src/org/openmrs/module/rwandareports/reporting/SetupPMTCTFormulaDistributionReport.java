@@ -28,7 +28,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirth;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
@@ -39,7 +39,6 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
-import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 
 public class SetupPMTCTFormulaDistributionReport {
 	
@@ -189,7 +188,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
 		
-		DateOfBirth birthdate = new DateOfBirth();
+		DateOfBirthShowingEstimation birthdate = new DateOfBirthShowingEstimation();
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();

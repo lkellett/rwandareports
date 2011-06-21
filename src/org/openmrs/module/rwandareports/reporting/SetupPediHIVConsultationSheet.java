@@ -25,7 +25,7 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirth;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
@@ -140,7 +140,7 @@ public class SetupPediHIVConsultationSheet {
 		infantId.addPatientDataDefinition(pcId, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(infantId, new HashMap<String,Object>());
 		
-		DateOfBirth birthdate = new DateOfBirth();
+		DateOfBirthShowingEstimation birthdate = new DateOfBirthShowingEstimation();
 		birthdate.setDateFormat("dd-MMM-yyyy");
 		birthdate.setEstimatedDateFormat("yyyy");
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());

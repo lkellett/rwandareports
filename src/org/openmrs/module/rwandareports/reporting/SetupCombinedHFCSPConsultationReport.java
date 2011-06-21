@@ -1,10 +1,12 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
@@ -26,19 +28,19 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirth;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfNextTestDueFromBirth;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfObsAfterDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MultipleConceptObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationPresentInMostRecentOrder;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAgeInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
@@ -49,8 +51,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPat
 import org.openmrs.module.rwandareports.customcalculators.PMTCTInfantDBSDue;
 import org.openmrs.module.rwandareports.customcalculators.StartOfARTForThisPMTCT;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.filter.BorFStateFilter;
 import org.openmrs.module.rwandareports.filter.DiscordantCoupleFilter;
-import org.openmrs.module.rwandareports.filter.PMTCTDbsTestOrderedFilter;
 
 public class SetupCombinedHFCSPConsultationReport {
 	
@@ -70,13 +72,17 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "PMTCTCombinedClinicConsultationSheet.xls", "PMTCTCombinedClinicConsultationSheet.xls_", null);
+	//	h.createRowPerPatientXlsOverview(rd, "PMTCTCombinedClinicConsultationSheet.xls", "PMTCTCombinedClinicConsultationSheet.xls_", null);
+		h.createRowPerPatientXlsOverview(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
 			if ("PMTCTCombinedClinicConsultationSheet.xls_".equals(rd.getName())) {
+				rs.purgeReportDesign(rd);
+			}
+			if ("HFCSPConsultationSheet.xls_".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
@@ -93,7 +99,11 @@ public class SetupCombinedHFCSPConsultationReport {
 		reportDefinition.setName("Combined HFCSP consultation");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class,  properties.get("PMTCT_COMBINED_CLINIC_PROGRAM")));
+		Properties stateProperties = new Properties();
+		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
+		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTCombinedLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
@@ -177,7 +187,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		motherId.setDescription("MotherId");
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
 		
-		PatientProperty birthdate = new PatientProperty("birthdate");
+		DateOfBirthShowingEstimation birthdate = new DateOfBirthShowingEstimation();
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
@@ -189,6 +199,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtctCombined);
 		feedingGroup.setPatienProgramWorkflow(pmtctCombined.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
+		feedingGroup.setFilter(new BorFStateFilter());
 		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		
 		PatientRelationship accomp = new PatientRelationship();
@@ -203,11 +214,68 @@ public class SetupCombinedHFCSPConsultationReport {
 		address.setIncludeProvince(false);
 		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
 		
-		MostRecentObservation dbsTest = new MostRecentObservation();
+		DateOfNextTestDueFromBirth firstDbs = new DateOfNextTestDueFromBirth();
+		firstDbs.setTimeUnit(Calendar.WEEK_OF_YEAR);
+		firstDbs.setTimeIncrement(6);
+		firstDbs.setName("firstDBSDue");
+		dataSetDefinition.addColumn(firstDbs, new HashMap<String,Object>());
+		
+		DateOfBirth dob = new DateOfBirth();
 		Concept dbsConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("DBS_CONCEPT_ID")));
-		dbsTest.setConcept(dbsConcept);
-		dbsTest.setName("DBSTest");
-		dataSetDefinition.addColumn(dbsTest, new HashMap<String,Object>());
+	
+		ObsValueAfterDateOfOtherDefinition firstDbsResult = new ObsValueAfterDateOfOtherDefinition();
+		firstDbsResult.setConcept(dbsConcept);
+		firstDbsResult.setName("firstDBSTest");
+		firstDbsResult.setDateOfPatientData(dob, new HashMap<String,Object>());
+		dataSetDefinition.addColumn(firstDbsResult, new HashMap<String,Object>());
+		
+		DateOfObsAfterDateOfOtherDefinition firstDbsDate = new DateOfObsAfterDateOfOtherDefinition();
+		firstDbsDate.setConcept(dbsConcept);
+		firstDbsDate.setName("firstDBSDate");
+		firstDbsDate.setDateOfPatientData(dob, new HashMap<String,Object>());
+		
+		ObsValueAfterDateOfOtherDefinition confDbsResult = new ObsValueAfterDateOfOtherDefinition();
+		confDbsResult.setConcept(dbsConcept);
+		confDbsResult.setName("confDBSTest");
+		confDbsResult.setDateOfPatientData(firstDbsDate, new HashMap<String,Object>());
+		dataSetDefinition.addColumn(confDbsResult, new HashMap<String,Object>());
+		
+		DateOfNextTestDueFromBirth firstSero = new DateOfNextTestDueFromBirth();
+		firstSero.setTimeUnit(Calendar.MONTH);
+		firstSero.setTimeIncrement(9);
+		firstSero.setName("firstSeroDue");
+		dataSetDefinition.addColumn(firstSero, new HashMap<String,Object>());
+		
+		DateOfNextTestDueFromBirth secondSero = new DateOfNextTestDueFromBirth();
+		secondSero.setTimeUnit(Calendar.MONTH);
+		secondSero.setTimeIncrement(9);
+		secondSero.setName("secondSeroDue");
+		dataSetDefinition.addColumn(secondSero, new HashMap<String,Object>());
+		
+		Concept seroConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("SERO_CONCEPT_ID")));
+		
+		ObsValueAfterDateOfOtherDefinition firstSeroResult = new ObsValueAfterDateOfOtherDefinition();
+		firstSeroResult.setConcept(seroConcept);
+		firstSeroResult.setName("firstSeroTest");
+		firstSeroResult.setDateOfPatientData(dob, new HashMap<String,Object>());
+		dataSetDefinition.addColumn(firstSeroResult, new HashMap<String,Object>());
+		
+		DateOfObsAfterDateOfOtherDefinition firstSeroDate = new DateOfObsAfterDateOfOtherDefinition();
+		firstSeroDate.setConcept(dbsConcept);
+		firstSeroDate.setName("firstSeroDate");
+		firstSeroDate.setDateOfPatientData(dob, new HashMap<String,Object>());
+		
+		ObsValueAfterDateOfOtherDefinition secondSeroResult = new ObsValueAfterDateOfOtherDefinition();
+		secondSeroResult.setConcept(dbsConcept);
+		secondSeroResult.setName("secondSeroTest");
+		secondSeroResult.setDateOfPatientData(firstSeroDate, new HashMap<String,Object>());
+		dataSetDefinition.addColumn(secondSeroResult, new HashMap<String,Object>());
+		
+		MostRecentObservation nextVisit = new MostRecentObservation();
+		nextVisit.setConcept(nextVisitConcept);
+		nextVisit.setName("nextRDV");
+		dataSetDefinition.addColumn(nextVisit, new HashMap<String,Object>());
+		
 		
 		StateOfPatient discordant = new StateOfPatient();
 		discordant.setName("DiscordantCouple");
@@ -380,6 +448,9 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		String dbsConcept = Context.getAdministrationService().getGlobalProperty("reports.dbsConcept");
 		properties.put("DBS_CONCEPT_ID", dbsConcept);
+		
+		String seroConcept = Context.getAdministrationService().getGlobalProperty("reports.serotestConcept");
+		properties.put("SERO_CONCEPT_ID", seroConcept);
 		
 		String dbsInitialConcept = Context.getAdministrationService().getGlobalProperty("reports.dbsInitialConcept");
 		properties.put("DBS_INITIAL_CONCEPT_ID", dbsInitialConcept);

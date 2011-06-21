@@ -358,6 +358,12 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.serotestConcept</property>
+		<defaultValue>1040</defaultValue>
+		<description>The id of the concept for the serotest</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.dbsInitialConcept</property>
 		<defaultValue>6961</defaultValue>
 		<description>The id of the concept for the DBS initial test</description>
