@@ -66,7 +66,7 @@ public class SetupPMTCTFoodDistributionReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "Food Package Distribution");
+		h.purgeDefinition(ReportDefinition.class, "PMTCT Food Package Distribution");
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Food Package Distribution Data Set");
 		
@@ -76,7 +76,7 @@ public class SetupPMTCTFoodDistributionReport {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Food Package Distribution");
+		reportDefinition.setName("PMTCT Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		Properties stateProperties = new Properties();

@@ -28,6 +28,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObserva
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
@@ -152,6 +153,12 @@ public class SetupAdultHIVConsultationSheet {
 		weight.setOutputFilter(new ObservationFilter());
 		dataSetDefinition.addColumn(weight, new HashMap<String,Object>());
 		
+		Concept heightConcept = Context.getConceptService().getConcept(new Integer(properties.get("HEIGHT_CONCEPT")));
+		
+		MostRecentObservation mostRecentHeight = new MostRecentObservation();
+		mostRecentHeight.setConcept(heightConcept);
+		mostRecentHeight.setName("RecentHeight");
+		
 		AllObservationValues cd4Test = new AllObservationValues();
 		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
 		cd4Test.setConcept(cd4Concept);
@@ -202,6 +209,7 @@ public class SetupAdultHIVConsultationSheet {
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
 		alert.setCalculator(new HIVAdultAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
@@ -259,6 +267,9 @@ public class SetupAdultHIVConsultationSheet {
 		
 		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
 		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
+		
+		String heightConcept = Context.getAdministrationService().getGlobalProperty("reports.heightConcept");
+		properties.put("HEIGHT_CONCEPT", heightConcept);
 	}	
 	
 }

@@ -1,5 +1,6 @@
 package org.openmrs.module.rwandareports.customcalculators;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
 import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
@@ -22,7 +24,12 @@ public class HIVAdultAlerts implements CustomCalculation{
 		
 		PatientAttributeResult alert = new PatientAttributeResult(null, null);
 		
+		ProgramWorkflowState state = (ProgramWorkflowState)context.getParameterValue("state");
+		
 		StringBuffer alerts = new StringBuffer();
+		
+		double height = 0;
+		double weight = 0;
 		
 		for(PatientDataResult result: results)
 		{
@@ -35,11 +42,11 @@ public class HIVAdultAlerts implements CustomCalculation{
 				{
 					int decline = calculateDecline(cd4.getValue());
 					
-					if(decline > 0)
+					if(decline > 50 && state.toString().contains("GROUP"))
 					{
-						alerts.append(" CD4 decline(");
+						alerts.append("CD4 decline(");
 						alerts.append(decline);
-						alerts.append(") ");
+						alerts.append(").\n");
 					}
 					
 					Obs lastCd4 = null;
@@ -51,7 +58,7 @@ public class HIVAdultAlerts implements CustomCalculation{
 					
 					if(lastCd4 == null)
 					{
-						alerts.append(" No CD4 recorded ");
+						alerts.append("No CD4 recorded.\n");
 					}
 					else
 					{
@@ -62,13 +69,17 @@ public class HIVAdultAlerts implements CustomCalculation{
 						
 						if(diff > 12)
 						{
-							alerts.append(" very late CD4 ");
+							alerts.append("Very late CD4(" + diff + " months ago).\n");
 						}
 						else if(diff > 6)
 						{
-							alerts.append(" late CD4");
+							alerts.append("Late CD4(" + diff + " months ago).\n");
 						}
 						
+						if(state.toString().contains("FOLLOWING") && lastCd4.getValueNumeric() != null && lastCd4.getValueNumeric() < 350)
+						{
+							alerts.append("Low CD4.\n");
+						}
 					}
 				}	
 			}
@@ -83,15 +94,52 @@ public class HIVAdultAlerts implements CustomCalculation{
 					
 					if(decline > 0)
 					{
-						alerts.append(" wt decline(");
+						alerts.append("WT decline(");
 						alerts.append(decline);
-						alerts.append(") ");
+						alerts.append(").\n");
 					}
+					
+					if(wt.getValue().size() > 0)
+					{
+						weight = wt.getValue().get(wt.getValue().size()-1).getValueNumeric();
+					}
+				}
+			}
+			
+			if(result.getName().equals("RecentHeight"))
+			{
+				ObservationResult heightOb = (ObservationResult)result;
+				
+				if(heightOb.getValue() == null || heightOb.getValue().trim().length() == 0)
+				{
+					alerts.append("No height recorded.\n");
+				}
+				else
+				{
+					height = Double.parseDouble(heightOb.getValue());
 				}
 			}
 		}
 		
-		alert.setValue(alerts.toString());
+		if(height > 0 && weight > 0)
+		{
+			double bmi = weight/(height/100*height/100);
+			int decimalPlace = 1;
+			BigDecimal bd = new BigDecimal( Double.toString(bmi) );
+			bd = bd.setScale( decimalPlace, BigDecimal.ROUND_HALF_UP );
+			
+			if(bmi < 16)
+			{
+				alerts.append("Very low BMI (" + bd.doubleValue()  + ").\n");
+			}
+			else if(bmi < 18.5)
+			{
+				alerts.append("Low BMI (" + bd.doubleValue()  + ").\n");
+			}
+				
+		}
+		
+		alert.setValue(alerts.toString().trim());
 		return alert;
 	}
 	

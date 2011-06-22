@@ -68,7 +68,7 @@ public class SetupPMTCTFormulaDistributionReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "Formula Package Distribution");
+		h.purgeDefinition(ReportDefinition.class, "PMTCT Formula Package Distribution");
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Formula Package Distribution Data Set");
 		
@@ -78,7 +78,7 @@ public class SetupPMTCTFormulaDistributionReport {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Formula Package Distribution");
+		reportDefinition.setName("PMTCT Formula Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		Properties stateProperties = new Properties();
