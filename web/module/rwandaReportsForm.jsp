@@ -64,12 +64,18 @@ $(document).ready(function(){
 <td colspan="2"><center>Action</center></td>
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">PIH Reports</td>
+<td rowspan="3" class="tabletd">PIH Reports</td>
 <td>PIH Quarterly Cross Site Indicator Report	
 </td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossSiteIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossSiteIndicator.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>PIH Quarterly Cross by District Indicator Report</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossDistrictIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossDistrictIndicator.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td>PIH Quarterly Cross for individual Site Indicator Report</td>

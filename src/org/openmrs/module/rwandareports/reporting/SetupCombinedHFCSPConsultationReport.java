@@ -195,12 +195,13 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
+		feedingGroup.addParameter(new Parameter("onDate", "Date", Date.class));
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtctCombined);
 		feedingGroup.setPatienProgramWorkflow(pmtctCombined.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
 		feedingGroup.setFilter(new BorFStateFilter());
-		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
+		dataSetDefinition.addColumn(feedingGroup, ParameterizableUtil.createParameterMappings("onDate=${date}"));
 		
 		PatientRelationship accomp = new PatientRelationship();
 		accomp.setName("AccompName");

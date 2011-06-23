@@ -16,6 +16,7 @@ import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyConsultatio
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupPediHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
+import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorByDistrictReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
@@ -49,6 +50,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/register_quarterlyCrossRegionIndicator")
 	public ModelAndView registerQuarterlyCrossRegionIndicator() throws Exception {
 		new SetupQuarterlyCrossSiteIndicatorBySiteReport(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_quarterlyCrossDistrictIndicator")
+	public ModelAndView removeQuarterlyCrossDistrictIndicator() throws Exception {
+		new SetupQuarterlyCrossSiteIndicatorByDistrictReport(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_quarterlyCrossDistrictIndicator")
+	public ModelAndView registerQuarterlyCrossDistrictIndicator() throws Exception {
+		new SetupQuarterlyCrossSiteIndicatorByDistrictReport(new Helper()).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 
