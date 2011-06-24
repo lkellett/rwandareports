@@ -39,7 +39,9 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
@@ -419,6 +421,17 @@ public class SetupPediatricLateVisitAndCD4Report {
 		pediatricHIVLostToFollowupDatSet.addColumn(lastEncounterType,new HashMap<String, Object>());
 		
 		
+		DateDiffInMonths lateVisitInMonth=new DateDiffInMonths();
+		lateVisitInMonth.setName("Late visit in months");
+		lateVisitInMonth.setDescription("Late visit type");
+		lateVisitInMonth.setEncounterTypes(clinicalEncounterTypesWithoutLabTest);
+		lateVisitInMonth.addParameter(new Parameter("endDate","endDate",Date.class));
+		pediatricARTLateVisitDataSet.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricPreARTLateVisitDataSet.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricHIVLateCD4CountDataSet.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricHIVLostToFollowupDatSet.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		
+		
 		ReturnVisitDate returnVisitDate=new ReturnVisitDate();
 		returnVisitDate.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.RETURN_VISIT_DATE_UUID));
 		returnVisitDate.setName("Date of missed appointment");
@@ -436,6 +449,17 @@ public class SetupPediatricLateVisitAndCD4Report {
 		pediatricHIVLateCD4CountDataSet.addColumn(cd4Count,new HashMap<String, Object>());
 		pediatricHIVLostToFollowupDatSet.addColumn(cd4Count,new HashMap<String, Object>());
 		
+		DateDiffInMonths lateCD4InMonths=new DateDiffInMonths();
+		lateCD4InMonths.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
+		lateCD4InMonths.setName("Late CD4 in months");
+		lateCD4InMonths.setDescription("Late CD4 in months");
+		lateCD4InMonths.addParameter(new Parameter("endDate","endDate",Date.class));
+		pediatricARTLateVisitDataSet.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricPreARTLateVisitDataSet.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricHIVLateCD4CountDataSet.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		pediatricHIVLostToFollowupDatSet.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		
+		
 		PatientRelationship accompagnateur=new PatientRelationship();
 		accompagnateur.setRelationshipTypeId(LateVisitAndCD4ReportConstant.RELATIONSHIP_TYPE_ID);
 		accompagnateur.setName("Accompagnateur");
@@ -445,7 +469,15 @@ public class SetupPediatricLateVisitAndCD4Report {
 		pediatricHIVLateCD4CountDataSet.addColumn(accompagnateur,new HashMap<String, Object>());
 		pediatricHIVLostToFollowupDatSet.addColumn(accompagnateur,new HashMap<String, Object>());
 		
-				
+		PatientAddress address1 = new PatientAddress();
+		address1.setName("Address");
+		address1.setIncludeCountry(false);
+		address1.setIncludeProvince(false);
+		pediatricARTLateVisitDataSet.addColumn(address1,new HashMap<String, Object>());
+		pediatricPreARTLateVisitDataSet.addColumn(address1,new HashMap<String, Object>());
+		pediatricHIVLateCD4CountDataSet.addColumn(address1,new HashMap<String, Object>());
+		pediatricHIVLostToFollowupDatSet.addColumn(address1,new HashMap<String, Object>());	
+		
 		pediatricARTLateVisitDataSet.addParameter(new Parameter("location", "Location", Location.class));
 		pediatricPreARTLateVisitDataSet.addParameter(new Parameter("location", "Location", Location.class));
 		pediatricHIVLateCD4CountDataSet.addParameter(new Parameter("location", "Location", Location.class));

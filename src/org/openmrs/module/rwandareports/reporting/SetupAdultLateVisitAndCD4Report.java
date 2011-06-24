@@ -34,7 +34,9 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
@@ -410,6 +412,16 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition3.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(lastEncounterType,new HashMap<String, Object>());
 		
+		DateDiffInMonths lateVisitInMonth=new DateDiffInMonths();
+		lateVisitInMonth.setName("Late visit in months");
+		lateVisitInMonth.setDescription("Late visit type");
+		lateVisitInMonth.setEncounterTypes(clinicalEncounterTypesWithoutLabTest);
+		lateVisitInMonth.addParameter(new Parameter("endDate","endDate",Date.class));
+		dataSetDefinition1.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition2.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition3.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition4.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		
 		
 		ReturnVisitDate returnVisitDate=new ReturnVisitDate();
 		returnVisitDate.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.RETURN_VISIT_DATE_UUID));
@@ -427,6 +439,16 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition3.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Count,new HashMap<String, Object>());
 		
+		DateDiffInMonths lateCD4InMonths=new DateDiffInMonths();
+		lateCD4InMonths.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
+		lateCD4InMonths.setName("Late CD4 in months");
+		lateCD4InMonths.setDescription("Late CD4 in months");
+		lateCD4InMonths.addParameter(new Parameter("endDate","endDate",Date.class));
+		dataSetDefinition1.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition2.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition3.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		dataSetDefinition4.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		
 				
 		
 		PatientRelationship accompagnateur=new PatientRelationship();
@@ -438,6 +460,52 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition3.addColumn(accompagnateur,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(accompagnateur,new HashMap<String, Object>());
 		
+		PatientAddress address1 = new PatientAddress();
+		address1.setName("Address");
+		address1.setIncludeCountry(false);
+		address1.setIncludeProvince(false);
+		dataSetDefinition1.addColumn(address1,new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(address1,new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(address1,new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(address1,new HashMap<String, Object>());
+		
+		
+		/*PatientAddress address2 = new PatientAddress();
+		address2.setName("Sector");
+		address2.setIncludeCountry(false);
+		address2.setIncludeProvince(false);
+		address2.setIncludeDistrict(false);
+		address2.setIncludeCell(false);
+		address2.setIncludeUmudugudu(false);
+		dataSetDefinition1.addColumn(address2,new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(address2,new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(address2,new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(address2,new HashMap<String, Object>());
+		
+		PatientAddress address3 = new PatientAddress();
+		address3.setName("Cell");
+		address3.setIncludeCountry(false);
+		address3.setIncludeProvince(false);
+		address3.setIncludeDistrict(false);
+		address3.setIncludeSector(false);
+		address3.setIncludeUmudugudu(false);
+		dataSetDefinition1.addColumn(address3,new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(address3,new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(address3,new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(address3,new HashMap<String, Object>());
+		
+		PatientAddress address4 = new PatientAddress();
+		address4.setName("Umudugudu");
+		address4.setIncludeCountry(false);
+		address4.setIncludeProvince(false);
+		address4.setIncludeDistrict(false);
+		address4.setIncludeSector(false);
+		address4.setIncludeCell(false);
+		dataSetDefinition1.addColumn(address4,new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(address4,new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(address4,new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(address4,new HashMap<String, Object>());
+		*/
 				
 		dataSetDefinition1.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
