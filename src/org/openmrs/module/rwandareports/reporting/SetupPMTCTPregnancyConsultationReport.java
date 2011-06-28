@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -65,6 +66,13 @@ public class SetupPMTCTPregnancyConsultationReport {
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
 		h.createRowPerPatientXlsOverview(rd, "PMTCTPregnancyConsultationSheet.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
+//		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTPregnancyConsultationSheetV2.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
+//		
+//		Properties props = new Properties();
+//		props.put("repeatSheet1Row6", "dataSet");
+//	
+//		design.setProperties(props);
+//		h.saveReportDesign(design);
 	}
 	
 	public void delete() {

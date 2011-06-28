@@ -367,5 +367,29 @@ public class Helper {
     	rs.saveReportDesign(design);
     }
 	
+	public ReportDesign createRowPerPatientXlsOverviewReportDesign(ReportDefinition rd, String resourceName, String name, Map<? extends Object, ? extends Object> properties) throws IOException {
+        ReportDesignResource resource = new ReportDesignResource();
+    	resource.setName(resourceName);
+    	resource.setExtension("xls");
+    	InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resourceName);
+    	resource.setContents(IOUtils.toByteArray(is));
+    	final ReportDesign design = new ReportDesign();
+    	design.setName(name);
+    	design.setReportDefinition(rd);
+    	design.setRendererType(ExcelTemplateRenderer.class);
+    	design.addResource(resource);
+    	if (properties != null) {
+    		design.getProperties().putAll(properties);
+    	}
+    	resource.setReportDesign(design);
+    	
+    	return design;
+    }
+	
+	public void saveReportDesign(ReportDesign design) {
+		ReportService rs = Context.getService(ReportService.class);
+    	rs.saveReportDesign(design);
+	}
+	
 
 }

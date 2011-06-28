@@ -117,6 +117,14 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pediHIVConsultationSheet.form" onclick=msgrem(this)>Remove</a></td>	 
 </tr>
 <tr>
+<td class="tabletd">TB Program</td>
+<td>TB Consultation Sheet</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_tbConsultationSheet.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_tbConsultationSheet.form" onclick=msgrem(this)>Remove</a></td>	 
+</tr>
+<tr>
+<tr>
 <td rowspan="4" class="tabletd">PMTCT Reports</td>
 <td>Combined HFCSP Consultation Sheet</td>
 <td>At site</td>

@@ -20,6 +20,7 @@ import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicat
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
+import org.openmrs.module.rwandareports.reporting.SetupTBConsultationSheet;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -170,6 +171,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_adultHIVConsultationSheet")
 	public ModelAndView removeAdultHIVConsultationSheet() throws Exception {
 		new SetupAdultHIVConsultationSheet(new Helper()).delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_tbConsultationSheet")
+	public ModelAndView registerTbConsultationSheet() throws Exception {
+		new SetupTBConsultationSheet(new Helper()).setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_tbConsultationSheet")
+	public ModelAndView removeTbConsultationSheet() throws Exception {
+		new SetupTBConsultationSheet(new Helper()).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

@@ -58,6 +58,13 @@ public class SetupPediHIVConsultationSheet {
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
 		h.createRowPerPatientXlsOverview(rd, "PediHIVConsultationSheet.xls", "PediHIVConsultationSheet.xls_", null);
+//		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediHIVConsultationSheetV2.xls", "PediHIVConsultationSheet.xls_", null);
+//		
+//		Properties props = new Properties();
+//		props.put("repeatSheet1Row6", "dataSet");
+//	
+//		design.setProperties(props);
+//		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -239,7 +246,7 @@ public class SetupPediHIVConsultationSheet {
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
 		
-		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}
 	
 	private void createCohortDefinitions() {
