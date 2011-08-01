@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
@@ -63,7 +64,14 @@ public class SetupPMTCTRegisterReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "TRACMotherInfantRegister.xls", "TRACMotherInfantRegister.xls_", null);
+		//h.createRowPerPatientXlsOverview(rd, "TRACMotherInfantRegister.xls", "TRACMotherInfantRegister.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "TRACMotherInfantRegister.xls", "TRACMotherInfantRegister.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:5,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -453,7 +461,7 @@ public class SetupPMTCTRegisterReport {
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		//mappings.put("location", "${location}");
 		
-		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 		
 		//h.replaceDataSetDefinition(dataSetDefinition);
 	}

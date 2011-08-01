@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
@@ -17,11 +17,6 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDateOfBirth;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
-import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
@@ -31,20 +26,23 @@ import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
-import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientDateOfBirth;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ReturnVisitDate;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.LateVisitAndCD4ReportConstant;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
@@ -69,7 +67,15 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
+		//h.createRowPerPatientXlsOverview(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
+		
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultPreARTLateVisit|sheet:3,row:8,dataset:AdultHIVLateCD4Count|sheet:4,row:8,dataset:HIVLostToFollowup|sheet5,row:8,dataset:PreARTBelow350CD4|sheet6,row:8,dataset:HIVLowBMI");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -79,7 +85,7 @@ public class SetupAdultLateVisitAndCD4Report {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "Adult Late Visit And CD4");
+		h.purgeDefinition(ReportDefinition.class, "Adult HIV Monthly Report");
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult Late Visit And CD4 Data Set");
 		
@@ -113,7 +119,7 @@ public class SetupAdultLateVisitAndCD4Report {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult Late Visit And CD4");
+		reportDefinition.setName("Adult HIV Monthly Report");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -149,6 +155,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
 		dataSetDefinition4.setName("Adult HIV lost to follow-up dataSetDefinition");
 		
+
 		//Create Adult Pre-ART patients with CD4 below 350 dataset definition
 		PatientDataSetDefinition dataSetDefinition5 = new PatientDataSetDefinition();
 		dataSetDefinition5.setName("Adult Pre-ART patients with CD4 below 350 dataSetDefinition");
@@ -573,11 +580,11 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(address1,new HashMap<String, Object>());
+
 		dataSetDefinition5.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(address1,new HashMap<String, Object>());
 		//dataSetDefinition7.addColumn(address1,new HashMap<String, Object>());
-		
-		
+
 		dataSetDefinition1.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));

@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
+import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
@@ -32,7 +33,7 @@ public class HIVPediAlerts implements CustomCalculation{
 				
 				if(cd4.getValue() == null)
 				{
-					alerts.append(" No CD4 recorded ");
+					alerts.append(" No CD4 recorded\n");
 				}
 				else
 				{
@@ -43,13 +44,40 @@ public class HIVPediAlerts implements CustomCalculation{
 					
 					if(diff > 12)
 					{
-						alerts.append(" very late CD4 ");
+						alerts.append(" very late CD4\n");
 					}
 					else if(diff > 6)
 					{
-						alerts.append(" late CD4");
+						alerts.append(" late CD4\n");
 					}
 				}	
+			}
+			
+			if(result.getName().equals("weightObs"))
+			{
+				AllObservationValuesResult wt = (AllObservationValuesResult)result;
+				
+				if(wt.getValue() != null)
+				{
+					int decline = calculateDecline(wt.getValue());
+					
+					if(decline > 0)
+					{
+						alerts.append("WT decline(");
+						alerts.append(decline);
+						alerts.append("kg)\n");
+					}
+				}
+			}
+			
+			if(result.getName().equals("IO") && result.getValue() != null)
+			{
+				alerts.append("IO reported last visit: " + result.getValue() + "\n");
+			}
+			
+			if(result.getName().equals("SideEffects") && result.getValue() != null)
+			{
+				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
 			}
 		}
 		alert.setValue(alerts.toString());

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
@@ -26,11 +27,13 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstRecordedObservationWithCodedConceptAnswer;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
@@ -45,6 +48,8 @@ import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.comparator.PMTCTDataSetRowComparator;
 import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
+import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
+import org.openmrs.module.rwandareports.filter.ObservationFilter;
 import org.openmrs.module.rwandareports.filter.RemoveDecimalFilter;
 
 public class SetupPMTCTPregnancyConsultationReport {
@@ -65,14 +70,14 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "PMTCTPregnancyConsultationSheet.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
-//		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTPregnancyConsultationSheetV2.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
-//		
-//		Properties props = new Properties();
-//		props.put("repeatSheet1Row6", "dataSet");
-//	
-//		design.setProperties(props);
-//		h.saveReportDesign(design);
+//		h.createRowPerPatientXlsOverview(rd, "PMTCTPregnancyConsultationSheet.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTPregnancyConsultationSheetV2.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -289,17 +294,44 @@ public class SetupPMTCTPregnancyConsultationReport {
 		bOrF.setCalculator(new BreastFeedingOrFormula());
 		dataSetDefinition.addColumn(bOrF, new HashMap<String, Object>());
 		
+		AllObservationValues weight = new AllObservationValues();
+		Concept weightConcept = Context.getConceptService().getConcept(new Integer(properties.get("WEIGHT_CONCEPT")));
+		weight.setConcept(weightConcept);
+		weight.setName("weightObs");
+		weight.setFilter(new LastThreeObsFilter());
+		weight.setDateFormat("ddMMMyy");
+		weight.setOutputFilter(new ObservationFilter());
+		
+		ObservationInMostRecentEncounterOfType io = new ObservationInMostRecentEncounterOfType();
+		Concept ioConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("IO_CONCEPT")));
+		io.setName("IO");
+		io.setObservationConcept(ioConcept);
+		EncounterType flowsheetEncounter = Context.getEncounterService().getEncounterType(Integer.valueOf(properties.get("FLOWSHEET_ENCOUNTER")));
+		List<EncounterType> encounterTypes = new ArrayList<EncounterType>();
+		encounterTypes.add(flowsheetEncounter);
+		io.setEncounterTypes(encounterTypes);
+		
+		ObservationInMostRecentEncounterOfType sideEffect = new ObservationInMostRecentEncounterOfType();
+		Concept sideEffectConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("SIDE_EFFECT_CONCEPT")));
+		sideEffect.setName("SideEffects");
+		sideEffect.setObservationConcept(sideEffectConcept);
+		encounterTypes.add(flowsheetEncounter);
+		sideEffect.setEncounterTypes(encounterTypes);
+		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(gestationalAge, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
 		alert.setCalculator(new Alerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("date", "${date}");
 		
-		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}
 	
 	
@@ -353,6 +385,18 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		String accompType = Context.getAdministrationService().getGlobalProperty("reports.accompagnatuerRelationship");
 		properties.put("ACCOMPAGNATUER_RELATIONSHIP_ID", accompType);
+		
+		String ioConcept = Context.getAdministrationService().getGlobalProperty("reports.ioConcept");
+		properties.put("IO_CONCEPT", ioConcept);
+		
+		String flowsheetEncounter = Context.getAdministrationService().getGlobalProperty("reports.adultflowsheetencounter");
+		properties.put("FLOWSHEET_ENCOUNTER", flowsheetEncounter);
+		
+		String sideEffectConcept = Context.getAdministrationService().getGlobalProperty("reports.sideEffectConcept");
+		properties.put("SIDE_EFFECT_CONCEPT", sideEffectConcept);
+		
+		String weightConcept = Context.getAdministrationService().getGlobalProperty("reports.weightConcept");
+		properties.put("WEIGHT_CONCEPT", weightConcept);
 	}	
 	
 }

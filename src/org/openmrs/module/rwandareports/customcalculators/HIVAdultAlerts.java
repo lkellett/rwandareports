@@ -78,7 +78,7 @@ public class HIVAdultAlerts implements CustomCalculation{
 						
 						if(state.toString().contains("FOLLOWING") && lastCd4.getValueNumeric() != null && lastCd4.getValueNumeric() < 350)
 						{
-							alerts.append("Low CD4.\n");
+							alerts.append("Eligible for Treatment.\n");
 						}
 					}
 				}	
@@ -90,19 +90,27 @@ public class HIVAdultAlerts implements CustomCalculation{
 				
 				if(wt.getValue() != null)
 				{
-					int decline = calculateDecline(wt.getValue());
+					int decline = calculatePercentageDecline(wt.getValue());
 					
-					if(decline > 0)
+					if(decline > 5)
 					{
 						alerts.append("WT decline(");
 						alerts.append(decline);
-						alerts.append(").\n");
+						alerts.append("%, ");
+						int kilosLost = calculateDecline(wt.getValue());
+						alerts.append(kilosLost);
+						alerts.append("kg)\n");
 					}
 					
 					if(wt.getValue().size() > 0)
 					{
 						weight = wt.getValue().get(wt.getValue().size()-1).getValueNumeric();
 					}
+				}
+				
+				if(wt.getValue() == null || wt.getValue().size() == 0)
+				{
+					alerts.append("No weight recorded.\n");
 				}
 			}
 			
@@ -118,6 +126,16 @@ public class HIVAdultAlerts implements CustomCalculation{
 				{
 					height = Double.parseDouble(heightOb.getValue());
 				}
+			}
+			
+			if(result.getName().equals("IO") && result.getValue() != null)
+			{
+				alerts.append("IO reported last visit: " + result.getValue() + "\n");
+			}
+			
+			if(result.getName().equals("SideEffects") && result.getValue() != null)
+			{
+				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
 			}
 		}
 		
@@ -186,6 +204,40 @@ public class HIVAdultAlerts implements CustomCalculation{
 			if(firstVal != null && nextToLastVal != null)
 			{
 				double decline = nextToLastVal - firstVal;
+			
+				if(decline > 0)
+				{
+					return (int)decline;
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
+	private int calculatePercentageDecline(List<Obs> obs)
+	{
+		Obs lastOb = null;
+		Obs nextToLastOb = null;
+		
+		if(obs.size() > 0)
+		{
+			lastOb = obs.get(obs.size() - 1);
+		}
+		
+		if(obs.size() > 1)
+		{
+			nextToLastOb = obs.get(obs.size() - 2);
+		}
+		
+		if(lastOb != null && nextToLastOb != null)
+		{
+			Double firstVal = lastOb.getValueNumeric();
+			Double nextToLastVal = nextToLastOb.getValueNumeric();
+			
+			if(firstVal != null && nextToLastVal != null)
+			{
+				double decline = 100 - ((firstVal / nextToLastVal)*100);
 			
 				if(decline > 0)
 				{

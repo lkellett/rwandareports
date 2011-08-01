@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,7 +69,14 @@ public class SetupPediatricLateVisitAndCD4Report {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "PediatricLateVisitAndCD4Template.xls", "XlsPediatricLateVisitAndCD4Template", null);
+		//h.createRowPerPatientXlsOverview(rd, "PediatricLateVisitAndCD4Template.xls", "XlsPediatricLateVisitAndCD4Template", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediatricLateVisitAndCD4Template.xls", "XlsPediatricLateVisitAndCD4Template", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:8,dataset:PediatricARTLateVisit|sheet:2,row:8,dataset:PediatricPreARTLateVisit|sheet:3,row:8,dataset:PediatricHIVLateCD4Count|sheet:4,row:8,dataset:PediatricHIVLostToFollowup");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -78,7 +86,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeDefinition(ReportDefinition.class, "Pediatric Late Visit And CD4");
+		h.purgeDefinition(ReportDefinition.class, "Pediatric HIV Monthly Report");
 		
 		h.purgeDefinition(PatientDataSetDefinition.class, "Pediatric Late Visit And CD4 Data Set");
 		
@@ -109,7 +117,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Pediatric Late Visit And CD4");
+		reportDefinition.setName("Pediatric HIV Monthly Report");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		

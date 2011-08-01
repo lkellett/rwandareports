@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
@@ -26,19 +27,17 @@ import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSet
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.IsEnrolledInProgram;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
-import org.openmrs.module.rwandareports.customcalculators.TBAlerts;
+import org.openmrs.module.rwandareports.customcalculators.HIVAdultAlerts;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
 import org.openmrs.module.rwandareports.filter.ObservationFilter;
-import org.openmrs.module.rwandareports.filter.PosOrNegFilter;
 
 public class SetupTBConsultationSheet {
 	
@@ -58,14 +57,14 @@ public class SetupTBConsultationSheet {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "TBConsultationSheet.xls", "TBConsultationSheet.xls_", null);
-//		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "TBConsultationSheetV2.xls", "TBConsultationSheetV2.xls_", null);
-//		
-//		Properties props = new Properties();
-//		props.put("repeatSheet1Row6", "dataSet");
-//	
-//		design.setProperties(props);
-//		h.saveReportDesign(design);
+//		h.createRowPerPatientXlsOverview(rd, "TBConsultationSheet.xls", "TBConsultationSheet.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "TBConsultationSheetV2.xls", "TBConsultationSheet.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -88,13 +87,13 @@ public class SetupTBConsultationSheet {
 		reportDefinition.setName("TB Consultation Sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
-		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class));
+		//reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class));
 		//This is waiting on changes to the reporting framework to allow for filtering of the state parameter
 		//so the user is only presented with the treatment group options
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", properties.get("TB_PROGRAM"));
 		stateProperties.setProperty("Workflow", properties.get("TREATMENT_GROUP"));
-		//reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
+		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("TBLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
@@ -119,9 +118,9 @@ public class SetupTBConsultationSheet {
 		
 		InProgramCohortDefinition inTBProgram = new InProgramCohortDefinition();
 		inTBProgram.setOnDate(Calendar.getInstance().getTime());
-		inTBProgram.setName("tb: In Program");
+		inTBProgram.setName("adultTB: In Program");
 		List<Program> programs = new ArrayList<Program>();
-		Program tb = Context.getProgramWorkflowService().getProgram(Integer.parseInt(properties.get("TB_PROGRAM_ID")));
+		Program tb = Context.getProgramWorkflowService().getProgramByName(properties.get("TB_PROGRAM"));
 		if(tb != null)
 		{
 			programs.add(tb);
@@ -152,9 +151,6 @@ public class SetupTBConsultationSheet {
 		PatientProperty age = new PatientProperty("age");
 		dataSetDefinition.addColumn(age, new HashMap<String,Object>());
 		
-		PatientProperty gender = new PatientProperty("gender");
-		dataSetDefinition.addColumn(gender, new HashMap<String,Object>());
-		
 		AllObservationValues weight = new AllObservationValues();
 		Concept weightConcept = Context.getConceptService().getConcept(new Integer(properties.get("WEIGHT_CONCEPT")));
 		weight.setConcept(weightConcept);
@@ -169,30 +165,50 @@ public class SetupTBConsultationSheet {
 		mostRecentWeight.setDateFormat("@ddMMMyy");
 		dataSetDefinition.addColumn(mostRecentWeight, new HashMap<String,Object>());
 		
-		IsEnrolledInProgram hivEnrolment = new IsEnrolledInProgram();
-		hivEnrolment.setProgramId(new Integer(properties.get("ADULT_HIV_PROGRAM_ID")));
-		hivEnrolment.setFilter(new PosOrNegFilter());
-		hivEnrolment.setName("HIVStatus");
-		dataSetDefinition.addColumn(hivEnrolment, new HashMap<String,Object>());
-		
 		Concept heightConcept = Context.getConceptService().getConcept(new Integer(properties.get("HEIGHT_CONCEPT")));
 		
 		MostRecentObservation mostRecentHeight = new MostRecentObservation();
 		mostRecentHeight.setConcept(heightConcept);
 		mostRecentHeight.setName("RecentHeight");
 		
-		MostRecentObservation cd4Test = new MostRecentObservation();
+		AllObservationValues cd4Test = new AllObservationValues();
 		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
 		cd4Test.setConcept(cd4Concept);
 		cd4Test.setName("CD4Test");
-		cd4Test.setDateFormat("@ddMMMyy");
-		dataSetDefinition.addColumn(cd4Test, new HashMap<String, Object>());
+		cd4Test.setFilter(new LastThreeObsFilter());
+		cd4Test.setDateFormat("ddMMMyy");
+		cd4Test.setOutputFilter(new ObservationFilter());
 		
-		DateOfProgramEnrolment tbStart = new DateOfProgramEnrolment();
-		tbStart.setName("tbStart");
-		tbStart.setProgramId(new Integer(properties.get("TB_PROGRAM_ID")));
-		tbStart.setDateFormat("ddMMMyy");
-		dataSetDefinition.addColumn(tbStart, new HashMap<String, Object>());
+		MostRecentObservation cd4Result = new MostRecentObservation();
+		cd4Result.setConcept(cd4Concept);
+		cd4Result.setName("CD4Test");
+		cd4Result.setDateFormat("@ddMMMyy");
+		cd4Result.setIncludeNull(false);
+		dataSetDefinition.addColumn(cd4Result, new HashMap<String,Object>());
+		
+		Concept viralConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("VIRAL_LOAD_CONCEPT")));
+		MostRecentObservation viralLoad = new MostRecentObservation();
+		viralLoad.setConcept(viralConcept);
+		viralLoad.setName("ViralLoad");
+		viralLoad.setDateFormat("@ddMMMyy");
+		viralLoad.setIncludeNull(false);
+		dataSetDefinition.addColumn(viralLoad, new HashMap<String,Object>());
+		
+		ObservationInMostRecentEncounterOfType io = new ObservationInMostRecentEncounterOfType();
+		Concept ioConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("IO_CONCEPT")));
+		io.setName("IO");
+		io.setObservationConcept(ioConcept);
+		EncounterType flowsheetEncounter = Context.getEncounterService().getEncounterType(Integer.valueOf(properties.get("FLOWSHEET_ENCOUNTER")));
+		List<EncounterType> encounterTypes = new ArrayList<EncounterType>();
+		encounterTypes.add(flowsheetEncounter);
+		io.setEncounterTypes(encounterTypes);
+		
+		ObservationInMostRecentEncounterOfType sideEffect = new ObservationInMostRecentEncounterOfType();
+		Concept sideEffectConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("SIDE_EFFECT_CONCEPT")));
+		sideEffect.setName("SideEffects");
+		sideEffect.setObservationConcept(sideEffectConcept);
+		encounterTypes.add(flowsheetEncounter);
+		sideEffect.setEncounterTypes(encounterTypes);
 		
 		PatientRelationship accomp = new PatientRelationship();
 		accomp.setName("AccompName");
@@ -221,9 +237,12 @@ public class SetupTBConsultationSheet {
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
+		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
-		alert.setCalculator(new TBAlerts());
+		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
+		alert.setCalculator(new HIVAdultAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
@@ -251,14 +270,14 @@ public class SetupTBConsultationSheet {
 	{
 		properties = new HashMap<String, String>();
 		
-		String tbId = Context.getAdministrationService().getGlobalProperty("tb.programid");
-		properties.put("TB_PROGRAM_ID", tbId);
-		
-		String hivId = Context.getAdministrationService().getGlobalProperty("hiv.programid.adult");
-		properties.put("ADULT_HIV_PROGRAM_ID", hivId);
-		
 		String tb = Context.getAdministrationService().getGlobalProperty("reports.tbprogramname");
 		properties.put("TB_PROGRAM", tb);
+		
+		String adultHIVId = Context.getAdministrationService().getGlobalProperty("hiv.programid.adult");
+		properties.put("ADULT_HIV_PROGRAM_ID", adultHIVId);
+		
+		String adultHIV = Context.getAdministrationService().getGlobalProperty("reports.hivprogramname");
+		properties.put("ADULT_HIV_PROGRAM", adultHIV);
 		
 		String treatmentgroup = Context.getAdministrationService().getGlobalProperty("reports.tbworkflowgroup");
 		properties.put("TREATMENT_GROUP", treatmentgroup);
@@ -286,6 +305,22 @@ public class SetupTBConsultationSheet {
 		
 		String heightConcept = Context.getAdministrationService().getGlobalProperty("reports.heightConcept");
 		properties.put("HEIGHT_CONCEPT", heightConcept);
+		
+		String tbTestConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTestConcept");
+		properties.put("TB_TEST_CONCEPT", tbTestConcept);
+		
+		String ioConcept = Context.getAdministrationService().getGlobalProperty("reports.ioConcept");
+		properties.put("IO_CONCEPT", ioConcept);
+		
+		String flowsheetEncounter = Context.getAdministrationService().getGlobalProperty("reports.adultflowsheetencounter");
+		properties.put("FLOWSHEET_ENCOUNTER", flowsheetEncounter);
+		
+		String sideEffectConcept = Context.getAdministrationService().getGlobalProperty("reports.sideEffectConcept");
+		properties.put("SIDE_EFFECT_CONCEPT", sideEffectConcept);
+		
+		String viralLoadConcept = Context.getAdministrationService().getGlobalProperty("reports.viralLoadConcept");
+		properties.put("VIRAL_LOAD_CONCEPT", viralLoadConcept);
+		
 	}	
 	
 }

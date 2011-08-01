@@ -41,6 +41,30 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.pediInitialEncounter</property>
+		<defaultValue>3</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediRdvEncounter</property>
+		<defaultValue>4</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediFlowsheetEncounter</property>
+		<defaultValue>37</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.tbprogramname</property>
 		<defaultValue>TUBERCULOSIS PROGRAM</defaultValue>
 		<description>
@@ -53,6 +77,14 @@
 		<defaultValue>TREATMENT STATUS</defaultValue>
 		<description>
 			The workflow status that is used to determine if patients are on ART
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.visitconcept</property>
+		<defaultValue>6959</defaultValue>
+		<description>
+			The concept for the visit flowsheet construct
 		</description>
 	</globalProperty>
 	
@@ -177,6 +209,22 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.adultflowsheetencounter</property>
+		<defaultValue>24</defaultValue>
+		<description>
+			The Adult HIV Flowsheet encounter id that is used to return the io and side effects for a patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediflowsheetencounter</property>
+		<defaultValue>37</defaultValue>
+		<description>
+			The Pedi HIV Flowsheet encounter id that is used to return the io and side effects for a patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.pmtctGaveBirthStatus</property>
 		<defaultValue>GAVE BIRTH</defaultValue>
 		<description>
@@ -205,6 +253,22 @@
 		<defaultValue>2136</defaultValue>
 		<description>
 			The concept id of the TB test concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ioConcept</property>
+		<defaultValue>6900</defaultValue>
+		<description>
+			The concept id of the IO group construct
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.sideEffectConcept</property>
+		<defaultValue>1295</defaultValue>
+		<description>
+			The concept id of the Side effects group construct
 		</description>
 	</globalProperty>
 	
@@ -258,7 +322,7 @@
 	
 	<globalProperty>
 		<property>reports.tbTreatmentConcept</property>
-		<defaultValue>1156</defaultValue>
+		<defaultValue>1159</defaultValue>
 		<description>
 			The concept id of all the TB Treatment drug concept set 
 		</description>

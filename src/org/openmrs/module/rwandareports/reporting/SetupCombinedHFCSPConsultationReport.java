@@ -73,7 +73,14 @@ public class SetupCombinedHFCSPConsultationReport {
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
 	//	h.createRowPerPatientXlsOverview(rd, "PMTCTCombinedClinicConsultationSheet.xls", "PMTCTCombinedClinicConsultationSheet.xls_", null);
-		h.createRowPerPatientXlsOverview(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
+	//	h.createRowPerPatientXlsOverview(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -395,7 +402,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		mappings.put("state", "${state}");
 		mappings.put("date", "${date}");
 		
-		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}
 	
 	

@@ -3,6 +3,7 @@ package org.openmrs.module.rwandareports.reporting;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
@@ -44,7 +45,14 @@ public class SetupMissingCD4AllSiteReport {
 		setUpGlobalProperties();
 		
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "MissingCD4ReportAllSiteTemplate.xls", "XlsMissingCD4ReportAllSiteTemplate", null);
+		//h.createRowPerPatientXlsOverview(rd, "MissingCD4ReportAllSiteTemplate.xls", "XlsMissingCD4ReportAllSiteTemplate", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "MissingCD4ReportAllSiteTemplate.xls", "XlsMissingCD4ReportAllSiteTemplate", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:8,dataset:NotCompleted|sheet:2,row:8,dataset:NoResult");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {

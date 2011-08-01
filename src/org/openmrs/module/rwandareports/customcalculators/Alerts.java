@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Obs;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
+import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
@@ -84,6 +86,41 @@ public class Alerts implements CustomCalculation{
 					}	
 				}
 			}
+			
+			if(result.getName().equals("weightObs"))
+			{
+				AllObservationValuesResult wt = (AllObservationValuesResult)result;
+				
+				if(wt.getValue() != null)
+				{
+					int decline = calculateDecline(wt.getValue());
+					
+					if(decline == 0 )
+					{
+						alerts.append("No weight gain\n");
+					}
+					else if(decline > 0){
+						alerts.append("Weight decline (");
+						alerts.append(decline);
+						alerts.append(" kg)\n");
+					}
+				}
+				
+				if(wt.getValue() == null || wt.getValue().size() == 0)
+				{
+					alerts.append("No weight recorded.\n");
+				}
+			}
+			
+			if(result.getName().equals("IO") && result.getValue() != null)
+			{
+				alerts.append("IO reported last visit: " + result.getValue() + "\n");
+			}
+			
+			if(result.getName().equals("SideEffects") && result.getValue() != null)
+			{
+				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
+			}
 		}
 		
 		alert.setValue(alerts.toString());
@@ -108,5 +145,36 @@ public class Alerts implements CustomCalculation{
 		diff = diff + monthDiff;
 	
 		return diff;
+	}
+	
+	private int calculateDecline(List<Obs> obs)
+	{
+		Obs lastOb = null;
+		Obs nextToLastOb = null;
+		
+		if(obs.size() > 0)
+		{
+			lastOb = obs.get(obs.size() - 1);
+		}
+		
+		if(obs.size() > 1)
+		{
+			nextToLastOb = obs.get(obs.size() - 2);
+		}
+		
+		if(lastOb != null && nextToLastOb != null)
+		{
+			Double firstVal = lastOb.getValueNumeric();
+			Double nextToLastVal = nextToLastOb.getValueNumeric();
+			
+			if(firstVal != null && nextToLastVal != null)
+			{
+				double decline = nextToLastVal - firstVal;
+			
+				return (int)decline;
+			}
+		}
+		
+		return -1;
 	}
 }

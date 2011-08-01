@@ -56,7 +56,14 @@ public class SetupPMTCTFoodDistributionReport {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "PMTCTFoodDistribution.xls", "PMTCTFoodDistribution.xls_", null);
+		//h.createRowPerPatientXlsOverview(rd, "PMTCTFoodDistribution.xls", "PMTCTFoodDistribution.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTFoodDistribution.xls", "PMTCTFoodDistribution.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:4,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
@@ -82,8 +89,8 @@ public class SetupPMTCTFoodDistributionReport {
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
-		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
+		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
+		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("FPlocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
@@ -202,7 +209,7 @@ public class SetupPMTCTFoodDistributionReport {
 		mappings.put("state", "${state}");
 		mappings.put("date", "${date}");
 		
-		reportDefinition.addDataSetDefinition("Register", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 		
 		h.replaceDataSetDefinition(dataSetDefinition);
 	}

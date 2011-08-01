@@ -84,7 +84,7 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossRegionIndicator.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
-<td rowspan="3" class="tabletd">Registers</td>
+<td rowspan="2" class="tabletd">Registers</td>
 <td>Adult HIV Art Register report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_adulthivartregister.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -96,12 +96,13 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pedihivartregister.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pedihivartregister.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
+<!--  
 <tr>
 <td>TRAC Mother-Infant Pair Follow-up Register report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctregister.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctregister.form" onclick=msgrem(this)>Remove</a></td>	 
-</tr>
+</tr>-->
 <tr>
 <td class="tabletd">Adult HIV Program</td>
 <td>Adult HIV Consultation Sheet</td>

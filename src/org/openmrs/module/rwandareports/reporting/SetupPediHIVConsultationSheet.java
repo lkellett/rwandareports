@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
@@ -23,11 +24,16 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
@@ -37,6 +43,7 @@ import org.openmrs.module.rwandareports.customcalculators.NextCD4;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.InformedStateFilter;
+import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
 import org.openmrs.module.rwandareports.filter.RemoveDecimalFilter;
 
 public class SetupPediHIVConsultationSheet {
@@ -57,20 +64,36 @@ public class SetupPediHIVConsultationSheet {
 		
 		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		h.createRowPerPatientXlsOverview(rd, "PediHIVConsultationSheet.xls", "PediHIVConsultationSheet.xls_", null);
-//		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediHIVConsultationSheetV2.xls", "PediHIVConsultationSheet.xls_", null);
-//		
-//		Properties props = new Properties();
-//		props.put("repeatSheet1Row6", "dataSet");
-//	
-//		design.setProperties(props);
-//		h.saveReportDesign(design);
+//		h.createRowPerPatientXlsOverview(rd, "PediHIVConsultationSheet.xls", "PediHIVConsultationSheet.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediHIVConsultationSheetV2.xls", "PediHIVConsultationSheet.xls_", null);
+		
+		Properties props = new Properties();
+		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design.setProperties(props);
+		h.saveReportDesign(design);
+		
+		ReportDesign design2 = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediPreArtHIVConsultationSheet.xls", "PediPreArtHIVConsultationSheet.xls_", null);
+		
+		Properties props2 = new Properties();
+		props2.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design2.setProperties(props2);
+		h.saveReportDesign(design2);	
+		
+		ReportDesign design3 = h.createRowPerPatientXlsOverviewReportDesign(rd, "BactrimSheet.xls", "Bactrim.xls_", null);
+		
+		Properties props3 = new Properties();
+		props3.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+	
+		design3.setProperties(props3);
+		h.saveReportDesign(design3);	
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("PediHIVConsultationSheet.xls_".equals(rd.getName())) {
+			if ("PediHIVConsultationSheet.xls_".equals(rd.getName()) || "PediPreArtHIVConsultationSheet.xls_".equals(rd.getName()) || "Bactrim.xls_".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
@@ -87,13 +110,13 @@ public class SetupPediHIVConsultationSheet {
 		reportDefinition.setName("Pedi HIV Consultation Sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
-		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class));
+		//reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class));
 		//This is waiting on changes to the reporting framework to allow for filtering of the state parameter
 		//so the user is only presented with the treatment group options
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", properties.get("PEDI_HIV_PROGRAM"));
 		stateProperties.setProperty("Workflow", properties.get("TREATMENT_STATUS"));
-		//reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
+		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PediHIVLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -129,6 +152,16 @@ public class SetupPediHIVConsultationSheet {
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
+		
+		PatientProperty age = new PatientProperty("age");
+		dataSetDefinition.addColumn(age, new HashMap<String,Object>());
+		
+		MostRecentObservation mostRecentTBScreening = new MostRecentObservation();
+		Concept tbTestConcept = Context.getConceptService().getConcept(new Integer(properties.get("TB_TEST_CONCEPT")));
+		mostRecentTBScreening.setConcept(tbTestConcept);
+		mostRecentTBScreening.setName("RecentTB");
+		mostRecentTBScreening.setDateFormat("@ddMMMyy");
+		dataSetDefinition.addColumn(mostRecentTBScreening, new HashMap<String,Object>());
 		
 		PatientProperty familyName = new PatientProperty("familyName");
 		dataSetDefinition.addColumn(familyName, new HashMap<String,Object>());
@@ -190,6 +223,35 @@ public class SetupPediHIVConsultationSheet {
 		height.setFilter(new RemoveDecimalFilter());
 		dataSetDefinition.addColumn(height, new HashMap<String, Object>());
 		
+		MostRecentEncounterOfType visit = new MostRecentEncounterOfType();
+		EncounterType pediInitial = Context.getEncounterService().getEncounterType(new Integer(properties.get("PEDI_INITIAL_ENCOUNTER")));
+		EncounterType pediRDV = Context.getEncounterService().getEncounterType(new Integer(properties.get("PEDI_RDV_ENCOUNTER")));
+		EncounterType pediFlowsheet = Context.getEncounterService().getEncounterType(new Integer(properties.get("PEDI_FLOWSHEET_ENCOUNTER")));
+		visit.addEncounterType(pediInitial);
+		visit.addEncounterType(pediRDV);
+		visit.addEncounterType(pediFlowsheet);
+		visit.setName("lastVisit");
+		visit.setDateFormat("dd-MMM-yyyy");
+		dataSetDefinition.addColumn(visit, new HashMap<String, Object>());
+		
+		PatientAddress address = new PatientAddress();
+		address.setName("Sector");
+		address.setIncludeCountry(false);
+		address.setIncludeProvince(false);
+		address.setIncludeDistrict(false);
+		address.setIncludeCell(false);
+		address.setIncludeUmudugudu(false);
+		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
+		
+		PatientAddress address2 = new PatientAddress();
+		address2.setName("Cell");
+		address2.setIncludeCountry(false);
+		address2.setIncludeProvince(false);
+		address2.setIncludeDistrict(false);
+		address2.setIncludeSector(false);
+		address2.setIncludeUmudugudu(false);
+		dataSetDefinition.addColumn(address2, new HashMap<String,Object>());
+		
 		MostRecentObservation viralLoad = new MostRecentObservation();
 		Concept viralLoadConcept = Context.getConceptService().getConcept(new Integer(properties.get("VIRAL_LOAD_CONCEPT")));
 		viralLoad.setConcept(viralLoadConcept);
@@ -231,6 +293,35 @@ public class SetupPediHIVConsultationSheet {
 		artDrugs.setDrugFilter(new DrugNameFilter());
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String,Object>());
 		
+		FirstDrugOrderStartedRestrictedByConceptSet startArt = new FirstDrugOrderStartedRestrictedByConceptSet();
+		startArt.setDrugConceptSetConcept(artDrugsSet);
+		startArt.setName("StartART");
+		startArt.setDescription("StartART");
+		startArt.setDateFormat("dd-MMM-yyyy");
+		dataSetDefinition.addColumn(startArt, new HashMap<String,Object>());
+		
+		AllObservationValues allWeights = new AllObservationValues();
+		allWeights.setConcept(weightConcept);
+		allWeights.setName("weightObs");
+		allWeights.setFilter(new LastThreeObsFilter());
+		allWeights.setDateFormat("ddMMMyy");
+		
+		ObservationInMostRecentEncounterOfType io = new ObservationInMostRecentEncounterOfType();
+		Concept ioConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("IO_CONCEPT")));
+		io.setName("IO");
+		io.setObservationConcept(ioConcept);
+		EncounterType flowsheetEncounter = Context.getEncounterService().getEncounterType(Integer.valueOf(properties.get("FLOWSHEET_ENCOUNTER")));
+		List<EncounterType> encounterTypes = new ArrayList<EncounterType>();
+		encounterTypes.add(flowsheetEncounter);
+		io.setEncounterTypes(encounterTypes);
+		
+		ObservationInMostRecentEncounterOfType sideEffect = new ObservationInMostRecentEncounterOfType();
+		Concept sideEffectConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("SIDE_EFFECT_CONCEPT")));
+		sideEffect.setName("SideEffects");
+		sideEffect.setObservationConcept(sideEffectConcept);
+		encounterTypes.add(flowsheetEncounter);
+		sideEffect.setEncounterTypes(encounterTypes);
+		
 		PatientRelationship accomp = new PatientRelationship();
 		accomp.setName("AccompName");
 		accomp.setRelationshipTypeId(Integer.valueOf(properties.get("ACCOMPAGNATUER_RELATIONSHIP_ID")));
@@ -240,6 +331,9 @@ public class SetupPediHIVConsultationSheet {
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(allWeights, new HashMap<String,Object>());
+		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
 		alert.setCalculator(new HIVPediAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
@@ -310,6 +404,31 @@ public class SetupPediHIVConsultationSheet {
 		
 		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
 		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
+		
+		String ioConcept = Context.getAdministrationService().getGlobalProperty("reports.ioConcept");
+		properties.put("IO_CONCEPT", ioConcept);
+		
+		String flowsheetEncounter = Context.getAdministrationService().getGlobalProperty("reports.pediflowsheetencounter");
+		properties.put("FLOWSHEET_ENCOUNTER", flowsheetEncounter);
+		
+		String sideEffectConcept = Context.getAdministrationService().getGlobalProperty("reports.sideEffectConcept");
+		properties.put("SIDE_EFFECT_CONCEPT", sideEffectConcept);
+		
+		String tbTestConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTestConcept");
+		properties.put("TB_TEST_CONCEPT", tbTestConcept);
+		
+		String visitConcept = Context.getAdministrationService().getGlobalProperty("reports.visitconcept");
+		properties.put("VISIT_CONCEPT", visitConcept);
+		
+		String pediInitial = Context.getAdministrationService().getGlobalProperty("reports.pediInitialEncounter");
+		properties.put("PEDI_INITIAL_ENCOUNTER", pediInitial);
+		
+		String pediRDV = Context.getAdministrationService().getGlobalProperty("reports.pediRdvEncounter");
+		properties.put("PEDI_RDV_ENCOUNTER", pediRDV);
+		
+		String pediFlowsheet = Context.getAdministrationService().getGlobalProperty("reports.pediFlowsheetEncounter");
+		properties.put("PEDI_FLOWSHEET_ENCOUNTER", pediFlowsheet);
+		
 	}	
 	
 }
