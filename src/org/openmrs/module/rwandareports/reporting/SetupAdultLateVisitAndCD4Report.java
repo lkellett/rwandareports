@@ -72,9 +72,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultPreARTLateVisit|sheet:3,row:8,dataset:AdultHIVLateCD4Count|sheet:4,row:8,dataset:HIVLostToFollowup|sheet5,row:8,dataset:PreARTBelow350CD4|sheet6,row:8,dataset:HIVLowBMI");
-	
-		design.setProperties(props);
+		props.put("repeatingSections", "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultPreARTLateVisit|sheet:3,row:8,dataset:AdultHIVLateCD4Count|sheet:4,row:8,dataset:HIVLostToFollowup|sheet5,row:8,dataset:PreARTBelow350CD4|sheet6,row:8,dataset:HIVLowBMI|sheet7,row:8,dataset:DecliningInCD4ByMoreThan50");
+																																																																										 
 		h.saveReportDesign(design);
 	}
 	
@@ -93,9 +92,9 @@ public class SetupAdultLateVisitAndCD4Report {
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult Pre-ART dataSetDefinition");
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult HIV late CD4 dataSetDefinition");
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult HIV lost to follow-up dataSetDefinition");
-		h.purgeDefinition(PatientDataSetDefinition.class, "Adult HIV lost to follow-up dataSetDefinition");
+		h.purgeDefinition(PatientDataSetDefinition.class, "Patients with BMI below 18.5 dataSetDefinition");
 		h.purgeDefinition(PatientDataSetDefinition.class, "Adult Pre-ART patients with CD4 below 350 dataSetDefinition");
-		
+		h.purgeDefinition(PatientDataSetDefinition.class, "Patients declining in CD4 more than 50 dataSetDefinition");
 		
 		h.purgeDefinition(CohortDefinition.class, "location: HIV Adult Patients at location");
 		h.purgeDefinition(CohortDefinition.class, "adultHivProgramCohort");		
@@ -155,7 +154,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
 		dataSetDefinition4.setName("Adult HIV lost to follow-up dataSetDefinition");
 		
-
 		//Create Adult Pre-ART patients with CD4 below 350 dataset definition
 		PatientDataSetDefinition dataSetDefinition5 = new PatientDataSetDefinition();
 		dataSetDefinition5.setName("Adult Pre-ART patients with CD4 below 350 dataSetDefinition");
@@ -164,8 +162,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		PatientDataSetDefinition dataSetDefinition6 = new PatientDataSetDefinition();
 		dataSetDefinition6.setName("Patients with BMI below 18.5 dataSetDefinition");
 		
-		//PatientDataSetDefinition dataSetDefinition7 = new PatientDataSetDefinition();
-		//dataSetDefinition7.setName("Patients declining in CD4 more than 50 dataSetDefinition");
+		PatientDataSetDefinition dataSetDefinition7 = new PatientDataSetDefinition();
+		dataSetDefinition7.setName("Patients declining in CD4 more than 50 dataSetDefinition");
 		
 		
 		
@@ -184,6 +182,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition5.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition6.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+		dataSetDefinition7.addFilter(adultHivProgramCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
 		h.replaceCohortDefinition(adultHivProgramCohort);
 		
@@ -227,6 +226,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		dataSetDefinition5.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		dataSetDefinition6.addFilter(patientsNotVoided,new HashMap<String, Object>());
+		//dataSetDefinition7.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		
 
 		SqlCohortDefinition patientsWithAnyEncounterNotVoided = new SqlCohortDefinition("select distinct e.patient_id from encounter e where e.voided=0");
@@ -383,22 +383,24 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		SqlCohortDefinition patientWithLowBMI=new SqlCohortDefinition();
 		patientWithLowBMI.setName("patientWithLowBMI");
-		patientWithLowBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.HEIGHT_UUID+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.WEIGHT_UUID+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
+		patientWithLowBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.HEIGHT_UUID+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.WEIGHT_UUID+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
 		h.replaceCohortDefinition(patientWithLowBMI);
 		dataSetDefinition6.addFilter(patientWithLowBMI,new HashMap<String, Object>());
 		
 		
 		//==================================================================
-		//                 . Patients Declining in CD4 by more than 50
+		//                7 . Patients Declining in CD4 by more than 50
 		//==================================================================
 		
 		//Patients Declining in CD4 by more than 50
 		
-		/*DiffNumericObsCohortDefinition deciningInCD4MoreThan50=new DiffNumericObsCohortDefinition();
+		//DiffNumericObsCohortDefinition deciningInCD4MoreThan50=new DiffNumericObsCohortDefinition();
+		SqlCohortDefinition deciningInCD4MoreThan50=new SqlCohortDefinition("select distinct(person_id) from (select  a.person_id, b.obs_id as latest_obs_id, b.value_numeric as latest_value,  a.obs_id as last_obs_id, a.value_numeric as last_value from (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) a , (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) b where a.person_id = b.person_id and b.obs_datetime > a.obs_datetime group by a.person_id order by b.obs_datetime desc) main_query where last_value - latest_value > 50");
+		
 		deciningInCD4MoreThan50.setName("deciningInCD4MoreThan50");
-		deciningInCD4MoreThan50.setConcept(Context.getConceptService().getConcept(5497));
-		h.replaceCohortDefinition(deciningInCD4MoreThan50);*/
-		//dataSetDefinition7.addFilter(deciningInCD4MoreThan50,new HashMap<String, Object>());
+		//deciningInCD4MoreThan50.setConcept(Context.getConceptService().getConcept(5497));
+		h.replaceCohortDefinition(deciningInCD4MoreThan50);
+		dataSetDefinition7.addFilter(deciningInCD4MoreThan50,new HashMap<String, Object>());
 		
 		
 		
@@ -418,7 +420,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(imbId,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(imbId,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(imbId,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(imbId,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(imbId,new HashMap<String, Object>());
 		
 		
 		PatientProperty givenName = new PatientProperty("givenName");
@@ -430,7 +432,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(givenName,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(givenName,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(givenName,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(givenName,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(givenName,new HashMap<String, Object>());
 		
 		
 		PatientProperty familyName = new PatientProperty("familyName");
@@ -442,7 +444,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(familyName,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(familyName,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(familyName,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(familyName,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(familyName,new HashMap<String, Object>());
 		
 		PatientProperty gender = new PatientProperty("gender");
 		gender.setName("Sex");
@@ -453,7 +455,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(gender,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(gender,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(gender,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(gender,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(gender,new HashMap<String, Object>());
 		
 		PatientDateOfBirth birthdate = new PatientDateOfBirth();
 		birthdate.setName("Date of Birth");
@@ -464,7 +466,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(birthdate,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(birthdate,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(birthdate,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(birthdate,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(birthdate,new HashMap<String, Object>());
 		
 		
 		StateOfPatient txGroup=new StateOfPatient();
@@ -479,7 +481,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(txGroup,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(txGroup,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(txGroup,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(txGroup,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(txGroup,new HashMap<String, Object>());
 				
 		StateOfPatient stOfPatient=new StateOfPatient();
 		stOfPatient.setPatientProgram(hadultHivProgram);
@@ -493,7 +495,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(stOfPatient,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(stOfPatient,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(stOfPatient,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(stOfPatient,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(stOfPatient,new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType=new RecentEncounterType();
 		lastEncounterType.setName("Last visit type");
@@ -506,7 +508,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(lastEncounterType,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(lastEncounterType,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(lastEncounterType,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(lastEncounterType,new HashMap<String, Object>());
 		
 		DateDiffInMonths lateVisitInMonth=new DateDiffInMonths();
 		lateVisitInMonth.setName("Late visit in months");
@@ -519,7 +521,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition5.addColumn(lateVisitInMonth,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition6.addColumn(lateVisitInMonth,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(lateVisitInMonth,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(lateVisitInMonth,new HashMap<String, Object>());
 		
 		
 		ReturnVisitDate returnVisitDate=new ReturnVisitDate();
@@ -530,7 +532,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(returnVisitDate,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(returnVisitDate,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(returnVisitDate,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(returnVisitDate,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(returnVisitDate,new HashMap<String, Object>());
 		
 		MostRecentObservation cd4Count=new MostRecentObservation();
 		cd4Count.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
@@ -542,7 +544,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(cd4Count,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(cd4Count,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(cd4Count,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(cd4Count,new HashMap<String, Object>());
 		
 		DateDiffInMonths lateCD4InMonths=new DateDiffInMonths();
 		lateCD4InMonths.setConcept(Context.getConceptService().getConceptByUuid(LateVisitAndCD4ReportConstant.CD4_COUNT_UUID));
@@ -555,7 +557,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition5.addColumn(lateCD4InMonths,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition6.addColumn(lateCD4InMonths,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(lateCD4InMonths,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(lateCD4InMonths,new HashMap<String, Object>());
 		
 				
 		
@@ -569,7 +571,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addColumn(accompagnateur,new HashMap<String, Object>());
 		dataSetDefinition5.addColumn(accompagnateur,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(accompagnateur,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(accompagnateur,new HashMap<String, Object>());
+		dataSetDefinition7.addColumn(accompagnateur,new HashMap<String, Object>());
 		
 		PatientAddress address1 = new PatientAddress();
 		address1.setName("Address");
@@ -580,18 +582,18 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition2.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(address1,new HashMap<String, Object>());
-
 		dataSetDefinition5.addColumn(address1,new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(address1,new HashMap<String, Object>());
-		//dataSetDefinition7.addColumn(address1,new HashMap<String, Object>());
-
+		dataSetDefinition7.addColumn(address1,new HashMap<String, Object>());
+		
+		
 		dataSetDefinition1.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition4.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition5.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition6.addParameter(new Parameter("location", "Location", Location.class));
-		//dataSetDefinition7.addParameter(new Parameter("location", "Location", Location.class));
+		dataSetDefinition7.addParameter(new Parameter("location", "Location", Location.class));
 		
 		
 		dataSetDefinition1.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -600,7 +602,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition5.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition6.addParameter(new Parameter("endDate", "End Date", Date.class));
-		//dataSetDefinition7.addParameter(new Parameter("endDate", "End Date", Date.class));
+		dataSetDefinition7.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
 		h.replaceDefinition(dataSetDefinition1);
 		h.replaceDefinition(dataSetDefinition2);
@@ -608,7 +610,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		h.replaceDefinition(dataSetDefinition4);
 		h.replaceDefinition(dataSetDefinition5);
 		h.replaceDefinition(dataSetDefinition6);
-		//h.replaceDefinition(dataSetDefinition7);
+		h.replaceDefinition(dataSetDefinition7);
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
@@ -621,7 +623,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		reportDefinition.addDataSetDefinition("HIVLostToFollowup", dataSetDefinition4, mappings);
 		reportDefinition.addDataSetDefinition("PreARTBelow350CD4", dataSetDefinition5, mappings);
 		reportDefinition.addDataSetDefinition("HIVLowBMI", dataSetDefinition6, mappings);
-		//reportDefinition.addDataSetDefinition("DecliningInCD4ByMoreThan50", dataSetDefinition7, mappings);
+		reportDefinition.addDataSetDefinition("DecliningInCD4ByMoreThan50", dataSetDefinition7, mappings);
 	}
 	
 	
