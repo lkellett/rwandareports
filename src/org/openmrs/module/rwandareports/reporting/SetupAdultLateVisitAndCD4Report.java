@@ -72,8 +72,9 @@ public class SetupAdultLateVisitAndCD4Report {
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "AdultLateVisitAndCD4Template.xls", "XlsAdultLateVisitAndCD4Template", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultPreARTLateVisit|sheet:3,row:8,dataset:AdultHIVLateCD4Count|sheet:4,row:8,dataset:HIVLostToFollowup|sheet5,row:8,dataset:PreARTBelow350CD4|sheet6,row:8,dataset:HIVLowBMI|sheet7,row:8,dataset:DecliningInCD4ByMoreThan50");
-																																																																										 
+		props.put("repeatingSections", "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultPreARTLateVisit|sheet:3,row:8,dataset:AdultHIVLateCD4Count|sheet:4,row:8,dataset:HIVLostToFollowup|sheet:5,row:8,dataset:PreARTBelow350CD4|sheet:6,row:8,dataset:HIVLowBMI|sheet:7,row:8,dataset:DecliningInCD4ByMoreThan50");
+		
+		design.setProperties(props);																																																																								 
 		h.saveReportDesign(design);
 	}
 	
@@ -210,6 +211,7 @@ public class SetupAdultLateVisitAndCD4Report {
 				states.add(onART);
 				onARTStatusCohort.setStates(states);
 				dataSetDefinition1.addFilter(onARTStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				dataSetDefinition7.addFilter(onARTStatusCohort,ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 				
 			}
 		}
@@ -226,7 +228,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition4.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		dataSetDefinition5.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		dataSetDefinition6.addFilter(patientsNotVoided,new HashMap<String, Object>());
-		//dataSetDefinition7.addFilter(patientsNotVoided,new HashMap<String, Object>());
+		dataSetDefinition7.addFilter(patientsNotVoided,new HashMap<String, Object>());
 		
 
 		SqlCohortDefinition patientsWithAnyEncounterNotVoided = new SqlCohortDefinition("select distinct e.patient_id from encounter e where e.voided=0");
@@ -325,7 +327,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		// Patients without Any clinical Encounter(Test lab excluded) in last six months.
 		dataSetDefinition2.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
-		dataSetDefinition5.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
+		//dataSetDefinition5.addFilter(patientsWithoutClinicalEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
 		
 			
 			
@@ -382,8 +384,9 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		
 		SqlCohortDefinition patientWithLowBMI=new SqlCohortDefinition();
-		patientWithLowBMI.setName("patientWithLowBMI");
-		patientWithLowBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.HEIGHT_UUID+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.WEIGHT_UUID+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
+		patientWithLowBMI.setName("patientWithLowBMI"); 
+		patientWithLowBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.HEIGHT_UUID+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"+LateVisitAndCD4ReportConstant.WEIGHT_UUID+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
+		patientWithLowBMI.addParameter(new Parameter("location","location",Location.class));
 		h.replaceCohortDefinition(patientWithLowBMI);
 		dataSetDefinition6.addFilter(patientWithLowBMI,new HashMap<String, Object>());
 		
@@ -395,9 +398,9 @@ public class SetupAdultLateVisitAndCD4Report {
 		//Patients Declining in CD4 by more than 50
 		
 		//DiffNumericObsCohortDefinition deciningInCD4MoreThan50=new DiffNumericObsCohortDefinition();
-		SqlCohortDefinition deciningInCD4MoreThan50=new SqlCohortDefinition("select distinct(person_id) from (select  a.person_id, b.obs_id as latest_obs_id, b.value_numeric as latest_value,  a.obs_id as last_obs_id, a.value_numeric as last_value from (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) a , (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) b where a.person_id = b.person_id and b.obs_datetime > a.obs_datetime group by a.person_id order by b.obs_datetime desc) main_query where last_value - latest_value > 50");
-		
+		SqlCohortDefinition deciningInCD4MoreThan50=new SqlCohortDefinition("select distinct(person_id) from (select  a.person_id, b.obs_id as latest_obs_id, b.value_numeric as latest_value,  a.obs_id as last_obs_id, a.value_numeric as last_value from (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) a , (select person_id, obs_id, obs_datetime, value_numeric from obs where concept_id = 5497 and obs_datetime > DATE_ADD(current_timestamp(),INTERVAL -18 MONTH) and voided = 0 and value_numeric is not null order by obs_datetime desc) b,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) c where c.patient_id=a.person_id and a.person_id = b.person_id and b.obs_datetime > a.obs_datetime group by a.person_id order by b.obs_datetime desc) main_query where last_value - latest_value > 50");
 		deciningInCD4MoreThan50.setName("deciningInCD4MoreThan50");
+		deciningInCD4MoreThan50.addParameter(new Parameter("location","location",Location.class));
 		//deciningInCD4MoreThan50.setConcept(Context.getConceptService().getConcept(5497));
 		h.replaceCohortDefinition(deciningInCD4MoreThan50);
 		dataSetDefinition7.addFilter(deciningInCD4MoreThan50,new HashMap<String, Object>());
