@@ -77,7 +77,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		}
 		h.purgeDefinition(ReportDefinition.class, "PMTCT Formula Package Distribution");
 		
-		h.purgeDefinition(PatientDataSetDefinition.class, "Formula Package Distribution Data Set");
+		h.purgeDefinition(PatientDataSetDefinition.class, "PMTCT Formula Package Distribution Data Set");
 		
 		h.purgeDefinition(CohortDefinition.class, "FPDlocation: Patients at location");
 	}
@@ -166,11 +166,11 @@ public class SetupPMTCTFormulaDistributionReport {
 		
 		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("IMB_IDENTIFIER_TYPE"));
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		imbType.setPatientIdentifierTypeId(imbId.getId());
+		
 		
 		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
 		PatientIdentifier pcId = new PatientIdentifier(pcType);
-		pcType.setPatientIdentifierTypeId(pcId.getId());
+		
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
 		infantId.setName("InfantId");

@@ -67,12 +67,12 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		
 		h.purgeDefinition(DataSetDefinition.class, "PIH_Quarterly_Individual_District_Indicator Data Set");
 		
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: In all programs over 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: In all programs under 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: new in any Hiv program in period over 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: new in any Hiv program in period under 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: preArt in Hiv program in period over 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD:: preArt in Hiv program in period under 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: In all programs over 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: In all programs under 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: new in any Hiv program in period over 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: new in any Hiv program in period under 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program in period over 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program in period under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a visit in period -3 months and over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a visit in period -3 months and under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: ever taking ART before end date and over 15_");
@@ -83,10 +83,11 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		h.purgeDefinition(CohortIndicator.class, "hivQD: on ART in Hiv program with a visit in period -3 months and under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: started taking ART in period over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: started taking ART in period under 15_");
-		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a CD4 count in period and over 15__");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a CD4 count in period and over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a CD4 count in period -3 months and under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: on Art in Hiv program with a CD4 count in period -3 months and over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: on Art in Hiv program with a CD4 count in period -3 months and under 15_");
+		h.purgeDefinition(CohortIndicator.class, "hivQD: preArt in Hiv program with a CD4 count in period -3 months and over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: weight recorded in period over 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: weight recorded in period under 15_");
 		h.purgeDefinition(CohortIndicator.class, "hivQD: HIV visit and over 15_");
@@ -113,6 +114,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		h.purgeDefinition(CohortDefinition.class, "hivQD: preArt in Hiv program in period over 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: preArt in Hiv program with a visit in period - 3 months and under 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: preArt in Hiv program with a visit in period -3 months and over 15");
+		
 		h.purgeDefinition(CohortDefinition.class, "hivQD: ever taking ART before end date and under 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: ever taking ART before end date and over 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: currently taking ART before end date and under 15");
@@ -123,7 +125,10 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		h.purgeDefinition(CohortDefinition.class, "hivQD: started taking ART in period under 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: preArt in Hiv program with a CD4 count in period -3 months and under 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: preArt in Hiv program with a CD4 count in period -3 months and over 15");
+		
 		h.purgeDefinition(CohortDefinition.class, "hivQD: on Art in Hiv program with a CD4 count in period - 3 months and under 15");
+		                                        
+		h.purgeDefinition(CohortDefinition.class, "hivQD: on Art in Hiv program with a CD4 count in period -3 months and over 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: weight recorded in period under 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: weight recorded in period over 15");
 		h.purgeDefinition(CohortDefinition.class, "hivQD: HIV Adult or Pedi and over 15");

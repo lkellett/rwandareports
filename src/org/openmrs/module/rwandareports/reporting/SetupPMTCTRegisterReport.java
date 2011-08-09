@@ -141,11 +141,11 @@ public class SetupPMTCTRegisterReport {
 		
 		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("IMB_IDENTIFIER_TYPE"));
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		imbType.setPatientIdentifierTypeId(imbId.getId());
+		
 		
 		PatientIdentifierType tracType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("TRACNET_IDENTIFIER_TYPE"));
 		PatientIdentifier tracId = new PatientIdentifier(tracType);
-		tracType.setPatientIdentifierTypeId(tracId.getId());
+		
 		
 		MultiplePatientDataDefinitions id = new MultiplePatientDataDefinitions();
 		id.setName("id");

@@ -109,7 +109,6 @@ public class SetupPediatricLateVisitAndCD4Report {
 		h.purgeDefinition(CohortDefinition.class, "pediCD4CohortDefinition");
 		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithouthCD4RecordComposition");
 		h.purgeDefinition(CohortDefinition.class, "pediPatientsWithoutEncountersInPastYear");
-		h.purgeDefinition(CohortDefinition.class, "");
 		
 		      	
 	}
@@ -497,10 +496,10 @@ public class SetupPediatricLateVisitAndCD4Report {
 		pediatricHIVLateCD4CountDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
 		pediatricHIVLostToFollowupDatSet.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		h.replaceDefinition(pediatricARTLateVisitDataSet);
-		h.replaceDefinition(pediatricPreARTLateVisitDataSet);
-		h.replaceDefinition(pediatricHIVLateCD4CountDataSet);
-		h.replaceDefinition(pediatricHIVLostToFollowupDatSet);
+		h.replaceDataSetDefinition(pediatricARTLateVisitDataSet);
+		h.replaceDataSetDefinition(pediatricPreARTLateVisitDataSet);
+		h.replaceDataSetDefinition(pediatricHIVLateCD4CountDataSet);
+		h.replaceDataSetDefinition(pediatricHIVLostToFollowupDatSet);
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");

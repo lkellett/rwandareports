@@ -607,13 +607,13 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition6.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition7.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		h.replaceDefinition(dataSetDefinition1);
-		h.replaceDefinition(dataSetDefinition2);
-		h.replaceDefinition(dataSetDefinition3);
-		h.replaceDefinition(dataSetDefinition4);
-		h.replaceDefinition(dataSetDefinition5);
-		h.replaceDefinition(dataSetDefinition6);
-		h.replaceDefinition(dataSetDefinition7);
+		h.replaceDataSetDefinition(dataSetDefinition1);
+		h.replaceDataSetDefinition(dataSetDefinition2);
+		h.replaceDataSetDefinition(dataSetDefinition3);
+		h.replaceDataSetDefinition(dataSetDefinition4);
+		h.replaceDataSetDefinition(dataSetDefinition5);
+		h.replaceDataSetDefinition(dataSetDefinition6);
+		h.replaceDataSetDefinition(dataSetDefinition7);
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");

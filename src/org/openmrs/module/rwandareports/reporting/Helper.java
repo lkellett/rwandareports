@@ -13,8 +13,10 @@ import org.openmrs.Location;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.service.DataSetDefinitionService;
 import org.openmrs.module.reporting.definition.service.SerializedDefinitionService;
 import org.openmrs.module.reporting.evaluation.Definition;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
@@ -22,9 +24,11 @@ import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
+import org.openmrs.module.reporting.indicator.Indicator;
 import org.openmrs.module.reporting.indicator.dimension.CohortDefinitionDimension;
 import org.openmrs.module.reporting.indicator.dimension.Dimension;
 import org.openmrs.module.reporting.indicator.dimension.service.DimensionService;
+import org.openmrs.module.reporting.indicator.service.IndicatorService;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.ReportDesignResource;
@@ -38,12 +42,13 @@ import org.openmrs.module.reporting.serializer.ReportingSerializer;
 import org.openmrs.module.reportingobjectgroup.objectgroup.definition.ObjectGroupDefinition;
 import org.openmrs.module.reportingobjectgroup.objectgroup.service.ObjectGroupDefinitionService;
 import org.openmrs.module.reportingobjectgroup.report.renderer.ExcelCalendarTemplateRenderer;
+import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 
 public class Helper {
 	
-	public void purgeDefinition(Class clazz, String name) {
+	public void purgeGenericDefinition(Class clazz, String name) {
 		SerializedDefinitionService s = (SerializedDefinitionService) Context.getService(SerializedDefinitionService.class);
 		try {
 			// ouch
@@ -54,6 +59,161 @@ public class Helper {
 		catch (RuntimeException e) {
 			// intentional empty as the author is too long out of business...
 		}
+	}
+	
+	public void purgeReportDefinition(String name) {
+		ReportDefinitionService rds = Context.getService(ReportDefinitionService.class);
+		try {
+			ReportDefinition findDefinition = findReportDefinition(name);
+			if (findDefinition != null) {
+				rds.purgeDefinition(findDefinition);
+			}
+		}
+		catch (RuntimeException e) {
+			// intentional empty as the author is too long out of business...
+		}
+	}
+	
+	public void purgeCohortDefinition(String name) {
+		CohortDefinitionService cds = Context.getService(CohortDefinitionService.class);
+		try {
+			CohortDefinition findDefinition = findCohortDefinition(name);
+			if (findDefinition != null) {
+				cds.purgeDefinition(findDefinition);
+			}
+		}
+		catch (RuntimeException e) {
+			// intentional empty as the author is too long out of business...
+		}
+	}
+	
+	public void purgeObjectGroupDefinition(String name) {
+		ObjectGroupDefinitionService ojds = Context.getService(ObjectGroupDefinitionService.class);
+		try {
+			ObjectGroupDefinition findDefinition = findObjectGroupDefinition(name);
+			if (findDefinition != null) {
+				ojds.purgeDefinition(findDefinition);
+			}
+		}
+		catch (RuntimeException e) {
+			// intentional empty as the author is too long out of business...
+		}
+	}
+	
+	public void purgeDataSetDefinition(String name) {
+		DataSetDefinitionService dsds = Context.getService(DataSetDefinitionService.class);
+		try {
+			DataSetDefinition findDefinition = findDataSetDefinition(name);
+			if (findDefinition != null) {
+				dsds.purgeDefinition(findDefinition);
+			}
+		}
+		catch (RuntimeException e) {
+			// intentional empty as the author is too long out of business...
+		}
+	}
+	
+	public void purgeIndicator(String name) {
+		IndicatorService is = Context.getService(IndicatorService.class);
+		try {
+			Indicator findDefinition = findIndicator(name);
+			if (findDefinition != null) {
+				is.purgeDefinition(findDefinition);
+			}
+		}
+		catch (RuntimeException e) {
+			// intentional empty as the author is too long out of business...
+		}
+	}
+	
+	public void purgeDefinition(Class clazz, String name) {
+		
+		if(clazz.equals(ReportDefinition.class))
+		{
+			purgeReportDefinition(name);
+		}
+		else if(clazz.equals(PeriodIndicatorReportDefinition.class))
+		{
+			purgeReportDefinition(name);
+		}
+		else if(clazz.equals(CohortDefinition.class))
+		{
+			purgeCohortDefinition(name);
+		}
+		else if(clazz.equals(CompositionCohortDefinition.class))
+		{
+			purgeCohortDefinition(name);
+		}
+		else if(clazz.equals(ObjectGroupDefinition.class))
+		{
+			purgeObjectGroupDefinition(name);
+		}
+		else if(clazz.equals(DataSetDefinition.class))
+		{
+			purgeDataSetDefinition(name);
+		}
+		else if(clazz.equals(PatientDataSetDefinition.class))
+		{
+			purgeDataSetDefinition(name);
+		}
+		else if(clazz.equals(CohortIndicator.class))
+		{
+			purgeIndicator(name);
+		}
+		else if(clazz.equals(Indicator.class))
+		{
+			purgeIndicator(name);
+		}
+		else
+		{
+			purgeGenericDefinition(clazz, name);
+		}
+		
+	}
+	
+	public ReportDefinition findReportDefinition(String name) {
+		ReportDefinitionService s = (ReportDefinitionService) Context.getService(ReportDefinitionService.class);
+		List<ReportDefinition> defs = s.getDefinitions(name, true);
+		for (ReportDefinition def : defs) {
+			return def;
+		}
+		throw new RuntimeException("Couldn't find Definition " + name);
+	}
+	
+	public CohortDefinition findCohortDefinition(String name) {
+		CohortDefinitionService cds = Context.getService(CohortDefinitionService.class);
+		List<CohortDefinition> defs = cds.getDefinitions(name, true);
+		for (CohortDefinition def : defs) {
+			return def;
+		}
+		throw new RuntimeException("Couldn't find Definition " + name);
+	}
+	
+	public ObjectGroupDefinition findObjectGroupDefinition(String name) {
+		ObjectGroupDefinitionService ojds = Context.getService(ObjectGroupDefinitionService.class);
+		List<ObjectGroupDefinition> defs = ojds.getDefinitions(name, true);
+		for (ObjectGroupDefinition def : defs) {
+			return def;
+		}
+		throw new RuntimeException("Couldn't find Definition " + name);
+	}
+	
+	public DataSetDefinition findDataSetDefinition(String name) {
+		DataSetDefinitionService dsds = Context.getService(DataSetDefinitionService.class);
+		List<DataSetDefinition> defs = dsds.getDefinitions(name, true);
+		for (DataSetDefinition def : defs) {
+			return def;
+		}
+		throw new RuntimeException("Couldn't find Definition " + name);
+	}
+	
+	public Indicator findIndicator(String name) {
+		IndicatorService is = Context.getService(IndicatorService.class);
+		List<Indicator> defs = is.getDefinitions(name, true);
+		for (Indicator def : defs) {
+			return def;
+		}
+		throw new RuntimeException("Couldn't find Definition " + name);
 	}
 	
 	public void purgeAll(String tag) {
@@ -124,27 +284,35 @@ public class Helper {
 	
 	public void replaceCohortDefinition(CohortDefinition def) {
 		CohortDefinitionService cds = Context.getService(CohortDefinitionService.class);
-		purgeDefinition(def.getClass(), def.getName());
+		purgeCohortDefinition(def.getName());
 		cds.saveDefinition(def);
 	}
 	
 	public void replaceObjectGroupDefinition(ObjectGroupDefinition def) {
 		ObjectGroupDefinitionService cds = Context.getService(ObjectGroupDefinitionService.class);
-		purgeDefinition(def.getClass(), def.getName());
+		purgeObjectGroupDefinition(def.getName());
 		cds.saveDefinition(def);
 	}
 	
-	public void replaceDefinition(Definition def) {
-		SerializedDefinitionService s = (SerializedDefinitionService) Context.getService(SerializedDefinitionService.class);
-		purgeDefinition(def.getClass(), def.getName());
+	public void replaceDefinition(ReportDefinition def) {
+		ReportDefinitionService rds = Context.getService(ReportDefinitionService.class);
+		purgeReportDefinition(def.getName());
+		rds.saveDefinition(def);
+	}
+	
+	
+	public void replaceDataSetDefinition(DataSetDefinition def) {
+		DataSetDefinitionService s = (DataSetDefinitionService) Context.getService(DataSetDefinitionService.class);
+		purgeDataSetDefinition(def.getName());
 		s.saveDefinition(def);
 	}
 	
-	public void replaceDataSetDefinition(DataSetDefinition def) {
-		SerializedDefinitionService s = (SerializedDefinitionService) Context.getService(SerializedDefinitionService.class);
-		purgeDefinition(def.getClass(), def.getName());
+	public void replaceDefinition(Indicator def) {
+		IndicatorService s = (IndicatorService) Context.getService(IndicatorService.class);
+		purgeIndicator(def.getName());
 		s.saveDefinition(def);
 	}
+	
 	
 	public void newCountIndicator(String name, String cohort, String parameterMapping) {
 		CohortIndicator i = CohortIndicator.newCountIndicator(name, new Mapped<CohortDefinition>(cohortDefinition(cohort),
@@ -218,13 +386,13 @@ public class Helper {
 	}
 
 	public void replaceReportDefinition(PeriodIndicatorReportDefinition rd) {
-		purgeDefinition(PeriodIndicatorReportDefinition.class, rd.getName());
+		purgeReportDefinition(rd.getName());
 		ReportDefinitionService rds = (ReportDefinitionService) Context.getService(ReportDefinitionService.class);
 		rds.saveDefinition(rd);
     }
 
 	public void replaceReportDefinition(ReportDefinition rd) {
-		purgeDefinition(ReportDefinition.class, rd.getName());
+		purgeReportDefinition(rd.getName());
 		ReportDefinitionService rds = (ReportDefinitionService) Context.getService(ReportDefinitionService.class);
 		rds.saveDefinition(rd);
     }

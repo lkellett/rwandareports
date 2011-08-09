@@ -581,6 +581,8 @@ public class SetupRwandaPrimaryCareReport {
 		"patientsUnder5InRegistration");
 		
 		h.purgeDefinition(ObjectGroupDefinition.class, "ageBreakdownByGender");
+		h.purgeDefinition(ObjectGroupDefinition.class, "patientRequestAntenatalClinic");
+		
 		   
 
 		h.purgeDefinition(ObjectGroupIndicator.class,
@@ -658,7 +660,37 @@ public class SetupRwandaPrimaryCareReport {
 		h.purgeDefinition(ObjectGroupIndicator.class,
 		"patientsWithTemperatureGreaterThanNormalInVitalsIndicator");
 		h.purgeDefinition(ObjectGroupIndicator.class,
-		"patientsWithoutTemperatureInVitalsIndicator");		 
+		"patientsWithoutTemperatureInVitalsIndicator");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (0-1)");	
+		
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (0-1)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (1-2)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (1-2)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (2-3)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (2-3)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (3-4)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (3-4)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (4-5)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (4-5)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (5-15)");	
+		
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (5-15)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Male with age (15+)");	
+		h.purgeDefinition(ObjectGroupIndicator.class,
+		"Female with age (15+)");	
 		
 		
 	}

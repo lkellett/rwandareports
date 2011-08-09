@@ -150,11 +150,11 @@ public class SetupPMTCTPregnancyConsultationReport {
 		
 		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("IMB_IDENTIFIER_TYPE"));
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		imbType.setPatientIdentifierTypeId(imbId.getId());
+		
 		
 		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
 		PatientIdentifier pcId = new PatientIdentifier(pcType);
-		pcType.setPatientIdentifierTypeId(pcId.getId());
+		
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
 		infantId.setName("Id");

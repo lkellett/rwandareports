@@ -109,7 +109,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
+		reportDefinition.addParameter(new Parameter("state", "Feeding status", ProgramWorkflowState.class, stateProperties));
 		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
 		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTCombinedLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
@@ -165,11 +165,11 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("IMB_IDENTIFIER_TYPE"));
 		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		imbType.setPatientIdentifierTypeId(imbId.getId());
+		
 		
 		PatientIdentifierType pcType = Context.getPatientService().getPatientIdentifierTypeByName(properties.get("PRIMARY_CARE_IDENTIFIER_TYPE"));
 		PatientIdentifier pcId = new PatientIdentifier(pcType);
-		pcType.setPatientIdentifierTypeId(pcId.getId());
+		
 		
 		MultiplePatientDataDefinitions infantId = new MultiplePatientDataDefinitions();
 		infantId.setName("InfantId");
