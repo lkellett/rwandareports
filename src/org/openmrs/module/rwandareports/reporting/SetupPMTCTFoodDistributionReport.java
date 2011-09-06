@@ -11,6 +11,7 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
@@ -86,12 +87,12 @@ public class SetupPMTCTFoodDistributionReport {
 		reportDefinition.setName("PMTCT Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		Properties stateProperties = new Properties();
-		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
-		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
-		reportDefinition.addParameter(new Parameter("state", "Feeding status", ProgramWorkflowState.class, stateProperties));
-		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
-		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
+//		Properties stateProperties = new Properties();
+//		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+//		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+//		reportDefinition.addParameter(new Parameter("state", "Feeding status", ProgramWorkflowState.class, stateProperties));
+//		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
+//		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("FPlocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -106,17 +107,11 @@ public class SetupPMTCTFoodDistributionReport {
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
-		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
-		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
-		
-		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
-		feedingStatus.addParameter(new Parameter("states", "States", ProgramWorkflowState.class));
-		feedingStatus.setName("feeding state: Feeding state of patients");
-		dataSetDefinition.addFilter(feedingStatus, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
 		List<Program> programs = new ArrayList<Program>();
+		inPMTCTProgram.setOnOrAfter(new Date());
 		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtct != null)
 		{
@@ -125,17 +120,18 @@ public class SetupPMTCTFoodDistributionReport {
 		inPMTCTProgram.setPrograms(programs);
 		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
 		
-		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
+		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
+		List<ProgramWorkflowState> breastFeedingStates = new ArrayList<ProgramWorkflowState>();
+		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));                
+		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_ONE")))));
+		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_TWO")))));
+		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_THREE")))));
+		feedingStatus.setStates(breastFeedingStates);
+		feedingStatus.setName("feeding state: Feeding state of patients");
+		feedingStatus.setOnDate(new Date());
+		dataSetDefinition.addFilter(feedingStatus,  new HashMap<String,Object>());
 		
-		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
-		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
-		dueThatWeek.setTimeModifier(TimeModifier.ANY);
-		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
-		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
-		dueThatWeek.setName("patients due that week");
-		dueThatWeek.setGroupingConcept(nextVisitConcept);
-		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
+		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
@@ -178,8 +174,7 @@ public class SetupPMTCTFoodDistributionReport {
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
-		ageInMonths.addParameter(new Parameter("onDate", "onDate", ProgramWorkflowState.class));
-		dataSetDefinition.addColumn(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		dataSetDefinition.addColumn(ageInMonths, new HashMap<String,Object>());
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
 		feedingGroup.setName("FeedingGroup");
@@ -206,8 +201,6 @@ public class SetupPMTCTFoodDistributionReport {
 		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		mappings.put("state", "${state}");
-		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 		
@@ -251,5 +244,14 @@ public class SetupPMTCTFoodDistributionReport {
 		
 		String nextVisitConcept = Context.getAdministrationService().getGlobalProperty("reports.pmtctNextVisitConcept");
 		properties.put("PMTCT_NEXT_VISIT_CONCEPT_ID", nextVisitConcept);
+		
+		String breastFeeding1 = Context.getAdministrationService().getGlobalProperty("reports.breastfeedingStateOne");
+		properties.put("BREASTFEEDING_ONE", breastFeeding1);
+		
+		String breastFeeding2 = Context.getAdministrationService().getGlobalProperty("reports.breastfeedingStateTwo");
+		properties.put("BREASTFEEDING_TWO", breastFeeding2);
+		
+		String breastFeeding3 = Context.getAdministrationService().getGlobalProperty("reports.breastfeedingStateThree");
+		properties.put("BREASTFEEDING_THREE", breastFeeding3);
 	}	
 }

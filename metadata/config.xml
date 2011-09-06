@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>1.0.8</version>
+	<version>1.0.8.1</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>
@@ -213,6 +213,14 @@
 		<defaultValue>24</defaultValue>
 		<description>
 			The Adult HIV Flowsheet encounter id that is used to return the io and side effects for a patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.viralLoadConcept</property>
+		<defaultValue>859</defaultValue>
+		<description>
+			The Viral Load Concept
 		</description>
 	</globalProperty>
 	
@@ -543,6 +551,38 @@
 		<property>reports.weanedConcept</property>
 		<defaultValue>1152</defaultValue>
 		<description>The id of the concept for the weaned concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.formulaStateOne</property>
+		<defaultValue>6967</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.formulaStateTwo</property>
+		<defaultValue>6965</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.formulaStateThree</property>
+		<defaultValue>6970</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.breastfeedingStateOne</property>
+		<defaultValue>6966</defaultValue>
+		<description>The state id for breast feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.breastfeedingStateTwo</property>
+		<defaultValue>6964</defaultValue>
+		<description>The state id for breast feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.breastfeedingStateThree</property>
+		<defaultValue>7079</defaultValue>
+		<description>The state id for breast feeding one</description>
 	</globalProperty>
 	
 	<globalProperty>

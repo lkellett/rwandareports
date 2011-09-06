@@ -23,6 +23,10 @@ public class GestationalAge implements CustomCalculation{
 		PatientAttributeResult gestAge = new PatientAttributeResult(null, null);
 		
 		Date date = (Date)context.getParameterValue("date");
+		if(date == null)
+		{
+			date = new Date();
+		}
 		
 		for(PatientDataResult result: results)
 		{

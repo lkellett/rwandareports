@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,7 @@ public class SetupTBConsultationSheet {
 		InStateCohortDefinition tbGroup = new InStateCohortDefinition();
 		tbGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
 		tbGroup.setName("tb group");
+		tbGroup.setOnDate(new Date());
 		dataSetDefinition.addFilter(tbGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inTBProgram = new InProgramCohortDefinition();

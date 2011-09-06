@@ -14,13 +14,10 @@ import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
-import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -74,7 +71,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTPregnancyConsultationSheetV2.xls", "PMTCTPregnancyConsultationSheet.xls_", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+		props.put("repeatingSections", "sheet:1,row:5,dataset:dataSet");
 	
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -100,7 +97,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 		reportDefinition.setName("PMTCT Pregnancy consultation");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTPregLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -114,7 +110,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 	{
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
-		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
 		
@@ -122,6 +117,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		inPMTCTProgram.setName("pmtct: In Program");
 		List<Program> programs = new ArrayList<Program>();
 		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
+		inPMTCTProgram.setOnOrAfter(new Date());
 		inPMTCTProgram.setOnDate(Calendar.getInstance().getTime());
 		if(pmtct != null)
 		{
@@ -131,16 +127,16 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
-		
-		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
-		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
-		dueThatWeek.setTimeModifier(TimeModifier.ANY);
-		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
-		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
-		dueThatWeek.setName("patients due that week");
-		dueThatWeek.setQuestion(nextVisitConcept);
-		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
+//		
+//		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
+//		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
+//		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
+//		dueThatWeek.setTimeModifier(TimeModifier.ANY);
+//		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
+//		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
+//		dueThatWeek.setName("patients due that week");
+//		dueThatWeek.setQuestion(nextVisitConcept);
+//		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
@@ -242,7 +238,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
-		artDrugs.addParameter(new Parameter("onDate", "OnDate", ProgramWorkflowState.class));
+		artDrugs.setOnDate(new Date());
 		artDrugs.setName("Regimen");
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);
@@ -329,7 +325,6 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}

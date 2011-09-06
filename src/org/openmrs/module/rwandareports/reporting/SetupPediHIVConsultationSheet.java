@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.reporting;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,7 @@ public class SetupPediHIVConsultationSheet {
 		InStateCohortDefinition hivGroup = new InStateCohortDefinition();
 		hivGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
 		hivGroup.setName("hiv group");
+		hivGroup.setOnDate(new Date());
 		dataSetDefinition.addFilter(hivGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inHIVProgram = new InProgramCohortDefinition();

@@ -14,14 +14,10 @@ import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
-import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -74,10 +70,10 @@ public class SetupCombinedHFCSPConsultationReport {
 		ReportDefinition rd = createReportDefinition();
 	//	h.createRowPerPatientXlsOverview(rd, "PMTCTCombinedClinicConsultationSheet.xls", "PMTCTCombinedClinicConsultationSheet.xls_", null);
 	//	h.createRowPerPatientXlsOverview(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
-		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "HFCSPConsultationSheet.xls", "HFCSPConsultationSheet.xls_", null);
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTCombinedClinicConsultationSheet.xls", "PMTCTCombinedClinicConsultationSheet.xls_", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+		props.put("repeatingSections", "sheet:1,row:4,dataset:dataSet");
 	
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -106,12 +102,12 @@ public class SetupCombinedHFCSPConsultationReport {
 		reportDefinition.setName("Combined HFCSP consultation");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		Properties stateProperties = new Properties();
-		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
-		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
-		reportDefinition.addParameter(new Parameter("state", "Feeding status", ProgramWorkflowState.class, stateProperties));
-		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
-		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
+//		Properties stateProperties = new Properties();
+//		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
+//		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+//		reportDefinition.addParameter(new Parameter("state", "Feeding status", ProgramWorkflowState.class, stateProperties));
+//		//reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
+//		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PMTCTCombinedLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -126,16 +122,18 @@ public class SetupCombinedHFCSPConsultationReport {
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
-		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
-		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
+//		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
+//		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
 		
-		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
-		feedingStatus.addParameter(new Parameter("states", "States", ProgramWorkflowState.class));
-		feedingStatus.setName("feeding state: Feeding state of patients");
-		dataSetDefinition.addFilter(feedingStatus, ParameterizableUtil.createParameterMappings("states=${state}"));
+//		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
+//		feedingStatus.addParameter(new Parameter("states", "States", ProgramWorkflowState.class));
+//		feedingStatus.setName("feeding state: Feeding state of patients");
+//		feedingStatus.setOnDate(new Date());
+//		dataSetDefinition.addFilter(feedingStatus, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
+		inPMTCTProgram.setOnOrAfter(new Date());
 		List<Program> programs = new ArrayList<Program>();
 		Program pmtctCombined = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtctCombined != null)
@@ -147,15 +145,15 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		
-		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
-		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
-		dueThatWeek.setTimeModifier(TimeModifier.ANY);
-		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
-		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
-		dueThatWeek.setName("patients due that week");
-		dueThatWeek.setGroupingConcept(nextVisitConcept);
-		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
+//		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
+//		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
+//		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
+//		dueThatWeek.setTimeModifier(TimeModifier.ANY);
+//		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
+//		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
+//		dueThatWeek.setName("patients due that week");
+//		dueThatWeek.setGroupingConcept(nextVisitConcept);
+//		dataSetDefinition.addFilter(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}"));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
@@ -195,37 +193,41 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(motherId, new HashMap<String,Object>());
 		
 		DateOfBirthShowingEstimation birthdate = new DateOfBirthShowingEstimation();
+		birthdate.setName("birthdate");
+		birthdate.setDateFormat("ddMMMyyyy");
+		birthdate.setEstimatedDateFormat("ddMMMyyyy");
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
-		ageInMonths.addParameter(new Parameter("onDate", "onDate", ProgramWorkflowState.class));
-		dataSetDefinition.addColumn(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		ageInMonths.setName("ageInMonths");
+		dataSetDefinition.addColumn(ageInMonths, new HashMap<String,Object>());
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
-		feedingGroup.addParameter(new Parameter("onDate", "Date", Date.class));
+		feedingGroup.setOnDate(new Date());
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtctCombined);
 		feedingGroup.setPatienProgramWorkflow(pmtctCombined.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
 		feedingGroup.setFilter(new BorFStateFilter());
-		dataSetDefinition.addColumn(feedingGroup, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		
-		PatientRelationship accomp = new PatientRelationship();
-		accomp.setName("AccompName");
-		accomp.setRelationshipTypeId(Integer.valueOf(properties.get("ACCOMPAGNATUER_RELATIONSHIP_ID")));
-		accomp.setRetrievePersonAorB("A");
-		dataSetDefinition.addColumn(accomp, new HashMap<String,Object>());
-		
-		PatientAddress address = new PatientAddress();
-		address.setName("Address");
-		address.setIncludeCountry(false);
-		address.setIncludeProvince(false);
-		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
+//		PatientRelationship accomp = new PatientRelationship();
+//		accomp.setName("AccompName");
+//		accomp.setRelationshipTypeId(Integer.valueOf(properties.get("ACCOMPAGNATUER_RELATIONSHIP_ID")));
+//		accomp.setRetrievePersonAorB("A");
+//		dataSetDefinition.addColumn(accomp, new HashMap<String,Object>());
+//		
+//		PatientAddress address = new PatientAddress();
+//		address.setName("Address");
+//		address.setIncludeCountry(false);
+//		address.setIncludeProvince(false);
+//		dataSetDefinition.addColumn(address, new HashMap<String,Object>());
 		
 		DateOfNextTestDueFromBirth firstDbs = new DateOfNextTestDueFromBirth();
 		firstDbs.setTimeUnit(Calendar.WEEK_OF_YEAR);
 		firstDbs.setTimeIncrement(6);
 		firstDbs.setName("firstDBSDue");
+		firstDbs.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(firstDbs, new HashMap<String,Object>());
 		
 		DateOfBirth dob = new DateOfBirth();
@@ -235,6 +237,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		firstDbsResult.setConcept(dbsConcept);
 		firstDbsResult.setName("firstDBSTest");
 		firstDbsResult.setDateOfPatientData(dob, new HashMap<String,Object>());
+		firstDbsResult.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(firstDbsResult, new HashMap<String,Object>());
 		
 		DateOfObsAfterDateOfOtherDefinition firstDbsDate = new DateOfObsAfterDateOfOtherDefinition();
@@ -245,6 +248,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		ObsValueAfterDateOfOtherDefinition confDbsResult = new ObsValueAfterDateOfOtherDefinition();
 		confDbsResult.setConcept(dbsConcept);
 		confDbsResult.setName("confDBSTest");
+		confDbsResult.setDateFormat("ddMMMyy");
 		confDbsResult.setDateOfPatientData(firstDbsDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(confDbsResult, new HashMap<String,Object>());
 		
@@ -252,12 +256,14 @@ public class SetupCombinedHFCSPConsultationReport {
 		firstSero.setTimeUnit(Calendar.MONTH);
 		firstSero.setTimeIncrement(9);
 		firstSero.setName("firstSeroDue");
+		firstSero.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(firstSero, new HashMap<String,Object>());
 		
 		DateOfNextTestDueFromBirth secondSero = new DateOfNextTestDueFromBirth();
 		secondSero.setTimeUnit(Calendar.MONTH);
 		secondSero.setTimeIncrement(9);
 		secondSero.setName("secondSeroDue");
+		secondSero.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(secondSero, new HashMap<String,Object>());
 		
 		Concept seroConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("SERO_CONCEPT_ID")));
@@ -265,6 +271,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		ObsValueAfterDateOfOtherDefinition firstSeroResult = new ObsValueAfterDateOfOtherDefinition();
 		firstSeroResult.setConcept(seroConcept);
 		firstSeroResult.setName("firstSeroTest");
+		firstSeroResult.setDateFormat("ddMMMyy");
 		firstSeroResult.setDateOfPatientData(dob, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(firstSeroResult, new HashMap<String,Object>());
 		
@@ -276,42 +283,26 @@ public class SetupCombinedHFCSPConsultationReport {
 		ObsValueAfterDateOfOtherDefinition secondSeroResult = new ObsValueAfterDateOfOtherDefinition();
 		secondSeroResult.setConcept(dbsConcept);
 		secondSeroResult.setName("secondSeroTest");
+		secondSeroResult.setDateFormat("ddMMMyy");
 		secondSeroResult.setDateOfPatientData(firstSeroDate, new HashMap<String,Object>());
 		dataSetDefinition.addColumn(secondSeroResult, new HashMap<String,Object>());
 		
 		MostRecentObservation nextVisit = new MostRecentObservation();
 		nextVisit.setConcept(nextVisitConcept);
 		nextVisit.setName("nextRDV");
+		nextVisit.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(nextVisit, new HashMap<String,Object>());
-		
-		
-		StateOfPatient discordant = new StateOfPatient();
-		discordant.setName("DiscordantCouple");
-		discordant.setDescription("DiscordantCouple");
-		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_CLINIC_PROGRAM"));
-		if(pmtct != null)
-		{
-			discordant.setPatientProgram(pmtct);
-			discordant.setPatienProgramWorkflow(pmtct.getWorkflowByName(properties.get("PMTCT_RELATIONSHIP_STATUS_WORKFLOW")));
-		}
-		discordant.setFilter(new DiscordantCoupleFilter());
-		
-		EvaluateDefinitionForOtherPersonData motherDiscordant = new EvaluateDefinitionForOtherPersonData();
-		motherDiscordant.setPersonData(mother, new HashMap<String,Object>());
-		motherDiscordant.setDefinition(discordant, new HashMap<String,Object>());
-		motherDiscordant.setName("motherDiscordant");
-		motherDiscordant.setDescription("motherDiscordant");
-		dataSetDefinition.addColumn(motherDiscordant, new HashMap<String,Object>());
 		
 		MostRecentObservation cd4Test = new MostRecentObservation();
 		Concept cd4Concept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("CD4_CONCEPT")));
 		cd4Test.setConcept(cd4Concept);
 		cd4Test.setName("CD4Test");
+		cd4Test.setDateFormat("ddMMMyy");
 		
-		MostRecentObservation viralLoad = new MostRecentObservation();
-		Concept viralLoadConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("VIRAL_LOAD_CONCEPT")));
-		viralLoad.setConcept(viralLoadConcept);
-		viralLoad.setName("ViralLoadTest");
+//		MostRecentObservation viralLoad = new MostRecentObservation();
+//		Concept viralLoadConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("VIRAL_LOAD_CONCEPT")));
+//		viralLoad.setConcept(viralLoadConcept);
+//		viralLoad.setName("ViralLoadTest");
 	
 		EvaluateDefinitionForOtherPersonData motherCD4 = new EvaluateDefinitionForOtherPersonData();
 		motherCD4.setPersonData(mother, new HashMap<String,Object>());
@@ -320,87 +311,77 @@ public class SetupCombinedHFCSPConsultationReport {
 		motherCD4.setDescription("motherCD4");
 		dataSetDefinition.addColumn(motherCD4, new HashMap<String,Object>());
 		
-		EvaluateDefinitionForOtherPersonData motherViralLoad = new EvaluateDefinitionForOtherPersonData();
-		motherViralLoad.setPersonData(mother, new HashMap<String,Object>());
-		motherViralLoad.setDefinition(viralLoad, new HashMap<String,Object>());
-		motherViralLoad.setName("motherViralLoad");
-		motherViralLoad.setDescription("motherViralLoad");
-		dataSetDefinition.addColumn(motherViralLoad, new HashMap<String,Object>());
-		
-		MostRecentObservation hiv = new MostRecentObservation();
-		Concept hivConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("HIV_TEST_CONCEPT")));
-		hiv.setConcept(hivConcept);
-		hiv.setName("HIVTest");
-		
-		EvaluateDefinitionForOtherPersonData motherHIVTest = new EvaluateDefinitionForOtherPersonData();
-		motherHIVTest.setPersonData(mother, new HashMap<String,Object>());
-		motherHIVTest.setDefinition(hiv, new HashMap<String,Object>());
-		motherHIVTest.setName("motherHIV");
-		motherHIVTest.setDescription("motherHIV");
-		dataSetDefinition.addColumn(motherHIVTest, new HashMap<String,Object>());
+//		EvaluateDefinitionForOtherPersonData motherViralLoad = new EvaluateDefinitionForOtherPersonData();
+//		motherViralLoad.setPersonData(mother, new HashMap<String,Object>());
+//		motherViralLoad.setDefinition(viralLoad, new HashMap<String,Object>());
+//		motherViralLoad.setName("motherViralLoad");
+//		motherViralLoad.setDescription("motherViralLoad");
+//		dataSetDefinition.addColumn(motherViralLoad, new HashMap<String,Object>());
+
 		
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
-		artDrugs.addParameter(new Parameter("onDate", "OnDate", ProgramWorkflowState.class));
+		artDrugs.setOnDate(new Date());
 		artDrugs.setName("Regimen");
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);
+		artDrugs.setDateFormat("ddMMMyy");
 		
 		EvaluateDefinitionForOtherPersonData motherARV = new EvaluateDefinitionForOtherPersonData();
 		motherARV.setPersonData(mother, new HashMap<String,Object>());
-		motherARV.setDefinition(artDrugs, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		motherARV.setDefinition(artDrugs, new HashMap<String,Object>());
 		motherARV.setName("motherART");
 		motherARV.setDescription("motherART");
 		dataSetDefinition.addColumn(motherARV, new HashMap<String,Object>());
 		
-		MostRecentEncounterOfType encounters = new MostRecentEncounterOfType();
-		EncounterType exposedEnc = Context.getEncounterService().getEncounterType(new Integer(properties.get("EXPOSED_ENCOUNTER_TYPE")));
-		encounters.setName("LastPMTCTEncounter");
-		encounters.setDescription("LastPMTCTEncounter");
-		encounters.addEncounterType(exposedEnc);
+//		MostRecentEncounterOfType encounters = new MostRecentEncounterOfType();
+//		EncounterType exposedEnc = Context.getEncounterService().getEncounterType(new Integer(properties.get("EXPOSED_ENCOUNTER_TYPE")));
+//		encounters.setName("LastPMTCTEncounter");
+//		encounters.setDescription("LastPMTCTEncounter");
+//		encounters.addEncounterType(exposedEnc);
+//		
+//		CustomCalculationBasedOnMultiplePatientDataDefinitions infantHivTestDue = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+//		infantHivTestDue.addPatientDataToBeEvaluated(encounters, new HashMap<String,Object>());
+//		infantHivTestDue.setCalculator(new PMTCTInfantDBSDue());
+//		infantHivTestDue.setName("infantTestDue");
+//		infantHivTestDue.setDescription("infantTestDue");
+//		dataSetDefinition.addColumn(infantHivTestDue, new HashMap<String,Object>());
 		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions infantHivTestDue = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		infantHivTestDue.addPatientDataToBeEvaluated(encounters, new HashMap<String,Object>());
-		infantHivTestDue.setCalculator(new PMTCTInfantDBSDue());
-		infantHivTestDue.setName("infantTestDue");
-		infantHivTestDue.setDescription("infantTestDue");
-		dataSetDefinition.addColumn(infantHivTestDue, new HashMap<String,Object>());
+//		AllDrugOrdersRestrictedByConceptSet allArtDrugs = new AllDrugOrdersRestrictedByConceptSet();
+//		allArtDrugs.setName("ArtDrugs");
+//		allArtDrugs.setDescription("ArtDrugs");
+//		allArtDrugs.setDrugConceptSetConcept(artDrugsSet);
+//		
+//		EvaluateDefinitionForOtherPersonData motherStartARV = new EvaluateDefinitionForOtherPersonData();
+//		motherStartARV.setPersonData(mother, new HashMap<String,Object>());
+//		motherStartARV.setDefinition(allArtDrugs, new HashMap<String,Object>());
+//		motherStartARV.setName("ArtDrugs");
+//		motherStartARV.setDescription("ArtDrugs");
+//		
+//		DateOfProgramEnrolment motherRegistration = new DateOfProgramEnrolment();
+//		Program pmtctProg = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
+//		motherRegistration.setName("motherRegistration");
+//		motherRegistration.setDescription("motherRegistration");
+//		motherRegistration.setProgramId(pmtctProg.getId());
+//		
+//		EvaluateDefinitionForOtherPersonData motherReg = new EvaluateDefinitionForOtherPersonData();
+//		motherReg.setPersonData(mother, new HashMap<String,Object>());
+//		motherReg.setDefinition(motherRegistration, new HashMap<String,Object>());
+//		motherReg.setName("motherRegistration");
+//		motherReg.setDescription("motherRegistration");
 		
-		AllDrugOrdersRestrictedByConceptSet allArtDrugs = new AllDrugOrdersRestrictedByConceptSet();
-		allArtDrugs.setName("ArtDrugs");
-		allArtDrugs.setDescription("ArtDrugs");
-		allArtDrugs.setDrugConceptSetConcept(artDrugsSet);
-		
-		EvaluateDefinitionForOtherPersonData motherStartARV = new EvaluateDefinitionForOtherPersonData();
-		motherStartARV.setPersonData(mother, new HashMap<String,Object>());
-		motherStartARV.setDefinition(allArtDrugs, new HashMap<String,Object>());
-		motherStartARV.setName("ArtDrugs");
-		motherStartARV.setDescription("ArtDrugs");
-		
-		DateOfProgramEnrolment motherRegistration = new DateOfProgramEnrolment();
-		Program pmtctProg = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
-		motherRegistration.setName("motherRegistration");
-		motherRegistration.setDescription("motherRegistration");
-		motherRegistration.setProgramId(pmtctProg.getId());
-		
-		EvaluateDefinitionForOtherPersonData motherReg = new EvaluateDefinitionForOtherPersonData();
-		motherReg.setPersonData(mother, new HashMap<String,Object>());
-		motherReg.setDefinition(motherRegistration, new HashMap<String,Object>());
-		motherReg.setName("motherRegistration");
-		motherReg.setDescription("motherRegistration");
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions motherStartArt = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		motherStartArt.setName("motherStartArt");
-		motherStartArt.setDescription("motherStartArt");
-		motherStartArt.addPatientDataToBeEvaluated(motherReg, new HashMap<String,Object>());
-		motherStartArt.addPatientDataToBeEvaluated(motherStartARV, new HashMap<String,Object>());
-		motherStartArt.setCalculator(new StartOfARTForThisPMTCT());
-		dataSetDefinition.addColumn(motherStartArt, new HashMap<String,Object>());
+//		CustomCalculationBasedOnMultiplePatientDataDefinitions motherStartArt = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+//		motherStartArt.setName("motherStartArt");
+//		motherStartArt.setDescription("motherStartArt");
+//		motherStartArt.addPatientDataToBeEvaluated(motherReg, new HashMap<String,Object>());
+//		motherStartArt.addPatientDataToBeEvaluated(motherStartARV, new HashMap<String,Object>());
+//		motherStartArt.setCalculator(new StartOfARTForThisPMTCT());
+//		dataSetDefinition.addColumn(motherStartArt, new HashMap<String,Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		mappings.put("state", "${state}");
-		mappings.put("date", "${date}");
+		//mappings.put("state", "${state}");
+		//mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}

@@ -11,6 +11,7 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
@@ -88,12 +89,6 @@ public class SetupPMTCTFormulaDistributionReport {
 		reportDefinition.setName("PMTCT Formula Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		Properties stateProperties = new Properties();
-		stateProperties.setProperty("Program", properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
-		stateProperties.setProperty("Workflow", properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
-		reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class, stateProperties));
-	//	reportDefinition.addParameter(new Parameter("state", "Feeding Group", ProgramWorkflowState.class));
-		reportDefinition.addParameter(new Parameter("date", "Week starting on", Date.class));
 		reportDefinition.setBaseCohortDefinition(h.cohortDefinition("FPDlocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);
@@ -108,17 +103,11 @@ public class SetupPMTCTFormulaDistributionReport {
 		// Create new dataset definition 
 		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
-		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
-		dataSetDefinition.addParameter(new Parameter("date", "Date", Date.class));
-		
-		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
-		feedingStatus.addParameter(new Parameter("states", "States", ProgramWorkflowState.class));
-		feedingStatus.setName("feeding state: Feeding state of patients");
-		dataSetDefinition.addFilter(feedingStatus, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
 		List<Program> programs = new ArrayList<Program>();
+		inPMTCTProgram.setOnOrAfter(new Date());
 		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtct != null)
 		{
@@ -127,36 +116,18 @@ public class SetupPMTCTFormulaDistributionReport {
 		inPMTCTProgram.setPrograms(programs);
 		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
 		
+		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
+		List<ProgramWorkflowState> formulaStates = new ArrayList<ProgramWorkflowState>();
+		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_ONE")))));
+		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_TWO")))));
+		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_THREE")))));
+		feedingStatus.setStates(formulaStates);
+		feedingStatus.setName("feeding state: Feeding state of patients");
+		feedingStatus.setOnDate(new Date());
+		dataSetDefinition.addFilter(feedingStatus,  new HashMap<String,Object>());
+		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
-		
-		DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
-		dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-		dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
-		dueThatWeek.setTimeModifier(TimeModifier.ANY);
-		dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
-		dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
-		dueThatWeek.setName("patients due that week");
-		dueThatWeek.setGroupingConcept(nextVisitConcept);
-		
-		DateObsCohortDefinition dueTwoWeek = new DateObsCohortDefinition();
-		dueTwoWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-		dueTwoWeek.setOperator2(RangeComparator.LESS_EQUAL);
-		dueTwoWeek.setTimeModifier(TimeModifier.ANY);
-		dueTwoWeek.addParameter(new Parameter("value1", "value1", Date.class));
-		dueTwoWeek.addParameter(new Parameter("value2", "value2", Date.class));
-		dueTwoWeek.setName("patients due that week");
-		dueTwoWeek.setGroupingConcept(nextVisitConcept);
-		
-		CompositionCohortDefinition formulaDue = new CompositionCohortDefinition();
-		formulaDue.setName("pmtct: formula distribution due");
-		formulaDue.addParameter(new Parameter("date", "Date", Date.class));
-		formulaDue.getSearches().put(
-		    "1",new Mapped(dueThatWeek, ParameterizableUtil.createParameterMappings("value1=${date},value2=${date+7d}")));
-		formulaDue.getSearches().put(
-		    "2",
-		    new Mapped(dueTwoWeek, ParameterizableUtil.createParameterMappings("value1=${date+14d},value2=${date+21d}")));
-		formulaDue.setCompositionString("1 OR 2");
-		dataSetDefinition.addFilter(formulaDue, ParameterizableUtil.createParameterMappings("date=${date}"));
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());
@@ -199,8 +170,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		dataSetDefinition.addColumn(birthdate, new HashMap<String,Object>());
 		
 		PatientAgeInMonths ageInMonths = new PatientAgeInMonths();
-		ageInMonths.addParameter(new Parameter("onDate", "onDate", ProgramWorkflowState.class));
-		dataSetDefinition.addColumn(ageInMonths, ParameterizableUtil.createParameterMappings("onDate=${date}"));
+		dataSetDefinition.addColumn(ageInMonths, new HashMap<String,Object>());
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
 		feedingGroup.setName("FeedingGroup");
@@ -229,8 +199,6 @@ public class SetupPMTCTFormulaDistributionReport {
 		//dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		mappings.put("state", "${state}");
-		mappings.put("date", "${date}");
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 		
@@ -274,5 +242,14 @@ public class SetupPMTCTFormulaDistributionReport {
 		
 		String nextVisitConcept = Context.getAdministrationService().getGlobalProperty("reports.pmtctNextVisitConcept");
 		properties.put("PMTCT_NEXT_VISIT_CONCEPT_ID", nextVisitConcept);
+		
+		String formula1 = Context.getAdministrationService().getGlobalProperty("reports.formulaStateOne");
+		properties.put("FORMULA_STATE_ONE", formula1);
+		
+		String formula2 = Context.getAdministrationService().getGlobalProperty("reports.formulaStateTwo");
+		properties.put("FORMULA_STATE_TWO", formula2);
+		
+		String formula3 = Context.getAdministrationService().getGlobalProperty("reports.formulaStateThree");
+		properties.put("FORMULA_STATE_THREE", formula3);
 	}	
 }
