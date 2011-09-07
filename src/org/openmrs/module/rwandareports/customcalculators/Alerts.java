@@ -47,7 +47,7 @@ public class Alerts implements CustomCalculation{
 				if(cd4.getDateOfObservation() != null)
 				{
 					Date dateCd4 = cd4.getDateOfObservation();
-					Date date = (Date)context.getParameterValue("date");
+					Date date = new Date();
 					
 					int diff = calculateMonthsDifference(date, dateCd4);
 					

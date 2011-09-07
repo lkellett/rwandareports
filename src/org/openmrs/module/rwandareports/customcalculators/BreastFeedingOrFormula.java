@@ -22,7 +22,7 @@ public class BreastFeedingOrFormula implements CustomCalculation{
 		PatientAttributeResult bOrF = new PatientAttributeResult(null, null);
 		bOrF.setValue("");
 		
-		Date date = (Date)context.getParameterValue("date");
+		//Date date = (Date)context.getParameterValue("date");
 		
 		for(PatientDataResult result: results)
 		{
@@ -31,7 +31,7 @@ public class BreastFeedingOrFormula implements CustomCalculation{
 				DateResult decisionDate = (DateResult)result;
 				
 				Calendar todaysDate = Calendar.getInstance();
-				todaysDate.setTime(date);
+				todaysDate.setTime(new Date());
 				if(decisionDate.getValue() != null)
 				{
 					Calendar decDate = Calendar.getInstance();
