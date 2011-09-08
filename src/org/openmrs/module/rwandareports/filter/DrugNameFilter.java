@@ -1,5 +1,6 @@
 package org.openmrs.module.rwandareports.filter;
 
+import org.openmrs.DrugOrder;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilter;
 
 public class DrugNameFilter implements ResultFilter {
@@ -7,7 +8,8 @@ public class DrugNameFilter implements ResultFilter {
 	private String finalDateFormat = null;
 	
 	public Object filter(Object value) {
-		String result = (String)value;
+		DrugOrder drugOrder = (DrugOrder)value;
+		String result = drugOrder.getDrug().getName();
 		
 		while(result.indexOf("(") > -1)
 		{
