@@ -42,6 +42,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPat
 import org.openmrs.module.rwandareports.customcalculators.HIVPediAlerts;
 import org.openmrs.module.rwandareports.customcalculators.NextCD4;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.InformedStateFilter;
 import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
@@ -292,7 +293,7 @@ public class SetupPediHIVConsultationSheet {
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);
 		artDrugs.setDateFormat("dd-MMM-yyyy");
-		artDrugs.setDrugFilter(new DrugNameFilter());
+		artDrugs.setDrugFilter(new DrugDosageFrequencyFilter());
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String,Object>());
 		
 		FirstDrugOrderStartedRestrictedByConceptSet startArt = new FirstDrugOrderStartedRestrictedByConceptSet();
