@@ -207,7 +207,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtctCombined);
-		feedingGroup.setPatienProgramWorkflow(pmtctCombined.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
+		feedingGroup.setPatienProgramWorkflow(pmtctCombined.getWorkflow(Integer.valueOf(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"))));
 		feedingGroup.setFilter(new BorFStateFilter());
 		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		

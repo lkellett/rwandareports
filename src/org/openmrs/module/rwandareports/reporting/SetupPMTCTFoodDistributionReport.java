@@ -122,7 +122,7 @@ public class SetupPMTCTFoodDistributionReport {
 		
 		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
 		List<ProgramWorkflowState> breastFeedingStates = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));                
+		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflow(Integer.valueOf(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"))); 
 		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_ONE")))));
 		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_TWO")))));
 		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_THREE")))));
@@ -180,7 +180,7 @@ public class SetupPMTCTFoodDistributionReport {
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtct);
-		feedingGroup.setPatienProgramWorkflow(pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
+		feedingGroup.setPatienProgramWorkflow(feedingStatusWorkflow);
 		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		
 		MostRecentObservation nextVisit = new MostRecentObservation();

@@ -118,7 +118,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		
 		InStateCohortDefinition feedingStatus = new InStateCohortDefinition();
 		List<ProgramWorkflowState> formulaStates = new ArrayList<ProgramWorkflowState>();
-		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW"));
+		ProgramWorkflow feedingStatusWorkflow = pmtct.getWorkflow(Integer.valueOf(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
 		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_ONE")))));
 		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_TWO")))));
 		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_THREE")))));
@@ -176,7 +176,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtct);
-		feedingGroup.setPatienProgramWorkflow(pmtct.getWorkflowByName(properties.get("PMTCT_FEEDING_STATUS_WORKFLOW")));
+		feedingGroup.setPatienProgramWorkflow(feedingStatusWorkflow);
 		dataSetDefinition.addColumn(feedingGroup, new HashMap<String,Object>());
 		
 		MostRecentObservation nextVisit = new MostRecentObservation();
