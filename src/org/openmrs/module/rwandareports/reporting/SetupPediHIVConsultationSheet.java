@@ -138,7 +138,7 @@ public class SetupPediHIVConsultationSheet {
 		InStateCohortDefinition hivGroup = new InStateCohortDefinition();
 		hivGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
 		hivGroup.setName("hiv group");
-		hivGroup.setOnDate(new Date());
+		hivGroup.setOnDate(null);
 		dataSetDefinition.addFilter(hivGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inHIVProgram = new InProgramCohortDefinition();
@@ -151,7 +151,7 @@ public class SetupPediHIVConsultationSheet {
 			programs.add(hiv);
 		}
 		inHIVProgram.setPrograms(programs);
-		dataSetDefinition.addFilter(inHIVProgram, new HashMap<String,Object>());
+//		dataSetDefinition.addFilter(inHIVProgram, new HashMap<String,Object>());
 		
 		PatientProperty givenName = new PatientProperty("givenName");
 		dataSetDefinition.addColumn(givenName, new HashMap<String,Object>());

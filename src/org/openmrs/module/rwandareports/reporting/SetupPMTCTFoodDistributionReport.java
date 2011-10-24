@@ -111,7 +111,7 @@ public class SetupPMTCTFoodDistributionReport {
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
 		List<Program> programs = new ArrayList<Program>();
-		inPMTCTProgram.setOnOrAfter(new Date());
+		inPMTCTProgram.setOnOrAfter(null);
 		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtct != null)
 		{
@@ -128,7 +128,7 @@ public class SetupPMTCTFoodDistributionReport {
 		breastFeedingStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("BREASTFEEDING_THREE")))));
 		feedingStatus.setStates(breastFeedingStates);
 		feedingStatus.setName("feeding state: Feeding state of patients");
-		feedingStatus.setOnDate(new Date());
+		feedingStatus.setOnDate(null);
 		dataSetDefinition.addFilter(feedingStatus,  new HashMap<String,Object>());
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));

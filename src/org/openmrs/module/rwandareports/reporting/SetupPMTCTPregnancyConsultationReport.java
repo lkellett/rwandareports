@@ -116,9 +116,9 @@ public class SetupPMTCTPregnancyConsultationReport {
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: In Program");
 		List<Program> programs = new ArrayList<Program>();
-		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
-		inPMTCTProgram.setOnOrAfter(new Date());
-		inPMTCTProgram.setOnDate(Calendar.getInstance().getTime());
+		Program pmtct = Context.getProgramWorkflowService().getProgram(Integer.parseInt(properties.get("PMTCT_PROGRAM")));
+		inPMTCTProgram.setOnOrAfter(null);
+		//inPMTCTProgram.setOnDate(Calendar.getInstance().getTime());
 		if(pmtct != null)
 		{
 			programs.add(pmtct);
@@ -238,7 +238,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
-		artDrugs.setOnDate(new Date());
+		artDrugs.setOnDate(null);
 		artDrugs.setName("Regimen");
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);

@@ -133,7 +133,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
-		inPMTCTProgram.setOnOrAfter(new Date());
+		inPMTCTProgram.setOnOrAfter(null);
 		List<Program> programs = new ArrayList<Program>();
 		Program pmtctCombined = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtctCombined != null)
@@ -203,7 +203,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(ageInMonths, new HashMap<String,Object>());
 		
 		StateOfPatient feedingGroup = new StateOfPatient();
-		feedingGroup.setOnDate(new Date());
+		feedingGroup.setOnDate(null);
 		feedingGroup.setName("FeedingGroup");
 		feedingGroup.setDescription("FeedingGroup");
 		feedingGroup.setPatientProgram(pmtctCombined);
@@ -322,7 +322,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
 		
 		CurrentOrdersRestrictedByConceptSet artDrugs = new CurrentOrdersRestrictedByConceptSet();
-		artDrugs.setOnDate(new Date());
+		artDrugs.setOnDate(null);
 		artDrugs.setName("Regimen");
 		artDrugs.setDescription("Regimen");
 		artDrugs.setDrugConceptSetConcept(artDrugsSet);

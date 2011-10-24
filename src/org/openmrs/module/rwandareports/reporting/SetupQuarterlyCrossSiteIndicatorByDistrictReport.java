@@ -240,7 +240,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		{
 			hivPrograms.add(pedi);
 		}
-		Program pmtct = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_PROGRAM"));
+		Program pmtct = Context.getProgramWorkflowService().getProgram(Integer.parseInt(properties.get("PMTCT_PROGRAM")));
 		if(pmtct != null)
 		{
 			hivPrograms.add(pmtct);

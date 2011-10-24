@@ -121,7 +121,7 @@ public class SetupPMTCTRegisterReport {
 			pmtctPrograms.add(pmtctCombined);
 		}
 		inPMTCTCombinedProgram.setPrograms(pmtctPrograms);
-		inPMTCTCombinedProgram.setOnOrBefore(new Date());
+		inPMTCTCombinedProgram.setOnOrBefore(null);
 		dataSetDefinition.addFilter(inPMTCTCombinedProgram);
 		
 		DateOfProgramEnrolment infantRegistration = new DateOfProgramEnrolment();

@@ -114,7 +114,7 @@ public class SetupAdultHIVConsultationSheet {
 		InStateCohortDefinition hivGroup = new InStateCohortDefinition();
 		hivGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
 		hivGroup.setName("hiv group");
-		hivGroup.setOnDate(new Date());
+		hivGroup.setOnDate(null);
 		dataSetDefinition.addFilter(hivGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inHIVProgram = new InProgramCohortDefinition();

@@ -115,7 +115,7 @@ public class SetupTBConsultationSheet {
 		InStateCohortDefinition tbGroup = new InStateCohortDefinition();
 		tbGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
 		tbGroup.setName("tb group");
-		tbGroup.setOnDate(new Date());
+		tbGroup.setOnDate(null);
 		dataSetDefinition.addFilter(tbGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
 		
 		InProgramCohortDefinition inTBProgram = new InProgramCohortDefinition();
