@@ -114,9 +114,10 @@ public class SetupTBConsultationSheet {
 		
 		InStateCohortDefinition tbGroup = new InStateCohortDefinition();
 		tbGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
+		tbGroup.addParameter(new Parameter("onDate", "onDate", Date.class));
 		tbGroup.setName("tb group");
-		tbGroup.setOnDate(null);
-		dataSetDefinition.addFilter(tbGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
+		//tbGroup.setOnOrAfter(null);
+		dataSetDefinition.addFilter(tbGroup, ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
 		
 		InProgramCohortDefinition inTBProgram = new InProgramCohortDefinition();
 		inTBProgram.setOnDate(Calendar.getInstance().getTime());

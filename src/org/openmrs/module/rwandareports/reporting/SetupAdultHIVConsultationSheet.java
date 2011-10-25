@@ -113,12 +113,13 @@ public class SetupAdultHIVConsultationSheet {
 		
 		InStateCohortDefinition hivGroup = new InStateCohortDefinition();
 		hivGroup.addParameter(new Parameter("states", "Group", ProgramWorkflowState.class));
+		hivGroup.addParameter(new Parameter("onDate", "onDate", Date.class));
 		hivGroup.setName("hiv group");
-		hivGroup.setOnDate(null);
-		dataSetDefinition.addFilter(hivGroup, ParameterizableUtil.createParameterMappings("states=${state}"));
+		//hivGroup.setOnOrAfter(null);
+		dataSetDefinition.addFilter(hivGroup, ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
 		
 		InProgramCohortDefinition inHIVProgram = new InProgramCohortDefinition();
-		inHIVProgram.setOnDate(Calendar.getInstance().getTime());
+		inHIVProgram.setOnOrAfter(Calendar.getInstance().getTime());
 		inHIVProgram.setName("adultHIV: In Program");
 		List<Program> programs = new ArrayList<Program>();
 		Program hiv = Context.getProgramWorkflowService().getProgram(Integer.parseInt(properties.get("ADULT_HIV_PROGRAM_ID")));

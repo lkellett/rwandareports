@@ -124,8 +124,8 @@ public class SetupPMTCTFormulaDistributionReport {
 		formulaStates.add(feedingStatusWorkflow.getState(Context.getConceptService().getConcept(Integer.parseInt(properties.get("FORMULA_STATE_THREE")))));
 		feedingStatus.setStates(formulaStates);
 		feedingStatus.setName("feeding state: Feeding state of patients");
-		feedingStatus.setOnDate(null);
-		dataSetDefinition.addFilter(feedingStatus,  new HashMap<String,Object>());
+		feedingStatus.addParameter(new Parameter("onDate", "onDate", Date.class));
+		dataSetDefinition.addFilter(feedingStatus,  ParameterizableUtil.createParameterMappings("onDate=${now}"));
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		

@@ -117,14 +117,14 @@ public class SetupPMTCTPregnancyConsultationReport {
 		inPMTCTProgram.setName("pmtct: In Program");
 		List<Program> programs = new ArrayList<Program>();
 		Program pmtct = Context.getProgramWorkflowService().getProgram(Integer.parseInt(properties.get("PMTCT_PROGRAM")));
-		inPMTCTProgram.setOnOrAfter(null);
+		inPMTCTProgram.addParameter(new Parameter("onDate", "onDate", Date.class));
 		//inPMTCTProgram.setOnDate(Calendar.getInstance().getTime());
 		if(pmtct != null)
 		{
 			programs.add(pmtct);
 		}
 		inPMTCTProgram.setPrograms(programs);
-		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
+		dataSetDefinition.addFilter(inPMTCTProgram, ParameterizableUtil.createParameterMappings("onDate=${now}"));
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 //		

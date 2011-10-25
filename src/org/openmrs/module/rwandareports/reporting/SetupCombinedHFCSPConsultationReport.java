@@ -133,7 +133,8 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		InProgramCohortDefinition inPMTCTProgram = new InProgramCohortDefinition();
 		inPMTCTProgram.setName("pmtct: Combined Clinic In Program");
-		inPMTCTProgram.setOnOrAfter(null);
+		inPMTCTProgram.addParameter(new Parameter("onDate", "onDate", Date.class));
+		//inPMTCTProgram.setOnOrAfter(null);
 		List<Program> programs = new ArrayList<Program>();
 		Program pmtctCombined = Context.getProgramWorkflowService().getProgramByName(properties.get("PMTCT_COMBINED_CLINIC_PROGRAM"));
 		if(pmtctCombined != null)
@@ -141,7 +142,7 @@ public class SetupCombinedHFCSPConsultationReport {
 			programs.add(pmtctCombined);
 		}
 		inPMTCTProgram.setPrograms(programs);
-		dataSetDefinition.addFilter(inPMTCTProgram, new HashMap<String,Object>());
+		dataSetDefinition.addFilter(inPMTCTProgram,  ParameterizableUtil.createParameterMappings("onDate=${now}"));
 		
 		Concept nextVisitConcept = Context.getConceptService().getConcept(Integer.valueOf(properties.get("PMTCT_NEXT_VISIT_CONCEPT_ID")));
 		
