@@ -16,6 +16,7 @@ public class LateVisitAndCD4ReportConstant {
 	public static final String RETURN_VISIT_DATE_UUID="3ce94df0-26fe-102b-80cb-0017a47871b2";   //5096
 	public static final String HEIGHT_UUID="3ce93cf2-26fe-102b-80cb-0017a47871b2";
 	public static final String WEIGHT_UUID="3ce93b62-26fe-102b-80cb-0017a47871b2";
+	public static final String VIRAL_LOAD_UUID="3cd4a882-26fe-102b-80cb-0017a47871b2";
 //Others ids
 	public static final int RELATIONSHIP_TYPE_ID=1;
 	
