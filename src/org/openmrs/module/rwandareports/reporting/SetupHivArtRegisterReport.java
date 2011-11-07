@@ -8,45 +8,64 @@ import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Location;
-import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
-import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AgeAtDateOfOtherDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfWorkflowStateChange;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedAfterDateRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueBeforeDateOfOtherDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
-import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
+import org.openmrs.module.rwandareports.util.Cohorts;
+import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
+import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
 
 public class SetupHivArtRegisterReport {
 	
-	Helper h = new Helper();
+	private Helper h = new Helper();
 	
-	boolean pedi = false;
+	private boolean pedi = false;
 	
-	private HashMap<String, String> properties;
+	private GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 	
-	public SetupHivArtRegisterReport(Helper helper, boolean pedi) {
-		h = helper;
+	//private HashMap<String, String> properties;
+	//properties
+	private Program adultHIVProgram;
+	
+	private Program pediHIVProgram;
+	
+	private List<ProgramWorkflowState> pediOnART = new ArrayList<ProgramWorkflowState>();
+	
+	private List<ProgramWorkflowState> adultOnART = new ArrayList<ProgramWorkflowState>();
+	
+	private Concept onArtConcept;
+	
+	private Concept weight;
+	
+	private Concept stage;
+	
+	private Concept cd4;
+	
+	private Concept cd4Percentage;
+	
+	private Concept pregDeliveryDate;
+	
+	private Concept tbTest;
+	
+	private Concept ctx;
+	
+	private Concept tbTreatmentDrugs;
+	
+	private Concept firstLineArt;
+	
+	private Concept secondLineArt;
+	
+	private Concept art;
+	
+	public SetupHivArtRegisterReport(boolean pedi) {
 		
 		this.pedi = pedi;
 	}
@@ -55,29 +74,27 @@ public class SetupHivArtRegisterReport {
 		
 		delete();
 		
-		setUpGlobalProperties();
+		setUpProperties();
 		
-		createCohortDefinitions();
 		ReportDefinition rd = createReportDefinition();
-		if(pedi)
-		{
+		if (pedi) {
 			//h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "PediHIVArtTemplate.xls_", null);
-			ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "RegisterTemplate_small.xls", "PediHIVArtTemplate.xls_", null);
+			ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "RegisterTemplate_small.xls",
+			    "PediHIVArtTemplate.xls_", null);
 			
 			Properties props = new Properties();
 			props.put("repeatingSections", "sheet:1,row:7,dataset:dataSet");
-		
+			
 			design.setProperties(props);
 			h.saveReportDesign(design);
-		}
-		else
-		{
+		} else {
 			//h.createRowPerPatientXlsOverview(rd, "RegisterTemplate_small.xls", "HIVArtTemplate.xls_", null);
-			ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "RegisterTemplate_small.xls", "HIVArtTemplate.xls_", null);
+			ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "RegisterTemplate_small.xls",
+			    "HIVArtTemplate.xls_", null);
 			
 			Properties props = new Properties();
 			props.put("repeatingSections", "sheet:1,row:7,dataset:dataSet");
-		
+			
 			design.setProperties(props);
 			h.saveReportDesign(design);
 		}
@@ -86,379 +103,154 @@ public class SetupHivArtRegisterReport {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if(pedi)
-			{
+			if (pedi) {
 				if ("PediHIVArtTemplate.xls_".equals(rd.getName())) {
 					rs.purgeReportDesign(rd);
 				}
-			}
-			else
-			{
+			} else {
 				if ("HIVArtTemplate.xls_".equals(rd.getName())) {
 					rs.purgeReportDesign(rd);
 				}
 			}
 		}
-		if(pedi)
-		{
-			h.purgeDefinition(ReportDefinition.class, "Pedi HIV ART Register");
-		}
-		else
-		{
-			h.purgeDefinition(ReportDefinition.class, "Adult HIV ART Register");
+		if (pedi) {
+			h.purgeReportDefinition("Pedi HIV ART Register");
+		} else {
+			h.purgeReportDefinition("Adult HIV ART Register");
 		}
 		
-		if(pedi)
-		{
-			h.purgeDefinition(HIVARTRegisterDataSetDefinition2.class, "Pedi HIV ART Register Data Set");
-		}
-		else
-		{
-			h.purgeDefinition(HIVARTRegisterDataSetDefinition2.class, "Adult HIV ART Register Data Set");
-		}
-		
-		if(pedi)
-		{
-			h.purgeDefinition(CohortDefinition.class, "PediRegisterLocation: Patients at location");
-		}
-		else
-		{
-			h.purgeDefinition(CohortDefinition.class, "HIVRegisterLocation: Patients at location");
-		}
 	}
-	
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		if(pedi)
-		{
+		if (pedi) {
 			reportDefinition.setName("Pedi HIV ART Register");
-		}
-		else
-		{
+		} else {
 			reportDefinition.setName("Adult HIV ART Register");
 		}
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
-		if(pedi)
-		{
-			reportDefinition.setBaseCohortDefinition(h.cohortDefinition("PediRegisterLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
-		}
-		else
-		{
-			reportDefinition.setBaseCohortDefinition(h.cohortDefinition("HIVRegisterLocation: Patients at location"), ParameterizableUtil.createParameterMappings("location=${location}"));
+		if (pedi) {
+			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+			    ParameterizableUtil.createParameterMappings("location=${location}"));
+		} else {
+			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+			    ParameterizableUtil.createParameterMappings("location=${location}"));
 		}
 		
 		createDataSetDefinition(reportDefinition);
 		
-		h.replaceReportDefinition(reportDefinition);
+		h.saveReportDefinition(reportDefinition);
 		
 		return reportDefinition;
 	}
 	
-	private void createDataSetDefinition(ReportDefinition reportDefinition)
-	{
+	private void createDataSetDefinition(ReportDefinition reportDefinition) {
 		// Create new dataset definition 
 		HIVARTRegisterDataSetDefinition2 dataSetDefinition = new HIVARTRegisterDataSetDefinition2();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		
-		if(pedi)
-		{
-			InProgramCohortDefinition inPediHIVProgram = new InProgramCohortDefinition();
-			inPediHIVProgram.setName("hiv: In Pedi HIV Programs");
-			List<Program> hivPrograms = new ArrayList<Program>();
-			Program pedi = Context.getProgramWorkflowService().getProgramByName(properties.get("PEDI_HIV_PROGRAM"));
-			if(pedi != null)
-			{
-				hivPrograms.add(pedi);
-			}
-			inPediHIVProgram.setPrograms(hivPrograms);
-			dataSetDefinition.addFilter(inPediHIVProgram);
-		}
-		else
-		{
-		
-			InProgramCohortDefinition inAdultHIVProgram = new InProgramCohortDefinition();
-			inAdultHIVProgram.setName("hiv: In Adult HIV Programs");
-			List<Program> hivPrograms = new ArrayList<Program>();
-			Program adult = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
-			if(adult != null)
-			{
-				hivPrograms.add(adult);
-			}
-			inAdultHIVProgram.setPrograms(hivPrograms);
-			dataSetDefinition.addFilter(inAdultHIVProgram);
+		if (pedi) {
+			dataSetDefinition.addFilter(Cohorts.createInProgram("hiv: In Pedi HIV Programs", pediHIVProgram));
+		} else {
+			dataSetDefinition.addFilter(Cohorts.createInProgram("hiv: In Adult HIV Programs", adultHIVProgram));
 		}
 		
-//		PersonAttributeCohortDefinition location = new PersonAttributeCohortDefinition();
-//		PersonAttributeType healthCenterType = Context.getPersonService().getPersonAttributeTypeByName("Health Center");
-//		location.setAttributeType(healthCenterType);
-//		
-//		List<Location> locations = new ArrayList<Location>();
-//		Location currentLocationObj = Context.getLocationService().getLocation(properties.get("CURRENT_LOCATION"));
-//		locations.add(currentLocationObj);
-//		location.setValueLocations(locations);
-//		dataSetDefinition.addFilter(location);
-		
-		InStateCohortDefinition onARTCohort = new InStateCohortDefinition();
-		List<ProgramWorkflowState> states = new ArrayList<ProgramWorkflowState>();
-		Program hiv = Context.getProgramWorkflowService().getProgramByName(properties.get("HIV_PROGRAM"));
-		Program pediHiv = Context.getProgramWorkflowService().getProgramByName("PEDIATRIC HIV PROGRAM");
-		
-		if(hiv != null)
-		{
-			ProgramWorkflow txStatus = hiv.getWorkflowByName(properties.get("HIV_WORKFLOW_STATUS"));
-			if(txStatus != null)
-			{
-				ProgramWorkflowState onART = txStatus.getState(properties.get("HIV_ON_ART_STATE"));
-				if(onART != null)
-				{
-					states.add(onART);
-				}
-			}
-		}
-		if(pediHiv != null)
-		{
-			ProgramWorkflow pediTxStatus = pediHiv.getWorkflowByName("TX STATUS");
-			if(pediTxStatus != null)
-			{
-				ProgramWorkflowState onART = pediTxStatus.getState("ON ANTIRETROVIRALS");
-				if(onART != null)
-				{
-					states.add(onART);
-				}
-			}
+		if (pedi) {
+			dataSetDefinition.addFilter(Cohorts.createInCurrentState("hiv: In Pedi HIV OnART", pediOnART));
+		} else {
+			dataSetDefinition.addFilter(Cohorts.createInCurrentState("hiv: In Adult HIV OnART", adultOnART));
 		}
 		
-		
-		if(states.size() > 0)
-		{
-			onARTCohort.setStates(states);
-			dataSetDefinition.addFilter(onARTCohort);
-		}
-		
-		DateOfWorkflowStateChange startDate = new DateOfWorkflowStateChange();
-		Concept artConcept = Context.getConceptService().getConcept(new Integer(1577));
-		startDate.setConcept(artConcept);
-		startDate.setName("Commencement of ART");
-		startDate.setDescription("Commencement of ART");
+		DateOfWorkflowStateChange startDate = RowPerPatientColumns.getDateOfWorkflowStateChange("Commencement of ART",
+		    onArtConcept);
 		dataSetDefinition.addColumn(startDate);
 		
-		FirstDrugOrderStartedRestrictedByConceptSet startDateDrugs = new FirstDrugOrderStartedRestrictedByConceptSet();
-		startDateDrugs.setName("Start ART Regimen");
-		startDateDrugs.setDescription("Start ART Regimen");
-		Concept artDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_ART_DRUGS_CONCEPT")));
-		startDateDrugs.setDrugConceptSetConcept(artDrugsSet);
-		dataSetDefinition.addColumn(startDateDrugs);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getDrugOrderForStartOfART("Start ART Regimen"));
 		
-		PatientIdentifierType imbType = Context.getPatientService().getPatientIdentifierTypeByName("IMB ID");
-		PatientIdentifier imbId = new PatientIdentifier(imbType);
-		dataSetDefinition.addColumn(imbId);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getIMBId("IMB ID"));
 		
-		PatientIdentifierType tracNetType = Context.getPatientService().getPatientIdentifierTypeByName("TRACnet ID");
-		PatientIdentifier tracNetId = new PatientIdentifier(tracNetType);
-		tracNetId.setName("TracNetID");
-		tracNetId.setDescription("TracNetId");
-		dataSetDefinition.addColumn(tracNetId);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getTracnetId("TracNetID"));
 		
-		PatientProperty givenName = new PatientProperty("givenName");
-		dataSetDefinition.addColumn(givenName);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"));
 		
-		PatientProperty familyName = new PatientProperty("familyName");
-		dataSetDefinition.addColumn(familyName);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"));
 		
-		PatientProperty gender = new PatientProperty("gender");
-		dataSetDefinition.addColumn(gender);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("gender"));
 		
-		PatientProperty birthdate = new PatientProperty("birthdate");
-		dataSetDefinition.addColumn(birthdate);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getDateOfBirth("birthdate", null, null));
 		
-		AgeAtDateOfOtherDefinition ageAtStart = new AgeAtDateOfOtherDefinition();
-		ageAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		dataSetDefinition.addColumn(ageAtStart);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAgeAtDateOfOtherDefinition("Age", startDate));
 		
-		ObsValueAfterDateOfOtherDefinition weightAtStart = new ObsValueAfterDateOfOtherDefinition();
-		Concept weight = Context.getConceptService().getConcept(new Integer(properties.get("WEIGHT_CONCEPT")));
-		weightAtStart.setConcept(weight);
-		weightAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		dataSetDefinition.addColumn(weightAtStart);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("WEIGHT (KG)", weight,
+		    startDate, null));
 		
-		ObsValueAfterDateOfOtherDefinition stageAtStart = new ObsValueAfterDateOfOtherDefinition();
-		Concept stage = Context.getConceptService().getConcept(new Integer(properties.get("STAGE_CONCEPT")));
-		stageAtStart.setConcept(stage);
-		stageAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		stageAtStart.setName("Initial stage");
-		stageAtStart.setDescription("Initial stage");
-		dataSetDefinition.addColumn(stageAtStart);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("Initial stage", stage,
+		    startDate, null));
 		
-		ObsValueBeforeDateOfOtherDefinition cd4CountAtStartBefore = new ObsValueBeforeDateOfOtherDefinition();
-		Concept cd4 = Context.getConceptService().getConcept(new Integer(properties.get("CD4_CONCEPT")));
-		cd4CountAtStartBefore.setConcept(cd4);
-		cd4CountAtStartBefore.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		cd4CountAtStartBefore.setName("Initial CD4 count");
-		cd4CountAtStartBefore.setDescription("Initial CD4 count");
+		List<PatientData> initialCD4 = new ArrayList<PatientData>();
+		initialCD4.add(RowPerPatientColumns
+		        .getObsValueBeforeDateOfOtherDefinition("Initial CD4 count", cd4, startDate, null));
+		initialCD4
+		        .add(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("Initial CD4 count", cd4, startDate, null));
 		
-		ObsValueAfterDateOfOtherDefinition cd4CountAtStartAfter = new ObsValueAfterDateOfOtherDefinition();
-		cd4CountAtStartAfter.setConcept(cd4);
-		cd4CountAtStartAfter.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		cd4CountAtStartAfter.setName("Initial CD4 count");
-		cd4CountAtStartAfter.setDescription("Initial CD4 count");
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMultiplePatientDataDefinitions("Initial CD4 count", initialCD4));
 		
-		MultiplePatientDataDefinitions cd4CountAtStart = new MultiplePatientDataDefinitions();
-		cd4CountAtStart.setName("Initial CD4 count");
-		cd4CountAtStart.setDescription("Initial CD4 count");
-		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartBefore, new HashMap<String,Object>());
-		cd4CountAtStart.addPatientDataDefinition(cd4CountAtStartAfter, new HashMap<String,Object>());
-		dataSetDefinition.addColumn(cd4CountAtStart);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueBeforeDateOfOtherDefinition("CD4 percentage",
+		    cd4Percentage, startDate, null));
 		
-		ObsValueBeforeDateOfOtherDefinition cd4PercentAtStart = new ObsValueBeforeDateOfOtherDefinition();
-		Concept cd4percentage = Context.getConceptService().getConcept(new Integer(properties.get("CD4_PERCENTAGE_CONCEPT")));
-		cd4PercentAtStart.setConcept(cd4percentage);
-		cd4PercentAtStart.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		dataSetDefinition.addColumn(cd4PercentAtStart);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllDrugOrdersRestrictedByConcept("CTX treatment", ctx));
 		
-		AllDrugOrdersRestrictedByConcept ctx = new AllDrugOrdersRestrictedByConcept();
-		ctx.setName("CTX treatment");
-		ctx.setDescription("CTX treatment");
-		Concept ctxConcept = Context.getConceptService().getConcept(new Integer(properties.get("CTX_TREATMENT_CONCEPT")));
-		ctx.setConcept(ctxConcept);
-		dataSetDefinition.addColumn(ctx);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllDrugOrdersRestrictedByConceptSet("TB Treatment",
+		    tbTreatmentDrugs));
 		
-		AllDrugOrdersRestrictedByConcept tbTreatment = new AllDrugOrdersRestrictedByConcept();
-		tbTreatment.setName("TB Treatment");
-		tbTreatment.setDescription("TB Treatment");
-		Concept tbDrugConcept = Context.getConceptService().getConcept(new Integer(properties.get("TB_TREATMENT_CONCEPT")));
-		tbTreatment.setConcept(tbDrugConcept);
-		dataSetDefinition.addColumn(tbTreatment);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllObservationValues("Pregnancy", pregDeliveryDate, null, null,
+		    null));
 		
-		AllObservationValues deliveryDate = new AllObservationValues();
-		Concept delivery = Context.getConceptService().getConcept(new Integer(properties.get("PREGNANCY_DELIVERY_DATE_CONCEPT")));
-		deliveryDate.setConcept(delivery);
-		dataSetDefinition.addColumn(deliveryDate);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getDrugOrderForStartOfARTAfterDate("Initial Regimen", startDate));
 		
-		FirstDrugOrderStartedAfterDateRestrictedByConceptSet artDrugsInitial = new FirstDrugOrderStartedAfterDateRestrictedByConceptSet();
-		artDrugsInitial.setName("Initial Regimen");
-		artDrugsInitial.setDescription("Initial Regimen");
-		artDrugsInitial.setDrugConceptSetConcept(artDrugsSet);
-		artDrugsInitial.setDateOfPatientData(startDate, new HashMap<String,Object>());
-		dataSetDefinition.addColumn(artDrugsInitial);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllDrugOrdersRestrictedByConceptSet("First Line Changes",
+		    firstLineArt));
 		
-		AllDrugOrdersRestrictedByConceptSet firstLineChanges = new AllDrugOrdersRestrictedByConceptSet();
-		firstLineChanges.setName("First Line Changes");
-		firstLineChanges.setDescription("First Line Changes");
-		Concept firstLineDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_FIRST_LINE_ART_DRUGS_CONCEPT")));
-		firstLineChanges.setDrugConceptSetConcept(firstLineDrugsSet);
-		dataSetDefinition.addColumn(firstLineChanges);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllDrugOrdersRestrictedByConceptSet("Second Line Changes",
+		    secondLineArt));
 		
-		AllDrugOrdersRestrictedByConceptSet secondLineChanges = new AllDrugOrdersRestrictedByConceptSet();
-		secondLineChanges.setName("Second Line Changes");
-		secondLineChanges.setDescription("Second Line Changes");
-		Concept secondLineDrugsSet = Context.getConceptService().getConcept(new Integer(properties.get("ALL_SECOND_LINE_ART_DRUGS_CONCEPT")));
-		secondLineChanges.setDrugConceptSetConcept(secondLineDrugsSet);
-		dataSetDefinition.addColumn(secondLineChanges);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllDrugOrdersRestrictedByConceptSet("ART Drugs", art));
 		
-		AllDrugOrdersRestrictedByConceptSet artDrugs = new AllDrugOrdersRestrictedByConceptSet();
-		artDrugs.setName("ART Drugs");
-		artDrugs.setDescription("ART Drugs");
-		artDrugs.setDrugConceptSetConcept(artDrugsSet);
-		dataSetDefinition.addColumn(artDrugs);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllObservationValues("CD", cd4, null, null, null));
 		
-		AllObservationValues cd4Ongoing = new AllObservationValues();
-		cd4Ongoing.setConcept(cd4);
-		dataSetDefinition.addColumn(cd4Ongoing);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllObservationValues("Stage", stage, null, null, null));
 		
-		AllObservationValues whoStage = new AllObservationValues();
-		whoStage.setConcept(stage);
-		dataSetDefinition.addColumn(whoStage);
-		
-		AllObservationValues tbStatus = new AllObservationValues();
-		Concept tb = Context.getConceptService().getConcept(new Integer(properties.get("TB_TEST_CONCEPT")));
-		tbStatus.setConcept(tb);
-		dataSetDefinition.addColumn(tbStatus);
-		
-		//dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
+		dataSetDefinition.addColumn(RowPerPatientColumns.getAllObservationValues("TB", tbTest, null, null, null));
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
-		//mappings.put("location", "${location}");
+		mappings.put("onDate", "${now}");
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
-		
-		//h.replaceDataSetDefinition(dataSetDefinition);
 	}
 	
-	
-	
-	private void createCohortDefinitions() {
+	private void setUpProperties() {
+		adultHIVProgram = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
+		pediHIVProgram = gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		
-		SqlCohortDefinition location = new SqlCohortDefinition();
-		location
-		        .setQuery("select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location");
-		if(pedi)
-		{
-			location.setName("PediRegisterLocation: Patients at location");
-		}
-		else
-		{
-			location.setName("HIVRegisterLocation: Patients at location");
-		}
-		location.addParameter(new Parameter("location", "location", Location.class));
-		h.replaceCohortDefinition(location);
+		adultOnART.add(gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
+		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM));
+		pediOnART.add(gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
+		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM));
 		
-	}
-	
-	
-	
-	private void setUpGlobalProperties()
-	{
-		properties = new HashMap<String, String>();
+		onArtConcept = gp.getConcept(GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT);
+		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
+		stage = gp.getConcept(GlobalPropertiesManagement.STAGE_CONCEPT);
+		cd4 = gp.getConcept(GlobalPropertiesManagement.CD4_TEST);
+		cd4Percentage = gp.getConcept(GlobalPropertiesManagement.CD4_PERCENTAGE_TEST);
+		pregDeliveryDate = gp.getConcept(GlobalPropertiesManagement.PREGNANCY_DELIVERY_DATE);
+		tbTest = gp.getConcept(GlobalPropertiesManagement.TB_TEST_CONCEPT);
 		
-		String hivProgram = Context.getAdministrationService().getGlobalProperty("reports.hivprogramname");
-		properties.put("HIV_PROGRAM", hivProgram);
-		
-		String pediHivProgram = Context.getAdministrationService().getGlobalProperty("reports.pedihivprogramname");
-		properties.put("PEDI_HIV_PROGRAM", pediHivProgram);
-		
-		String currentLocation = Context.getAdministrationService().getGlobalProperty("reports.currentlocation");
-		properties.put("CURRENT_LOCATION", currentLocation);
-		
-		String workflowStatus = Context.getAdministrationService().getGlobalProperty("reports.hivworkflowstatus");
-		properties.put("HIV_WORKFLOW_STATUS", workflowStatus);
-		
-		String onARTState = Context.getAdministrationService().getGlobalProperty("reports.hivonartstate");
-		properties.put("HIV_ON_ART_STATE", onARTState);
-		
-		String allARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allArtDrugsConceptSet");
-		properties.put("ALL_ART_DRUGS_CONCEPT", allARTDrugsConcept);
-		
-		String weightConcept = Context.getAdministrationService().getGlobalProperty("reports.weightConcept");
-		properties.put("WEIGHT_CONCEPT", weightConcept);
-		
-		String stageConcept = Context.getAdministrationService().getGlobalProperty("reports.stageConcept");
-		properties.put("STAGE_CONCEPT", stageConcept);
-		
-		String cd4Concept = Context.getAdministrationService().getGlobalProperty("reports.cd4Concept");
-		properties.put("CD4_CONCEPT", cd4Concept);
-		
-		String cd4PercentageConcept = Context.getAdministrationService().getGlobalProperty("reports.cd4PercentageConcept");
-		properties.put("CD4_PERCENTAGE_CONCEPT", cd4PercentageConcept);
-		
-		String ctxTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.ctxTreatmentConcept");
-		properties.put("CTX_TREATMENT_CONCEPT", ctxTreatmentConcept);
-		
-		String tbTreatmentConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTreatmentConcept");
-		properties.put("TB_TREATMENT_CONCEPT", tbTreatmentConcept);
-		
-		String pregnancyDeliveryDateConcept = Context.getAdministrationService().getGlobalProperty("reports.pregnancyDeliveryDateConcept");
-		properties.put("PREGNANCY_DELIVERY_DATE_CONCEPT", pregnancyDeliveryDateConcept);
-		
-		String allFirstLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allFirstLineArtDrugsConceptSet");
-		properties.put("ALL_FIRST_LINE_ART_DRUGS_CONCEPT", allFirstLineARTDrugsConcept);
-		
-		String allSecondLineARTDrugsConcept = Context.getAdministrationService().getGlobalProperty("reports.allSecondLineArtDrugsConceptSet");
-		properties.put("ALL_SECOND_LINE_ART_DRUGS_CONCEPT", allSecondLineARTDrugsConcept);
-		
-		String tbTestConcept = Context.getAdministrationService().getGlobalProperty("reports.tbTestConcept");
-		properties.put("TB_TEST_CONCEPT", tbTestConcept);
+		ctx = gp.getConcept(GlobalPropertiesManagement.CTX);
+		tbTreatmentDrugs = gp.getConcept(GlobalPropertiesManagement.TB_TREATMENT_DRUGS);
+		firstLineArt = gp.getConcept(GlobalPropertiesManagement.ART_FIRST_LINE_DRUG_SET);
+		secondLineArt = gp.getConcept(GlobalPropertiesManagement.ART_SECOND_LINE_DRUG_SET);
+		art = gp.getConcept(GlobalPropertiesManagement.ART_DRUGS_SET);
 	}
 	
 }

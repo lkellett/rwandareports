@@ -64,24 +64,12 @@ $(document).ready(function(){
 <td colspan="2"><center>Action</center></td>
 </tr>
 <tr>
-<td rowspan="3" class="tabletd">PIH Reports</td>
+<td rowspan="1" class="tabletd">PIH Reports</td>
 <td>PIH Quarterly Cross Site Indicator Report	
 </td>
 <td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossSiteIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossSiteIndicator.form" onclick=msgrem(this)>Remove</a></td>
-</tr>
-<tr>
-<td>PIH Quarterly Cross by District Indicator Report</td>
-<td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossDistrictIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossDistrictIndicator.form" onclick=msgrem(this)>Remove</a></td>
-</tr>
-<tr>
-<td>PIH Quarterly Cross for individual Site Indicator Report</td>
-<td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossRegionIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossRegionIndicator.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Registers</td>
@@ -170,30 +158,18 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_rwandaPrimaryCareReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">Heart Failure</td>
+<td rowspan="1" class="tabletd">Heart Failure</td>
 <td>Heart Failure Report</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td>Heart Failure Report for all sites</td>
-<td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_heartFailureReportAllSites.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReportAllSites.form" onclick=msgrem(this)>Remove</a></td>	
-</tr>
-<tr>
-<td rowspan="3" class="tabletd">Data Quality</td>
+<td rowspan="2" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4Report.form" onclick=msgrem(this)>Remove</a></td>	
-</tr>
-<tr>
-<td>Missing CD4 Report for all sites</td>
-<td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4AllSiteReport.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4AllSiteReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td>Data Quality per site</td>
