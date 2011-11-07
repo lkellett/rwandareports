@@ -238,7 +238,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		newInHIVUnder15.getSearches().put(
 		    "2",
 		    new Mapped(inAnyHIVAfterStartDate, ParameterizableUtil
-		            .createParameterMappings("onOrBefore=${endDate},onOrAfer=${startDate}")));
+		            .createParameterMappings("onOrBefore=${endDate},onOrAfter=${startDate}")));
 		newInHIVUnder15.getSearches().put("3",
 		    new Mapped(inAnyHIVProgram, ParameterizableUtil.createParameterMappings("onOrBefore=${startDate-1d}")));
 		newInHIVUnder15.setCompositionString("NOT 1 AND 2 AND NOT 3");
@@ -252,7 +252,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		newInHIVOver15.getSearches().put(
 		    "2",
 		    new Mapped(inAnyHIVAfterStartDate, ParameterizableUtil
-		            .createParameterMappings("onOrBefore=${endDate},onOrAfer=${startDate}")));
+		            .createParameterMappings("onOrBefore=${endDate},onOrAfter=${startDate}")));
 		newInHIVOver15.getSearches().put("3",
 		    new Mapped(inAnyHIVProgram, ParameterizableUtil.createParameterMappings("onOrBefore=${startDate-1d}")));
 		newInHIVOver15.setCompositionString("1 AND 2 AND NOT 3");

@@ -73,7 +73,8 @@ public class SetupAdultHIVConsultationSheet {
 		
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", hivProgram.getName());
-		stateProperties.setProperty("Workflow", GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW);
+		stateProperties.setProperty("Workflow", Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW));
+		
 		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
@@ -93,8 +94,8 @@ public class SetupAdultHIVConsultationSheet {
 		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
 		
 		//Add Filters
-		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "state"),
-		    ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
+		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "states"),
+		    ParameterizableUtil.createParameterMappings("statesx=${state},onDate=${now}"));
 		
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("adultHIV: In Program", hivProgram),
 		    ParameterizableUtil.createParameterMappings("onDate=${now}"));

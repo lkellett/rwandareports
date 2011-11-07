@@ -115,7 +115,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		dataSetDefinition.addColumn(
 		    RowPerPatientColumns.getStateOfPatient("FeedingGroup", pmtctCombined, feedingState, new BorFStateFilter()),
-		    ParameterizableUtil.createParameterMappings("onDate=${now}"));
+		    new HashMap<String, Object>());
 		
 		DateOfNextTestDueFromBirth firstDbs = new DateOfNextTestDueFromBirth();
 		firstDbs.setTimeUnit(Calendar.WEEK_OF_YEAR);

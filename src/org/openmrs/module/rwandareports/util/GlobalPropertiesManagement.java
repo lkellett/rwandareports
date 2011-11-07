@@ -396,6 +396,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String COUNSELLING_GROUP_WORKFLOW = "reports.hivworkflowstatuscounselling";
 	
+	public final static String TB_TREATMENT_GROUP_WORKFLOW = "reports.tbworkflowgroup";
+	
 	//ProgramWorkflowState
 	public final static String ON_ANTIRETROVIRALS_STATE = "reports.hivonartstate";
 	

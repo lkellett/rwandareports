@@ -7,7 +7,6 @@ import java.util.Properties;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Program;
-import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -36,8 +35,6 @@ public class SetupTBConsultationSheet {
 	
 	//Properties
 	private Program tbProgram;
-	
-	private ProgramWorkflow treatmentGroup;
 	
 	private EncounterType flowsheetAdult;
 	
@@ -77,7 +74,7 @@ public class SetupTBConsultationSheet {
 		//so the user is only presented with the treatment group options
 		Properties stateProperties = new Properties();
 		stateProperties.setProperty("Program", tbProgram.getName());
-		stateProperties.setProperty("Workflow", GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW);
+		stateProperties.setProperty("Workflow", Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.TB_TREATMENT_GROUP_WORKFLOW));
 		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
@@ -96,7 +93,7 @@ public class SetupTBConsultationSheet {
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
 		
-		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "state"),
+		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "states"),
 		    ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
 		
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("adultTB: In Program", tbProgram),
@@ -165,9 +162,6 @@ public class SetupTBConsultationSheet {
 	
 	private void setUpProperties() {
 		tbProgram = gp.getProgram(GlobalPropertiesManagement.TB_PROGRAM);
-		
-		treatmentGroup = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW,
-		    GlobalPropertiesManagement.TB_PROGRAM);
 		
 		flowsheetAdult = gp.getEncounterType(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER);
 	}

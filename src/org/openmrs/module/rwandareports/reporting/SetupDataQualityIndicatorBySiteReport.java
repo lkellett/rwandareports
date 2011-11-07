@@ -3,6 +3,7 @@ package org.openmrs.module.rwandareports.reporting;
 import java.util.Date;
 
 import org.openmrs.Location;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -60,7 +61,7 @@ public class SetupDataQualityIndicatorBySiteReport {
 		
 		SqlCohortDefinition multEncounters = new SqlCohortDefinition();
 		String multEncountersSql = "select patient_id from encounter where voided = 0  and encounter_datetime > :startDate and encounter_datetime < :endDate and encounter_type in (";
-		multEncountersSql = multEncountersSql + GlobalPropertiesManagement.CLINICAL_ENCOUNTER_TYPES_EXC_LAB_TEST;
+		multEncountersSql = multEncountersSql + Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.CLINICAL_ENCOUNTER_TYPES_EXC_LAB_TEST);
 		multEncountersSql = multEncountersSql
 		        + ") group by patient_id, encounter_datetime, encounter_type having count(patient_id) > 1";
 		

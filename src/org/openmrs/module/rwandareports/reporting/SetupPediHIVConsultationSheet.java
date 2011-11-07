@@ -103,8 +103,8 @@ public class SetupPediHIVConsultationSheet {
 		//This is waiting on changes to the reporting framework to allow for filtering of the state parameter
 		//so the user is only presented with the treatment group options
 		Properties stateProperties = new Properties();
-		stateProperties.setProperty("Program", GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
-		stateProperties.setProperty("Workflow", GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW);
+		stateProperties.setProperty("Program", pediProgram.getName());
+		stateProperties.setProperty("Workflow", Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW));
 		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
