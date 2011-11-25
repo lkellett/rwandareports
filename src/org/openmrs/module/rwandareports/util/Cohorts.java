@@ -18,6 +18,7 @@ import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
@@ -42,6 +43,72 @@ public class Cohorts {
 		SqlCohortDefinition patientsNotVoided = new SqlCohortDefinition(
 		        "select distinct p.patient_id from patient p where p.voided=0");
 		return patientsNotVoided;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, ProgramWorkflowState state, Integer daysBefore, Integer daysAfter) {
+		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
+		        "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state = " +
+		        state.getId() + 
+		        " and o.concept_id = " +
+		        concept.getConceptId() + 
+		        " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL " +
+		        daysBefore + 
+		        " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + 
+		        daysAfter +
+		        " DAY)");
+		return patientsWithBaseLineObservation;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter) {
+		 
+		String stateId = "";
+		int i = 0;
+	    for(ProgramWorkflowState pws: state)
+        {
+        	if(i > 0)
+        	{
+        		stateId = stateId + ",";
+        	}
+        	
+        	stateId = stateId + pws.getId();
+        	
+        	i++;
+        }
+		
+		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
+		        "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state in (" +
+		        stateId + 
+		        ") and o.concept_id = " +
+		        concept.getConceptId() + 
+		        " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL " +
+		        daysBefore + 
+		        " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + 
+		        daysAfter +
+		        " DAY)");
+		return patientsWithBaseLineObservation;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithStatePredatingProgramEnrolment(ProgramWorkflowState state) {
+		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+			"select p.patient_id from patient p, patient_program pp, patient_state ps where p.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
+			"and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state = " + 
+			state.getId() +
+			" and ps.start_date < pp.date_enrolled");
+		return patientsWithBaseLineObservation;
+	}
+	
+	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept, ProgramWorkflowState state, Integer daysBefore, Integer daysAfter)
+	{
+		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
+		return patientsWithoutBaseLineObservation;
+	}
+	
+	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter)
+	{
+		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
+		return patientsWithoutBaseLineObservation;
 	}
 	
 	public static SqlCohortDefinition createPatientsWithAccompagnateur(String name, String parameterName) {

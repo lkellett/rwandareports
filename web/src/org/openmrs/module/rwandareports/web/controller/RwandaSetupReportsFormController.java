@@ -4,6 +4,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
+import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
@@ -221,6 +222,19 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_dataQualityReport")
 	public ModelAndView removeDataQualityReport() throws Exception {
 		new SetupDataQualityIndicatorBySiteReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//Research Links
+	@RequestMapping("/module/rwandareports/register_hivResearchDataQuality")
+	public ModelAndView registerHivResearchDataQualityReport() throws Exception {
+		new SetupHIVResearchDataQualitySheet().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_hivResearchDataQuality")
+	public ModelAndView removeHivResearchDataQualityReport() throws Exception {
+		new SetupHIVResearchDataQualitySheet().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }

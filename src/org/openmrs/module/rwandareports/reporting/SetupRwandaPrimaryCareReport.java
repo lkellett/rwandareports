@@ -17,6 +17,7 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
@@ -251,22 +252,22 @@ public class SetupRwandaPrimaryCareReport {
 		// Mutuelle Insurance cohort definition
 		
 		CodedObsCohortDefinition MUTUELLEInsCohortDef = Cohorts.createCodedObsCohortDefinition("MUTUELLEInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mutuelle, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mutuelle, SetComparator.IN, TimeModifier.ANY);
 		
 		CodedObsCohortDefinition RAMAInsCohortDef = Cohorts.createCodedObsCohortDefinition("RAMAInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, rama, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, rama, SetComparator.IN, TimeModifier.ANY);
 		
 		CodedObsCohortDefinition MMIInsCohortDef = Cohorts.createCodedObsCohortDefinition("MMIInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mmi, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mmi, SetComparator.IN, TimeModifier.ANY);
 		
 		CodedObsCohortDefinition MEDIPLANInsCohortDef = Cohorts.createCodedObsCohortDefinition("MEDIPLANInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mediplan, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, mediplan, SetComparator.IN, TimeModifier.ANY);
 		
 		CodedObsCohortDefinition CORARInsCohortDef = Cohorts.createCodedObsCohortDefinition("CORARInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, corar, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, corar, SetComparator.IN, TimeModifier.ANY);
 		
 		CodedObsCohortDefinition NONEInsCohortDef = Cohorts.createCodedObsCohortDefinition("NONEInsCohortDef",
-		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, none, null, TimeModifier.ANY);
+		    onOrBeforeonOrAfterParameterNames, rwandaInsuranceType, none, SetComparator.IN, TimeModifier.ANY);
 		
 		// 4.1 Percent of patients who are missing an insurance type in
 		// registration encounter

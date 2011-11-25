@@ -3,6 +3,8 @@ package org.openmrs.module.rwandareports.dataset.evaluator;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.openmrs.Cohort;
@@ -54,7 +56,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		
 		LocationHierachyIndicatorDataSetDefinition lhdsd = (LocationHierachyIndicatorDataSetDefinition)dataSetDefinition;
 		
-		SimpleDataSet ret = new SimpleDataSet(lhdsd.getBaseDefinition(), context);
+		SimpleDataSet ret = new SimpleDataSet(dataSetDefinition, context);
 	
 		
 		AllLocation location = lhdsd.getLocation();
@@ -62,7 +64,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		{
 			if(!location.isAllSites() && location.getHierarchy().equals(AllLocation.LOCATION))
 			{
-				addIteration(ret, getBaseCohort(location.getValue(), AllLocation.LOCATION, location.getValue()), location.getValue(), context, lhdsd.getBaseDefinition());
+				addIteration(ret, getBaseCohort(location.getValue(), LOCATION, location.getValue()), location.getValue(), context, lhdsd.getBaseDefinition());
 			}
 			else if(!location.isAllSites())
 			{
@@ -158,7 +160,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		return null;
 	}
 	
-	private void addIteration(SimpleDataSet sds, SqlCohortDefinition cohort, String locationDisplay, EvaluationContext context, DataSetDefinition baseDefinition) throws EvaluationException
+	private void addIteration(SimpleDataSet sds, SqlCohortDefinition cohort, String locationDisplay, EvaluationContext context, List<DataSetDefinition> baseDefinition) throws EvaluationException
 	{
 		
 		EvaluationContext ec = EvaluationContext.clone(context);
@@ -173,26 +175,32 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 				throw new EvaluationException("baseCohort", ex);
 			}
 		}
-		DataSet ds;
-		try {
-			ds = (DataSet) Context.getService(DataSetDefinitionService.class).evaluate(baseDefinition, ec);
-		} catch (Exception ex) {
-			throw new EvaluationException("baseDefinition", ex);
+		DataSetRow row = new DataSetRow();
+		
+		for(DataSetDefinition bd: baseDefinition)
+		{
+			
+			DataSet ds;
+			try {
+				ds = (DataSet) Context.getService(DataSetDefinitionService.class).evaluate(bd, ec);
+			} catch (Exception ex) {
+				throw new EvaluationException("baseDefinition", ex);
+			}
+		    
+		    row.addColumnValue(new DataSetColumn("locationDisplay", "locationDisplay", String.class), locationDisplay);
+		    if(bd instanceof CohortIndicatorDataSetDefinition)
+		    {
+		    	MapDataSet mds = (MapDataSet)ds;
+		    	CohortIndicatorDataSetDefinition cidsd = (CohortIndicatorDataSetDefinition)baseDefinition;
+		    	for (DataSetColumn column : cidsd.getColumns()) {
+		    		row.addColumnValue(column, mds.getData(column));
+		    	}
+		    }
+		    else if(bd instanceof PatientDataSetDefinition)
+		    {
+		    	row.addColumnValue(new DataSetColumn(bd.getName() + "PatientDataSet", bd.getName() + "PatientDataSet", SimpleDataSet.class), ds);
+		    }
 		}
-	    DataSetRow row = new DataSetRow();
-	    row.addColumnValue(new DataSetColumn("locationDisplay", "locationDisplay", String.class), locationDisplay);
-	    if(baseDefinition instanceof CohortIndicatorDataSetDefinition)
-	    {
-	    	MapDataSet mds = (MapDataSet)ds;
-	    	CohortIndicatorDataSetDefinition cidsd = (CohortIndicatorDataSetDefinition)baseDefinition;
-	    	for (DataSetColumn column : cidsd.getColumns()) {
-	    		row.addColumnValue(column, mds.getData(column));
-	    	}
-	    }
-	    else if(baseDefinition instanceof PatientDataSetDefinition)
-	    {
-	    	row.addColumnValue(new DataSetColumn("PatientDataSet", "PatientDataSet", SimpleDataSet.class), ds);
-	    }
     	sds.addRow(row);
 	}
 	

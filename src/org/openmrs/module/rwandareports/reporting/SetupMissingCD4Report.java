@@ -63,7 +63,7 @@ public class SetupMissingCD4Report {
 		    "XlsMissingCD4ReportTemplate", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:9,dataset:NotCompleted|sheet:2,row:9,dataset:NoResult");
+		props.put("repeatingSections", "sheet:1,dataset:NotCompleted|sheet:1,row:9,dataset:NotCompletedPatientDataSet|sheet:2,dataset:NoResult|sheet:2,row:9,dataset:NoResultPatientDataSet");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -104,10 +104,10 @@ public class SetupMissingCD4Report {
 		notCompletedDataSet.addParameter(new Parameter("location", "Location", Location.class));
 		notCompletedDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
 		notCompletedDataSet.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		notCompletedDataSet.setName("Not completed Data Set");
+		notCompletedDataSet.setName("NotCompleted");
 		
 		PatientDataSetDefinition noResultDataSet = new PatientDataSetDefinition();
-		noResultDataSet.setName("No Result Data Set");
+		noResultDataSet.setName("NoResult");
 		
 		SqlCohortDefinition patientDead = new SqlCohortDefinition(
 		        "SELECT DISTINCT person_id FROM obs o WHERE o.concept_id='" + patientDied.getId() + "'");
@@ -233,20 +233,20 @@ public class SetupMissingCD4Report {
 		mappings1.put("startDate", "${startDate}");
 		
 		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(notCompletedDataSet);
-		ldsd.setName("NotCompleted");
+		ldsd.setName("NotCompletedInd");
 		ldsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
 		LocationHierachyIndicatorDataSetDefinition ldsd2 = new LocationHierachyIndicatorDataSetDefinition(
 		        notCompletedDataSet);
-		ldsd2.setName("NoResult");
+		ldsd2.setName("NoResultInd");
 		ldsd2.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		ldsd2.addParameter(new Parameter("endDate", "End Date", Date.class));
 		ldsd2.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
 		reportDefinition.addDataSetDefinition("NotCompleted", ldsd, mappings1);
-		reportDefinition.addDataSetDefinition("NoResult data", ldsd2, mappings1);
+		reportDefinition.addDataSetDefinition("NoResult", noResultDataSet, mappings1);
 	}
 	
 	private void setUpProperties() {

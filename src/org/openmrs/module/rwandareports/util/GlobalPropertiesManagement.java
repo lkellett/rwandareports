@@ -510,7 +510,6 @@ public class GlobalPropertiesManagement {
 	public static final String MATERNITY_SERVICE = "reports.maternityService";					
 	public static final String HOSPITALIZATION_SERVICE = "reports.hospitalizationService";				
 	public static final String VACCINATION_SERVICE = "reports.vaccinationService";	
-
 	
 	//Encounters
 	public final static String ADULT_FLOWSHEET_ENCOUNTER = "reports.adultflowsheetencounter";
@@ -528,6 +527,8 @@ public class GlobalPropertiesManagement {
 	public final static String PRIMARY_CARE_REGISTRATION = "primarycarereport.registration.encountertypeid";
 	
 	public final static String VITALS = "primarycarereport.vitals.encountertypeid";
+	
+	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";

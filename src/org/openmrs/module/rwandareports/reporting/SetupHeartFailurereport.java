@@ -16,7 +16,9 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicService;
+import org.openmrs.logic.datasource.PersonDataSource;
 import org.openmrs.logic.rule.AgeRule;
+import org.openmrs.logic.token.TokenService;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -230,13 +232,16 @@ public class SetupHeartFailurereport {
 		//      1.2.   median age
 		//=========================================================================================
 		LogicService ls = Context.getLogicService();
+		TokenService ts = Context.getService(TokenService.class);
 		
 		try {
 			ls.getRule("AGE");
 		}
 		catch (Exception ex) {
 			AgeRule ageRule = new AgeRule();
-			ls.addRule("AGE", ageRule);
+			
+			//ls.addRule("AGE", ageRule);
+			ts.registerToken("AGE", new PersonDataSource(), "");
 		}
 		
 		CohortIndicator medianAge = Indicators.newLogicIndicator("medianAge", patientsInHFProgram,

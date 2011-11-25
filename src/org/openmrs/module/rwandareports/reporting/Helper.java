@@ -63,6 +63,13 @@ public class Helper {
 	
 	public void createXlsOverview(ReportDefinition rd, String resourceName, String name,
 	                              Map<? extends Object, ? extends Object> properties) throws IOException {
+		ReportService rs = Context.getService(ReportService.class);
+		for (ReportDesign rdd : rs.getAllReportDesigns(false)) {
+			if (name.equals(rdd.getName())) {
+				rs.purgeReportDesign(rdd);
+			}
+		}
+		
 		ReportDesignResource resource = new ReportDesignResource();
 		resource.setName(resourceName);
 		resource.setExtension("xls");
@@ -78,12 +85,19 @@ public class Helper {
 		}
 		resource.setReportDesign(design);
 		
-		ReportService rs = Context.getService(ReportService.class);
 		rs.saveReportDesign(design);
 	}
 	
 	public void createXlsCalendarOverview(ReportDefinition rd, String resourceName, String name,
 	                                      Map<? extends Object, ? extends Object> properties) throws IOException {
+		
+		ReportService rs = Context.getService(ReportService.class);
+		for (ReportDesign rdd : rs.getAllReportDesigns(false)) {
+			if (name.equals(rdd.getName())) {
+				rs.purgeReportDesign(rdd);
+			}
+		}
+		
 		ReportDesignResource resource = new ReportDesignResource();
 		resource.setName(resourceName);
 		resource.setExtension("xls");
@@ -98,14 +112,21 @@ public class Helper {
 			design.getProperties().putAll(properties);
 		}
 		resource.setReportDesign(design);
-		
-		ReportService rs = Context.getService(ReportService.class);
+	
 		rs.saveReportDesign(design);
 	}
 	
 	public ReportDesign createRowPerPatientXlsOverviewReportDesign(ReportDefinition rd, String resourceName, String name,
 	                                                               Map<? extends Object, ? extends Object> properties)
 	    throws IOException {
+		
+		ReportService rs = Context.getService(ReportService.class);
+		for (ReportDesign rdd : rs.getAllReportDesigns(false)) {
+			if (name.equals(rdd.getName())) {
+				rs.purgeReportDesign(rdd);
+			}
+		}
+		
 		ReportDesignResource resource = new ReportDesignResource();
 		resource.setName(resourceName);
 		resource.setExtension("xls");

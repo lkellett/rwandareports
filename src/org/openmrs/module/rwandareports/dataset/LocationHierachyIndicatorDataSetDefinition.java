@@ -1,5 +1,8 @@
 package org.openmrs.module.rwandareports.dataset;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openmrs.module.reporting.dataset.definition.BaseDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
@@ -14,7 +17,7 @@ public class LocationHierachyIndicatorDataSetDefinition extends BaseDataSetDefin
 	//***** PROPERTIES *****
 	
 	@ConfigurationProperty
-	private DataSetDefinition baseDefinition;
+	private List<DataSetDefinition> baseDefinition = new ArrayList<DataSetDefinition>();
 	
 	@ConfigurationProperty
 	private AllLocation location;
@@ -34,7 +37,7 @@ public class LocationHierachyIndicatorDataSetDefinition extends BaseDataSetDefin
 	 */
 	public LocationHierachyIndicatorDataSetDefinition(DataSetDefinition baseDefinition) {
 		this();
-		this.baseDefinition = baseDefinition;
+		this.baseDefinition.add(baseDefinition);
 	}
 	
 	//***** INSTANCE METHODS *****
@@ -45,15 +48,19 @@ public class LocationHierachyIndicatorDataSetDefinition extends BaseDataSetDefin
     /**
      * @return the baseDefinition
      */
-    public DataSetDefinition getBaseDefinition() {
+    public List<DataSetDefinition> getBaseDefinition() {
     	return baseDefinition;
     }
 	
     /**
      * @param baseDefinition the baseDefinition to set
      */
-    public void setBaseDefinition(DataSetDefinition baseDefinition) {
+    public void setBaseDefinition(List<DataSetDefinition> baseDefinition) {
     	this.baseDefinition = baseDefinition;
+    }
+    
+    public void addBaseDefinition(DataSetDefinition baseDefinition) {
+    	this.baseDefinition.add(baseDefinition);
     }
 
 	public AllLocation getLocation() {

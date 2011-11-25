@@ -248,13 +248,13 @@ public class SetupPediatricLateVisitAndCD4Report {
 		dataSetDefinition3.addColumn(imbType, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(imbType, new HashMap<String, Object>());
 		
-		PatientProperty givenName = RowPerPatientColumns.getFirstNameColumn("givenName");
+		PatientProperty givenName = RowPerPatientColumns.getFirstNameColumn("First Name");
 		dataSetDefinition1.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(givenName, new HashMap<String, Object>());
 		
-		PatientProperty familyName = RowPerPatientColumns.getFamilyNameColumn("familyName");
+		PatientProperty familyName = RowPerPatientColumns.getFamilyNameColumn("Last Name");
 		dataSetDefinition1.addColumn(familyName, new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(familyName, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(familyName, new HashMap<String, Object>());

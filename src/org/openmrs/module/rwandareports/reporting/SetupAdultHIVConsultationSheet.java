@@ -95,7 +95,7 @@ public class SetupAdultHIVConsultationSheet {
 		
 		//Add Filters
 		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "states"),
-		    ParameterizableUtil.createParameterMappings("statesx=${state},onDate=${now}"));
+		    ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
 		
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("adultHIV: In Program", hivProgram),
 		    ParameterizableUtil.createParameterMappings("onDate=${now}"));

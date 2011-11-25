@@ -18,6 +18,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffIn
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfObsAfterDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfPatientData;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfWorkflowStateChange;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedAfterDateRestrictedByConceptSet;
@@ -30,6 +31,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueBe
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAgeInMonths;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAttribute;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
@@ -137,6 +139,21 @@ public class RowPerPatientColumns {
 		return state;
 	}
 	
+	public static StateOfPatient getStateOfPatient(String name, Program program, ProgramWorkflow programWorkflow,
+	                                               boolean includeCompleted, ResultFilter filter) {
+		StateOfPatient state = new StateOfPatient();
+		state.setPatientProgram(program);
+		state.setPatienProgramWorkflow(programWorkflow);
+		state.setName(name);
+		state.setIncludeCompleted(includeCompleted);
+		
+		if (filter != null) {
+			state.setFilter(filter);
+		}
+		
+		return state;
+	}
+	
 	public static RecentEncounterType getRecentEncounterType(String name, List<EncounterType> encounterTypes,
 	                                                         ResultFilter filter) {
 		RecentEncounterType lastEncounter = new RecentEncounterType();
@@ -177,6 +194,52 @@ public class RowPerPatientColumns {
 			mult.addPatientDataDefinition(pd, new HashMap<String, Object>());
 		}
 		return mult;
+	}
+	
+	public static PatientAttribute getHealthCenter(String name)
+	{
+		PatientAttribute healthCenter = new PatientAttribute();
+		healthCenter.setAttribute("Health Center");
+		healthCenter.setName(name);
+		return healthCenter;
+	}
+	
+	public static StateOfPatient getTreatmentGroupOfHIVPatient(String name,
+	                                               ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), filter);
+	}
+	
+	public static StateOfPatient getTreatmentGroupOfHIVPatientIncludingCompleted(String name,
+	        	                                               ResultFilter filter) {
+	    return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), true, filter);
+	}
+	
+	public static StateOfPatient getTreatmentGroupOfPediHIVPatient(String name,
+	        	                                               ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), filter);
+	}
+	
+	public static StateOfPatient getTreatmentGroupOfPediHIVPatientIncludingCompleted(String name,
+		        	                                               ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), true, filter);
+	}
+	
+	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatient(String name, ResultFilter filter)
+	{
+		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
+		mdd.setName(name);
+		mdd.addPatientDataDefinition(getTreatmentGroupOfHIVPatient(name, filter), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getTreatmentGroupOfPediHIVPatient(name, filter), new HashMap<String, Object>());
+		return mdd;
+	}
+	
+	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatientIncludingCompleted(String name, ResultFilter filter)
+	{
+		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
+		mdd.setName(name);
+		mdd.addPatientDataDefinition(getTreatmentGroupOfHIVPatientIncludingCompleted(name, filter), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getTreatmentGroupOfPediHIVPatientIncludingCompleted(name, filter), new HashMap<String, Object>());
+		return mdd;
 	}
 	
 	public static MostRecentObservation getMostRecentTbTest(String name, String dateFormat) {
@@ -412,6 +475,18 @@ public class RowPerPatientColumns {
 		return startDate;
 	}
 	
+	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, String dateFormat)
+	{
+		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
+		progEnrol.setName(name);
+		progEnrol.setProgramId(program.getProgramId());
+		if(dateFormat != null)
+		{
+			progEnrol.setDateFormat(dateFormat);
+		}
+		return progEnrol;
+	}
+	
 	public static FirstDrugOrderStartedRestrictedByConceptSet getFirstDrugOrderStartedRestrictedByConceptSet(String name,
 	                                                                                                         Concept conceptSet) {
 		FirstDrugOrderStartedRestrictedByConceptSet startDateDrugs = new FirstDrugOrderStartedRestrictedByConceptSet();
@@ -448,6 +523,25 @@ public class RowPerPatientColumns {
 	public static FirstDrugOrderStartedRestrictedByConceptSet getDrugOrderForStartOfART(String name, String dateFormat) {
 		return getFirstDrugOrderStartedRestrictedByConceptSet(name, gp.getConcept(GlobalPropertiesManagement.ART_DRUGS_SET),
 		    dateFormat);
+	}
+	
+	public static DateOfProgramEnrolment getDateOfHIVEnrolment(String name, String dateFormat)
+	{
+		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), dateFormat);
+	}
+	
+	public static DateOfProgramEnrolment getDateOfPediHIVEnrolment(String name, String dateFormat)
+	{
+		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), dateFormat);
+	}
+	
+	public static MultiplePatientDataDefinitions getDateOfAllHIVEnrolment(String name, String dateFormat)
+	{
+		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
+		mdd.setName(name);
+		mdd.addPatientDataDefinition(getDateOfHIVEnrolment(name, dateFormat), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getDateOfPediHIVEnrolment(name, dateFormat), new HashMap<String, Object>());
+		return mdd;
 	}
 	
 	public static FirstDrugOrderStartedAfterDateRestrictedByConceptSet getDrugOrderForStartOfARTAfterDate(String name,
