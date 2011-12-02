@@ -493,6 +493,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TEMPERATURE = "concept.temperature";
 	
+	public final static String HIV_DIAGNOSIS_DATE = "reports.hivDiagnosisDate";
+	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							

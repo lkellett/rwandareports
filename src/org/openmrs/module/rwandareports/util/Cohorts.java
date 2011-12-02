@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.util;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.openmrs.Concept;
@@ -14,6 +15,9 @@ import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
@@ -25,10 +29,13 @@ import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDef
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.common.SetComparator;
+import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.rwandareports.definition.DrugsActiveCohortDefinition;
 
 public class Cohorts {
+	
+	private static GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 	
 	public static SqlCohortDefinition createParameterizedLocationCohort() {
 		
@@ -60,8 +67,8 @@ public class Cohorts {
 		return patientsWithBaseLineObservation;
 	}
 	
-	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter) {
-		 
+	private static String getStateString(List<ProgramWorkflowState> state)
+	{
 		String stateId = "";
 		int i = 0;
 	    for(ProgramWorkflowState pws: state)
@@ -75,6 +82,13 @@ public class Cohorts {
         	
         	i++;
         }
+	    
+	    return stateId;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter) {
+		 
+		String stateId = getStateString(state);
 		
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
 		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
@@ -88,6 +102,25 @@ public class Cohorts {
 		        daysAfter +
 		        " DAY)");
 		return patientsWithBaseLineObservation;
+	}
+	
+	public static SqlCohortDefinition createPatientsWhereDrugRegimenDoesNotMatchState(Concept conceptSet, List<ProgramWorkflowState> states)
+	{
+		String stateId = getStateString(states);
+		
+		SqlCohortDefinition patients = new SqlCohortDefinition("select d.patient_id from (" + 
+				"select patient_id, start_date from orders where voided = 0 and concept_id in (select distinct concept_id from concept_set where concept_set = " +
+				conceptSet.getConceptId() +
+				") group by patient_id order by start_date asc)d " +
+				"INNER JOIN " +  
+				"(select p.patient_id as patient_id, ps.start_date as start_date from patient p, patient_program pp, patient_state ps where " + 
+				"p.voided = 0 and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state in ("
+				+ stateId + 
+				") group by p.patient_id order by start_date asc)s " +
+				"on s.patient_id = d.patient_id " +
+				"where d.start_date != s.start_date");
+		
+		return patients;
 	}
 	
 	public static SqlCohortDefinition createPatientsWithStatePredatingProgramEnrolment(ProgramWorkflowState state) {
@@ -448,5 +481,25 @@ public class Cohorts {
 		drugsActive.setDrugs(drugs);
 		drugsActive.addParameter(new Parameter(parameterName, parameterName, Date.class));
 		return drugsActive;
+	}
+	
+	public static CompositionCohortDefinition createHIVDiagnosisDate(String name)
+	{
+		DateObsCohortDefinition dateOfDiagnosis = new DateObsCohortDefinition();
+		
+		Concept diagnosisConcept = gp.getConcept(GlobalPropertiesManagement.HIV_DIAGNOSIS_DATE);
+		
+		dateOfDiagnosis.setQuestion(diagnosisConcept);
+		dateOfDiagnosis.setTimeModifier(TimeModifier.ANY);
+		
+		CodedObsCohortDefinition positiveHIV = createCodedObsCohortDefinition("positiveHIV", gp.getConcept(GlobalPropertiesManagement.HIV_TEST), gp.getConcept(GlobalPropertiesManagement.POSITIVE_HIV_TEST_ANSWER), SetComparator.IN, TimeModifier.ANY);
+           
+		CompositionCohortDefinition diagnosis = new CompositionCohortDefinition();
+		diagnosis.setName("diagnosis");
+		diagnosis.getSearches().put("date", new Mapped<CohortDefinition>(dateOfDiagnosis, new HashMap<String, Object>()));
+		diagnosis.getSearches().put("test", new Mapped<CohortDefinition>(positiveHIV, new HashMap<String, Object>()));
+		diagnosis.setCompositionString("date or test");
+		diagnosis.setCompositionString("test");
+		return diagnosis;
 	}
 }

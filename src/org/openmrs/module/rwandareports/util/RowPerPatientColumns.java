@@ -468,10 +468,14 @@ public class RowPerPatientColumns {
 		return dooadood;
 	}
 	
-	public static DateOfWorkflowStateChange getDateOfWorkflowStateChange(String name, Concept workflowConcept) {
+	public static DateOfWorkflowStateChange getDateOfWorkflowStateChange(String name, Concept workflowConcept, String dateFormat) {
 		DateOfWorkflowStateChange startDate = new DateOfWorkflowStateChange();
 		startDate.setConcept(workflowConcept);
 		startDate.setName(name);
+		if(dateFormat != null)
+		{
+			startDate.setDateFormat(dateFormat);
+		}
 		return startDate;
 	}
 	
@@ -480,6 +484,19 @@ public class RowPerPatientColumns {
 		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
 		progEnrol.setName(name);
 		progEnrol.setProgramId(program.getProgramId());
+		if(dateFormat != null)
+		{
+			progEnrol.setDateFormat(dateFormat);
+		}
+		return progEnrol;
+	}
+	
+	public static DateOfProgramEnrolment getDateOfEarliestProgramEnrolment(String name, Program program, String dateFormat)
+	{
+		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
+		progEnrol.setName(name);
+		progEnrol.setProgramId(program.getProgramId());
+		progEnrol.setReturnEarliest(true);
 		if(dateFormat != null)
 		{
 			progEnrol.setDateFormat(dateFormat);

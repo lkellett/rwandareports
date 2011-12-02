@@ -163,7 +163,7 @@ public class SetupHivArtRegisterReport {
 		}
 		
 		DateOfWorkflowStateChange startDate = RowPerPatientColumns.getDateOfWorkflowStateChange("Commencement of ART",
-		    onArtConcept);
+		    onArtConcept, null);
 		dataSetDefinition.addColumn(startDate);
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getDrugOrderForStartOfART("Start ART Regimen"));

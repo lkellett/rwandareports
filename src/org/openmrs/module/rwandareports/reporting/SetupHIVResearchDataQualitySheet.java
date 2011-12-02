@@ -46,11 +46,13 @@ public class SetupHIVResearchDataQualitySheet {
 	
 	private ProgramWorkflowState onArtPedi;
 	
-	List<ProgramWorkflowState> pws = new ArrayList<ProgramWorkflowState>();
+	private List<ProgramWorkflowState> pws = new ArrayList<ProgramWorkflowState>();
 	
-	List<EncounterType> transferEncounter = new ArrayList<EncounterType>();
+	private List<EncounterType> transferEncounter = new ArrayList<EncounterType>();
 	
 	private Concept art;
+	
+	private Concept artSet;
 	
 	private Program pmtct;
 	
@@ -64,7 +66,7 @@ public class SetupHIVResearchDataQualitySheet {
 		    "HIVResearchDataQuality", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,dataset:dataSet|sheet:1,row:6,dataset:BaselineCD4PatientDataSet|sheet:1,row:11,dataset:BaselineWeightPatientDataSet|sheet:1,row:16,dataset:TransferPatientsPatientDataSet");
+		props.put("repeatingSections", "sheet:1,dataset:dataSet|sheet:1,row:6,dataset:BaselineCD4PatientDataSet|sheet:1,row:11,dataset:BaselineWeightPatientDataSet|sheet:1,row:16,dataset:TransferPatientsPatientDataSet|sheet:1,row:21,dataset:NoDiagnosisPatientDataSet|sheet:1,row:26,dataset:RegimenStateDiffPatientDataSet");
 		design.setProperties(props);
 		
 		h.saveReportDesign(design);
@@ -108,6 +110,12 @@ public class SetupHIVResearchDataQualitySheet {
 		PatientDataSetDefinition dataSetDefinition3 = new PatientDataSetDefinition();
 		dataSetDefinition3.setName("TransferPatients");
 		
+		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
+		dataSetDefinition4.setName("NoDiagnosis");
+		
+		PatientDataSetDefinition dataSetDefinition5 = new PatientDataSetDefinition();
+		dataSetDefinition5.setName("RegimenStateDiff");
+		
 		CompositionCohortDefinition onAllArt = new CompositionCohortDefinition();
 		onAllArt.setName("onArt");
 		onAllArt.getSearches().put(
@@ -127,7 +135,7 @@ public class SetupHIVResearchDataQualitySheet {
 		//No baseline CD4
 		dataSetDefinition.addFilter(Cohorts.createPatientsWithoutBaseLineObservation(cd4, pws, 180, 42), new HashMap<String, Object>());
 		//No baseline weight
-		dataSetDefinition2.addFilter(Cohorts.createPatientsWithoutBaseLineObservation(weight, pws, 180, 42), new HashMap<String, Object>());
+		dataSetDefinition2.addFilter(Cohorts.createPatientsWithoutBaseLineObservation(weight, pws, 90, 42), new HashMap<String, Object>());
 		
 		//Transfer in Patients
 		EncounterCohortDefinition transferEncounter = new EncounterCohortDefinition();
@@ -142,18 +150,42 @@ public class SetupHIVResearchDataQualitySheet {
 		
 		dataSetDefinition3.addFilter(allTransfer, new HashMap<String, Object>());
 		
+		//No Diagnosis date
+		CompositionCohortDefinition diagnosis = new CompositionCohortDefinition();
+		diagnosis.setName("diagnosis");
+		diagnosis.getSearches().put("art", new Mapped<CohortDefinition>(onAllArt, new HashMap<String, Object>()));
+		diagnosis.getSearches().put("concept", new Mapped<CohortDefinition>(Cohorts.createHIVDiagnosisDate("concept"), new HashMap<String, Object>()));
+		diagnosis.setCompositionString("art and not concept");
+		
+		dataSetDefinition4.addFilter(diagnosis, new HashMap<String, Object>());
+		
+		//ART Status and Regimen don't match
+		CompositionCohortDefinition noDrugMatch = new CompositionCohortDefinition();
+		noDrugMatch.setName("allTransfer");
+		noDrugMatch.getSearches().put("art", new Mapped<CohortDefinition>(Cohorts.createPatientsWhereDrugRegimenDoesNotMatchState(artSet, pws), new HashMap<String, Object>()));
+		noDrugMatch.getSearches().put("transfer", new Mapped<CohortDefinition>(transferEncounter, new HashMap<String, Object>()));
+		noDrugMatch.setCompositionString("art and not transfer");
+		
+		dataSetDefinition5.addFilter(Cohorts.createPatientsWhereDrugRegimenDoesNotMatchState(artSet, pws), new HashMap<String, Object>());
+		
 		//Add Columns
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
 		
 		//dataSetDefinition.addColumn(RowPerPatientColumns.getHealthCenter("healthCenter"), new HashMap<String, Object>());
 		//dataSetDefinition2.addColumn(RowPerPatientColumns.getHealthCenter("healthCenter"), new HashMap<String, Object>());
@@ -161,10 +193,14 @@ public class SetupHIVResearchDataQualitySheet {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getTreatmentGroupOfAllHIVPatientIncludingCompleted("Group", null), new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(RowPerPatientColumns.getTreatmentGroupOfAllHIVPatientIncludingCompleted("Group", null), new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(RowPerPatientColumns.getTreatmentGroupOfAllHIVPatientIncludingCompleted("Group", null), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getTreatmentGroupOfAllHIVPatientIncludingCompleted("Group", null), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getTreatmentGroupOfAllHIVPatientIncludingCompleted("Group", null), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art), new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art), new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getDateOfWorkflowStateChange("artWorkflowStart", art, "dd-MMM-yyyy"), new HashMap<String, Object>());
 		
 		FirstDrugOrderStartedRestrictedByConceptSet startArt = RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy");
 		dataSetDefinition.addColumn(startArt,
@@ -172,6 +208,8 @@ public class SetupHIVResearchDataQualitySheet {
 		dataSetDefinition2.addColumn(startArt,
 		    new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(startArt,
+		    new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(startArt,
 		    new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions minDate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
@@ -191,12 +229,17 @@ public class SetupHIVResearchDataQualitySheet {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getDateOfAllHIVEnrolment("hivEnrolment", "dd-MMM-yyyy"), new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(RowPerPatientColumns.getDateOfAllHIVEnrolment("hivEnrolment", "dd-MMM-yyyy"), new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(RowPerPatientColumns.getDateOfAllHIVEnrolment("hivEnrolment", "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getDateOfAllHIVEnrolment("hivEnrolment", "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getDateOfAllHIVEnrolment("hivEnrolment", "dd-MMM-yyyy"), new HashMap<String, Object>());
 		
-		dataSetDefinition3.addColumn(RowPerPatientColumns.getDateOfProgramEnrolment("pmtctEnrolment", pmtct, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(RowPerPatientColumns.getDateOfEarliestProgramEnrolment("pmtctEnrolment", pmtct, "dd-MMM-yyyy"), new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getDateOfEarliestProgramEnrolment("pmtctEnrolment", pmtct, "dd-MMM-yyyy"), new HashMap<String, Object>());
 
 		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(dataSetDefinition);
 		ldsd.addBaseDefinition(dataSetDefinition2);
 		ldsd.addBaseDefinition(dataSetDefinition3);
+		ldsd.addBaseDefinition(dataSetDefinition4);
+		ldsd.addBaseDefinition(dataSetDefinition5);
 		ldsd.setName("Location Data Set");
 		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
@@ -222,5 +265,7 @@ public class SetupHIVResearchDataQualitySheet {
 		art = gp.getConcept(GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT);
 		
 		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		
+		artSet = gp.getConcept(GlobalPropertiesManagement.ART_DRUGS_SET);
 	}
 }

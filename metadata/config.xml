@@ -65,6 +65,14 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.hivDiagnosisDate</property>
+		<defaultValue>2515</defaultValue>
+		<description>
+			The concept id of the Date of HIV Diagnosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.pediFlowsheetEncounter</property>
 		<defaultValue>37</defaultValue>
 		<description>
