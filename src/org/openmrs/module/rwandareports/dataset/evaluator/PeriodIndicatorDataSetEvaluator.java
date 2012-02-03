@@ -2,10 +2,12 @@ package org.openmrs.module.rwandareports.dataset.evaluator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -15,6 +17,7 @@ import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluato
 import org.openmrs.module.reporting.dataset.definition.service.DataSetDefinitionService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
+import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.rwandareports.dataset.PeriodIndicatorDataSetDefinition;
 
 @Handler(supports={PeriodIndicatorDataSetDefinition.class})
@@ -51,8 +54,6 @@ public class PeriodIndicatorDataSetEvaluator implements DataSetEvaluator {
 		
 		for(int i = 0; i <= pidsd.getQuarters(); i++)
 		{
-			System.out.println(startDate.getTime());
-			System.out.println(endDate.getTime());
 			Iteration iter = new Iteration(startDate.getTime(), endDate.getTime(), pidsd.getLocation());
 			iterations.add(iter);
 			
@@ -65,7 +66,8 @@ public class PeriodIndicatorDataSetEvaluator implements DataSetEvaluator {
 			mpdsd.addIteration(iterations.get(i));
 		}
 		
-		EvaluationContext ec = EvaluationContext.clone(context);
+		EvaluationContext ec = EvaluationContext.cloneForChild(context, new Mapped<MultiPeriodIndicatorDataSetDefinition>(mpdsd, new HashMap<String, Object>()));
+		
 		
 		return Context.getService(DataSetDefinitionService.class).evaluate(mpdsd, ec);
 	}

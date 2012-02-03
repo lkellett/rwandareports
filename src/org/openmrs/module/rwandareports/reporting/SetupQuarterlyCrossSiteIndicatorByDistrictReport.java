@@ -191,6 +191,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		    "hivQD: In AdultOrPedi HIV Programs on Date", hivProgramsExcPMTCT, "onDate");
 		
 		AgeCohortDefinition over15Cohort = Cohorts.createOver15AgeCohort("ageQD: Over 15");
+		AgeCohortDefinition under15Cohort = Cohorts.createUnder15AgeCohort("ageQD: Under 15");
 		
 		InStateCohortDefinition preArt = Cohorts.createInCurrentState("hivQD: preArt", preArtWorkflowStates);
 		
@@ -356,12 +357,12 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		currentArtOver15.setName("hivQD: currently taking ART before end date and over 15");
 		currentArtOver15.addParameter(new Parameter("endDate", "endDate", Date.class));
 		currentArtOver15.getSearches().put("1",
-		    new Mapped(over15Cohort, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
+		    new Mapped(under15Cohort, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
 		currentArtOver15.getSearches().put("2",
 		    new Mapped(artCurrently, ParameterizableUtil.createParameterMappings("onDate=${endDate}")));
 		currentArtOver15.getSearches().put("3",
 		    new Mapped(inAdultOrPediHIVOnDateProgram, ParameterizableUtil.createParameterMappings("onDate=${endDate}")));
-		currentArtOver15.setCompositionString("1 AND 2 AND 3");
+		currentArtOver15.setCompositionString("Not 1 AND 2 AND 3");
 		
 		CompositionCohortDefinition artWithAVisitUnder15 = new CompositionCohortDefinition();
 		artWithAVisitUnder15.setName("hivQD: on ART in Hiv program with a visit in period -3 months and under 15");
@@ -683,14 +684,14 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		pmtctProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT);
 		pmtctCombinedMotherProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_MOTHER_PROGRAM);
 		
-		pediArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.FOLLOWING_STATE,
+		pediPreArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.FOLLOWING_STATE,
 		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
-		hivArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.FOLLOWING_STATE,
+		hivPreArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.FOLLOWING_STATE,
 		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
-		pediPreArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
+		pediArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
 		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
-		hivPreArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
-		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
+		hivArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
+		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		
 		hivPrograms.add(hivProgram);
 		hivPrograms.add(pediHivProgram);
@@ -700,11 +701,11 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		hivProgramsExcPMTCT.add(hivProgram);
 		hivProgramsExcPMTCT.add(pediHivProgram);
 		
-		preArtWorkflowStates.add(pediArt);
-		preArtWorkflowStates.add(hivArt);
+		preArtWorkflowStates.add(pediPreArt);
+		preArtWorkflowStates.add(hivPreArt);
 		
-		artWorkflowStates.add(pediPreArt);
-		artWorkflowStates.add(hivPreArt);
+		artWorkflowStates.add(pediArt);
+		artWorkflowStates.add(hivArt);
 		
 		hivEncounterTypes = gp.getEncounterTypeList(GlobalPropertiesManagement.HIV_ENCOUNTER_TYPES);
 		

@@ -162,6 +162,14 @@ public class Cohorts {
 		return over15Cohort;
 	}
 	
+	public static AgeCohortDefinition createUnder15AgeCohort(String name) {
+		AgeCohortDefinition over15Cohort = new AgeCohortDefinition();
+		over15Cohort.setName(name);
+		over15Cohort.setMaxAge(new Integer(15));
+		over15Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return over15Cohort;
+	}
+	
 	public static InProgramCohortDefinition createInProgram(String name, Program program) {
 		InProgramCohortDefinition inProgram = new InProgramCohortDefinition();
 		inProgram.setName(name);

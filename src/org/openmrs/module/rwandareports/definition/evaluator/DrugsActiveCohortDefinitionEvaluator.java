@@ -16,11 +16,12 @@ package org.openmrs.module.rwandareports.definition.evaluator;
 import org.openmrs.Cohort;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.rwandareports.definition.DrugsActiveCohortDefinition;
+import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.cohort.query.service.CohortQueryService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
+import org.openmrs.module.rwandareports.definition.DrugsActiveCohortDefinition;
 
 /**
  * 
@@ -36,11 +37,12 @@ public class DrugsActiveCohortDefinitionEvaluator implements CohortDefinitionEva
 	/**
      * @see CohortDefinitionEvaluator#evaluateCohort(CohortDefinition, EvaluationContext)
      */
-    public Cohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
+    public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
     	DrugsActiveCohortDefinition definition = (DrugsActiveCohortDefinition) cohortDefinition;
 		
-    	return Context.getService(CohortQueryService.class).getPatientsHavingActiveDrugOrders(
+    	Cohort c =  Context.getService(CohortQueryService.class).getPatientsHavingActiveDrugOrders(
     			definition.getDrugs(), 
     			definition.getAsOfDate());
+    	return new EvaluatedCohort(c, cohortDefinition, context);
     }
 }

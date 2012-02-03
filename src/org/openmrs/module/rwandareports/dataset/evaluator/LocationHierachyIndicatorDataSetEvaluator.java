@@ -3,8 +3,6 @@ package org.openmrs.module.rwandareports.dataset.evaluator;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
 import org.openmrs.Cohort;
@@ -28,7 +26,7 @@ import org.openmrs.module.reporting.dataset.definition.service.DataSetDefinition
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.widget.AllLocation;
 
@@ -75,7 +73,11 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 				for(Location l: allLocations)
 				{
 					String hierarchyValue = (String)ReflectionUtil.getPropertyValue(l, location.getHierarchy());
-					hierarchyValue = hierarchyValue.trim();
+					if(hierarchyValue != null)
+					{
+						hierarchyValue = hierarchyValue.trim();
+						hierarchyValue = hierarchyValue.toUpperCase();
+					}	
 					
 					if(location.getValue() != null && location.getValue().equals(hierarchyValue))
 					{
@@ -110,8 +112,12 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 					for(Location l: allLocations)
 					{
 						String hierarchyValue = (String)ReflectionUtil.getPropertyValue(l, hVal);
-						hierarchyValue = hierarchyValue.trim();
-						allLoc.add(hierarchyValue);	
+						if(hierarchyValue != null)
+						{
+							hierarchyValue = hierarchyValue.trim();
+							hierarchyValue = hierarchyValue.toUpperCase();
+							allLoc.add(hierarchyValue);	
+						}
 					}
 					
 					for(String hLoc: allLoc)
@@ -163,7 +169,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 	private void addIteration(SimpleDataSet sds, SqlCohortDefinition cohort, String locationDisplay, EvaluationContext context, List<DataSetDefinition> baseDefinition) throws EvaluationException
 	{
 		
-		EvaluationContext ec = EvaluationContext.clone(context);
+		EvaluationContext ec = EvaluationContext.cloneForChild(context, new Mapped<SqlCohortDefinition>(cohort, new HashMap<String, Object>()));
 		
 		if(cohort != null)
 		{
@@ -191,12 +197,12 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		    if(bd instanceof CohortIndicatorDataSetDefinition)
 		    {
 		    	MapDataSet mds = (MapDataSet)ds;
-		    	CohortIndicatorDataSetDefinition cidsd = (CohortIndicatorDataSetDefinition)baseDefinition;
+		    	CohortIndicatorDataSetDefinition cidsd = (CohortIndicatorDataSetDefinition)bd;
 		    	for (DataSetColumn column : cidsd.getColumns()) {
 		    		row.addColumnValue(column, mds.getData(column));
 		    	}
 		    }
-		    else if(bd instanceof PatientDataSetDefinition)
+		    else if(bd instanceof RowPerPatientDataSetDefinition)
 		    {
 		    	row.addColumnValue(new DataSetColumn(bd.getName() + "PatientDataSet", bd.getName() + "PatientDataSet", SimpleDataSet.class), ds);
 		    }

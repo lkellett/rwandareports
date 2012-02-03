@@ -9,6 +9,7 @@ import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.module.reporting.data.patient.PatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AgeAtDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
@@ -32,7 +33,6 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.Observatio
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAgeInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAttribute;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientIdentifier;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
@@ -40,6 +40,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PersonData
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilter;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 
 public class RowPerPatientColumns {
@@ -186,11 +187,11 @@ public class RowPerPatientColumns {
 		return lastObs;
 	}
 	
-	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name, List<PatientData> definitions) {
+	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name, List<RowPerPatientData> definitions) {
 		MultiplePatientDataDefinitions mult = new MultiplePatientDataDefinitions();
 		mult.setName(name);
 		
-		for (PatientData pd : definitions) {
+		for (RowPerPatientData pd : definitions) {
 			mult.addPatientDataDefinition(pd, new HashMap<String, Object>());
 		}
 		return mult;
@@ -421,7 +422,7 @@ public class RowPerPatientColumns {
 	}
 	
 	public static EvaluateDefinitionForOtherPersonData getDefinitionForOtherPerson(String name, PersonData person,
-	                                                                               PatientData definition) {
+	                                                                               RowPerPatientData definition) {
 		EvaluateDefinitionForOtherPersonData otherDef = new EvaluateDefinitionForOtherPersonData();
 		otherDef.setPersonData(person, new HashMap<String, Object>());
 		otherDef.setDefinition(definition, new HashMap<String, Object>());

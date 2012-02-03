@@ -17,7 +17,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfWorkflowStateChange;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
@@ -188,7 +188,7 @@ public class SetupHivArtRegisterReport {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("Initial stage", stage,
 		    startDate, null));
 		
-		List<PatientData> initialCD4 = new ArrayList<PatientData>();
+		List<RowPerPatientData> initialCD4 = new ArrayList<RowPerPatientData>();
 		initialCD4.add(RowPerPatientColumns
 		        .getObsValueBeforeDateOfOtherDefinition("Initial CD4 count", cd4, startDate, null));
 		initialCD4

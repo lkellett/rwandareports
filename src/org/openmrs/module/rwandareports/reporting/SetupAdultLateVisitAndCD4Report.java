@@ -31,7 +31,7 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
@@ -128,35 +128,35 @@ public class SetupAdultLateVisitAndCD4Report {
 		//====================================================================
 		
 		// Create Adult ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition1 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition1 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition1.setName("Adult ART dataSetDefinition");
 		
 		// Create Adult Pre-ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition2 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition2 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition2.setName("Adult Pre-ART dataSetDefinition");
 		
 		//Create Adult HIV late CD4 count dataset definition
-		PatientDataSetDefinition dataSetDefinition3 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition3 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition3.setName("Adult HIV late CD4 dataSetDefinition");
 		
 		//Create HIV lost to follow-up dataset definition
-		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition4.setName("Adult HIV lost to follow-up dataSetDefinition");
 		
 		//Create Adult Pre-ART patients with CD4 below 350 dataset definition
-		PatientDataSetDefinition dataSetDefinition5 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition5 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition5.setName("Adult Pre-ART patients with CD4 below 350 dataSetDefinition");
 		
 		//Patients with BMI below 18.5 dataset definition
-		PatientDataSetDefinition dataSetDefinition6 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition6 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition6.setName("Patients with BMI below 18.5 dataSetDefinition");
 		
 		//Patients whose cd4 has declined more than 50 in the last month for ART patients
-		PatientDataSetDefinition dataSetDefinition7 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition7 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition7.setName("Patients declining in CD4 more than 50 dataSetDefinition");
 		
 		//Patients whose viral loads are greater than 20 in the last 3 months
-		PatientDataSetDefinition dataSetDefinition8 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition8 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition8.setName("Patients with Viral Load greater than 20 in the last three months");
 		
 		//Adult HIV program Cohort definition

@@ -30,7 +30,7 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
@@ -121,19 +121,19 @@ public class SetupPediatricLateVisitAndCD4Report {
 		//====================================================================
 		
 		// Create ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition1 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition1 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition1.setName("Pediatric ART dataSetDefinition");
 		
 		// Create Pre-ART late visit dataset definition 
-		PatientDataSetDefinition dataSetDefinition2 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition2 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition2.setName("Pediatric Pre-ART dataSetDefinition");
 		
 		//Create HIV late CD4 count dataset definition
-		PatientDataSetDefinition dataSetDefinition3 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition3 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition3.setName("Pediatric HIV late CD4 dataSetDefinition");
 		
 		//Create HIV lost to follow-up dataset definition
-		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition4.setName("Pediatric HIV lost to follow-up dataSetDefinition");
 		
 		// HIV program Cohort definition

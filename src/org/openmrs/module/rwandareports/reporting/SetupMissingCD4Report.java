@@ -20,7 +20,7 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
@@ -100,13 +100,13 @@ public class SetupMissingCD4Report {
 		//           Patients Dataset definition
 		//====================================================================
 		
-		PatientDataSetDefinition notCompletedDataSet = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition notCompletedDataSet = new RowPerPatientDataSetDefinition();
 		notCompletedDataSet.addParameter(new Parameter("location", "Location", Location.class));
 		notCompletedDataSet.addParameter(new Parameter("endDate", "End Date", Date.class));
 		notCompletedDataSet.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		notCompletedDataSet.setName("NotCompleted");
 		
-		PatientDataSetDefinition noResultDataSet = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition noResultDataSet = new RowPerPatientDataSetDefinition();
 		noResultDataSet.setName("NoResult");
 		
 		SqlCohortDefinition patientDead = new SqlCohortDefinition(

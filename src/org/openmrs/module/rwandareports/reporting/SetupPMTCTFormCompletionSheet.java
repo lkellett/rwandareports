@@ -27,7 +27,7 @@ import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
 
-public class SetupAdultHIVConsultationSheet {
+public class SetupPMTCTFormCompletionSheet {
 	
 	Helper h = new Helper();
 	

@@ -36,15 +36,14 @@ import org.openmrs.module.reporting.dataset.DataSetColumn;
 import org.openmrs.module.reporting.dataset.DataSetRow;
 import org.openmrs.module.reporting.dataset.SimpleDataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
+import org.openmrs.module.reporting.dataset.definition.PatientDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 import org.openmrs.module.rowperpatientreports.patientdata.service.PatientDataService;
-import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition2;
 import org.openmrs.module.rwandareports.dataset.HIVRegisterDataSetRowComparator;
 
@@ -129,7 +128,7 @@ public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluat
 //				break;
 //			}
 				
-			for(PatientData pd: definition.getColumns())
+			for(RowPerPatientData pd: definition.getColumns())
 			{
 				pd.setPatient(p);
 				pd.setPatientId(p.getPatientId());

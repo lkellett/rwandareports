@@ -20,7 +20,7 @@ import org.openmrs.Patient;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.BaseDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.evaluator.SimplePatientDataSetEvaluator;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientData;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 
 /**
  * This is a simple example of how one might implement a row-per-Patient DataSetDefinition
@@ -32,7 +32,7 @@ public class PMTCTRegisterDataSetDefinition extends BaseDataSetDefinition {
 
 	private static final long serialVersionUID = 6405583324151111487L;
 	
-	private List<PatientData> columns;
+	private List<RowPerPatientData> columns;
 	
 	private List<CohortDefinition> filters;
 	
@@ -57,9 +57,9 @@ public class PMTCTRegisterDataSetDefinition extends BaseDataSetDefinition {
     /**
      * @return the columns
      */
-    public List<PatientData> getColumns() {
+    public List<RowPerPatientData> getColumns() {
     	if (columns == null) {
-			columns = new ArrayList<PatientData>();
+			columns = new ArrayList<RowPerPatientData>();
 		}
     	return columns;
     }
@@ -68,7 +68,7 @@ public class PMTCTRegisterDataSetDefinition extends BaseDataSetDefinition {
     /**
      * @param columns the columns to set
      */
-    public void setColumns(List<PatientData> columns) {
+    public void setColumns(List<RowPerPatientData> columns) {
     	this.columns = columns;
     }
 
@@ -89,7 +89,7 @@ public class PMTCTRegisterDataSetDefinition extends BaseDataSetDefinition {
     }
 
 	
-	public void addColumn(PatientData column)
+	public void addColumn(RowPerPatientData column)
 	{
 		getColumns().add(column);
 	}

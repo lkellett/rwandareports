@@ -20,7 +20,7 @@ import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.PatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rwandareports.customcalculators.DrugOrderDateManipulation;
@@ -101,19 +101,19 @@ public class SetupHIVResearchDataQualitySheet {
 	private void createDataSetDefinition(ReportDefinition reportDefinition) {
 		
 		// Create new dataset definition 
-		PatientDataSetDefinition dataSetDefinition = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
 		dataSetDefinition.setName("BaselineCD4");
 		
-		PatientDataSetDefinition dataSetDefinition2 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition2 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition2.setName("BaselineWeight");
 		
-		PatientDataSetDefinition dataSetDefinition3 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition3 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition3.setName("TransferPatients");
 		
-		PatientDataSetDefinition dataSetDefinition4 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition4.setName("NoDiagnosis");
 		
-		PatientDataSetDefinition dataSetDefinition5 = new PatientDataSetDefinition();
+		RowPerPatientDataSetDefinition dataSetDefinition5 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition5.setName("RegimenStateDiff");
 		
 		CompositionCohortDefinition onAllArt = new CompositionCohortDefinition();
