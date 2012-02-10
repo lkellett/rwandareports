@@ -1027,4 +1027,67 @@
 	</globalProperty>
 	
 	<!-- End Heart Failure report global properties  -->
+	<!-- Start of DM report global properties  -->
+	
+	<globalProperty>
+		<property>reports.diabetesprogram</property>
+		<defaultValue>12</defaultValue>
+		<description>
+			The name of the DIABETES PROGRAM to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.DiabetesIncounterType</property>
+		<defaultValue>42</defaultValue>
+		<description>
+          This global property for diabetes encounter type id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.AdultInitialVisitIncounterType</property>
+		<defaultValue>1</defaultValue>
+		<description>
+          This global property for ADULT INITIAL VISIT  encounter type id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.DiabetesDDBForm</property>
+		<defaultValue>83</defaultValue>
+		<description>
+          This global property for Diabetes DDB form which can be Form Name or Form Id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.glucoseConcept</property>
+		<defaultValue>887</defaultValue>
+		<description>The id of the concept for the SERUM GLUCOSE</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.DiastolicBPConcept</property>
+		<defaultValue>5086</defaultValue>
+		<description>The id of the concept for the Diastolic Blood Pressure</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SystolicBPConcept</property>
+		<defaultValue>5085</defaultValue>
+		<description>The id of the concept for the Systolic Blood Pressure</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.HbA1cConcept</property>
+		<defaultValue>7127</defaultValue>
+		<description>The id of the concept for the HbA1c</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SensationInRightFootConcept</property>
+		<defaultValue>6737</defaultValue>
+		<description>The id of the concept for the 	Sensation in right foot</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SensationInLeftFootConcept</property>
+		<defaultValue>6736</defaultValue>
+		<description>The id of the concept for the 	Sensation in left foot</description>
+	</globalProperty>
+	<!-- End of DM report global properties  -->
+	
 </module>
