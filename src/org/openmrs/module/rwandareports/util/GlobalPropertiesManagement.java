@@ -23,12 +23,11 @@ public class GlobalPropertiesManagement {
 		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
 		
 		Program program = Context.getProgramWorkflowService().getProgramByUuid(globalProperty);
-		
+	
 		if(program == null)
 		{
 			program = Context.getProgramWorkflowService().getProgramByName(globalProperty);
 		}
-		
 		if(program == null)
 		{
 			try{
@@ -368,12 +367,54 @@ public class GlobalPropertiesManagement {
 	     return drugs;
 	 }
 	
+	public List<Concept> getConceptsByConceptSet(String globalPropertyName)
+	{
+		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
+		
+		Concept c = Context.getConceptService().getConceptByUuid(globalProperty);
+		List<Concept> concepts=null;
+		if(c!= null)
+			concepts=Context.getConceptService().getConceptsByConceptSet(c);		
+		
+		if(c == null && (concepts==null ||concepts.size()==0))
+		{
+			c = Context.getConceptService().getConceptByName(globalProperty);
+			if(c!= null)
+			concepts=Context.getConceptService().getConceptsByConceptSet(c);
+		}
+		
+		if(c == null && (concepts==null ||concepts.size()==0))
+		{
+			try{
+				c = Context.getConceptService().getConcept(Integer.parseInt(globalProperty));
+				if(c!= null)
+				concepts=Context.getConceptService().getConceptsByConceptSet(c);
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException("Unable to convert global property " + globalPropertyName +" to an integer.");
+			}
+		}
+		
+		if(c == null)
+		{
+			throw new RuntimeException("Unable to retrieve a concept from the global property: " + globalPropertyName);
+		}
+		if(c != null && (concepts==null ||concepts.size()==0))
+		{
+			throw new RuntimeException("Unable to retrieve a concepts from the global property: " + globalPropertyName+". Check if the concept is a Set of other concepts.");
+		}
+		
+		return concepts;
+	}
+	
+	
 	//Programs
 	public final static String ADULT_HIV_PROGRAM = "hiv.programid.adult"; 
 	
 	public final static String PMTCT_COMBINED_CLINIC_PROGRAM = "reports.pmtctcombinedprogramname";
 	
-	public final static String HEART_FAILURE_PROGRAM = "dataqualitytools.heartFailureProgramId";
+	public final static String HEART_FAILURE_PROGRAM = "report.heartFailureProgram";
 	
 	public final static String PEDI_HIV_PROGRAM = "reports.pedihivprogramname";
 	
@@ -382,6 +423,8 @@ public class GlobalPropertiesManagement {
 	public final static String PMTCT_COMBINED_MOTHER_PROGRAM = "reports.pmtctCombinedMotherProgramname";
 	
 	public final static String TB_PROGRAM = "reports.tbprogramname";
+	
+	public final static String DM_PROGRAM = "reports.diabetesprogram";
 	
 	//ProgramWorkflow
 	public final static String TREATMENT_STATUS_WORKFLOW = "reports.hivworkflowstatus";
@@ -493,8 +536,22 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TEMPERATURE = "concept.temperature";
 	
+
+	public final static String GLUCOSE="reports.glucoseConcept";
+	
+	public final static String DIASTOLIC_BLOOD_PRESSURE="reports.DiastolicBPConcept";
+	
+	public final static String SYSTOLIC_BLOOD_PRESSURE="reports.SystolicBPConcept";
+	
+	public final static String HBA1C="reports.HbA1cConcept";
+	
+	public final static String SENSATION_IN_RIGHT_FOOT="reports.SensationInRightFootConcept";
+	
+	public final static String SENSATION_IN_LEFT_FOOT="reports.SensationInLeftFootConcept";
+
 	public final static String HIV_DIAGNOSIS_DATE = "reports.hivDiagnosisDate";
 	
+
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -530,8 +587,15 @@ public class GlobalPropertiesManagement {
 	
 	public final static String VITALS = "primarycarereport.vitals.encountertypeid";
 	
+
+	public final static String DIABETES_VISIT="reports.DiabetesIncounterType";
+	
+	public final static String ADULT_INITIAL_VISIT="reports.AdultInitialVisitIncounterType";
+	
+
 	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
+
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";
 	
@@ -539,6 +603,8 @@ public class GlobalPropertiesManagement {
 	
 	//Forms
 	public final static String CARDIOLOGY_CONSULT_FORM = "cardiologyreporting.cardilogyConsultationFormId";
+	
+	public final static String DIABETES_DDB_FORM="reports.DiabetesDDBForm";
 	
 	public final static String CARDIOLOGY_DDB = "cardiologyreporting.hFDonneDeBaseFormId";
 	
@@ -561,6 +627,13 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CTX = "reports.ctxTreatmentConcept";
 	
+	public final static String INSULIN_70_30 = "reports.insulin7030Concept";
+	
+	public final static String INSULIN_LENTE = "reports.insulinlenteConcept";
+	
+	public final static String INSULIN_RAPIDE = "reports.insulinrapideConcept";
+	
+	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
 	
@@ -569,6 +642,17 @@ public class GlobalPropertiesManagement {
 	public final static String ART_FIRST_LINE_DRUG_SET = "reports.allFirstLineArtDrugsConceptSet";
 	
 	public final static String ART_SECOND_LINE_DRUG_SET = "reports.allSecondLineArtDrugsConceptSet";
+	
+    public final static String TB_FIRST_LINE_DRUG_SET = "reports.allFirstLineTBDrugsConceptSet";
+	
+	public final static String TB_SECOND_LINE_DRUG_SET = "reports.allSecondLineTBDrugsConceptSet";
+	
+	public final static String DIABETES_TREATMENT_DRUG_SET= "reports.diabetesTreatmentDrugConceptSet";
+	
+	public final static String METFORMIN_DRUG="reports.metforminConcept";
+	
+	
+	
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
@@ -588,6 +672,8 @@ public class GlobalPropertiesManagement {
 	public final static String SERUM_CREATININE = "reports.serumCreatinine";
 	
 	public final static String HIV_TEST = "reports.hivTestConcept";
+	
+	
 
 	//Lab Panel Concepts 
 	public final static String CD4_PANEL_LAB_CONCEPT = "reports.cd4LabConcept";
@@ -595,3 +681,4 @@ public class GlobalPropertiesManagement {
 	//Order types
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
 }
+
