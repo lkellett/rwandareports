@@ -43,7 +43,7 @@ import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
-import org.openmrs.module.rowperpatientreports.patientdata.service.PatientDataService;
+import org.openmrs.module.rowperpatientreports.patientdata.service.RowPerPatientDataService;
 import org.openmrs.module.rwandareports.dataset.HIVARTRegisterDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.HIVRegisterDataSetRowComparator;
 
@@ -136,7 +136,7 @@ public class HIVARTRegisterDataSetDefinitionEvaluator implements DataSetEvaluato
 				long startTime = System.currentTimeMillis();
 				PatientDataResult patientDataResult;
 				try {
-					patientDataResult = Context.getService(PatientDataService.class).evaluate(pd, context);
+					patientDataResult = Context.getService(RowPerPatientDataService.class).evaluate(pd, context);
 					DataSetColumn c = new DataSetColumn(patientDataResult.getName(), patientDataResult.getDescription(), patientDataResult.getColumnClass());
 					row.addColumnValue(c, patientDataResult);
 				} catch (EvaluationException e) {
