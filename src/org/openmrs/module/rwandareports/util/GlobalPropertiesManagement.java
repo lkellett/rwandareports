@@ -579,6 +579,12 @@ public class GlobalPropertiesManagement {
 
 	public final static String HIV_DIAGNOSIS_DATE = "reports.hivDiagnosisDate";
 	
+
+	public final static String HOSPITAL_ADMITTANCE="reports.hospitalAdmittanceConcept";
+	
+	public final static String LOCATION_OF_HOSPITALIZATION="reports.locationOfHospitalization";
+	
+
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -659,6 +665,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String INSULIN_RAPIDE = "reports.insulinrapideConcept";
 	
+	public final static String GLIBENCLAMIDE_DRUG="reports.glibenclamideConcept";
+	
 	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
@@ -676,7 +684,7 @@ public class GlobalPropertiesManagement {
 	public final static String DIABETES_TREATMENT_DRUG_SET= "reports.diabetesTreatmentDrugConceptSet";
 	
 	public final static String METFORMIN_DRUG="reports.metforminConcept";
-	
+
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
 	
