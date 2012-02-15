@@ -21,8 +21,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObserva
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
-import org.openmrs.module.rwandareports.customcalculators.HIVPediAlerts;
-import org.openmrs.module.rwandareports.customcalculators.NextCD4;
+import org.openmrs.module.rwandareports.customcalculator.HIVPediAlerts;
+import org.openmrs.module.rwandareports.customcalculator.NextCD4;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.InformedStateFilter;
@@ -129,6 +129,7 @@ public class SetupPediHIVConsultationSheet {
 		    ParameterizableUtil.createParameterMappings("onDate=${now}"));
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
+		
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
 		

@@ -12,6 +12,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlwidgets.util.ReflectionUtil;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.service.CohortDefinitionService;
 import org.openmrs.module.reporting.cohort.definition.util.CohortFilter;
 import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
@@ -168,13 +169,17 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 	
 	private void addIteration(SimpleDataSet sds, SqlCohortDefinition cohort, String locationDisplay, EvaluationContext context, List<DataSetDefinition> baseDefinition) throws EvaluationException
 	{
+		for(DataSetDefinition bd: baseDefinition)
+		{
 		
-		EvaluationContext ec = EvaluationContext.cloneForChild(context, new Mapped<SqlCohortDefinition>(cohort, new HashMap<String, Object>()));
+			EvaluationContext ec = new EvaluationContext(context);
+			//EvaluationContext ec = EvaluationContext.cloneForChild(context, new Mapped<DataSetDefinition>(bd, new HashMap<String, Object>()));
+			//EvaluationContext ec = EvaluationContext.clone(context);
 		
 		if(cohort != null)
 		{
 			try {
-				Cohort baseCohort = CohortFilter.filter(ec, new Mapped<CohortDefinition>(cohort, new HashMap<String, Object>()));
+				Cohort baseCohort = Context.getService(CohortDefinitionService.class).evaluate(cohort, ec);
 				ec.setBaseCohort(baseCohort);
 			} catch (Exception ex) {
 				
@@ -183,8 +188,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		}
 		DataSetRow row = new DataSetRow();
 		
-		for(DataSetDefinition bd: baseDefinition)
-		{
+		
 			
 			DataSet ds;
 			try {
@@ -206,8 +210,9 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		    {
 		    	row.addColumnValue(new DataSetColumn(bd.getName() + "PatientDataSet", bd.getName() + "PatientDataSet", SimpleDataSet.class), ds);
 		    }
-		}
+		
     	sds.addRow(row);
+		}
 	}
 	
 	private String resolveDatabaseColumnName(String value)

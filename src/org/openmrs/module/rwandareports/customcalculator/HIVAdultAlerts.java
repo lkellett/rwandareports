@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.customcalculators;
+package org.openmrs.module.rwandareports.customcalculator;
 
 import java.math.BigDecimal;
 import java.util.Calendar;

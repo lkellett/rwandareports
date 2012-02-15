@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.customcalculators;
+package org.openmrs.module.rwandareports.customcalculator;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +14,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationRes
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 
-public class Alerts implements CustomCalculation{
+public class HIVPediAlerts implements CustomCalculation{
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
@@ -31,60 +31,26 @@ public class Alerts implements CustomCalculation{
 			{
 				ObservationResult cd4 = (ObservationResult)result;
 				
-				if(cd4.getValue() != null && cd4.getValue().trim().length() > 0)
+				if(cd4.getValue() == null)
 				{
-					int cd4Val = Integer.parseInt(cd4.getValue());
-					if(cd4Val < 350)
-					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Low CD4");
-					}
+					alerts.append(" No CD4 recorded\n");
 				}
-				
-				if(cd4.getDateOfObservation() != null)
+				else
 				{
 					Date dateCd4 = cd4.getDateOfObservation();
-					Date date = new Date();
+					Date date = Calendar.getInstance().getTime();
 					
 					int diff = calculateMonthsDifference(date, dateCd4);
 					
-					if(diff > 7)
+					if(diff > 12)
 					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Late CD4");
+						alerts.append(" very late CD4\n");
 					}
-				}
-			}
-			
-			if(result.getName().equals("gestationalAge"))
-			{
-				if(result.getValue() != null)
-				{
-					int gestationalAge = Integer.parseInt(result.getValue().toString());
-					
-					if(gestationalAge > 37 && gestationalAge < 41)
+					else if(diff > 6)
 					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Due to deliver");
+						alerts.append(" late CD4\n");
 					}
-					if(gestationalAge > 40)
-					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Post term");
-					}	
-				}
+				}	
 			}
 			
 			if(result.getName().equals("weightObs"))
@@ -95,20 +61,12 @@ public class Alerts implements CustomCalculation{
 				{
 					int decline = calculateDecline(wt.getValue());
 					
-					if(decline == 0 )
+					if(decline > 0)
 					{
-						alerts.append("No weight gain\n");
-					}
-					else if(decline > 0){
-						alerts.append("Weight decline (");
+						alerts.append("WT decline(");
 						alerts.append(decline);
-						alerts.append(" kg)\n");
+						alerts.append("kg)\n");
 					}
-				}
-				
-				if(wt.getValue() == null || wt.getValue().size() == 0)
-				{
-					alerts.append("No weight recorded.\n");
 				}
 			}
 			
@@ -122,7 +80,6 @@ public class Alerts implements CustomCalculation{
 				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
 			}
 		}
-		
 		alert.setValue(alerts.toString());
 		return alert;
 	}
@@ -171,10 +128,13 @@ public class Alerts implements CustomCalculation{
 			{
 				double decline = nextToLastVal - firstVal;
 			
-				return (int)decline;
+				if(decline > 0)
+				{
+					return (int)decline;
+				}
 			}
 		}
 		
-		return -1;
+		return 0;
 	}
 }

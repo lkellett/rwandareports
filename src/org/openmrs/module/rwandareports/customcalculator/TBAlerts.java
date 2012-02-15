@@ -1,7 +1,6 @@
-package org.openmrs.module.rwandareports.customcalculators;
+package org.openmrs.module.rwandareports.customcalculator;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -14,7 +13,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationRes
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 
-public class HIVPediAlerts implements CustomCalculation{
+public class TBAlerts implements CustomCalculation{
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
@@ -24,35 +23,11 @@ public class HIVPediAlerts implements CustomCalculation{
 		
 		StringBuffer alerts = new StringBuffer();
 		
+		double height = 0;
+		double weight = 0;
+		
 		for(PatientDataResult result: results)
 		{
-			
-			if(result.getName().equals("CD4Test"))
-			{
-				ObservationResult cd4 = (ObservationResult)result;
-				
-				if(cd4.getValue() == null)
-				{
-					alerts.append(" No CD4 recorded\n");
-				}
-				else
-				{
-					Date dateCd4 = cd4.getDateOfObservation();
-					Date date = Calendar.getInstance().getTime();
-					
-					int diff = calculateMonthsDifference(date, dateCd4);
-					
-					if(diff > 12)
-					{
-						alerts.append(" very late CD4\n");
-					}
-					else if(diff > 6)
-					{
-						alerts.append(" late CD4\n");
-					}
-				}	
-			}
-			
 			if(result.getName().equals("weightObs"))
 			{
 				AllObservationValuesResult wt = (AllObservationValuesResult)result;
@@ -65,43 +40,51 @@ public class HIVPediAlerts implements CustomCalculation{
 					{
 						alerts.append("WT decline(");
 						alerts.append(decline);
-						alerts.append("kg)\n");
+						alerts.append(").\n");
+					}
+					
+					if(wt.getValue().size() > 0)
+					{
+						weight = wt.getValue().get(wt.getValue().size()-1).getValueNumeric();
 					}
 				}
 			}
 			
-			if(result.getName().equals("IO") && result.getValue() != null)
+			if(result.getName().equals("RecentHeight"))
 			{
-				alerts.append("IO reported last visit: " + result.getValue() + "\n");
-			}
-			
-			if(result.getName().equals("SideEffects") && result.getValue() != null)
-			{
-				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
+				ObservationResult heightOb = (ObservationResult)result;
+				
+				if(heightOb.getValue() == null || heightOb.getValue().trim().length() == 0)
+				{
+					alerts.append("No height recorded.\n");
+				}
+				else
+				{
+					height = Double.parseDouble(heightOb.getValue());
+				}
 			}
 		}
-		alert.setValue(alerts.toString());
+		
+		if(height > 0 && weight > 0)
+		{
+			double bmi = weight/(height/100*height/100);
+			int decimalPlace = 1;
+			BigDecimal bd = new BigDecimal( Double.toString(bmi) );
+			bd = bd.setScale( decimalPlace, BigDecimal.ROUND_HALF_UP );
+			
+			if(bmi < 16)
+			{
+				alerts.append("Very low BMI (" + bd.doubleValue()  + ").\n");
+			}
+			else if(bmi < 18.5)
+			{
+				alerts.append("Low BMI (" + bd.doubleValue()  + ").\n");
+			}
+				
+		}
+		
+		alert.setValue(alerts.toString().trim());
 		return alert;
-	}
-	
-	private int calculateMonthsDifference(Date observation, Date startingDate)
-	{
-		int diff = 0;
-	
-		Calendar obsDate = Calendar.getInstance();	
-		obsDate.setTime(observation);
-	
-		Calendar startDate = Calendar.getInstance();
-		startDate.setTime(startingDate);
-	
-		//find out if there is any difference in years first
-		diff = obsDate.get(Calendar.YEAR) - startDate.get(Calendar.YEAR);
-		diff = diff * 12;
-	
-		int monthDiff = obsDate.get(Calendar.MONTH) - startDate.get(Calendar.MONTH);
-		diff = diff + monthDiff;
-	
-		return diff;
 	}
 	
 	private int calculateDecline(List<Obs> obs)

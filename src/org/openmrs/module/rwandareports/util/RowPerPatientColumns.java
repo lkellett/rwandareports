@@ -9,22 +9,25 @@ import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
-import org.openmrs.module.reporting.data.patient.PatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AgeAtDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.BaselineObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfAllProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfObsAfterDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfPatientData;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramCompletion;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfWorkflowStateChange;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.EvaluateDefinitionForOtherPersonData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedAfterDateRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstRecordedObservationWithCodedConceptAnswer;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.FullHistoryOfProgramWorkflowStates;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
@@ -187,7 +190,8 @@ public class RowPerPatientColumns {
 		return lastObs;
 	}
 	
-	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name, List<RowPerPatientData> definitions) {
+	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name,
+	                                                                               List<RowPerPatientData> definitions) {
 		MultiplePatientDataDefinitions mult = new MultiplePatientDataDefinitions();
 		mult.setName(name);
 		
@@ -197,36 +201,45 @@ public class RowPerPatientColumns {
 		return mult;
 	}
 	
-	public static PatientAttribute getHealthCenter(String name)
-	{
+	public static PatientAttribute getHealthCenter(String name) {
 		PatientAttribute healthCenter = new PatientAttribute();
 		healthCenter.setAttribute("Health Center");
 		healthCenter.setName(name);
 		return healthCenter;
 	}
 	
-	public static StateOfPatient getTreatmentGroupOfHIVPatient(String name,
-	                                               ResultFilter filter) {
-		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), filter);
+	public static StateOfPatient getTreatmentGroupOfHIVPatient(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), filter);
 	}
 	
-	public static StateOfPatient getTreatmentGroupOfHIVPatientIncludingCompleted(String name,
-	        	                                               ResultFilter filter) {
-	    return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), true, filter);
+	public static StateOfPatient getTreatmentGroupOfHIVPatientIncludingCompleted(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), true, filter);
 	}
 	
-	public static StateOfPatient getTreatmentGroupOfPediHIVPatient(String name,
-	        	                                               ResultFilter filter) {
-		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), filter);
+	public static StateOfPatient getTreatmentGroupOfPediHIVPatient(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), filter);
 	}
 	
-	public static StateOfPatient getTreatmentGroupOfPediHIVPatientIncludingCompleted(String name,
-		        	                                               ResultFilter filter) {
-		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), true, filter);
+	public static StateOfPatient getTreatmentGroupOfPediHIVPatientIncludingCompleted(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), true, filter);
 	}
 	
-	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatient(String name, ResultFilter filter)
-	{
+	public static StateOfPatient getTreatmentStatusOfHIVPatientIncludingCompleted(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM), true,
+		    filter);
+	}
+	
+	public static StateOfPatient getTreatmentStatusOfPediHIVPatientIncludingCompleted(String name, ResultFilter filter) {
+		return getStateOfPatient(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), gp.getProgramWorkflow(
+		    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM), true, filter);
+	}
+	
+	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatient(String name, ResultFilter filter) {
 		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
 		mdd.setName(name);
 		mdd.addPatientDataDefinition(getTreatmentGroupOfHIVPatient(name, filter), new HashMap<String, Object>());
@@ -234,12 +247,24 @@ public class RowPerPatientColumns {
 		return mdd;
 	}
 	
-	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatientIncludingCompleted(String name, ResultFilter filter)
-	{
+	public static MultiplePatientDataDefinitions getTreatmentGroupOfAllHIVPatientIncludingCompleted(String name,
+	                                                                                                ResultFilter filter) {
 		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
 		mdd.setName(name);
-		mdd.addPatientDataDefinition(getTreatmentGroupOfHIVPatientIncludingCompleted(name, filter), new HashMap<String, Object>());
-		mdd.addPatientDataDefinition(getTreatmentGroupOfPediHIVPatientIncludingCompleted(name, filter), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getTreatmentGroupOfHIVPatientIncludingCompleted(name, filter),
+		    new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getTreatmentGroupOfPediHIVPatientIncludingCompleted(name, filter),
+		    new HashMap<String, Object>());
+		return mdd;
+	}
+	
+	public static MultiplePatientDataDefinitions getTreamentStatusOfAllHIVPatientIncludingCompleted(String name) {
+		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
+		mdd.setName(name);
+		mdd.addPatientDataDefinition(getTreatmentStatusOfHIVPatientIncludingCompleted(name, null),
+		    new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getTreatmentStatusOfPediHIVPatientIncludingCompleted(name, null),
+		    new HashMap<String, Object>());
 		return mdd;
 	}
 	
@@ -410,7 +435,7 @@ public class RowPerPatientColumns {
 	public static PatientAddress getPatientAddress(String name, boolean district, boolean sector, boolean cell,
 	                                               boolean umudugudu) {
 		PatientAddress address = new PatientAddress();
-		address.setName("Address");
+		address.setName(name);
 		address.setDescription("Address");
 		address.setIncludeCountry(false);
 		address.setIncludeProvince(false);
@@ -445,6 +470,36 @@ public class RowPerPatientColumns {
 		return ovadood;
 	}
 	
+	public static BaselineObservation getBaselineObservation(String name, Concept concept, DateOfPatientData patientData,
+	                                                         String dateFormat) {
+		BaselineObservation baseline = new BaselineObservation();
+		baseline.setConcept(concept);
+		baseline.setName(name);
+		baseline.setDateOfPatientData(patientData, new HashMap<String, Object>());
+		
+		if (dateFormat != null) {
+			baseline.setDateFormat(dateFormat);
+		}
+		
+		return baseline;
+	}
+	
+	public static BaselineObservation getBaselineCD4(String name, 
+	                                                 String dateFormat) {
+		BaselineObservation baseline = new BaselineObservation();
+		baseline.setConcept(gp.getConcept(GlobalPropertiesManagement.CD4_TEST));
+		baseline.setName(name);
+		baseline.setDateOfPatientData(getDateOfHIVEnrolment("hivEnrollment", dateFormat), new HashMap<String, Object>());
+		baseline.setAfter(42);
+		baseline.setBefore(180);
+		
+		if (dateFormat != null) {
+			baseline.setDateFormat(dateFormat);
+		}
+		
+		return baseline;
+	}
+	
 	public static ObsValueBeforeDateOfOtherDefinition getObsValueBeforeDateOfOtherDefinition(String name, Concept concept,
 	                                                                                         DateOfPatientData patientData,
 	                                                                                         String dateFormat) {
@@ -469,37 +524,64 @@ public class RowPerPatientColumns {
 		return dooadood;
 	}
 	
-	public static DateOfWorkflowStateChange getDateOfWorkflowStateChange(String name, Concept workflowConcept, String dateFormat) {
+	public static DateOfWorkflowStateChange getDateOfWorkflowStateChange(String name, Concept workflowConcept,
+	                                                                     String dateFormat) {
 		DateOfWorkflowStateChange startDate = new DateOfWorkflowStateChange();
 		startDate.setConcept(workflowConcept);
 		startDate.setName(name);
-		if(dateFormat != null)
-		{
+		if (dateFormat != null) {
 			startDate.setDateFormat(dateFormat);
 		}
 		return startDate;
 	}
 	
-	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, String dateFormat)
-	{
+	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, String dateFormat) {
 		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
 		progEnrol.setName(name);
 		progEnrol.setProgramId(program.getProgramId());
-		if(dateFormat != null)
-		{
+		if (dateFormat != null) {
 			progEnrol.setDateFormat(dateFormat);
 		}
 		return progEnrol;
 	}
 	
-	public static DateOfProgramEnrolment getDateOfEarliestProgramEnrolment(String name, Program program, String dateFormat)
-	{
+	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, Boolean returnEarliest, String dateFormat) {
+		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
+		progEnrol.setName(name);
+		progEnrol.setReturnEarliest(returnEarliest);
+		progEnrol.setProgramId(program.getProgramId());
+		if (dateFormat != null) {
+			progEnrol.setDateFormat(dateFormat);
+		}
+		return progEnrol;
+	}
+	
+	public static DateOfProgramCompletion getDateOfProgramCompletion(String name, Program program, String dateFormat) {
+		DateOfProgramCompletion progEnrol = new DateOfProgramCompletion();
+		progEnrol.setName(name);
+		progEnrol.setProgramId(program.getProgramId());
+		if (dateFormat != null) {
+			progEnrol.setDateFormat(dateFormat);
+		}
+		return progEnrol;
+	}
+	
+	public static DateOfAllProgramEnrolment getDateOfAllProgramEnrolment(String name, Program program, String dateFormat) {
+		DateOfAllProgramEnrolment progEnrol = new DateOfAllProgramEnrolment();
+		progEnrol.setName(name);
+		progEnrol.setPatientProgram(program);
+		if (dateFormat != null) {
+			progEnrol.setDateFormat(dateFormat);
+		}
+		return progEnrol;
+	}
+	
+	public static DateOfProgramEnrolment getDateOfEarliestProgramEnrolment(String name, Program program, String dateFormat) {
 		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
 		progEnrol.setName(name);
 		progEnrol.setProgramId(program.getProgramId());
 		progEnrol.setReturnEarliest(true);
-		if(dateFormat != null)
-		{
+		if (dateFormat != null) {
 			progEnrol.setDateFormat(dateFormat);
 		}
 		return progEnrol;
@@ -543,22 +625,35 @@ public class RowPerPatientColumns {
 		    dateFormat);
 	}
 	
-	public static DateOfProgramEnrolment getDateOfHIVEnrolment(String name, String dateFormat)
-	{
-		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), dateFormat);
+	public static DateOfProgramEnrolment getDateOfHIVEnrolment(String name, String dateFormat) {
+		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), true, dateFormat);
 	}
 	
-	public static DateOfProgramEnrolment getDateOfPediHIVEnrolment(String name, String dateFormat)
-	{
-		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), dateFormat);
+	public static DateOfProgramEnrolment getDateOfPediHIVEnrolment(String name, String dateFormat) {
+		return getDateOfProgramEnrolment(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), true, dateFormat);
 	}
 	
-	public static MultiplePatientDataDefinitions getDateOfAllHIVEnrolment(String name, String dateFormat)
-	{
+	public static MultiplePatientDataDefinitions getDateOfAllHIVEnrolment(String name, String dateFormat) {
 		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
 		mdd.setName(name);
-		mdd.addPatientDataDefinition(getDateOfHIVEnrolment(name, dateFormat), new HashMap<String, Object>());
 		mdd.addPatientDataDefinition(getDateOfPediHIVEnrolment(name, dateFormat), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getDateOfHIVEnrolment(name, dateFormat), new HashMap<String, Object>());
+		return mdd;
+	}
+	
+	public static DateOfProgramCompletion getDateOfHIVCompletion(String name, String dateFormat) {
+		return getDateOfProgramCompletion(name, gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM), dateFormat);
+	}
+	
+	public static DateOfProgramCompletion getDateOfPediHIVCompletion(String name, String dateFormat) {
+		return getDateOfProgramCompletion(name, gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM), dateFormat);
+	}
+	
+	public static MultiplePatientDataDefinitions getDateOfAllHIVCompletion(String name, String dateFormat) {
+		MultiplePatientDataDefinitions mdd = new MultiplePatientDataDefinitions();
+		mdd.setName(name);
+		mdd.addPatientDataDefinition(getDateOfHIVCompletion(name, dateFormat), new HashMap<String, Object>());
+		mdd.addPatientDataDefinition(getDateOfPediHIVCompletion(name, dateFormat), new HashMap<String, Object>());
 		return mdd;
 	}
 	
@@ -595,5 +690,14 @@ public class RowPerPatientColumns {
 			firstRecorded.setDateFormat("dd-MMM-yyyy");
 		}
 		return firstRecorded;
+	}
+	
+	public static FullHistoryOfProgramWorkflowStates getFullHistoryOfProgramWorkflowStates(String name, List<ProgramWorkflow> workflows, String dateFormat)
+	{
+		FullHistoryOfProgramWorkflowStates history = new FullHistoryOfProgramWorkflowStates();
+		history.setName(name);
+		history.setWorkflows(workflows);
+		history.setDateFormat(dateFormat);
+		return history;
 	}
 }

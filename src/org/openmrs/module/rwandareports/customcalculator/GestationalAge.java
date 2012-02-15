@@ -1,4 +1,4 @@
-package org.openmrs.module.rwandareports.customcalculators;
+package org.openmrs.module.rwandareports.customcalculator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

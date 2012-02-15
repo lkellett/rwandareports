@@ -1,7 +1,9 @@
 package org.openmrs.module.rwandareports.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Drug;
@@ -14,6 +16,11 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
+import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
+import org.openmrs.module.reporting.report.definition.ReportDefinition;
+import org.openmrs.module.rwandareports.reporting.SetupQuarterlyViralLoadReport;
+import org.openmrs.module.rwandareports.widget.AllLocation;
 
 public class GlobalPropertiesManagement {
 	
@@ -23,11 +30,12 @@ public class GlobalPropertiesManagement {
 		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
 		
 		Program program = Context.getProgramWorkflowService().getProgramByUuid(globalProperty);
-	
+		
 		if(program == null)
 		{
 			program = Context.getProgramWorkflowService().getProgramByName(globalProperty);
 		}
+		
 		if(program == null)
 		{
 			try{
@@ -367,6 +375,26 @@ public class GlobalPropertiesManagement {
 	     return drugs;
 	 }
 	
+	public ReportDefinition createReportDefinition(SetupQuarterlyViralLoadReport setupQuarterlyViralLoadReport) {
+    	// PIH Quarterly Cross Site Indicator Report
+    	ReportDefinition rd = new ReportDefinition();
+    	rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    	rd.addParameter(new Parameter("endDate", "End Date", Date.class));
+    	
+    	Properties properties = new Properties();
+    	properties.setProperty("hierarchyFields", "countyDistrict:District");
+    	rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
+    	
+    	rd.setName("PIH Quarterly Cross Site Indicator");
+    	
+    	rd.addDataSetDefinition(setupQuarterlyViralLoadReport.createDataSet(),
+    	    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
+    	
+    	setupQuarterlyViralLoadReport.h.saveReportDefinition(rd);
+    	
+    	return rd;
+    }
+	
 	public List<Concept> getConceptsByConceptSet(String globalPropertyName)
 	{
 		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
@@ -408,7 +436,7 @@ public class GlobalPropertiesManagement {
 		return concepts;
 	}
 	
-	
+
 	//Programs
 	public final static String ADULT_HIV_PROGRAM = "hiv.programid.adult"; 
 	
@@ -551,7 +579,6 @@ public class GlobalPropertiesManagement {
 
 	public final static String HIV_DIAGNOSIS_DATE = "reports.hivDiagnosisDate";
 	
-
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -595,7 +622,6 @@ public class GlobalPropertiesManagement {
 
 	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
-
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";
 	
@@ -651,9 +677,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String METFORMIN_DRUG="reports.metforminConcept";
 	
-	
-	
-	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
 	
@@ -672,8 +695,6 @@ public class GlobalPropertiesManagement {
 	public final static String SERUM_CREATININE = "reports.serumCreatinine";
 	
 	public final static String HIV_TEST = "reports.hivTestConcept";
-	
-	
 
 	//Lab Panel Concepts 
 	public final static String CD4_PANEL_LAB_CONCEPT = "reports.cd4LabConcept";
@@ -681,4 +702,3 @@ public class GlobalPropertiesManagement {
 	//Order types
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
 }
-

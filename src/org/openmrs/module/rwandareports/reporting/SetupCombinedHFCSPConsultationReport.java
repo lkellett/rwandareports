@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.DrugOrder;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
@@ -178,6 +179,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
+		
 	}
 	
 	private void setupProperties() {

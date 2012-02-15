@@ -5,8 +5,8 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Repor
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
+import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
-import org.openmrs.module.rwandareports.reporting.SetupHivArtRegisterReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
@@ -15,6 +15,7 @@ import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyConsultatio
 import org.openmrs.module.rwandareports.reporting.SetupPediHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorByDistrictReport;
+import org.openmrs.module.rwandareports.reporting.SetupQuarterlyViralLoadReport;
 import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
 import org.openmrs.module.rwandareports.reporting.SetupTBConsultationSheet;
 import org.springframework.stereotype.Controller;
@@ -41,25 +42,25 @@ public class RwandaSetupReportsFormController {
 
 	@RequestMapping("/module/rwandareports/register_adulthivartregister")
 	public ModelAndView registerAdultHivArtRegiser() throws Exception {
-		new SetupHivArtRegisterReport(false).setup();
+		//new SetupHivArtRegisterReport(false).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
 	@RequestMapping("/module/rwandareports/remove_adulthivartregister")
 	public ModelAndView removeAdultHivArtRegister() throws Exception {
-		new SetupHivArtRegisterReport(false).delete();
+		//new SetupHivArtRegisterReport(false).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
 	@RequestMapping("/module/rwandareports/register_pedihivartregister")
 	public ModelAndView registerPediHivArtRegiser() throws Exception {
-		new SetupHivArtRegisterReport(true).setup();
+	//	new SetupHivArtRegisterReport(true).setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
 	@RequestMapping("/module/rwandareports/remove_pedihivartregister")
 	public ModelAndView removePediHivArtRegister() throws Exception {
-		new SetupHivArtRegisterReport(true).delete();
+		//new SetupHivArtRegisterReport(true).delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
@@ -250,6 +251,30 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_hivResearchDataQuality")
 	public ModelAndView removeHivResearchDataQualityReport() throws Exception {
 		new SetupHIVResearchDataQualitySheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_hivResearchDataExtraction")
+	public ModelAndView registerHivResearchDataExtractionReport() throws Exception {
+		new SetupHIVResearchExtractionSheet().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_hivResearchDataExtraction")
+	public ModelAndView removeHivResearchDataExtractionReport() throws Exception {
+		new SetupHIVResearchExtractionSheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_viralLoad")
+	public ModelAndView registerViralLoadReport() throws Exception {
+		new SetupQuarterlyViralLoadReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_viralLoad")
+	public ModelAndView removeViralLoadReport() throws Exception {
+		new SetupQuarterlyViralLoadReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }
