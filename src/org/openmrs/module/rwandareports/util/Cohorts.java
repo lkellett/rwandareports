@@ -355,6 +355,12 @@ public class Cohorts {
 		return encounter;
 	}
 	
+	public static EncounterCohortDefinition createEncounterBasedOnForms(String name, List<String> parameterNames, List<Form> forms) {
+		EncounterCohortDefinition encounter = createEncounterParameterizedByDate(name,parameterNames);
+		encounter.setFormList(forms);
+		return encounter;
+	}
+	
 	public static NumericObsCohortDefinition createNumericObsCohortDefinition(String name, Concept question, double value,
 	                                                                          RangeComparator setComparator,
 	                                                                          TimeModifier timeModifier) {
