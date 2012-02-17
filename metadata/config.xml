@@ -1088,6 +1088,46 @@
 		<defaultValue>6736</defaultValue>
 		<description>The id of the concept for the 	Sensation in left foot</description>
 	</globalProperty>
+	<globalProperty>
+		<property>reports.diabetesTreatmentDrugConceptSet</property>
+		<defaultValue>6868</defaultValue>
+		<description>The id of the concept set for DIABETES TREATMENT DRUGS </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulin7030Concept</property>
+		<defaultValue>6746</defaultValue>
+		<description>The id of the concept for the 	INSULIN 70/30 </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulinlenteConcept</property>
+		<defaultValue>279</defaultValue>
+		<description>The id of the concept for the 	INSULIN LENTE </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulinrapideConcept</property>
+		<defaultValue>282</defaultValue>
+		<description>The id of the concept for the 	INSULIN Regular </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.metforminConcept</property>
+		<defaultValue>4052</defaultValue>
+		<description>The id of the concept for the METFORMIN drug </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.glibenclamideConcept</property>
+		<defaultValue>4046</defaultValue>
+		<description>The id of the concept for the GLIBENCLAMIDE drug </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.hospitalAdmittanceConcept</property>
+		<defaultValue>3290</defaultValue>
+		<description>The id of the concept for the Hospital Admittance</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.locationOfHospitalization</property>
+		<defaultValue>3134</defaultValue>
+		<description>The id of the concept for the LOCATION OF HOSPITALIZATION</description>
+	</globalProperty>	
 	<!-- End of DM report global properties  -->
 	
 </module>

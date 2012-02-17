@@ -4,6 +4,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
+import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
@@ -275,6 +276,17 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_viralLoad")
 	public ModelAndView removeViralLoadReport() throws Exception {
 		new SetupQuarterlyViralLoadReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/register_DiabetesQuarterlyAndMonthReport")
+	public ModelAndView registerDiabetesQuarterlyAndMonthReport() throws Exception {
+		new SetupDiabetesQuarterlyAndMonthReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_DiabetesQuarterlyAndMonthReport")
+	public ModelAndView removeDiabetesQuarterlyAndMonthReport() throws Exception {
+		new SetupDiabetesQuarterlyAndMonthReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }
