@@ -9,6 +9,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualityShe
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
+import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
@@ -253,6 +254,19 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_hivResearchDataQuality")
 	public ModelAndView removeHivResearchDataQualityReport() throws Exception {
 		new SetupHIVResearchDataQualitySheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//NCD late visit and LTFU
+	@RequestMapping("/module/rwandareports/register_NCDlatevistAndLTFU")
+	public ModelAndView registerNCDlatevistAndLTFUReport() throws Exception {
+		new SetupNCDLateVisitandLTFUReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_NCDlatevistAndLTFU")
+	public ModelAndView removeNCDlatevistAndLTFUReport() throws Exception {
+		new SetupNCDLateVisitandLTFUReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 

@@ -45,6 +45,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rwandareports.definition.LastWeekMostRecentObservation;
+import org.openmrs.module.rwandareports.definition.CurrentPatientProgram;
 
 public class RowPerPatientColumns {
 	
@@ -157,6 +159,12 @@ public class RowPerPatientColumns {
 		
 		return state;
 	}
+	
+	public static CurrentPatientProgram getCurrentPatientProgram(String name, Program program) {
+		          CurrentPatientProgram ppr = new CurrentPatientProgram(program);
+		          ppr.setName(name);              
+                  return ppr;
+    }
 	
 	public static RecentEncounterType getRecentEncounterType(String name, List<EncounterType> encounterTypes,
 	                                                         ResultFilter filter) {
@@ -313,6 +321,11 @@ public class RowPerPatientColumns {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), dateFormat, resultFilter);
 	}
 	
+	public static LastWeekMostRecentObservation getLastWeekMostRecentReturnVisitDate(String name, String dateFormat,
+            ResultFilter resultFilter) {
+        return getLastWeekMostRecent(name, gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), dateFormat, resultFilter);
+   }
+	
 	public static AllObservationValues getAllWeightValues(String name, String dateFormat, ResultFilter resultFilter,
 	                                                      ResultFilter outputFilter) {
 		return getAllObservationValues(name, gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT), dateFormat,
@@ -369,9 +382,30 @@ public class RowPerPatientColumns {
 		return mostRecent;
 	}
 	
+	public static LastWeekMostRecentObservation getLastWeekMostRecent(String name, Concept concept, String dateFormat) {
+		LastWeekMostRecentObservation mostRecent = new LastWeekMostRecentObservation();
+		mostRecent.setConcept(concept);
+		mostRecent.setName(name);
+		if (dateFormat != null) {
+			mostRecent.setDateFormat(dateFormat);
+		}
+		return mostRecent;
+	}
+	
 	public static MostRecentObservation getMostRecent(String name, Concept concept, String dateFormat,
 	                                                  ResultFilter resultFilter) {
 		MostRecentObservation mostRecent = getMostRecent(name, concept, dateFormat);
+		if (resultFilter != null) {
+			mostRecent.setFilter(resultFilter);
+		}
+		return mostRecent;
+	}
+	
+	public static LastWeekMostRecentObservation getLastWeekMostRecent(
+			String name, Concept concept, String dateFormat,
+			ResultFilter resultFilter) {
+		LastWeekMostRecentObservation mostRecent = getLastWeekMostRecent(name,
+				concept, dateFormat);
 		if (resultFilter != null) {
 			mostRecent.setFilter(resultFilter);
 		}
