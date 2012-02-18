@@ -451,10 +451,10 @@ public class GlobalPropertiesManagement {
 	public final static String PMTCT_COMBINED_MOTHER_PROGRAM = "reports.pmtctCombinedMotherProgramname";
 	
 	public final static String TB_PROGRAM = "reports.tbprogramname";
-	
-	public final static String HEART_FAILURE_PROGRAM_NAME ="reports.heartfailureprogramname";
-	
+		
 	public final static String DIABETES_PROGRAM ="reports.diabetesprogramname";
+		
+	public final static String HEART_FAILURE_PROGRAM_NAME ="reports.heartfailureprogramname";
 	
 	public final static String CRD_PROGRAM ="reports.CRDprogramname";
 	
@@ -507,6 +507,13 @@ public class GlobalPropertiesManagement {
 	public final static String TRACNET_IDENTIFIER = "reports.tracIdentifier";
 	
 	//Concepts
+	
+	public final static String TELEPHONE_NUMBER_CONCEPT = "reports.telephoneNumberConcept"; 
+	
+	public final static String SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "reports.systolicBloodPressureConcept"; 
+	
+	public final static String PATIENT_HAS_ACCOMPAGNATEUR_CONCEPT = "reports.patientHasAccompagnateurConcept"; 
+	
 	public final static String WEIGHT_CONCEPT = "reports.weightConcept"; 
 	
 	public final static String HEIGHT_CONCEPT = "reports.heightConcept";
@@ -623,6 +630,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CARDIOLOGY_ENCTOUNTER_TYPES = "cardiologyreporting.cardilogyEncounterTypes";
 	
+	public final static String DIABETES_ENCTOUNTER_TYPES = "reports.diabetesencountertypes";
+	
 	public final static String PEDI_FLOWSHEET_ENCOUNTER = "reports.pediFlowsheetEncounter";
 	
 	public final static String HIV_ENCOUNTER_TYPES = "reports.hivencountertypes";
@@ -646,10 +655,12 @@ public class GlobalPropertiesManagement {
 	
 	//Forms
 	public final static String CARDIOLOGY_CONSULT_FORM = "cardiologyreporting.cardilogyConsultationFormId";
-	
+		
 	public final static String DIABETES_DDB_FORM="reports.DiabetesDDBForm";
 	
 	public final static String CARDIOLOGY_DDB = "cardiologyreporting.hFDonneDeBaseFormId";
+	
+	public final static String DIABETES_DONNEES_DE_BASE = "diabetesreporting.diabetesDonneesDeBaseFormId";
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";
@@ -670,6 +681,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CTX = "reports.ctxTreatmentConcept";
 	
+	public final static String INSULIN = "reports.insulineDrugs";
+	
 	public final static String INSULIN_70_30 = "reports.insulin7030Concept";
 	
 	public final static String INSULIN_LENTE = "reports.insulinlenteConcept";
@@ -677,7 +690,6 @@ public class GlobalPropertiesManagement {
 	public final static String INSULIN_RAPIDE = "reports.insulinrapideConcept";
 	
 	public final static String GLIBENCLAMIDE_DRUG="reports.glibenclamideConcept";
-	
 	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
@@ -688,6 +700,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ART_SECOND_LINE_DRUG_SET = "reports.allSecondLineArtDrugsConceptSet";
 	
+	public final static String DIABETES_TREATMENT_DRUGS = "reports.diabetesTreatmentConcept";
+
     public final static String TB_FIRST_LINE_DRUG_SET = "reports.allFirstLineTBDrugsConceptSet";
 	
 	public final static String TB_SECOND_LINE_DRUG_SET = "reports.allSecondLineTBDrugsConceptSet";
@@ -698,6 +712,8 @@ public class GlobalPropertiesManagement {
 
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
+	
+	public final static String HbA1c_TEST_CONCEPT = "reports.HbA1cTestConcept";	
 	
 	public final static String CD4_TEST = "reports.cd4Concept";
 	

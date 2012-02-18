@@ -88,6 +88,14 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.diabetesencountertypes</property>
+		<defaultValue>27</defaultValue>
+		<description>
+			The id for the Diabetes Visit Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.tbprogramname</property>
 		<defaultValue>TUBERCULOSIS PROGRAM</defaultValue>
 		<description>
@@ -156,6 +164,30 @@
 		<defaultValue>5089</defaultValue>
 		<description>
 			The concept id of the weight concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.telephoneNumberConcept</property>
+		<defaultValue>1426</defaultValue>
+		<description>
+			The concept id of the patient telephone number concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.systolicBloodPressureConcept</property>
+		<defaultValue>5085</defaultValue>
+		<description>
+			The concept id of the systolic blood pressure concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.patientHasAccompagnateurConcept</property>
+		<defaultValue>3293</defaultValue>
+		<description>
+			The concept id of the patient has Accompagnateur concept
 		</description>
 	</globalProperty>
 	
@@ -422,7 +454,15 @@
 			The lab test order type
 		</description>
 	</globalProperty>
-	
+
+	<globalProperty>
+		<property>reports.diabetesprogramname</property>
+		<defaultValue>Diabetes Program</defaultValue>
+		<description>
+			The program name for the Diabetes program
+		</description>
+	</globalProperty>
+		
 	<globalProperty>
 		<property>reports.heartfailureprogramname</property>
 		<defaultValue>HEART FAILURE PROGRAM</defaultValue>
@@ -560,6 +600,14 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.HbA1cTestConcept</property>
+		<defaultValue>7051</defaultValue>
+		<description>
+			The concept id of the HbA1c test concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.ioConcept</property>
 		<defaultValue>6900</defaultValue>
 		<description>
@@ -638,10 +686,26 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.insulineDrugs</property>
+		<defaultValue>282,279,6746,6872</defaultValue>
+		<description>
+			A comma separated list of insuline drug concepts id's
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.tbTreatmentConcept</property>
 		<defaultValue>1159</defaultValue>
 		<description>
 			The concept id of all the TB Treatment drug concept set 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.diabetesTreatmentConcept</property>
+		<defaultValue>6868</defaultValue>
+		<description>
+			The concept id of all the diabetes Treatment drug concept set 
 		</description>
 	</globalProperty>
 	
@@ -1071,6 +1135,14 @@
 		<defaultValue>77</defaultValue>
 		<description>
           This global property is used to get Heart failure donne de Base Form . The default value is form ID. 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>diabetesreporting.diabetesDonneesDeBaseFormId</property>
+		<defaultValue>83</defaultValue>
+		<description>
+          This global property is used to get diabetes donne de Base Form . The default value is form ID. 
 		</description>
 	</globalProperty>
 	

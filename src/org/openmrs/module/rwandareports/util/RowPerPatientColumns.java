@@ -159,7 +159,7 @@ public class RowPerPatientColumns {
 		
 		return state;
 	}
-	
+		
 	public static CurrentPatientProgram getCurrentPatientProgram(String name, Program program) {
 		          CurrentPatientProgram ppr = new CurrentPatientProgram(program);
 		          ppr.setName(name);              
@@ -197,7 +197,7 @@ public class RowPerPatientColumns {
 		lastObs.setConcept(concept);
 		return lastObs;
 	}
-	
+		
 	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name,
 	                                                                               List<RowPerPatientData> definitions) {
 		MultiplePatientDataDefinitions mult = new MultiplePatientDataDefinitions();
@@ -278,6 +278,21 @@ public class RowPerPatientColumns {
 	
 	public static MostRecentObservation getMostRecentTbTest(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TB_TEST_CONCEPT), dateFormat);
+	}
+	public static MostRecentObservation getMostRecentHbA1c(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HbA1c_TEST_CONCEPT), dateFormat);
+	}
+	public static MostRecentObservation getMostRecentCreatinine(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SERUM_CREATININE), dateFormat);
+	}
+	public static MostRecentObservation getMostRecentSBP(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE_CONCEPT), dateFormat);
+	}
+	public static MostRecentObservation getMostRecentPatientPhoneNumber(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TELEPHONE_NUMBER_CONCEPT), dateFormat);
+	}
+	public static MostRecentObservation getMostRecentAccompagnateurStatus(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.PATIENT_HAS_ACCOMPAGNATEUR_CONCEPT), dateFormat);
 	}
 	
 	public static MostRecentObservation getMostRecentWeight(String name, String dateFormat) {
@@ -371,6 +386,11 @@ public class RowPerPatientColumns {
 		return getCurrentOrdersRestrictedByConceptSet(name, gp.getConcept(GlobalPropertiesManagement.TB_TREATMENT_DRUGS),
 		    dateFormat, drugFilter);
 	}
+
+	public static CurrentOrdersRestrictedByConceptSet getCurrentDiabetesOrders(String name, String dateFormat, ResultFilter drugFilter) {
+		return getCurrentOrdersRestrictedByConceptSet(name,gp.getConcept(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUGS),
+				dateFormat, drugFilter);
+	}
 	
 	public static MostRecentObservation getMostRecent(String name, Concept concept, String dateFormat) {
 		MostRecentObservation mostRecent = new MostRecentObservation();
@@ -400,7 +420,7 @@ public class RowPerPatientColumns {
 		}
 		return mostRecent;
 	}
-	
+		
 	public static LastWeekMostRecentObservation getLastWeekMostRecent(
 			String name, Concept concept, String dateFormat,
 			ResultFilter resultFilter) {
