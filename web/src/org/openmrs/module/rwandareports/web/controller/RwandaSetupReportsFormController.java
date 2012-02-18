@@ -9,6 +9,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualityShe
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
+import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
@@ -254,6 +255,21 @@ public class RwandaSetupReportsFormController {
 		new SetupHIVResearchDataQualitySheet().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+
+	
+	//Remove/Register Pediatric Late visit And CD4
+	@RequestMapping("/module/rwandareports/register_NCDConsult")
+	public ModelAndView registerNCDConsult() throws Exception {
+		new SetupNCDConsultationSheet().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_NCDConsult")
+	public ModelAndView removeNCDConsult() throws Exception {
+		new SetupNCDConsultationSheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+
 	
 	@RequestMapping("/module/rwandareports/register_hivResearchDataExtraction")
 	public ModelAndView registerHivResearchDataExtractionReport() throws Exception {
@@ -289,4 +305,5 @@ public class RwandaSetupReportsFormController {
 		new SetupDiabetesQuarterlyAndMonthReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+
 }

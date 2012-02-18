@@ -452,6 +452,17 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TB_PROGRAM = "reports.tbprogramname";
 	
+	public final static String HEART_FAILURE_PROGRAM_NAME ="reports.heartfailureprogramname";
+	
+	public final static String DIABETES_PROGRAM ="reports.diabetesprogramname";
+	
+	public final static String CRD_PROGRAM ="reports.CRDprogramname";
+	
+	public final static String HYPERTENSION_PROGRAM ="reports.hypertensionprogram";
+	
+	public final static String EPILEPSY_PROGRAM ="reports.epilepsyprogramname";
+	
+
 	public final static String DM_PROGRAM = "reports.diabetesprogram";
 	
 	//ProgramWorkflow

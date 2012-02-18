@@ -424,6 +424,46 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.heartfailureprogramname</property>
+		<defaultValue>HEART FAILURE PROGRAM</defaultValue>
+		<description>
+			The program name for the heart failure program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.diabetesprogramname</property>
+		<defaultValue>Diabetes Program</defaultValue>
+		<description>
+			The program name for the Diabetes program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.CRDprogramname</property>
+		<defaultValue>Chronic respiratory disease program</defaultValue>
+		<description>
+			The program name for the Chronic respiratory disease program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertensionprogram</property>
+		<defaultValue>Hypertension program</defaultValue>
+		<description>
+			The program name for the Hypertension program 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.epilepsyprogramname</property>
+		<defaultValue>Epilepsy program</defaultValue>
+		<description>
+			The program name for the Epilepsy program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.pedihivprogramname</property>
 		<defaultValue>PEDIATRIC HIV PROGRAM</defaultValue>
 		<description>
@@ -626,6 +666,14 @@
 		<defaultValue>1085</defaultValue>
 		<description>
 			The concept id of the concept set that contains all ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>concept.returnVisitDate</property>
+		<defaultValue>5096</defaultValue>
+		<description>
+			The concept id of the Return Visit Date concept
 		</description>
 	</globalProperty>
 	
