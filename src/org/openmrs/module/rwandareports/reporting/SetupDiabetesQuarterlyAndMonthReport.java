@@ -95,7 +95,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
     	properties.setProperty("hierarchyFields", "countyDistrict:District");
     	rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
     	
-    	rd.setName("DM Quaterly Monthly Indicator Report");
+    	rd.setName("Diabetes Quarterly and Monthly Indicator Report");
     	
     	rd.addDataSetDefinition(createDataSet(),
     	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
@@ -103,7 +103,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
     	h.saveReportDefinition(rd);
 		
     	ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd,
-		    "DM_Quaterly_Monthly_Indicator_Report.xls", "DM Quaterly Monthly Indicator Report (Excel)", null);
+		    "DM_Quarterly_Monthly_Indicator_Report.xls", "Diabetes Quarterly and Monthly Indicator Report (Excel)", null);
 		Properties props = new Properties();
 		props.put("repeatingSections", "sheet:1,dataset:Data Set");
 		design.setProperties(props);
@@ -113,11 +113,11 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("DM Quaterly Monthly Indicator Report (Excel)".equals(rd.getName())) {
+			if ("Diabetes Quarterly and Monthly Indicator Report (Excel)".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("DM Quaterly Monthly Indicator Report");
+		h.purgeReportDefinition("Diabetes Quarterly and Monthly Indicator Report");
 		
 	}
 	
