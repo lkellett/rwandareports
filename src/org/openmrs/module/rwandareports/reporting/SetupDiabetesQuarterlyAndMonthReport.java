@@ -182,25 +182,23 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//B1: Pediatric:  Of the new patients enrolled in the last quarter, % ≤15 years old at intake
 		
-		AgeCohortDefinition patientsUnderFifteen=Cohorts.createUnder15AgeCohort("Under 15 years old");
+	//	AgeCohortDefinition patientsUnderFifteen=Cohorts.createUnder15AgeCohort("Under 15 years old");
 		
-		//EncounterCohortDefinition patientsWithDMDDB=Cohorts.createEncounterParameterizedByDate("patientsWithDMDDB", onOrAfterOnOrBefore, adultInitialVisit);
+		SqlCohortDefinition patientsUnderFifteenAtEnrollementDate=new SqlCohortDefinition("select distinct pp.patient_id from person p,patient_program pp where p.person_id=pp.patient_id and DATEDIFF(pp.date_enrolled,p.birthdate)<=5475 and p.voided=0 and pp.voided=0");
+		
 		
 		CompositionCohortDefinition patientsUnderFifteenComposition = new CompositionCohortDefinition();
 		patientsUnderFifteenComposition.setName("patientsUnderFifteenComposition");
 		patientsUnderFifteenComposition.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
 		patientsUnderFifteenComposition.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
-		patientsUnderFifteenComposition.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
-		patientsUnderFifteenComposition.addParameter(new Parameter("startDate", "startDate", Date.class));
-		patientsUnderFifteenComposition.addParameter(new Parameter("endDate", "endDate", Date.class));
 		patientsUnderFifteenComposition.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
-		patientsUnderFifteenComposition.getSearches().put("2",new Mapped<CohortDefinition>(patientsUnderFifteen, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
+		patientsUnderFifteenComposition.getSearches().put("2",new Mapped<CohortDefinition>(patientsUnderFifteenAtEnrollementDate,null));
 		patientsUnderFifteenComposition.setCompositionString("1 AND 2");
 		
+		CohortIndicator patientsUnderFifteenIndicator=Indicators.newFractionIndicator("patientsUnderFifteen", patientsUnderFifteenComposition, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 		
-		CohortIndicator patientsUnderFifteenIndicator=Indicators.newFractionIndicator("patientsUnderFifteen", patientsUnderFifteenComposition, ParameterizableUtil.createParameterMappings("endDate=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
+		CohortIndicator patientsUnderFifteenCountIndicator=Indicators.newCountIndicator("patientsUnderFifteenCountIndicator", patientsUnderFifteenComposition, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 		
-		CohortIndicator patientsUnderFifteenCountIndicator=Indicators.newCountIndicator("patientsUnderFifteenCountIndicator", patientsUnderFifteenComposition, ParameterizableUtil.createParameterMappings("endDate=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 		
 		
 		//B2: Gender: Of the new patients enrolled in the last quarter, % male
