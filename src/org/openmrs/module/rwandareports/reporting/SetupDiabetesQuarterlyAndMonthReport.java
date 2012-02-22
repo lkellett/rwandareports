@@ -184,7 +184,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 	//	AgeCohortDefinition patientsUnderFifteen=Cohorts.createUnder15AgeCohort("Under 15 years old");
 		
-		SqlCohortDefinition patientsUnderFifteenAtEnrollementDate=new SqlCohortDefinition("select distinct pp.patient_id from person p,patient_program pp where p.person_id=pp.patient_id and DATEDIFF(pp.date_enrolled,p.birthdate)<=5475 and p.voided=0 and pp.voided=0");
+		SqlCohortDefinition patientsUnderFifteenAtEnrollementDate=new SqlCohortDefinition("select distinct pp.patient_id from person p,patient_program pp where p.person_id=pp.patient_id and DATEDIFF(pp.date_enrolled,p.birthdate)<=5475 and pp.program_id= "+DMProgram.getId()+" and p.voided=0 and pp.voided=0");
 		
 		
 		CompositionCohortDefinition patientsUnderFifteenComposition = new CompositionCohortDefinition();
