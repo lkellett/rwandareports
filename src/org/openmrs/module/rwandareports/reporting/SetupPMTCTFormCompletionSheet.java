@@ -1,31 +1,28 @@
 package org.openmrs.module.rwandareports.reporting;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
-import org.openmrs.EncounterType;
-import org.openmrs.Location;
+import org.openmrs.Form;
 import org.openmrs.Program;
-import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
+import org.openmrs.module.reporting.query.encounter.definition.SqlEncounterQuery;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
-import org.openmrs.module.rwandareports.customcalculator.HIVAdultAlerts;
-import org.openmrs.module.rwandareports.filter.DrugNameFilter;
-import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
-import org.openmrs.module.rwandareports.filter.ObservationFilter;
+import org.openmrs.module.rwandareports.dataset.EncounterIndicatorDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
+import org.openmrs.module.rwandareports.indicator.EncounterIndicator;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
-import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
+import org.openmrs.module.rwandareports.widget.AllLocation;
+import org.openmrs.module.rwandareports.widget.LocationHierarchy;
 
 public class SetupPMTCTFormCompletionSheet {
 	
@@ -33,136 +30,109 @@ public class SetupPMTCTFormCompletionSheet {
 	
 	GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 	
+	private List<String> onOrAfterOnOrBefore = new ArrayList<String>();
+	
+	private Program pmtctCombinedInfantProgram;
+	
 	//properties retrieved from global variables
-	private Program hivProgram;
 	
-	private EncounterType flowsheetAdult;
+	private Form pmtctDDB;
 	
-	public void setup() throws Exception {
+	
+	
+    public void setup() throws Exception {
 		
-		setupProperties();
+		setUpProperties();
 		
-		ReportDefinition rd = createReportDefinition();
-		
-		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "AdultHIVConsultationSheetV2.xls",
-		    "AdultHIVConsultationSheet.xls_", null);
-		
+		ReportDefinition rd = createCrossSiteReportDefinition();
+		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd,
+		    "PMTCTFormCompletion.xls", "PMTCT Form Completion Excel", null);
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:6,dataset:dataSet");
+		props.put("repeatingSections", "sheet:1,dataset:DataSet");
 		design.setProperties(props);
-		
 		h.saveReportDesign(design);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("AdultHIVConsultationSheet.xls_".equals(rd.getName())) {
+			if ("PMTCT Form Completion Excel".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Adult HIV Consultation Sheet");
+		h.purgeReportDefinition("PMTCT Form Completion");
 	}
 	
-	private ReportDefinition createReportDefinition() {
+	private ReportDefinition createCrossSiteReportDefinition() {
 		
-		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult HIV Consultation Sheet");
+		ReportDefinition rd = new ReportDefinition();
+		rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+		rd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
+		Properties properties = new Properties();
+		properties.setProperty("hierarchyFields", "countyDistrict:District");
+		rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		Properties stateProperties = new Properties();
-		stateProperties.setProperty("Program", hivProgram.getName());
-		stateProperties.setProperty("Workflow", Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.TREATMENT_GROUP_WORKFLOW));
+		rd.setName("PMTCT Form Completion");
 		
-		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
+		rd.addDataSetDefinition(createDataSet(),
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
 		
-		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
-		    ParameterizableUtil.createParameterMappings("location=${location}"));
+		rd.setBaseCohortDefinition(Cohorts.createInProgramParameterizableByDate("InPMTCT", pmtctCombinedInfantProgram, onOrAfterOnOrBefore), ParameterizableUtil.createParameterMappings("onOrBefore=${startDate},onOrAfter=${endDate}"));
 		
-		createDataSetDefinition(reportDefinition);
+		h.saveReportDefinition(rd);
 		
-		h.saveReportDefinition(reportDefinition);
-		
-		return reportDefinition;
+		return rd;
 	}
 	
-	private void createDataSetDefinition(ReportDefinition reportDefinition) {
-		// Create new dataset definition 
-		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
-		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
+	private LocationHierachyIndicatorDataSetDefinition createDataSet() {
 		
-		//Add Filters
-		dataSetDefinition.addFilter(Cohorts.createInCurrentStateParameterized("in state", "states"),
-		    ParameterizableUtil.createParameterMappings("states=${state},onDate=${now}"));
+		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createBaseDataSet());
+		ldsd.setName("DataSet");
+		ldsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
-		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("adultHIV: In Program", hivProgram),
-		    ParameterizableUtil.createParameterMappings("onDate=${now}"));
-		
-		//Add Columns
-		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getFamilyNameColumn("familyName"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentWeight("RecentWeight", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentTbTest("RecentTB", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentCD4("CD4Test", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentViralLoad("ViralLoad", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("AccompName"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentARTOrders("Regimen", "@ddMMMyy", new DrugNameFilter()),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(
-		    RowPerPatientColumns.getCurrentTBOrders("TB Treatment", "@ddMMMyy", new DrugNameFilter()),
-		    new HashMap<String, Object>());
-		
-		//Calculation definitions
-		MostRecentObservation mostRecentHeight = RowPerPatientColumns.getMostRecentHeight("RecentHeight", null);
-		
-		AllObservationValues weight = RowPerPatientColumns.getAllWeightValues("weightObs", "ddMMMyy",
-		    new LastThreeObsFilter(), new ObservationFilter());
-		
-		AllObservationValues cd4Test = RowPerPatientColumns.getAllCD4Values("CD4Test", "ddMMMyy", new LastThreeObsFilter(),
-		    new ObservationFilter());
-		
-		ObservationInMostRecentEncounterOfType io = RowPerPatientColumns.getIOInMostRecentEncounterOfType("IO",
-		    flowsheetAdult);
-		
-		ObservationInMostRecentEncounterOfType sideEffect = RowPerPatientColumns.getSideEffectInMostRecentEncounterOfType(
-		    "SideEffects", flowsheetAdult);
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		alert.setName("alert");
-		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
-		alert.setCalculator(new HIVAdultAlerts());
-		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
-		
-		Map<String, Object> mappings = new HashMap<String, Object>();
-		mappings.put("state", "${state}");
-		
-		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
+		return ldsd;
 	}
 	
-	private void setupProperties() {
-		hivProgram = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
+	private EncounterIndicatorDataSetDefinition createBaseDataSet() {
 		
-		flowsheetAdult = gp.getEncounterType(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER);
+		EncounterIndicatorDataSetDefinition eidsd = new EncounterIndicatorDataSetDefinition();
+	
+		eidsd.setName("DataSet");
+		eidsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+		eidsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		
+		createIndicators(eidsd);
+		return eidsd;
+	}
+	
+	private void createIndicators(EncounterIndicatorDataSetDefinition dsd) {
+		
+		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
+		
+		formsCompleted.setQuery("select encounter_id from encounter where voided = 0 and form_id = " + pmtctDDB.getFormId() + " and encounter_datetime >= :startDate and encounter_datetime <= :endDate");
+		formsCompleted.setName("PMTCT Encounter");
+		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
+		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		EncounterIndicator ddbCompleted = new EncounterIndicator();
+		ddbCompleted.setName("1");
+		ddbCompleted.setEncounterQuery(new Mapped<EncounterQuery>(formsCompleted,ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
+		
+		dsd.addColumn(ddbCompleted);
+	}
+	
+	private void setUpProperties() {
+		pmtctDDB = gp.getForm(GlobalPropertiesManagement.PMTCT_DDB);
+		
+		pmtctCombinedInfantProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
+		
+		onOrAfterOnOrBefore.add("onOrAfter");
+		onOrAfterOnOrBefore.add("onOrBefore");
+		
+		
+		
 	}
 }
