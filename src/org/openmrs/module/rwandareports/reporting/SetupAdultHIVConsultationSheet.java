@@ -17,8 +17,11 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
+import org.openmrs.module.rwandareports.customcalculator.BMI;
+import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.customcalculator.HIVAdultAlerts;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
@@ -144,6 +147,11 @@ public class SetupAdultHIVConsultationSheet {
 		ObservationInMostRecentEncounterOfType sideEffect = RowPerPatientColumns.getSideEffectInMostRecentEncounterOfType(
 		    "SideEffects", flowsheetAdult);
 		
+		AllObservationValues allCD4 = RowPerPatientColumns.getAllCD4Values("allCD4Obs", "ddMMMyy",
+		    null, null);
+		
+		FirstDrugOrderStartedRestrictedByConceptSet startArt = RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy");
+		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
@@ -153,6 +161,22 @@ public class SetupAdultHIVConsultationSheet {
 		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
 		alert.setCalculator(new HIVAdultAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions bmi = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		bmi.setName("bmi");
+		bmi.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
+		bmi.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
+		bmi.setCalculator(new BMI());
+		dataSetDefinition.addColumn(bmi, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions cd4Decline = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		cd4Decline.setName("cd4Decline");
+		cd4Decline.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
+		cd4Decline.addPatientDataToBeEvaluated(startArt, new HashMap<String, Object>());
+		DeclineHighestCD4 declineCD4 = new DeclineHighestCD4();
+		declineCD4.setInitiationArt("StartART");
+		cd4Decline.setCalculator(declineCD4);
+		dataSetDefinition.addColumn(cd4Decline, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");

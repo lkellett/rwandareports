@@ -239,6 +239,11 @@ public class SetupPediatricLateVisitAndCD4Report {
 		dataSetDefinition4.addFilter(patientsWithoutEncountersInPastYear,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
 		
+		
+		//==================================================================
+		//                 5. ART CD4 Decline
+		//==================================================================
+		
 		//==================================================================
 		//                 Columns of report settings
 		//==================================================================
@@ -356,7 +361,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 		reportDefinition.addDataSetDefinition("PediatricARTLateVisit", dataSetDefinition1, mappings);
 		reportDefinition.addDataSetDefinition("PediatricPreARTLateVisit", dataSetDefinition2, mappings);
 		reportDefinition.addDataSetDefinition("PediatricHIVLateCD4Count", dataSetDefinition3, mappings);
-		reportDefinition.addDataSetDefinition("PediatricHIVLostToFollowup", dataSetDefinition4, mappings);
+		reportDefinition.addDataSetDefinition("PediatricHIVLostToFollowup1", dataSetDefinition4, mappings);
 	}
 	
 	private void setupProperties() {

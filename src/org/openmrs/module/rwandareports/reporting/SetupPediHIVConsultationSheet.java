@@ -1,5 +1,6 @@
 package org.openmrs.module.rwandareports.reporting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +20,12 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
+import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.customcalculator.HIVPediAlerts;
 import org.openmrs.module.rwandareports.customcalculator.NextCD4;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
@@ -130,8 +135,8 @@ public class SetupPediHIVConsultationSheet {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
+		PatientProperty age = RowPerPatientColumns.getAge("age");
+		dataSetDefinition.addColumn(age, new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentTbTest("RecentTB", "@ddMMMyy"),
 		    new HashMap<String, Object>());
@@ -147,7 +152,8 @@ public class SetupPediHIVConsultationSheet {
 		    new RemoveDecimalFilter());
 		dataSetDefinition.addColumn(cd4Test, new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentCD4Percentage("CD4Percent", "dd-MMM-yyyy"),
+		MostRecentObservation cd4Percent = RowPerPatientColumns.getMostRecentCD4Percentage("CD4Percent", "dd-MMM-yyyy");
+		dataSetDefinition.addColumn(cd4Percent,
 		    new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions nextCD4 = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
@@ -193,17 +199,23 @@ public class SetupPediHIVConsultationSheet {
 		    RowPerPatientColumns.getCurrentARTOrders("Regimen", "dd-MMM-yyyy", new DrugDosageFrequencyFilter()),
 		    new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy"),
+		FirstDrugOrderStartedRestrictedByConceptSet startArt = RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy");
+		dataSetDefinition.addColumn(startArt,
 		    new HashMap<String, Object>());
 		
 		AllObservationValues allWeights = RowPerPatientColumns.getAllWeightValues("weightObs", "ddMMMyy",
 		    new LastThreeObsFilter(), null);
+		
+		AllObservationValues allCD4 = RowPerPatientColumns.getAllCD4Values("allCD4Obs", "ddMMMyy",
+		    null, null);
 		
 		ObservationInMostRecentEncounterOfType io = RowPerPatientColumns.getIOInMostRecentEncounterOfType("IO",
 		    pediFlowsheet);
 		
 		ObservationInMostRecentEncounterOfType sideEffect = RowPerPatientColumns.getSideEffectInMostRecentEncounterOfType(
 		    "SideEffects", pediFlowsheet);
+		
+		MostRecentObservation heightWeight = RowPerPatientColumns.getMostRecent("heightweight", gp.getConcept(GlobalPropertiesManagement.HEIGHT_WEIGHT_PERCENTAGE), null);
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("AccompName"), new HashMap<String, Object>());
 		
@@ -213,8 +225,36 @@ public class SetupPediHIVConsultationSheet {
 		alert.addPatientDataToBeEvaluated(allWeights, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(heightWeight, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(age, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(height, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(cd4Percent, new HashMap<String, Object>());
 		alert.setCalculator(new HIVPediAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions cd4Decline = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		cd4Decline.setName("cd4Decline");
+		cd4Decline.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
+		cd4Decline.addPatientDataToBeEvaluated(startArt, new HashMap<String, Object>());
+		DeclineHighestCD4 declineCD4 = new DeclineHighestCD4();
+		declineCD4.setInitiationArt("StartART");
+		cd4Decline.setCalculator(declineCD4);
+		
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions cd4Decline60 = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		cd4Decline60.setName("cd4Decline60");
+		cd4Decline60.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
+		cd4Decline60.addPatientDataToBeEvaluated(startArt, new HashMap<String, Object>());
+		DeclineHighestCD4 declineCD460 = new DeclineHighestCD4();
+		declineCD460.setInitiationArt("StartART");
+		declineCD460.setDaysBefore(60);
+		cd4Decline60.setCalculator(declineCD460);
+		
+		List<RowPerPatientData> decline = new ArrayList<RowPerPatientData>();
+		decline.add(cd4Decline);
+		decline.add(cd4Decline60);
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMultiplePatientDataDefinitions("cd4DeclineFromHighest", decline), new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
