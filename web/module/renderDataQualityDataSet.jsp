@@ -2,10 +2,6 @@
 <%@ include file="/WEB-INF/view/module/reporting/includeScripts.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-
-
-
-
 <script type="text/javascript" src="reporting/web/resources/scripts/jquery/jquery-1.3.2.min.js"></script>        
 <style type="text/css">
     .alt { background-color: #EEE; }
@@ -28,7 +24,6 @@ $(document).ready(function(){
 </script>
 
 
-
 <!-- Start break table scripts-->
 
 <style type="text/css">
@@ -36,10 +31,10 @@ $(document).ready(function(){
         #cohortHeader { padding-left: 5px; background-color: #003366; height: 2em; border-bottom: 1px solid black;
         vertical-align:middle; width: 100%; 
         line-height:2em; font-size: 1.5em; font-weight: bold; color: white; }         
-        .cohortResultsColumn { width: 100%; height: 35%; text-align: left; margin: 0px; padding-left: 5px; padding-top: 5px;border-collapse: collapse;border: 1px solid black; } 
+        .cohortResultsColumn { width: 100%; height: auto; text-align: left; margin: 0px; padding-left: 5px; padding-top: 5px;border-collapse: collapse;border: 1px solid black; } 
         #accordion { width: 100%; } 
         table { width: 100%; } 
-        .profileImage { width: 75px; height: 86px; }
+        .profileImage { width: 75px; height: auto; }
         #cohort-details-table_wrapper { width: 75%; } 
         #cohort-details-table { border: 0px; } 
 </style>
@@ -71,13 +66,13 @@ $(document).ready(function() {
                 // eventually will show/hide appropriate columns based on selected dataset definition
         });
 
-
 } );
 </script>
 <script type="text/javascript">
 $(function() {
 
         $('#cohort-breakdown-table').dataTable( {
+        	  //  "iDisplayLength": 5,
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": false,
