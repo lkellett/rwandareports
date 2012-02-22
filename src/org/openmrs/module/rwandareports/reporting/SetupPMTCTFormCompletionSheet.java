@@ -38,6 +38,7 @@ public class SetupPMTCTFormCompletionSheet {
 	
 	private Form pmtctDDB;
 	
+	private Form pmtctRDV;
 	
 	
     public void setup() throws Exception {
@@ -78,7 +79,7 @@ public class SetupPMTCTFormCompletionSheet {
 		rd.addDataSetDefinition(createDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
 		
-		rd.setBaseCohortDefinition(Cohorts.createInProgramParameterizableByDate("InPMTCT", pmtctCombinedInfantProgram, onOrAfterOnOrBefore), ParameterizableUtil.createParameterMappings("onOrBefore=${startDate},onOrAfter=${endDate}"));
+		rd.setBaseCohortDefinition(Cohorts.createInProgramParameterizableByDate("InPMTCT", pmtctCombinedInfantProgram, onOrAfterOnOrBefore), ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${startDate}"));
 		
 		h.saveReportDefinition(rd);
 		
@@ -111,7 +112,6 @@ public class SetupPMTCTFormCompletionSheet {
 	private void createIndicators(EncounterIndicatorDataSetDefinition dsd) {
 		
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
-		
 		formsCompleted.setQuery("select encounter_id from encounter where voided = 0 and form_id = " + pmtctDDB.getFormId() + " and encounter_datetime >= :startDate and encounter_datetime <= :endDate");
 		formsCompleted.setName("PMTCT Encounter");
 		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
@@ -122,10 +122,24 @@ public class SetupPMTCTFormCompletionSheet {
 		ddbCompleted.setEncounterQuery(new Mapped<EncounterQuery>(formsCompleted,ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		
 		dsd.addColumn(ddbCompleted);
+		
+		SqlEncounterQuery formsCompletedRDV = new SqlEncounterQuery();
+		formsCompletedRDV.setQuery("select encounter_id from encounter where voided = 0 and form_id = " + pmtctRDV.getFormId() + " and encounter_datetime >= :startDate and encounter_datetime <= :endDate");
+		formsCompletedRDV.setName("PMTCT Encounter");
+		formsCompletedRDV.addParameter(new Parameter("startDate", "startDate", Date.class));
+		formsCompletedRDV.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		EncounterIndicator rdvCompleted = new EncounterIndicator();
+		rdvCompleted.setName("2");
+		rdvCompleted.setEncounterQuery(new Mapped<EncounterQuery>(formsCompletedRDV,ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
+		
+		dsd.addColumn(rdvCompleted);
 	}
 	
 	private void setUpProperties() {
 		pmtctDDB = gp.getForm(GlobalPropertiesManagement.PMTCT_DDB);
+		
+		pmtctRDV = gp.getForm(GlobalPropertiesManagement.PMTCT_RDV);
 		
 		pmtctCombinedInfantProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
 		

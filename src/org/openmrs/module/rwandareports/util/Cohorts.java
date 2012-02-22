@@ -65,7 +65,7 @@ public class Cohorts {
 		return patientsWithBaseLineObservation;
 	}
 	
-	public static SqlCohortDefinition createPatientsWithDeclineFromBaseline(Concept concept, ProgramWorkflowState state) {
+	public static SqlCohortDefinition createPatientsWithDeclineFromBaseline(String name, Concept concept, ProgramWorkflowState state) {
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
 		        "select p.patient_id from patient p, obs o1, obs o2, patient_program pp, patient_state ps where p.voided = 0 " +
 		        "and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id =  " +
@@ -81,7 +81,9 @@ public class Cohorts {
 		        "0 and p.patient_id = person_id and concept_id = " +
 		        concept.getId() + 
 		        " and value_numeric is not null and obs_datetime >= " +
-		        "ps.start_date order by obs_datetime desc LIMIT 1) and ((o2.value_numeric/o1.value_numeric)*100) < 50");
+		        "ps.start_date and obs_datetime <= :beforeDate order by obs_datetime desc LIMIT 1) and ((o2.value_numeric/o1.value_numeric)*100) < 50");
+		patientsWithBaseLineObservation.setName(name);
+		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
 		return patientsWithBaseLineObservation;
 	}
 	

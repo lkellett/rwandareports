@@ -662,6 +662,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PMTCT_DDB = "reports.pmtctDDBFormId";
 	
+	public final static String PMTCT_RDV = "reports.pmtctRDVFormId";
+	
 	public final static String DIABETES_DONNEES_DE_BASE = "diabetesreporting.diabetesDonneesDeBaseFormId";
 	
 	//Drug concepts

@@ -1263,6 +1263,11 @@
 		<description>The id of the form id for the PMTCT ddb form</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.pmtctRDVFormId</property>
+		<defaultValue>100d09a9-2889-4da4-97dd-f243b372e6cf</defaultValue>
+		<description>The id of the form id for the PMTCT rdv form</description>
+	</globalProperty>
 	
 	
 </module>
