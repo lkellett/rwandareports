@@ -28,6 +28,7 @@ import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
+import org.openmrs.module.rwandareports.dataset.EncounterIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.widget.AllLocation;
 
@@ -180,7 +181,14 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		{
 			try {
 				Cohort baseCohort = Context.getService(CohortDefinitionService.class).evaluate(cohort, ec);
-				ec.setBaseCohort(baseCohort);
+				
+				if(context.getBaseCohort() != null)
+				{
+					baseCohort = Cohort.intersect(baseCohort, context.getBaseCohort());
+				}
+				
+					ec.setBaseCohort(null);
+				
 			} catch (Exception ex) {
 				
 				throw new EvaluationException("baseCohort", ex);
@@ -209,6 +217,15 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		    else if(bd instanceof RowPerPatientDataSetDefinition)
 		    {
 		    	row.addColumnValue(new DataSetColumn(bd.getName() + "PatientDataSet", bd.getName() + "PatientDataSet", SimpleDataSet.class), ds);
+		    }
+		    else if(bd instanceof EncounterIndicatorDataSetDefinition)
+		    {
+		    	SimpleDataSet sd = (SimpleDataSet)ds;
+		    	for(DataSetRow dsr: sd.getRows())
+		    	{
+		    		row.setColumnValues(dsr.getColumnValues());
+		    	}
+		    	row.addColumnValue(new DataSetColumn("locationDisplay", "locationDisplay", String.class), locationDisplay);
 		    }
 		
     	sds.addRow(row);
