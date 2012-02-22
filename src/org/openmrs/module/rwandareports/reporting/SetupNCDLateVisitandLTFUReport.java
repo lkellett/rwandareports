@@ -206,7 +206,7 @@ public class SetupNCDLateVisitandLTFUReport {
 		clinicalEncoutersExcLab = gp.getEncounterTypeList(GlobalPropertiesManagement.CLINICAL_ENCOUNTER_TYPES_EXC_LAB_TEST);
 		returnVisitDateConcept = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
 		diseases = new ArrayList<Program>();
-		diseases.add(gp.getProgram(GlobalPropertiesManagement.DIABETES_PROGRAM));
+		diseases.add(gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM));
 		diseases.add(gp.getProgram(GlobalPropertiesManagement.CRD_PROGRAM));
 		diseases.add(gp.getProgram(GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME));
 		diseases.add(gp.getProgram(GlobalPropertiesManagement.HYPERTENSION_PROGRAM));

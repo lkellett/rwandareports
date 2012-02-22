@@ -89,14 +89,6 @@
 	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.diabetesencountertypes</property>
-		<defaultValue>27</defaultValue>
-		<description>
-			The id for the Diabetes Visit Encounter Type
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
 		<property>reports.tbprogramname</property>
 		<defaultValue>TUBERCULOSIS PROGRAM</defaultValue>
 		<description>
@@ -173,14 +165,6 @@
 		<defaultValue>1426</defaultValue>
 		<description>
 			The concept id of the patient telephone number concept
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.systolicBloodPressureConcept</property>
-		<defaultValue>5085</defaultValue>
-		<description>
-			The concept id of the systolic blood pressure concept
 		</description>
 	</globalProperty>
 	
@@ -455,28 +439,12 @@
 			The lab test order type
 		</description>
 	</globalProperty>
-
-	<globalProperty>
-		<property>reports.diabetesprogramname</property>
-		<defaultValue>Diabetes Program</defaultValue>
-		<description>
-			The program name for the Diabetes program
-		</description>
-	</globalProperty>
-		
+	
 	<globalProperty>
 		<property>reports.heartfailureprogramname</property>
 		<defaultValue>HEART FAILURE PROGRAM</defaultValue>
 		<description>
 			The program name for the heart failure program
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.diabetesprogramname</property>
-		<defaultValue>Diabetes Program</defaultValue>
-		<description>
-			The program name for the Diabetes program
 		</description>
 	</globalProperty>
 	
@@ -601,14 +569,6 @@
 	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.HbA1cTestConcept</property>
-		<defaultValue>7051</defaultValue>
-		<description>
-			The concept id of the HbA1c test concept
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
 		<property>reports.ioConcept</property>
 		<defaultValue>6900</defaultValue>
 		<description>
@@ -699,14 +659,6 @@
 		<defaultValue>1159</defaultValue>
 		<description>
 			The concept id of all the TB Treatment drug concept set 
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.diabetesTreatmentConcept</property>
-		<defaultValue>6868</defaultValue>
-		<description>
-			The concept id of all the diabetes Treatment drug concept set 
 		</description>
 	</globalProperty>
 	

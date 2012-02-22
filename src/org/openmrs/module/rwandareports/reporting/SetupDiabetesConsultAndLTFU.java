@@ -175,8 +175,8 @@ public class SetupDiabetesConsultAndLTFU {
 
 
 	private void setupPrograms() {
-		diabetesProgram = gp.getProgram(GlobalPropertiesManagement.DIABETES_PROGRAM);
-		diabetesEncouters = gp.getEncounterTypeList(GlobalPropertiesManagement.DIABETES_ENCTOUNTER_TYPES);
+		diabetesProgram = gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM);
+		diabetesEncouters = gp.getEncounterTypeList(GlobalPropertiesManagement.DIABETES_VISIT);
 	}
 	
 	private PersonAttributeCohortDefinition getPatientAtHealthCenterCohort(){

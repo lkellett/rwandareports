@@ -18,7 +18,7 @@ import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 
 public class DiabetesAlerts implements CustomCalculation {
 	protected Log log = LogFactory.getLog(this.getClass());
-
+	GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 	public PatientDataResult calculateResult(List<PatientDataResult> results,
 			EvaluationContext context) {
 
@@ -74,7 +74,7 @@ public class DiabetesAlerts implements CustomCalculation {
 	
 	private boolean patientHasDiabetesDDBForm(PatientDataResult result){
 		try {
-			int formId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.DIABETES_DONNEES_DE_BASE));
+			int formId = gp.getForm(GlobalPropertiesManagement.DIABETES_DDB_FORM).getFormId();
 			Patient p = result.getPatientData().getPatient();
 			List<Encounter> patientEncounters =Context.getEncounterService().getEncountersByPatient(p);
 			
@@ -86,7 +86,7 @@ public class DiabetesAlerts implements CustomCalculation {
 				}
 			}
 		} catch (NumberFormatException e) {
-			 log.error("Could not parse value of "+ GlobalPropertiesManagement.DIABETES_DONNEES_DE_BASE+ "to integer");
+			 log.error("Could not parse value of "+ GlobalPropertiesManagement.DIABETES_DDB_FORM+ "to integer");
 		}
 			
 		return false;

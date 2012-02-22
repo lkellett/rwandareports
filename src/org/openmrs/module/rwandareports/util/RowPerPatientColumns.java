@@ -280,13 +280,13 @@ public class RowPerPatientColumns {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TB_TEST_CONCEPT), dateFormat);
 	}
 	public static MostRecentObservation getMostRecentHbA1c(String name, String dateFormat) {
-		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HbA1c_TEST_CONCEPT), dateFormat);
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HBA1C), dateFormat);
 	}
 	public static MostRecentObservation getMostRecentCreatinine(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SERUM_CREATININE), dateFormat);
 	}
 	public static MostRecentObservation getMostRecentSBP(String name, String dateFormat) {
-		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE_CONCEPT), dateFormat);
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE), dateFormat);
 	}
 	public static MostRecentObservation getMostRecentPatientPhoneNumber(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TELEPHONE_NUMBER_CONCEPT), dateFormat);
@@ -388,7 +388,7 @@ public class RowPerPatientColumns {
 	}
 
 	public static CurrentOrdersRestrictedByConceptSet getCurrentDiabetesOrders(String name, String dateFormat, ResultFilter drugFilter) {
-		return getCurrentOrdersRestrictedByConceptSet(name,gp.getConcept(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUGS),
+		return getCurrentOrdersRestrictedByConceptSet(name,gp.getConcept(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUG_SET),
 				dateFormat, drugFilter);
 	}
 	

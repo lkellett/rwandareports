@@ -452,8 +452,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TB_PROGRAM = "reports.tbprogramname";
 		
-	public final static String DIABETES_PROGRAM ="reports.diabetesprogramname";
-		
 	public final static String HEART_FAILURE_PROGRAM_NAME ="reports.heartfailureprogramname";
 	
 	public final static String CRD_PROGRAM ="reports.CRDprogramname";
@@ -508,8 +506,6 @@ public class GlobalPropertiesManagement {
 	//Concepts
 	
 	public final static String TELEPHONE_NUMBER_CONCEPT = "reports.telephoneNumberConcept"; 
-	
-	public final static String SYSTOLIC_BLOOD_PRESSURE_CONCEPT = "reports.systolicBloodPressureConcept"; 
 	
 	public final static String PATIENT_HAS_ACCOMPAGNATEUR_CONCEPT = "reports.patientHasAccompagnateurConcept"; 
 	
@@ -630,8 +626,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CARDIOLOGY_ENCTOUNTER_TYPES = "cardiologyreporting.cardilogyEncounterTypes";
 	
-	public final static String DIABETES_ENCTOUNTER_TYPES = "reports.diabetesencountertypes";
-	
 	public final static String PEDI_FLOWSHEET_ENCOUNTER = "reports.pediFlowsheetEncounter";
 	
 	public final static String HIV_ENCOUNTER_TYPES = "reports.hivencountertypes";
@@ -659,7 +653,7 @@ public class GlobalPropertiesManagement {
 	public final static String DIABETES_DDB_FORM="reports.DiabetesDDBForm";
 	
 	public final static String CARDIOLOGY_DDB = "cardiologyreporting.hFDonneDeBaseFormId";
-	
+
 	public final static String PMTCT_DDB = "reports.pmtctDDBFormId";
 	
 	public final static String PMTCT_RDV = "reports.pmtctRDVFormId";
@@ -703,8 +697,6 @@ public class GlobalPropertiesManagement {
 	public final static String ART_FIRST_LINE_DRUG_SET = "reports.allFirstLineArtDrugsConceptSet";
 	
 	public final static String ART_SECOND_LINE_DRUG_SET = "reports.allSecondLineArtDrugsConceptSet";
-	
-	public final static String DIABETES_TREATMENT_DRUGS = "reports.diabetesTreatmentConcept";
 
     public final static String TB_FIRST_LINE_DRUG_SET = "reports.allFirstLineTBDrugsConceptSet";
 	
@@ -716,8 +708,6 @@ public class GlobalPropertiesManagement {
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
-	
-	public final static String HbA1c_TEST_CONCEPT = "reports.HbA1cTestConcept";	
 	
 	public final static String CD4_TEST = "reports.cd4Concept";
 	
