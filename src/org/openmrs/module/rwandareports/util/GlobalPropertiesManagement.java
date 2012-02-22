@@ -462,7 +462,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String EPILEPSY_PROGRAM ="reports.epilepsyprogramname";
 	
-
 	public final static String DM_PROGRAM = "reports.diabetesprogram";
 	
 	//ProgramWorkflow
@@ -597,12 +596,13 @@ public class GlobalPropertiesManagement {
 
 	public final static String HIV_DIAGNOSIS_DATE = "reports.hivDiagnosisDate";
 	
-
+	public final static String HEIGHT_WEIGHT_PERCENTAGE = "reports.hieghtWeightPercentage";
+	
 	public final static String HOSPITAL_ADMITTANCE="reports.hospitalAdmittanceConcept";
 	
 	public final static String LOCATION_OF_HOSPITALIZATION="reports.locationOfHospitalization";
 	
-
+	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -655,10 +655,12 @@ public class GlobalPropertiesManagement {
 	
 	//Forms
 	public final static String CARDIOLOGY_CONSULT_FORM = "cardiologyreporting.cardilogyConsultationFormId";
-		
+	
 	public final static String DIABETES_DDB_FORM="reports.DiabetesDDBForm";
 	
 	public final static String CARDIOLOGY_DDB = "cardiologyreporting.hFDonneDeBaseFormId";
+	
+	public final static String PMTCT_DDB = "reports.pmtctDDBFormId";
 	
 	public final static String DIABETES_DONNEES_DE_BASE = "diabetesreporting.diabetesDonneesDeBaseFormId";
 	
@@ -709,7 +711,7 @@ public class GlobalPropertiesManagement {
 	public final static String DIABETES_TREATMENT_DRUG_SET= "reports.diabetesTreatmentDrugConceptSet";
 	
 	public final static String METFORMIN_DRUG="reports.metforminConcept";
-
+	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
 	

@@ -7,12 +7,16 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Obs;
+import org.openmrs.ProgramWorkflowState;
+import org.openmrs.module.heightweighttracker.mapper.WHOCalculations;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
+import org.openmrs.module.rowperpatientreports.patientdata.result.PatientPropertyResult;
 
 public class HIVPediAlerts implements CustomCalculation{
 
@@ -22,7 +26,16 @@ public class HIVPediAlerts implements CustomCalculation{
 		
 		PatientAttributeResult alert = new PatientAttributeResult(null, null);
 		
+		ProgramWorkflowState state = (ProgramWorkflowState)context.getParameterValue("state");
+		
 		StringBuffer alerts = new StringBuffer();
+		
+		PatientPropertyResult age = null;
+		ObservationResult weight = null;
+		ObservationResult height = null;
+		ObservationResult heightWeight = null;
+		ObservationResult cd4Obs = null;
+		ObservationResult cd4Percent = null;
 		
 		for(PatientDataResult result: results)
 		{
@@ -78,6 +91,97 @@ public class HIVPediAlerts implements CustomCalculation{
 			if(result.getName().equals("SideEffects") && result.getValue() != null)
 			{
 				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
+			}
+			
+			if(result.getName().equals("heightWeight") && result.getValue() != null)
+			{
+				heightWeight = (ObservationResult)result;
+			}
+			
+			if(result.getName().equals("height") && result.getValue() != null)
+			{
+				height = (ObservationResult)result;
+			}
+			
+			if(result.getName().equals("weight") && result.getValue() != null)
+			{
+				weight = (ObservationResult)result;
+			}
+			
+			if(result.getName().equals("CD4Test") && result.getValue() != null)
+			{
+				cd4Obs = (ObservationResult)result;
+			}
+			
+			if(result.getName().equals("CD4Percent") && result.getValue() != null)
+			{
+				cd4Percent = (ObservationResult)result;
+			}
+			
+			if(result.getName().equals("age") && result.getValue() != null)
+			{
+				age = (PatientPropertyResult)result;
+			}
+		}
+		
+		if(age != null)
+		{
+			Integer ageInt = Integer.parseInt(age.getValueAsString());
+			
+			Double zscore = null;
+			if(ageInt < 6)
+			{
+				if(heightWeight!= null && heightWeight.getValue() != null)
+				{
+					zscore = Double.parseDouble(heightWeight.getValue());
+				}
+			}
+			else
+			{
+				if(height != null && height.getValue() != null && weight != null && weight.getValue() != null)
+				{
+					WHOCalculations who = new WHOCalculations();
+					String bmiAge = who.getCalculatedBmiForAge(height.getObs(), weight.getObs());
+					zscore = Double.parseDouble(bmiAge);
+				}
+			}
+			
+			if(zscore != null)
+			{
+				if(zscore <= -3)
+				{
+					alerts.append("Malnutrion rating: severe\n");
+				}
+				else if(zscore <= -2)
+				{
+					alerts.append("Malnutrion rating: moderate\n");
+				}
+				else if(zscore <= -1)
+				{
+					alerts.append("Malnutrion rating: mild\n");
+				}
+			}
+			
+			if(ageInt > 5)
+			{
+				if(cd4Obs != null && state.toString().contains("FOLLOWING") && cd4Obs.getObs().getValueNumeric() != null && cd4Obs.getObs().getValueNumeric() < 350)
+				{
+					alerts.append("CD4 < 350 \n");
+				}
+			}
+			else if(ageInt < 3)
+			{
+				if(cd4Percent != null && state.toString().contains("FOLLOWING") && cd4Percent.getObs().getValueNumeric() != null && cd4Percent.getObs().getValueNumeric() < 20)
+				{
+					alerts.append("CD4% < 20% \n");
+				}
+			}
+			else 
+			{
+				if(cd4Percent != null && state.toString().contains("FOLLOWING") && cd4Percent.getObs().getValueNumeric() != null && cd4Percent.getObs().getValueNumeric() < 25)
+				{
+					alerts.append("CD4% < 25% \n");
+				}
 			}
 		}
 		alert.setValue(alerts.toString());

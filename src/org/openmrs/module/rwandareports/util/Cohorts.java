@@ -52,95 +52,111 @@ public class Cohorts {
 		return patientsNotVoided;
 	}
 	
-	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, ProgramWorkflowState state, Integer daysBefore, Integer daysAfter) {
+	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, ProgramWorkflowState state,
+	                                                                        Integer daysBefore, Integer daysAfter) {
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
-		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
-		        "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state = " +
-		        state.getId() + 
-		        " and o.concept_id = " +
-		        concept.getConceptId() + 
-		        " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL " +
-		        daysBefore + 
-		        " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + 
-		        daysAfter +
-		        " DAY)");
+		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 "
+		                + "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state = "
+		                + state.getId()
+		                + " and o.concept_id = "
+		                + concept.getConceptId()
+		                + " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL "
+		                + daysBefore + " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + daysAfter + " DAY)");
 		return patientsWithBaseLineObservation;
 	}
 	
-	private static String getStateString(List<ProgramWorkflowState> state)
-	{
-		String stateId = "";
-		int i = 0;
-	    for(ProgramWorkflowState pws: state)
-        {
-        	if(i > 0)
-        	{
-        		stateId = stateId + ",";
-        	}
-        	
-        	stateId = stateId + pws.getId();
-        	
-        	i++;
-        }
-	    
-	    return stateId;
+	public static SqlCohortDefinition createPatientsWithDeclineFromBaseline(Concept concept, ProgramWorkflowState state) {
+		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+		        "select p.patient_id from patient p, obs o1, obs o2, patient_program pp, patient_state ps where p.voided = 0 " +
+		        "and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id =  " +
+		        "p.patient_id and ps.state = " + 
+		        state.getId() + 
+		        " and o1.concept_id = " +
+		        concept.getId() + 
+		        " and o1.obs_id = (select obs_id from obs where " +
+		        "voided = 0 and p.patient_id = person_id and concept_id = " +
+		        concept.getId() +
+		        " and value_numeric is not null and obs_datetime " +
+		        ">= ps.start_date order by value_numeric desc LIMIT 1) and o2.obs_id = (select obs_id from obs where voided = " +
+		        "0 and p.patient_id = person_id and concept_id = " +
+		        concept.getId() + 
+		        " and value_numeric is not null and obs_datetime >= " +
+		        "ps.start_date order by obs_datetime desc LIMIT 1) and ((o2.value_numeric/o1.value_numeric)*100) < 50");
+		return patientsWithBaseLineObservation;
 	}
 	
-	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter) {
-		 
+	private static String getStateString(List<ProgramWorkflowState> state) {
+		String stateId = "";
+		int i = 0;
+		for (ProgramWorkflowState pws : state) {
+			if (i > 0) {
+				stateId = stateId + ",";
+			}
+			
+			stateId = stateId + pws.getId();
+			
+			i++;
+		}
+		
+		return stateId;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithBaseLineObservation(Concept concept,
+	                                                                        List<ProgramWorkflowState> state,
+	                                                                        Integer daysBefore, Integer daysAfter) {
+		
 		String stateId = getStateString(state);
 		
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
-		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
-		        "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state in (" +
-		        stateId + 
-		        ") and o.concept_id = " +
-		        concept.getConceptId() + 
-		        " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL " +
-		        daysBefore + 
-		        " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + 
-		        daysAfter +
-		        " DAY)");
+		        "select p.patient_id from patient p, obs o, patient_program pp, patient_state ps where p.voided = 0 and o.voided = 0 and pp.voided = 0 and ps.voided = 0 "
+		                + "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and p.patient_id = o.person_id and ps.state in ("
+		                + stateId
+		                + ") and o.concept_id = "
+		                + concept.getConceptId()
+		                + " and o.value_numeric is not null and o.obs_datetime >= DATE_SUB(ps.start_date,INTERVAL "
+		                + daysBefore + " DAY) and o.obs_datetime <= DATE_ADD(ps.start_date,INTERVAL " + daysAfter + " DAY)");
 		return patientsWithBaseLineObservation;
 	}
 	
-	public static SqlCohortDefinition createPatientsWhereDrugRegimenDoesNotMatchState(Concept conceptSet, List<ProgramWorkflowState> states)
-	{
+	public static SqlCohortDefinition createPatientsWhereDrugRegimenDoesNotMatchState(Concept conceptSet,
+	                                                                                  List<ProgramWorkflowState> states) {
 		String stateId = getStateString(states);
 		
-		SqlCohortDefinition patients = new SqlCohortDefinition("select d.patient_id from (" + 
-				"select patient_id, start_date from orders where voided = 0 and concept_id in (select distinct concept_id from concept_set where concept_set = " +
-				conceptSet.getConceptId() +
-				") group by patient_id order by start_date asc)d " +
-				"INNER JOIN " +  
-				"(select p.patient_id as patient_id, ps.start_date as start_date from patient p, patient_program pp, patient_state ps where " + 
-				"p.voided = 0 and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state in ("
-				+ stateId + 
-				") group by p.patient_id order by start_date asc)s " +
-				"on s.patient_id = d.patient_id " +
-				"where d.start_date != s.start_date");
+		SqlCohortDefinition patients = new SqlCohortDefinition(
+		        "select d.patient_id from ("
+		                + "select patient_id, start_date from orders where voided = 0 and concept_id in (select distinct concept_id from concept_set where concept_set = "
+		                + conceptSet.getConceptId()
+		                + ") group by patient_id order by start_date asc)d "
+		                + "INNER JOIN "
+		                + "(select p.patient_id as patient_id, ps.start_date as start_date from patient p, patient_program pp, patient_state ps where "
+		                + "p.voided = 0 and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state in ("
+		                + stateId + ") group by p.patient_id order by start_date asc)s " + "on s.patient_id = d.patient_id "
+		                + "where d.start_date != s.start_date");
 		
 		return patients;
 	}
 	
 	public static SqlCohortDefinition createPatientsWithStatePredatingProgramEnrolment(ProgramWorkflowState state) {
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
-			"select p.patient_id from patient p, patient_program pp, patient_state ps where p.voided = 0 and pp.voided = 0 and ps.voided = 0 " +
-			"and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state = " + 
-			state.getId() +
-			" and ps.start_date < pp.date_enrolled");
+		        "select p.patient_id from patient p, patient_program pp, patient_state ps where p.voided = 0 and pp.voided = 0 and ps.voided = 0 "
+		                + "and ps.patient_program_id = pp.patient_program_id and pp.patient_id = p.patient_id and ps.state = "
+		                + state.getId() + " and ps.start_date < pp.date_enrolled");
 		return patientsWithBaseLineObservation;
 	}
 	
-	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept, ProgramWorkflowState state, Integer daysBefore, Integer daysAfter)
-	{
-		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
+	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept,
+	                                                                               ProgramWorkflowState state,
+	                                                                               Integer daysBefore, Integer daysAfter) {
+		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(
+		        createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
 		return patientsWithoutBaseLineObservation;
 	}
 	
-	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept, List<ProgramWorkflowState> state, Integer daysBefore, Integer daysAfter)
-	{
-		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
+	public static InverseCohortDefinition createPatientsWithoutBaseLineObservation(Concept concept,
+	                                                                               List<ProgramWorkflowState> state,
+	                                                                               Integer daysBefore, Integer daysAfter) {
+		InverseCohortDefinition patientsWithoutBaseLineObservation = new InverseCohortDefinition(
+		        createPatientsWithBaseLineObservation(concept, state, daysBefore, daysAfter));
 		return patientsWithoutBaseLineObservation;
 	}
 	
@@ -205,6 +221,16 @@ public class Cohorts {
 	}
 	
 	public static InProgramCohortDefinition createInProgramParameterizableByDate(String name, List<Program> programs,
+	                                                                             List<String> parameterName) {
+		InProgramCohortDefinition inProgram = createInProgram(name, programs);
+		
+		for (String p : parameterName) {
+			inProgram.addParameter(new Parameter(p, p, Date.class));
+		}
+		return inProgram;
+	}
+	
+	public static InProgramCohortDefinition createInProgramParameterizableByDate(String name, Program programs,
 	                                                                             List<String> parameterName) {
 		InProgramCohortDefinition inProgram = createInProgram(name, programs);
 		
@@ -497,8 +523,7 @@ public class Cohorts {
 		return drugsActive;
 	}
 	
-	public static CompositionCohortDefinition createHIVDiagnosisDate(String name)
-	{
+	public static CompositionCohortDefinition createHIVDiagnosisDate(String name) {
 		DateObsCohortDefinition dateOfDiagnosis = new DateObsCohortDefinition();
 		
 		Concept diagnosisConcept = gp.getConcept(GlobalPropertiesManagement.HIV_DIAGNOSIS_DATE);
@@ -506,8 +531,10 @@ public class Cohorts {
 		dateOfDiagnosis.setQuestion(diagnosisConcept);
 		dateOfDiagnosis.setTimeModifier(TimeModifier.ANY);
 		
-		CodedObsCohortDefinition positiveHIV = createCodedObsCohortDefinition("positiveHIV", gp.getConcept(GlobalPropertiesManagement.HIV_TEST), gp.getConcept(GlobalPropertiesManagement.POSITIVE_HIV_TEST_ANSWER), SetComparator.IN, TimeModifier.ANY);
-           
+		CodedObsCohortDefinition positiveHIV = createCodedObsCohortDefinition("positiveHIV",
+		    gp.getConcept(GlobalPropertiesManagement.HIV_TEST),
+		    gp.getConcept(GlobalPropertiesManagement.POSITIVE_HIV_TEST_ANSWER), SetComparator.IN, TimeModifier.ANY);
+		
 		CompositionCohortDefinition diagnosis = new CompositionCohortDefinition();
 		diagnosis.setName("diagnosis");
 		diagnosis.getSearches().put("date", new Mapped<CohortDefinition>(dateOfDiagnosis, new HashMap<String, Object>()));
