@@ -17,6 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
+		<require_module>org.openmrs.module.heightweighttracker</require_module>
 	</require_modules>
 
 	<extension>
@@ -1249,5 +1250,19 @@
 		<description>The id of the concept for the LOCATION OF HOSPITALIZATION</description>
 	</globalProperty>	
 	<!-- End of DM report global properties  -->
+	
+	<globalProperty>
+		<property>reports.hieghtWeightPercentage</property>
+		<defaultValue>2438e295-d9da-4d5c-bacc-13c313e34755</defaultValue>
+		<description>The id of the concept for the height weight percentage in kids</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctDDBFormId</property>
+		<defaultValue>cd066311-66c2-415b-82ce-a3b74bf95517</defaultValue>
+		<description>The id of the form id for the PMTCT ddb form</description>
+	</globalProperty>
+	
+	
 	
 </module>
