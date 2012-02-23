@@ -43,7 +43,6 @@ public class SetupDiabetesConsultAndLTFU {
 	private List<EncounterType> diabetesEncouters;
 		
 	public void setup() throws Exception {
-		delete();
 		setupPrograms();
 		ReportDefinition rd = createReportDefinition();	
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "DiabetesConsultAndLTFUSheet.xls","DiabetesConsultAndLTFUSheet.xls_", null);	
