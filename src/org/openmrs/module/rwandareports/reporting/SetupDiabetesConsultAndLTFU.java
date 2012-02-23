@@ -84,7 +84,6 @@ public class SetupDiabetesConsultAndLTFU {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("Diabetes Consult");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
-		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
 
 		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
 
@@ -145,7 +144,7 @@ public class SetupDiabetesConsultAndLTFU {
 								
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
-		mappings.put("endDate", "${endDate}");
+		mappings.put("endDate", new Date());
 		
 		reportDefinition.addDataSetDefinition("dataset1", dataSetDefinition, mappings);
 		
