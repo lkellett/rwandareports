@@ -44,38 +44,68 @@ public class SetupDiabetesConsultAndLTFU {
 		
 	public void setup() throws Exception {
 		setupPrograms();
-		ReportDefinition rd = createReportDefinition();	
-		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "DiabetesConsultAndLTFUSheet.xls","DiabetesConsultAndLTFUSheet.xls_", null);	
-		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:9,dataset:dataset1|sheet:2,row:8,dataset:dataset2");
-		design.setProperties(props);
-		h.saveReportDesign(design);
+		
+		ReportDefinition consultReportDefinition = createConsultReportDefinition();	
+		ReportDefinition ltfuReportDefinition = createLTFUReportDefinition();
+		
+		ReportDesign consultReporDesign = h.createRowPerPatientXlsOverviewReportDesign(consultReportDefinition, "DiabetesConsultSheet.xls","DiabetesConsultSheet.xls_", null);	
+		ReportDesign ltfuReporDesign = h.createRowPerPatientXlsOverviewReportDesign(ltfuReportDefinition, "DiabetesLTFUSheet.xls","DiabetesLTFUSheet.xls_", null);	
+		
+		Properties consultProps = new Properties();
+		consultProps.put("repeatingSections", "sheet:1,row:9,dataset:dataset1");
+		
+		Properties ltfuProps = new Properties();
+		ltfuProps.put("repeatingSections", "sheet:1,row:8,dataset:dataset2");
+		
+		consultReporDesign.setProperties(consultProps);
+		ltfuReporDesign.setProperties(ltfuProps);
+		
+		h.saveReportDesign(consultReporDesign);
+		h.saveReportDesign(ltfuReporDesign);
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("DiabetesConsultAndLTFUSheet.xls_".equals(rd.getName())) {
+			if ("DiabetesConsultSheet.xls_".equals(rd.getName())) {
+				rs.purgeReportDesign(rd);
+			}
+			if ("DiabetesLTFUSheet.xls_".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Diabetes Consult and Lost to Follow Up");
+		h.purgeReportDefinition("Diabetes Consult");
+		h.purgeReportDefinition("Diabetes Lost to Follow Up");
+		
 	}
 	
-	private ReportDefinition createReportDefinition() {
-		
+	private ReportDefinition createConsultReportDefinition() {
+
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Diabetes Late Visit and Lost to Follow Up");	
+		reportDefinition.setName("Diabetes Consult");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
-				
+
 		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
-		
-		     createConsultDataSetDefinition (reportDefinition,diabetesProgram);	
-		     createLTFUDataSetDefinition(reportDefinition,diabetesProgram);	
+
+		createConsultDataSetDefinition (reportDefinition,diabetesProgram);	
+		h.saveReportDefinition(reportDefinition);
+
+		return reportDefinition;
+	}
+	
+	private ReportDefinition createLTFUReportDefinition() {
+
+		ReportDefinition reportDefinition = new ReportDefinition();
+		reportDefinition.setName("Diabetes Lost to Follow Up");	
+		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
+		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
+
+		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
+		createLTFUDataSetDefinition(reportDefinition,diabetesProgram);	
 
 		h.saveReportDefinition(reportDefinition);
-		
+
 		return reportDefinition;
 	}
 	
