@@ -49,7 +49,6 @@ public class SetupNCDLateVisitandLTFUReport {
 	private Concept returnVisitDateConcept;
 
 	public void setup() throws Exception {
-		delete();
 		setupPrograms();
 		ReportDefinition rd = createReportDefinition();
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd,"NCDLateVisitAndLTFUSheet.xls","NCDLateVisitAndLTFUSheet.xls_", null);
