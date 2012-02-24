@@ -32,11 +32,14 @@ import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.query.encounter.EncounterQueryResult;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
 import org.openmrs.module.reporting.query.encounter.definition.SqlEncounterQuery;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.rwandareports.dataset.EncounterIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
+import org.openmrs.module.rwandareports.indicator.EncounterIndicator;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.Indicators;
@@ -54,7 +57,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 	private List<Program> DMPrograms=new ArrayList<Program>();
 	private int DMEncounterTypeId;
 	private EncounterType DMEncounterType;
-	private EncounterType adultInitialVisit;
 	private Form DDBform;
 	private List<Form> DDBforms=new ArrayList<Form>();
 	private List<EncounterType> patientsSeenEncounterTypes=new ArrayList<EncounterType>();	
@@ -88,67 +90,216 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		setUpProperties();
 		
-		ReportDefinition rd = new ReportDefinition();
-    	rd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		ReportDefinition monthlyRd = new ReportDefinition();
+    	monthlyRd.addParameter(new Parameter("endDate", "End Date", Date.class));
     	
     	Properties properties = new Properties();
     	properties.setProperty("hierarchyFields", "countyDistrict:District");
-    	rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
+    	monthlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
     	
-    	rd.setName("Diabetes Quarterly and Monthly Indicator Report");
+    	monthlyRd.setName("Diabetes Monthly Indicator Report");
     	
-    	rd.addDataSetDefinition(createDataSet(),
+    	monthlyRd.addDataSetDefinition(createMonthlyEncounterDataSet(),
+        	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
+    	
+    	
+    	monthlyRd.addDataSetDefinition(createMonthlyDataSet(),
     	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
     	
-    	h.saveReportDefinition(rd);
+    	
+    	// Quarterly Report Definition: Start
+    	
+    	ReportDefinition quarterlyRd = new ReportDefinition();
+    	quarterlyRd.addParameter(new Parameter("endDate", "End Date", Date.class));
+    	
+    
+    	quarterlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
+    	
+    	quarterlyRd.setName("Diabetes Quarterly Indicator Report");
+    	
+    	quarterlyRd.addDataSetDefinition(createEncounterQuarterlyDataSet(),
+        	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
+    	
+    	
+    	quarterlyRd.addDataSetDefinition(createQuarterlyDataSet(),
+    	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
+    	
+    	// Quarterly Report Definition: End
+    	
+    	
+    	ProgramEnrollmentCohortDefinition patientEnrolledInDM=new ProgramEnrollmentCohortDefinition();
+    	patientEnrolledInDM.addParameter(new Parameter("enrolledOnOrBefore","enrolledOnOrBefore",Date.class));
+    	patientEnrolledInDM.setPrograms(DMPrograms);
+    	
+    	//rd.setBaseCohortDefinition(Cohorts.createProgramEnrollment("InDM", DMProgram), null);
 		
-    	ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd,
-		    "DM_Quarterly_Monthly_Indicator_Report.xls", "Diabetes Quarterly and Monthly Indicator Report (Excel)", null);
-		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,dataset:Data Set");
-		design.setProperties(props);
-		h.saveReportDesign(design);
+    	monthlyRd.setBaseCohortDefinition(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrBefore=${endDate}"));
+    	quarterlyRd.setBaseCohortDefinition(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrBefore=${endDate}"));
+    	
+    	
+    	h.saveReportDefinition(monthlyRd);
+    	h.saveReportDefinition(quarterlyRd);
+		
+    	
+    	ReportDesign monthlyDesign = h.createRowPerPatientXlsOverviewReportDesign(monthlyRd,
+    		    "DM_Monthly_Indicator_Report.xls", "Diabetes Monthly Indicator Report (Excel)", null);
+    		Properties monthlyProps = new Properties();
+    		monthlyProps.put("repeatingSections", "sheet:1,dataset:Monthly Data Set;Encounter Monthly Data Set");
+    		//monthlyProps.put("repeatingSections", "sheet:1,dataset:Data Set|sheet:1,dataset:Encounter Data Set");
+    		
+    		monthlyDesign.setProperties(monthlyProps);
+    		h.saveReportDesign(monthlyDesign);
+    	
+    	ReportDesign quarterlyDesign = h.createRowPerPatientXlsOverviewReportDesign(quarterlyRd,
+		    "DM_Quarterly_Indicator_Report.xls", "Diabetes Quarterly Indicator Report (Excel)", null);
+		Properties quarterlyProps = new Properties();
+		quarterlyProps.put("repeatingSections", "sheet:1,dataset:Quarterly Data Set;Encounter Quarterly Data Set");
+		//quarterlyProps.put("repeatingSections", "sheet:1,dataset:Data Set|sheet:1,dataset:Encounter Data Set");
+		
+		quarterlyDesign.setProperties(quarterlyProps);
+		h.saveReportDesign(quarterlyDesign);
+		
+		
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("Diabetes Quarterly and Monthly Indicator Report (Excel)".equals(rd.getName())) {
+			if ("Diabetes Monthly Indicator Report (Excel)".equals(rd.getName())||"Diabetes Quarterly Indicator Report (Excel)".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Diabetes Quarterly and Monthly Indicator Report");
+		h.purgeReportDefinition("Diabetes Quarterly Indicator Report");
+		h.purgeReportDefinition("Diabetes Monthly Indicator Report");
 		
 	}
 	
-	public LocationHierachyIndicatorDataSetDefinition createDataSet() {
+	// Create Monthly Encounter Data set
+	
+public LocationHierachyIndicatorDataSetDefinition createMonthlyEncounterDataSet() {
 		
-		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createBaseDataSet());
-		ldsd.setName("Data Set");
+		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createMonthlyEncounterBaseDataSet());
+		ldsd.setName("Encounter Monthly Data Set");
 		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
 		return ldsd;
 	}
 	
+private EncounterIndicatorDataSetDefinition createMonthlyEncounterBaseDataSet() {
+		
+		EncounterIndicatorDataSetDefinition eidsd = new EncounterIndicatorDataSetDefinition();
 	
-	private CohortIndicatorDataSetDefinition createBaseDataSet() {
+		eidsd.setName("eidsd");
+		eidsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		
+		createMonthlyIndicators(eidsd);
+		return eidsd;
+	}
+
+private void createMonthlyIndicators(EncounterIndicatorDataSetDefinition dsd) {
+	
+	SqlEncounterQuery patientVisitsToDMClinic = new SqlEncounterQuery();
+	
+	patientVisitsToDMClinic.setQuery("select distinct e.encounter_id from encounter e where (e.encounter_type="+DMEncounterTypeId+" or e.form_id="+DDBform.getId()+") and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.voided=0");
+	patientVisitsToDMClinic.setName("patientVisitsToDMClinic");
+	patientVisitsToDMClinic.addParameter(new Parameter("startDate", "startDate", Date.class));
+	patientVisitsToDMClinic.addParameter(new Parameter("endDate", "endDate", Date.class));
+	
+	EncounterIndicator patientVisitsToDMClinicMonthIndicator = new EncounterIndicator();
+	patientVisitsToDMClinicMonthIndicator.setName("patientVisitsToDMClinicMonthIndicator");
+	patientVisitsToDMClinicMonthIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientVisitsToDMClinic,ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${endDate-1m}")));
+	
+	dsd.addColumn(patientVisitsToDMClinicMonthIndicator);		
+	
+	}
+
+
+//Create Quarterly Encounter Data set
+
+public LocationHierachyIndicatorDataSetDefinition createEncounterQuarterlyDataSet() {
+	
+	LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createEncounterQuarterlyBaseDataSet());
+	ldsd.setName("Encounter Quarterly Data Set");
+	ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+	ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
+	
+	return ldsd;
+}
+
+private EncounterIndicatorDataSetDefinition createEncounterQuarterlyBaseDataSet() {
+	
+	EncounterIndicatorDataSetDefinition eidsd = new EncounterIndicatorDataSetDefinition();
+
+	eidsd.setName("eidsd");
+	eidsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+	
+	createQuarterlyIndicators(eidsd);
+	return eidsd;
+}
+
+	
+private void createQuarterlyIndicators(EncounterIndicatorDataSetDefinition dsd) {
+		
+		SqlEncounterQuery patientVisitsToDMClinic = new SqlEncounterQuery();
+		
+		patientVisitsToDMClinic.setQuery("select distinct e.encounter_id from encounter e where (e.encounter_type="+DMEncounterTypeId+" or e.form_id="+DDBform.getId()+") and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.voided=0");
+		patientVisitsToDMClinic.setName("patientVisitsToDMClinic");
+		patientVisitsToDMClinic.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientVisitsToDMClinic.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		EncounterIndicator patientVisitsToDMClinicQuarterIndicator = new EncounterIndicator();
+		patientVisitsToDMClinicQuarterIndicator.setName("patientVisitsToDMClinicQuarterIndicator");
+		patientVisitsToDMClinicQuarterIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientVisitsToDMClinic,ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${endDate-3m}")));
+		
+		
+		dsd.addColumn(patientVisitsToDMClinicQuarterIndicator);
+		
+		}
+	
+// create monthly cohort Data set
+
+public LocationHierachyIndicatorDataSetDefinition createMonthlyDataSet() {
+	
+	LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createMonthlyBaseDataSet());
+	ldsd.setName("Monthly Data Set");
+	ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+	ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
+	
+	return ldsd;
+}
+
+	private CohortIndicatorDataSetDefinition createMonthlyBaseDataSet() {
 		CohortIndicatorDataSetDefinition dsd = new CohortIndicatorDataSetDefinition();
-		dsd.setName("Cohort Data Set");
+		dsd.setName("Monthly Cohort Data Set");
 		dsd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		createIndicators(dsd);
+		createMonthlyIndicators(dsd);
 		return dsd;
 	}
 	
-	private void createIndicators(CohortIndicatorDataSetDefinition dsd) {
+	// create quarterly cohort Data set
+	
+	public LocationHierachyIndicatorDataSetDefinition createQuarterlyDataSet() {
 		
+		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition(createQuarterlyBaseDataSet());
+		ldsd.setName("Quarterly Data Set");
+		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
 		
-	/*	SqlEncounterQuery encq=new SqlEncounterQuery();
-		encq.setQuery("select encounter_id from encounter where encounter_type=42");
+		return ldsd;
+	}
+
+		private CohortIndicatorDataSetDefinition createQuarterlyBaseDataSet() {
+			CohortIndicatorDataSetDefinition dsd = new CohortIndicatorDataSetDefinition();
+			dsd.setName("Quarterly Cohort Data Set");
+			dsd.addParameter(new Parameter("endDate", "End Date", Date.class));			
+			createQuarterlyIndicators(dsd);
+			return dsd;
+		}
 		
-		EncounterQueryResult s =new EncounterQueryResult(encq,new EvaluationContext());
-		*/
+	
+	private void createQuarterlyIndicators(CohortIndicatorDataSetDefinition dsd) {
 		
 		
 // A2: Total # of patients seen in the last month/quarter
@@ -245,9 +396,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsEnrolledAndHaveHbAc1AtIntakeCountIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveHbAc1AtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-3m},end=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 
-		CohortIndicator patientsEnrolledAndHaveHbAc1AtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndHaveHbAc1AtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
-		
-		CohortIndicator patientsEnrolledAndHaveHbAc1AtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveHbAc1AtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
 		
 		
 		
@@ -276,9 +424,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsEnrolledAndHaveglucoseAtIntakeCountIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveglucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-3m},end=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 
-		CohortIndicator patientsEnrolledAndHaveglucoseAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndHaveglucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
-		
-		CohortIndicator patientsEnrolledAndHaveglucoseAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveglucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
 		
 		
         //B5: Of the new patients enrolled in the last month/quarter, % with BMI recorded at intake
@@ -302,9 +447,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsEnrolledAndBMIRecordedAtIntakeCountIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndBMIRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-3m},end=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 
-		CohortIndicator patientsEnrolledAndBMIRecordedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndBMIRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
-		
-		CohortIndicator patientsEnrolledAndBMIRecordedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndBMIRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
 		
 		
         //B6: Of the new patients enrolled in the last month/quarter, % with BP recorded at intake
@@ -330,9 +472,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsEnrolledAndBPRecordedAtIntakeCountIndicator=Indicators.newCountIndicator("patientsEnrolledAndBPRecordedAtIntakeCountIndicator", patientsEnrolledAndBPRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-3m},end=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 
-		CohortIndicator patientsEnrolledAndBPRecordedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndBPRecordedAtIntakeIndicator", patientsEnrolledAndBPRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
-		
-		CohortIndicator patientsEnrolledAndBPRecordedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndBPRecordedAtIntakeCountIndicator", patientsEnrolledAndBPRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
 		
 		
 		
@@ -359,9 +498,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsEnrolledAndNeuropathyCheckedAtIntakeCountIndicator=Indicators.newCountIndicator("patientsEnrolledAndNeuropathyCheckedAtIntakeCountIndicator", patientsEnrolledAndNeuropathyCheckedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-3m},end=${endDate},enrolledOnOrAfter=${endDate-3m},enrolledOnOrBefore=${endDate}"));
 
-		CohortIndicator patientsEnrolledAndNeuropathyCheckedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndNeuropathyCheckedAtIntakeIndicator", patientsEnrolledAndNeuropathyCheckedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
-		
-		CohortIndicator patientsEnrolledAndNeuropathyCheckedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndNeuropathyCheckedAtIntakeCountIndicator", patientsEnrolledAndNeuropathyCheckedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
 		
 		
 		
@@ -516,11 +652,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		CohortIndicator patientsSeenAndNotOnAnyDMRegimenCountQuarterIndicator=Indicators.newCountIndicator("patientsSeenAndNotOnAnyDMRegimenCountQuarterIndicator", patientsSeenAndNotOnAnyDMRegimen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m},onOrBefore=${endDate}"));
 		
-        CohortIndicator patientsSeenAndNotOnAnyDMRegimenMonthIndicator=Indicators.newFractionIndicator("patientsSeenAndNotOnAnyDMRegimenMonthIndicator", patientsSeenAndNotOnAnyDMRegimen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"), patientsSeenComposition, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"));
-		
-		CohortIndicator patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator=Indicators.newCountIndicator("patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator", patientsSeenAndNotOnAnyDMRegimen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"));
-		
-		
+       
         //D2: Of total patients seen in the last quarter, % on any type of insulin at last visit
 		
 		SqlCohortDefinition patientOnInsulin=new SqlCohortDefinition("select o.patient_id from orders o,(select * from (select * from encounter e where (e.encounter_type=42 or e.form_id=83) and e.voided=0 order by e.encounter_datetime desc) as lastencbypatient group by lastencbypatient.patient_id) as lastenc where lastenc.patient_id>=o.patient_id and lastenc.encounter_datetime>=o.start_date and (o.concept_id= "+insulin7030.getId()+" or o.concept_id= "+insulinLente.getId()+" or o.concept_id= "+insulinRapide.getId()+") and o.discontinued=0 and o.voided=0 group by o.patient_id;");
@@ -646,7 +778,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//E3: Of total active patients, % with no visit 14 weeks or more past last visit date
 		
-		SqlCohortDefinition	withDiabetesVisit=new SqlCohortDefinition("select patient_id from encounter where encounter_type="+DMEncounterType.getId()+" and encounter_datetime>= :start and encounter_datetime<= :end and voided=0");
+		SqlCohortDefinition	withDiabetesVisit=new SqlCohortDefinition("select patient_id from encounter where (encounter_type="+DMEncounterType.getId()+" or form_id="+DDBform.getId()+") and encounter_datetime>= :start and encounter_datetime<= :end and voided=0");
 		withDiabetesVisit.addParameter(new Parameter("end", "end", Date.class));
 		withDiabetesVisit.addParameter(new Parameter("start", "start", Date.class));
 		
@@ -733,42 +865,22 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B3NQ", "New patients enrolled in the last quarter, Number with HbA1c done at intake",
 		new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B3M", "New patients enrolled in the last month, % with HbA1c done at intake",
-		new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B3NM", "New patients enrolled in the last month, Number with HbA1c done at intake",
-		new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
 		dsd.addColumn("B4Q", "New patients enrolled in the last quarter, % with Glucose done at intake",
 		new Mapped(patientsEnrolledAndHaveglucoseAtIntakeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B4NQ", "New patients enrolled in the last quarter, Number with Glucose done at intake",
 		new Mapped(patientsEnrolledAndHaveglucoseAtIntakeCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B4M", "New patients enrolled in the last month, % with Glucose done at intake",
-		new Mapped(patientsEnrolledAndHaveglucoseAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B4NM", "New patients enrolled in the last month, Number with Glucose done at intake",
-		new Mapped(patientsEnrolledAndHaveglucoseAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
 		dsd.addColumn("B5Q", "New patients enrolled in the last quarter, % with BMI recorded at intake",
 		new Mapped(patientsEnrolledAndBMIRecordedAtIntakeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B5NQ", "New patients enrolled in the last quarter, Number with BMI recorded at intake",
 		new Mapped(patientsEnrolledAndBMIRecordedAtIntakeCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B5M", "New patients enrolled in the last month, % with BMI recorded at intake",
-		new Mapped(patientsEnrolledAndBMIRecordedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B5NM", "Of the new patients enrolled in the last month, Number with BMI recorded at intake",
-		new Mapped(patientsEnrolledAndBMIRecordedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B6Q", "New patients enrolled in the last quarter, % with BMI recorded at intake",
 		new Mapped(patientsEnrolledAndBPRecordedAtIntakeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B6NQ", "New patients enrolled in the last quarter, Number with BMI recorded at intake",
 		new Mapped(patientsEnrolledAndBPRecordedAtIntakeCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B6M", "New patients enrolled in the last month, % with BMI recorded at intake",
-		new Mapped(patientsEnrolledAndBPRecordedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B6NM", "new patients enrolled in the last month, Number with BMI recorded at intake",
-		new Mapped(patientsEnrolledAndBPRecordedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B7Q", "new patients enrolled in the last quarter, % with Neuropathy checked at intake",
 		new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("B7NQ", "new patients enrolled in the last quarter, Number with Neuropathy checked at intake",
 		new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B7M", "new patients enrolled in the last month, % with Neuropathy checked at intake",
-		new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("B7NM", "new patients enrolled in the last month, Number with Neuropathy checked at intake",
-		new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
 		dsd.addColumn("C1Q", "total patients seen in the last quarter and are on ace inhibitors, % who had Creatinine tested in the last 6 months",
 		new Mapped(patientsSeenOnAceInhibitorsAndTestedForCreatinineIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("C1NQ", "total patients seen in the last quarter and are on ace inhibitors, Numerator who had Creatinine tested in the last 6 months",
@@ -801,10 +913,6 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		new Mapped(patientsSeenAndNotOnAnyDMRegimenQuarterIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("D1NQ", "Total patients seen in the last month/quarter,number with no regimen documented",
 		new Mapped(patientsSeenAndNotOnAnyDMRegimenCountQuarterIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("D1M", "Total patients seen in the last month, % with no regimen documented",
-		new Mapped(patientsSeenAndNotOnAnyDMRegimenMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("D1NM", "Total patients seen in the last month, number with no regimen documented",
-		new Mapped(patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("D2Q", "Total patients seen in the last quarter, % on any type of insulin at last visit",
 		new Mapped(patientsSeenAndOnInsulinQuarterIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("D2NQ", "Total patients seen in the last quarter, Number on any type of insulin at last visit",
@@ -851,12 +959,220 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		new Mapped(patientsTestedForHbA1cWithLastHbA1cLessThanEightDenominatoCountQuarterIndicatorrs, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 	}
 	
+	
+	
+	
+	
+	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
+		
+		
+		// A2: Total # of patients seen in the last month/quarter
+				
+				EncounterCohortDefinition patientSeen=Cohorts.createEncounterParameterizedByDate("Patients seen", onOrAfterOnOrBefore, patientsSeenEncounterTypes);
+				
+				EncounterCohortDefinition patientWithDDB=Cohorts.createEncounterBasedOnForms("patientWithDDB", onOrAfterOnOrBefore, DDBforms);
+						
+				CompositionCohortDefinition patientsSeenComposition = new CompositionCohortDefinition();
+				patientsSeenComposition.setName("patientsSeenComposition");
+				patientsSeenComposition.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+				patientsSeenComposition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+				patientsSeenComposition.getSearches().put("1",new Mapped<CohortDefinition>(patientWithDDB, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+				patientsSeenComposition.getSearches().put("2",new Mapped<CohortDefinition>(patientSeen, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));		
+				patientsSeenComposition.setCompositionString("1 OR 2");
+				
+				CohortIndicator patientsSeenMonthOneIndicator = Indicators.newCountIndicator("patientsSeenMonthOneIndicator", patientsSeenComposition, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"));
+				
+				
+		// A3: Total # of new patients enrolled in the last month/quarter
+				
+				ProgramEnrollmentCohortDefinition patientEnrolledInDM=Cohorts.createProgramEnrollmentParameterizedByStartEndDate("Enrolled In DM", DMProgram);
+				
+				CohortIndicator patientEnrolledInDMMonthOneIndicator = Indicators.newCountIndicator("patientEnrolledInDMQuarterIndicator", patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				//B3: Of the new patients enrolled in the last month/quarter, % with HbA1c done at intake
+				
+				//// collection for HbA1c not provided at intake, modification id needed on DDB form.
+				
+				
+				
+				SqlCohortDefinition HbA1cAtIntake=new SqlCohortDefinition("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="+DDBform.getId()+" and o.concept_id="+hbA1c.getId()+" and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
+				HbA1cAtIntake.setName("HbA1cAtIntake");
+				HbA1cAtIntake.addParameter(new Parameter("start","start",Date.class));
+				HbA1cAtIntake.addParameter(new Parameter("end","end",Date.class));
+				
+				CompositionCohortDefinition patientsEnrolledAndHaveHbAc1AtIntake = new CompositionCohortDefinition();
+				patientsEnrolledAndHaveHbAc1AtIntake.setName("patientsEnrolledAndHaveHbAc1AtIntake");
+				patientsEnrolledAndHaveHbAc1AtIntake.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+				patientsEnrolledAndHaveHbAc1AtIntake.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+				patientsEnrolledAndHaveHbAc1AtIntake.addParameter(new Parameter("start", "start", Date.class));
+				patientsEnrolledAndHaveHbAc1AtIntake.addParameter(new Parameter("end", "end", Date.class));
+				patientsEnrolledAndHaveHbAc1AtIntake.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
+				patientsEnrolledAndHaveHbAc1AtIntake.getSearches().put("2",new Mapped<CohortDefinition>(HbA1cAtIntake, ParameterizableUtil.createParameterMappings("start=${start},end=${end}")));
+				patientsEnrolledAndHaveHbAc1AtIntake.setCompositionString("1 AND 2");
+
+		       CohortIndicator patientsEnrolledAndHaveHbAc1AtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndHaveHbAc1AtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				CohortIndicator patientsEnrolledAndHaveHbAc1AtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveHbAc1AtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				
+				
+				
+				
+				//B4: Of the new patients enrolled in the last month/quarter, % with Glucose done at intake
+				
+				SqlCohortDefinition glucoseAtIntake=new SqlCohortDefinition("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="+DDBform.getId()+" and o.concept_id="+glucose.getId()+" and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
+				glucoseAtIntake.setName("glucoseAtIntake");
+				glucoseAtIntake.addParameter(new Parameter("start","start",Date.class));
+				glucoseAtIntake.addParameter(new Parameter("end","end",Date.class));
+				
+				CompositionCohortDefinition patientsEnrolledAndHaveglucoseAtIntake = new CompositionCohortDefinition();
+				patientsEnrolledAndHaveglucoseAtIntake.setName("patientsEnrolledAndHaveglucoseAtIntake");
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("start", "start", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("end", "end", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("startDate", "startDate", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.addParameter(new Parameter("endDate", "endDate", Date.class));
+				patientsEnrolledAndHaveglucoseAtIntake.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
+				patientsEnrolledAndHaveglucoseAtIntake.getSearches().put("2",new Mapped<CohortDefinition>(glucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${start},end=${end}")));
+				patientsEnrolledAndHaveglucoseAtIntake.setCompositionString("1 AND 2");
+
+		        CohortIndicator patientsEnrolledAndHaveglucoseAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndHaveglucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				CohortIndicator patientsEnrolledAndHaveglucoseAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndHaveglucoseAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				
+		        //B5: Of the new patients enrolled in the last month/quarter, % with BMI recorded at intake
+				
+				SqlCohortDefinition BMIAtIntake=new SqlCohortDefinition("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="+DDBform.getId()+" and (o.concept_id="+weight.getId()+" or o.concept_id="+height.getId()+") and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
+				BMIAtIntake.setName("BMIAtIntake");
+				BMIAtIntake.addParameter(new Parameter("start","start",Date.class));
+				BMIAtIntake.addParameter(new Parameter("end","end",Date.class));
+				
+				CompositionCohortDefinition patientsEnrolledAndBMIRecordedAtIntake = new CompositionCohortDefinition();
+				patientsEnrolledAndBMIRecordedAtIntake.setName("patientsEnrolledAndBMIRecordedAtIntake");
+				patientsEnrolledAndBMIRecordedAtIntake.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+				patientsEnrolledAndBMIRecordedAtIntake.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+				patientsEnrolledAndBMIRecordedAtIntake.addParameter(new Parameter("start", "start", Date.class));
+				patientsEnrolledAndBMIRecordedAtIntake.addParameter(new Parameter("end", "end", Date.class));
+				patientsEnrolledAndBMIRecordedAtIntake.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
+				patientsEnrolledAndBMIRecordedAtIntake.getSearches().put("2",new Mapped<CohortDefinition>(BMIAtIntake, ParameterizableUtil.createParameterMappings("start=${start},end=${end}")));
+				patientsEnrolledAndBMIRecordedAtIntake.setCompositionString("1 AND 2");
+
+		        CohortIndicator patientsEnrolledAndBMIRecordedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndHaveglucoseAtIntakeIndicator", patientsEnrolledAndBMIRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				CohortIndicator patientsEnrolledAndBMIRecordedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndHaveglucoseAtIntakeCountIndicator", patientsEnrolledAndBMIRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				
+		        //B6: Of the new patients enrolled in the last month/quarter, % with BP recorded at intake
+				
+				SqlCohortDefinition BPAtIntake=new SqlCohortDefinition("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="+DDBform.getId()+" and (o.concept_id="+diastolicBP.getId()+" or o.concept_id="+systolicBP.getId()+") and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
+				BPAtIntake.setName("BPAtIntake");
+				BPAtIntake.addParameter(new Parameter("start","start",Date.class));
+				BPAtIntake.addParameter(new Parameter("end","end",Date.class));
+				
+				CompositionCohortDefinition patientsEnrolledAndBPRecordedAtIntake = new CompositionCohortDefinition();
+				patientsEnrolledAndBPRecordedAtIntake.setName("patientsEnrolledAndBPRecordedAtIntake");
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("start", "start", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("end", "end", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("startDate", "startDate", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.addParameter(new Parameter("endDate", "endDate", Date.class));
+				patientsEnrolledAndBPRecordedAtIntake.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
+				patientsEnrolledAndBPRecordedAtIntake.getSearches().put("2",new Mapped<CohortDefinition>(BPAtIntake, ParameterizableUtil.createParameterMappings("start=${start},end=${end}")));
+				patientsEnrolledAndBPRecordedAtIntake.setCompositionString("1 AND 2");
+
+		       
+				CohortIndicator patientsEnrolledAndBPRecordedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndBPRecordedAtIntakeIndicator", patientsEnrolledAndBPRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				CohortIndicator patientsEnrolledAndBPRecordedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndBPRecordedAtIntakeCountIndicator", patientsEnrolledAndBPRecordedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				
+				
+		  //B7: Of the new patients enrolled in the last month/quarter, % with Neuropathy status recorded at intake
+				
+				SqlCohortDefinition NeuropathyAtIntake=new SqlCohortDefinition("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="+DDBform.getId()+" and (o.concept_id="+sensationInLeftFoot.getId()+" or o.concept_id="+sensationInRightFoot.getId()+") and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
+				NeuropathyAtIntake.setName("NeuropathyAtIntake");
+				NeuropathyAtIntake.addParameter(new Parameter("start","start",Date.class));
+				NeuropathyAtIntake.addParameter(new Parameter("end","end",Date.class));
+				
+				CompositionCohortDefinition patientsEnrolledAndNeuropathyCheckedAtIntake = new CompositionCohortDefinition();
+				patientsEnrolledAndNeuropathyCheckedAtIntake.setName("patientsEnrolledAndNeuropathyCheckedAtIntake");
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("start", "start", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("end", "end", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("startDate", "startDate", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.addParameter(new Parameter("endDate", "endDate", Date.class));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.getSearches().put("1",new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${enrolledOnOrAfter},enrolledOnOrBefore=${enrolledOnOrBefore}")));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.getSearches().put("2",new Mapped<CohortDefinition>(NeuropathyAtIntake, ParameterizableUtil.createParameterMappings("start=${start},end=${end}")));
+				patientsEnrolledAndNeuropathyCheckedAtIntake.setCompositionString("1 AND 2");
+
+		        CohortIndicator patientsEnrolledAndNeuropathyCheckedAtIntakeMonthIndicator=Indicators.newFractionIndicator("patientsEnrolledAndNeuropathyCheckedAtIntakeIndicator", patientsEnrolledAndNeuropathyCheckedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"), patientEnrolledInDM, ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+				
+				CohortIndicator patientsEnrolledAndNeuropathyCheckedAtIntakeCountMonthIndicator=Indicators.newCountIndicator("patientsEnrolledAndNeuropathyCheckedAtIntakeCountIndicator", patientsEnrolledAndNeuropathyCheckedAtIntake, ParameterizableUtil.createParameterMappings("start=${endDate-1m},end=${endDate},enrolledOnOrAfter=${endDate-1m},enrolledOnOrBefore=${endDate}"));
+								
+				//D1: Of total patients seen in the last month/quarter, % with no regimen documented
+				
+				SqlCohortDefinition patientOnRegimen=new SqlCohortDefinition("select distinct patient_id from orders where concept_id in ("+splitedDiabetesConceptSet+") and voided=0 and discontinued=0");
+				
+				CompositionCohortDefinition patientsSeenAndNotOnAnyDMRegimen = new CompositionCohortDefinition();
+				patientsSeenAndNotOnAnyDMRegimen.setName("patientsSeenAndNotOnAnyDMRegimen");
+				patientsSeenAndNotOnAnyDMRegimen.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+				patientsSeenAndNotOnAnyDMRegimen.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+				patientsSeenAndNotOnAnyDMRegimen.getSearches().put("1",new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+				patientsSeenAndNotOnAnyDMRegimen.getSearches().put("2",new Mapped<CohortDefinition>(patientOnRegimen, null));
+				patientsSeenAndNotOnAnyDMRegimen.setCompositionString("1 AND (NOT 2)");
+					
+		       
+		        CohortIndicator patientsSeenAndNotOnAnyDMRegimenMonthIndicator=Indicators.newFractionIndicator("patientsSeenAndNotOnAnyDMRegimenMonthIndicator", patientsSeenAndNotOnAnyDMRegimen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"), patientsSeenComposition, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"));
+				
+				CohortIndicator patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator=Indicators.newCountIndicator("patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator", patientsSeenAndNotOnAnyDMRegimen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m},onOrBefore=${endDate}"));
+				
+				
+				//Adding columns to data set definition
+				
+				
+				dsd.addColumn("A2QM1", "Total # of patients seen in the last month one",
+				    new Mapped(patientsSeenMonthOneIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("A3QM1", "Total # of new patients enrolled in the month one",
+			    new Mapped(patientEnrolledInDMMonthOneIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B3M", "New patients enrolled in the last month, % with HbA1c done at intake",
+				new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B3NM", "New patients enrolled in the last month, Number with HbA1c done at intake",
+				new Mapped(patientsEnrolledAndHaveHbAc1AtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
+				dsd.addColumn("B4M", "New patients enrolled in the last month, % with Glucose done at intake",
+				new Mapped(patientsEnrolledAndHaveglucoseAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B4NM", "New patients enrolled in the last month, Number with Glucose done at intake",
+				new Mapped(patientsEnrolledAndHaveglucoseAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
+				dsd.addColumn("B5M", "New patients enrolled in the last month, % with BMI recorded at intake",
+				new Mapped(patientsEnrolledAndBMIRecordedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B5NM", "Of the new patients enrolled in the last month, Number with BMI recorded at intake",
+				new Mapped(patientsEnrolledAndBMIRecordedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B6M", "New patients enrolled in the last month, % with BMI recorded at intake",
+				new Mapped(patientsEnrolledAndBPRecordedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B6NM", "new patients enrolled in the last month, Number with BMI recorded at intake",
+				new Mapped(patientsEnrolledAndBPRecordedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B7M", "new patients enrolled in the last month, % with Neuropathy checked at intake",
+				new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("B7NM", "new patients enrolled in the last month, Number with Neuropathy checked at intake",
+				new Mapped(patientsEnrolledAndNeuropathyCheckedAtIntakeCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
+				dsd.addColumn("D1M", "Total patients seen in the last month, % with no regimen documented",
+				new Mapped(patientsSeenAndNotOnAnyDMRegimenMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+				dsd.addColumn("D1NM", "Total patients seen in the last month, number with no regimen documented",
+				new Mapped(patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+			}
+	
+	
+	
+	
+	
 	private void setUpProperties() {
 		DMProgram=gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM);
 		DMPrograms.add(DMProgram);
 		DMEncounterTypeId=Integer.parseInt(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.DIABETES_VISIT));
 		DMEncounterType=gp.getEncounterType(GlobalPropertiesManagement.DIABETES_VISIT);
-		adultInitialVisit=gp.getEncounterType(GlobalPropertiesManagement.ADULT_INITIAL_VISIT);
 		DDBform=gp.getForm(GlobalPropertiesManagement.DIABETES_DDB_FORM);
 		DDBforms.add(DDBform);
 		patientsSeenEncounterTypes.add(DMEncounterType);
