@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-		<require_module>org.openmrs.module.heightweighttracker</require_module>
+		<!-- <require_module>org.openmrs.module.heightweighttracker</require_module> -->
 	</require_modules>
 
 	<extension>
@@ -1089,16 +1089,7 @@
 		<description>
           This global property is used to get Heart failure donne de Base Form . The default value is form ID. 
 		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>diabetesreporting.diabetesDonneesDeBaseFormId</property>
-		<defaultValue>83</defaultValue>
-		<description>
-          This global property is used to get diabetes donne de Base Form . The default value is form ID. 
-		</description>
-	</globalProperty>
-	
+	</globalProperty>	
 	<!-- End Heart Failure report global properties  -->
 	<!-- Start of DM report global properties  -->
 	
@@ -1108,8 +1099,7 @@
 		<description>
 			The name of the DIABETES PROGRAM to be used
 		</description>
-	</globalProperty>
-	
+	</globalProperty>	
 	<globalProperty>
 		<property>reports.DiabetesIncounterType</property>
 		<defaultValue>42</defaultValue>

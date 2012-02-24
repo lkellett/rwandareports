@@ -658,7 +658,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PMTCT_RDV = "reports.pmtctRDVFormId";
 	
-	public final static String DIABETES_DONNEES_DE_BASE = "diabetesreporting.diabetesDonneesDeBaseFormId";
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";
