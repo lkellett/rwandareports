@@ -64,18 +64,12 @@ $(document).ready(function(){
 <td colspan="2"><center>Action</center></td>
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">PIH Reports</td>
+<td rowspan="1" class="tabletd">PIH Reports</td>
 <td>PIH Quarterly Cross Site Indicator Report	
 </td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_quarterlyCrossDistrictIndicator.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_quarterlyCrossDistrictIndicator.form" onclick=msgrem(this)>Remove</a></td>
-</tr>
-<tr>
-<td>PIH Viral Load Report</td>
-<td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_viralLoad.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_viralLoad.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Registers</td>
@@ -177,7 +171,7 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">Data Quality</td>
+<td rowspan="3" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -188,6 +182,12 @@ $(document).ready(function(){
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReport.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>Data Quality For All sites</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReportForallSites.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReportForallSites.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Research</td>
@@ -201,6 +201,13 @@ $(document).ready(function(){
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_hivResearchDataExtraction.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_hivResearchDataExtraction.form" onclick=msgrem(this)>Remove</a></td>	
+</tr>
+<tr>
+<td rowspan="1" class="tabletd">TracNet Report</td>
+<td>TracNet Report</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_tracNetReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td rowspan="4" class="tabletd">NCD Reports</td>

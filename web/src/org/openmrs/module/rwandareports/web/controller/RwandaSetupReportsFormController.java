@@ -4,6 +4,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
+import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorForAllSites;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
@@ -22,6 +23,7 @@ import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicat
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyViralLoadReport;
 import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
 import org.openmrs.module.rwandareports.reporting.SetupTBConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupTracNetRwandaReportBySite;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -245,6 +247,19 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+	//Data quality For all Sites
+	@RequestMapping("/module/rwandareports/register_dataQualityReportForallSites")
+	public ModelAndView registerDataQualityReportForAllSites() throws Exception {
+		new SetupDataQualityIndicatorForAllSites().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_dataQualityReportForallSites")
+	public ModelAndView removeDataQualityReportForAllSites() throws Exception {
+		new SetupDataQualityIndicatorForAllSites().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
 	//Research Links
 	@RequestMapping("/module/rwandareports/register_hivResearchDataQuality")
 	public ModelAndView registerHivResearchDataQualityReport() throws Exception {
@@ -333,5 +348,20 @@ public class RwandaSetupReportsFormController {
 		new SetupDiabetesQuarterlyAndMonthReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	
+	//Remove/Register TracNet report
+	@RequestMapping("/module/rwandareports/remove_tracNetReport")
+	public ModelAndView removeTracNetIndicator() throws Exception {
+		new SetupTracNetRwandaReportBySite().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_tracNetReport")
+	public ModelAndView registerTracNetIndicator() throws Exception {
+		new SetupTracNetRwandaReportBySite().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	
 
 }

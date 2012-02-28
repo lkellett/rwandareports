@@ -458,9 +458,19 @@ public class GlobalPropertiesManagement {
 	
 	public final static String HYPERTENSION_PROGRAM ="reports.hypertensionprogram";
 	
-	public final static String EPILEPSY_PROGRAM ="reports.epilepsyprogramname";
+	public final static String EPILEPSY_PROGRAMm ="reports.epilepsyprogramname";
 	
 	public final static String DM_PROGRAM = "reports.diabetesprogram";
+	
+	public final static String NUTRITION_PROGRAM = "reports.nutritionprogram";
+	
+	public final static String ORACTA_STUDY = "reports.oractaprogram";
+	
+	public final static String CHRONIC_RESPIRATORY_PROGRAM = "reports.chronicrespiratoryprogram";
+	
+	public final static String HYPERTENTION_PROGRAM = "reports.hypertension";
+	
+	public final static String EPILEPSY_PROGRAM = "reports.epilepsyprogram";
 	
 	//ProgramWorkflow
 	public final static String TREATMENT_STATUS_WORKFLOW = "reports.hivworkflowstatus";
@@ -729,4 +739,68 @@ public class GlobalPropertiesManagement {
 	
 	//Order types
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
+	public final static String PATIENT_PREGNANT_STATE = "reports.patientpregnant";
+	public final static String PREGNANCY_STATUS_WORKFLOW = "reports.pregnantStatus";
+	
+	
+	//-------------------------------------------------
+//  TRACNET REPORT INDICATORS
+//-------------------------------------------------	
+	//Programs
+	public final static String PMTCT_PREGNANCY_PROGRAM = "pmtct.pregnancy.programid";
+	public final static String PMTCT_COMBINED_INFANT = "pmtct.combinedinfant.programid";
+	public final static String PMTCT_COMBINED_MOTHER= "pmtct.combinedmother.programid";
+	public final static String ANTIRETROVIRAL_DRUGS = "reports.antiretroviraldrugs";
+	public final static String REASON_PATIENT_STARTED_ARVS_FOR_PROPHYLAXIS = "reports.reasonpatientstartedProphylalxisdrug";
+	public final static String EXPOSURE_TO_BLOOD_OR_BLOOD_PRODUCTS = "reports.exposedtobloodorbloodproduct";
+	public final static String SEXUAL_ASSAULT="reports.sexualAssault";
+	public final static String SEXUAL_CONTACT_WITH_HIV_POSITIVE_PARTNER="reports.sexualContactWithPospartner";
+	public final static int HIV_TEST_DONE=2169;
+	public final static String NEGATIVE_HIV_TEST_ANSWER = "reports.negativeHivTestConcept";
+	public final static String UNDETERMINATE_HIV_TEST_ANSWER = "reports.undeterminateHivTestConcept";
+	public final int METHOD_OF_FAMILY_PLANNING_ID=374;
+	public final static String PREGNANCY_STATUS="reports.pregnancy_status";
+	public final static String YES="reports.yesStatus";
+	public final static String NO="reports.noStatus";
+	public final static String PROGRAM_THAT_ORDERED_TEST="reports.programthatordered_test";
+	public final static String MATERNITY_WARD="maternity_ward";
+	public final static String PROPHYLAXIS_FOR_MOTHER_IN_PMTCT="";
+	public final static String TRIPLE_THERAPY_DURING_PREGNANCY="";
+	public final static String BIRTH_LOCATION_TYPE="report.birthlocationtype";
+	public final static String HOSPITAL="report.hospital";
+	public final static String HOUSE="report.house";
+	public final static String HEALTH_CENTER="report.heatccenter";
+	public final static String INFANT_FEEDING_METHOD="report.feedmethod";
+	public final static String BREASTFEED_EXCL="report.breastfeed";
+	public final static String USING_FORMULA="report.usingformula";
+	public final static String TB_SCREENING_TEST="report.tbscreeningtest";
+	public final static String SOCIO_ECONOMIC_ASSISTANCE_RECOMENDED="reports.socioeconomicassistance";
+	public final static String NUTRITIONAL_AID="report.nutritionalaid";
+	public final static String TRASNFERED_OUT="report.patienttransferedOut";
+	public final static String TRASNFERED_IN="report.patienttransferedIn";
+	public final static String WHOSTAGE="reports.whostage";
+	public final static String WHOSTAGE4PED="reports.whostage4p";
+	public final static String WHOSTAGE3PED="reports.whostage3p";
+	public final static String WHOSTAGE2PED="reports.whostage2p";
+	public final static String WHOSTAGE1PED="reports.whostage1p";
+	public final static String WHOSTAGEUNKOWN="reports.whostageunkown";
+	public final static String WHOSTAGE4AD="reports.whostage4ad";
+	public final static String WHOSTAGE3AD="reports.whostage3ad";
+	public final static String WHOSTAGE2AD="reports.whostage2ad";
+	public final static String WHOSTAGE1AD="reports.whostage1ad";
+	public final static String CURRENT_OPORTUNISTIC_INFECTION="reports.stitest";
+	public final static String TUBERCULOSIS="reports.tuberculosis";
+	public final static String REASON_THERAPEUTIC_FAILED="reports.reasontherapeuticFailed";
+	public final static String POOR_ADHERENCE="reports.pooradherence";
+	public final static String NO_TEST="reports.notestDone";
+	public final static String RPR_TEST="reports.rprtest";
+	public final static String RPR_REACTIVE_ANWER="reports.reactiveanswer";
+	public final static String TESTING_STATUS_OF_PARTNER="report.partnerStatus";
+	public final static String GAVE_BIRTH="reports.pmtctGaveBirthStatus";
+	public final static String METHOD_OF_FAMILY_PLANNING="report.fplaning";
+	public final static String USING_CONDOMS="report.usingCondom";
+	public final static String USINF_INJECTABLE="report.injectable";
+	public final static String USING_ORALCONTRAC="report.orals";
+	public final static String REFERED_FOR_FP="report.referedforfp";
+	
 }

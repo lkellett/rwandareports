@@ -46,12 +46,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Controller prepares result page for Data Quality Report
  */
 @Controller
-public class RenderDataQualityReportController {
+public class RenderDataQualityReportingFormControllerForAllSites {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	@SuppressWarnings("unused")
-	@RequestMapping("/module/rwandareports/renderDataQualityDataSet")
+	@RequestMapping("/module/rwandareports/renderDataQualityDataSetAllSites")
 	public String showReport(@RequestParam(required=false, value="savedDataSetKey") String savedDataSetKey,
 			/*@RequestParam(required=false, value="savedColumnKey") String savedColumnKey,   */                
             @RequestParam(required=false, value="applyDataSetId") String applyDataSetId,
@@ -85,6 +85,7 @@ public class RenderDataQualityReportController {
             savedColumnKeys.add("17");
             savedColumnKeys.add("18");
             savedColumnKeys.add("19");
+            savedColumnKeys.add("20");
             List<DQReportModel> dQRList=new ArrayList<DQReportModel>();
             
             for (String savedColumnKey : savedColumnKeys) {

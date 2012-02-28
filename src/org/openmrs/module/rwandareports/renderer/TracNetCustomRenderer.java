@@ -26,10 +26,10 @@ import org.openmrs.module.reporting.web.renderers.IndicatorReportWebRenderer;
 import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
 
 /**
- * Renderer for Data Quality report
+ * Renderer for CD4 Count Report
  *
  */
-public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer implements WebReportRenderer {
+public class TracNetCustomRenderer extends IndicatorReportWebRenderer implements WebReportRenderer {
 	
 	
 	/**
@@ -37,7 +37,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
      */
 	@Override
     public String getLabel() {
-    	return "DataQuality Web Report";
+    	return "TracNet Web Report";
     }
 	
 	
@@ -46,7 +46,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
 	 */
 	@Override
 	public String getLinkUrl(ReportDefinition arg0) {
-		return "module/rwandareports/renderDataQualityDataSet.form";
+		return "module/rwandareports/renderTracNetDataSet.form";
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
 		for (Map.Entry<String, Mapped<? extends DataSetDefinition>> e : definition.getDataSetDefinitions().entrySet()) {
 			String name = e.getKey();
 			DataSetDefinition def = e.getValue().getParameterizable();
-	    	if ("Data Quality Report Data Set".equals(def.getName())) {
+	    	if ("TracNet Report Data Set".equals(def.getName())) {
 				ret.add(new RenderingMode(this, this.getLabel() , name, Integer.MAX_VALUE - 5));
 	    	}
 		}

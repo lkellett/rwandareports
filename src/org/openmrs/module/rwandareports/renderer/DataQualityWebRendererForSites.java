@@ -29,7 +29,7 @@ import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
  * Renderer for Data Quality report
  *
  */
-public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer implements WebReportRenderer {
+public class DataQualityWebRendererForSites extends IndicatorReportWebRenderer implements WebReportRenderer {
 	
 	
 	/**
@@ -46,7 +46,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
 	 */
 	@Override
 	public String getLinkUrl(ReportDefinition arg0) {
-		return "module/rwandareports/renderDataQualityDataSet.form";
+		return "module/rwandareports/renderDataQualityDataSetAllSites.form";
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
 		for (Map.Entry<String, Mapped<? extends DataSetDefinition>> e : definition.getDataSetDefinitions().entrySet()) {
 			String name = e.getKey();
 			DataSetDefinition def = e.getValue().getParameterizable();
-	    	if ("Data Quality Report Data Set".equals(def.getName())) {
+	    	if ("Data Quality Report For All sites Data Set".equals(def.getName())) {
 				ret.add(new RenderingMode(this, this.getLabel() , name, Integer.MAX_VALUE - 5));
 	    	}
 		}
