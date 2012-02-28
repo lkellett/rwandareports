@@ -3,8 +3,7 @@ package org.openmrs.module.rwandareports.web.controller;
 import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
-import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorBySiteReport;
-import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorForAllSites;
+import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
@@ -237,29 +236,16 @@ public class RwandaSetupReportsFormController {
 	
 	@RequestMapping("/module/rwandareports/register_dataQualityReport")
 	public ModelAndView registerDataQualityReport() throws Exception {
-		new SetupDataQualityIndicatorBySiteReport().setup();
+		new SetupDataQualityIndicatorReport().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
 	@RequestMapping("/module/rwandareports/remove_dataQualityReport")
 	public ModelAndView removeDataQualityReport() throws Exception {
-		new SetupDataQualityIndicatorBySiteReport().delete();
+		new SetupDataQualityIndicatorReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
-	
-	//Data quality For all Sites
-	@RequestMapping("/module/rwandareports/register_dataQualityReportForallSites")
-	public ModelAndView registerDataQualityReportForAllSites() throws Exception {
-		new SetupDataQualityIndicatorForAllSites().setup();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-	
-	@RequestMapping("/module/rwandareports/remove_dataQualityReportForallSites")
-	public ModelAndView removeDataQualityReportForAllSites() throws Exception {
-		new SetupDataQualityIndicatorForAllSites().delete();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-	
+		
 	//Research Links
 	@RequestMapping("/module/rwandareports/register_hivResearchDataQuality")
 	public ModelAndView registerHivResearchDataQualityReport() throws Exception {

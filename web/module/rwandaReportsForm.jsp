@@ -171,23 +171,17 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="3" class="tabletd">Data Quality</td>
+<td rowspan="2" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_missingCD4Report.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td>Data Quality per site</td>
+<td>Data Quality Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReport.form" onclick=msgrem(this)>Remove</a></td>
-</tr>
-<tr>
-<td>Data Quality For All sites</td>
-<td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReportForallSites.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReportForallSites.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Research</td>

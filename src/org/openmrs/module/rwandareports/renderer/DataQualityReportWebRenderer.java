@@ -37,7 +37,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
      */
 	@Override
     public String getLabel() {
-    	return "DataQuality Web Report";
+    	return "Data Quality Report By Site";
     }
 	
 	
@@ -58,7 +58,7 @@ public class DataQualityReportWebRenderer extends IndicatorReportWebRenderer imp
 		for (Map.Entry<String, Mapped<? extends DataSetDefinition>> e : definition.getDataSetDefinitions().entrySet()) {
 			String name = e.getKey();
 			DataSetDefinition def = e.getValue().getParameterizable();
-	    	if ("Data Quality Report Data Set".equals(def.getName())) {
+	    	if ("Data Quality Report By Site Data Set".equals(def.getName())) {
 				ret.add(new RenderingMode(this, this.getLabel() , name, Integer.MAX_VALUE - 5));
 	    	}
 		}

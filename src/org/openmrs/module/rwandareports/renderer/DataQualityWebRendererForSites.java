@@ -37,7 +37,7 @@ public class DataQualityWebRendererForSites extends IndicatorReportWebRenderer i
      */
 	@Override
     public String getLabel() {
-    	return "DataQuality Web Report";
+    	return "Data Quality Report For All Sites";
     }
 	
 	
@@ -46,7 +46,7 @@ public class DataQualityWebRendererForSites extends IndicatorReportWebRenderer i
 	 */
 	@Override
 	public String getLinkUrl(ReportDefinition arg0) {
-		return "module/rwandareports/renderDataQualityDataSetAllSites.form";
+		return "module/rwandareports/renderDataQualityDataSet.form";
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class DataQualityWebRendererForSites extends IndicatorReportWebRenderer i
 		for (Map.Entry<String, Mapped<? extends DataSetDefinition>> e : definition.getDataSetDefinitions().entrySet()) {
 			String name = e.getKey();
 			DataSetDefinition def = e.getValue().getParameterizable();
-	    	if ("Data Quality Report For All sites Data Set".equals(def.getName())) {
+	    	if ("Data Quality Report For All Sites Data Set".equals(def.getName())) {
 				ret.add(new RenderingMode(this, this.getLabel() , name, Integer.MAX_VALUE - 5));
 	    	}
 		}
