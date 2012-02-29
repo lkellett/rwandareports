@@ -215,8 +215,6 @@ public class SetupPediHIVConsultationSheet {
 		ObservationInMostRecentEncounterOfType sideEffect = RowPerPatientColumns.getSideEffectInMostRecentEncounterOfType(
 		    "SideEffects", pediFlowsheet);
 		
-		MostRecentObservation heightWeight = RowPerPatientColumns.getMostRecent("heightweight", gp.getConcept(GlobalPropertiesManagement.HEIGHT_WEIGHT_PERCENTAGE), null);
-		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("AccompName"), new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
@@ -225,7 +223,6 @@ public class SetupPediHIVConsultationSheet {
 		alert.addPatientDataToBeEvaluated(allWeights, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(heightWeight, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(age, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(height, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());

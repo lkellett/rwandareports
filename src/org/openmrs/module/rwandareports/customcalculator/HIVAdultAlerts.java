@@ -130,7 +130,7 @@ public class HIVAdultAlerts implements CustomCalculation{
 			
 			if(result.getName().equals("IO") && result.getValue() != null)
 			{
-				alerts.append("IO reported last visit: " + result.getValue() + "\n");
+				alerts.append("OI reported last visit: " + result.getValue() + "\n");
 			}
 			
 			if(result.getName().equals("SideEffects") && result.getValue() != null)

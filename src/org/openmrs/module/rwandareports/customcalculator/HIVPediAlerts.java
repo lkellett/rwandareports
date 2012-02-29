@@ -85,17 +85,12 @@ public class HIVPediAlerts implements CustomCalculation{
 			
 			if(result.getName().equals("IO") && result.getValue() != null)
 			{
-				alerts.append("IO reported last visit: " + result.getValue() + "\n");
+				alerts.append("OI reported last visit: " + result.getValue() + "\n");
 			}
 			
 			if(result.getName().equals("SideEffects") && result.getValue() != null)
 			{
 				alerts.append("Side effects reported last visit: " + result.getValue() + "\n");
-			}
-			
-			if(result.getName().equals("heightWeight") && result.getValue() != null)
-			{
-				heightWeight = (ObservationResult)result;
 			}
 			
 			if(result.getName().equals("height") && result.getValue() != null)
@@ -133,7 +128,7 @@ public class HIVPediAlerts implements CustomCalculation{
 			{
 				if(heightWeight!= null && heightWeight.getValue() != null)
 				{
-					zscore = Double.parseDouble(heightWeight.getValue());
+					
 				}
 			}
 			else

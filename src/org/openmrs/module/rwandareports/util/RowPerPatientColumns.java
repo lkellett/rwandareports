@@ -28,6 +28,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugO
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstRecordedObservationWithCodedConceptAnswer;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FullHistoryOfProgramWorkflowStates;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
@@ -339,7 +340,7 @@ public class RowPerPatientColumns {
 	public static LastWeekMostRecentObservation getLastWeekMostRecentReturnVisitDate(String name, String dateFormat,
             ResultFilter resultFilter) {
         return getLastWeekMostRecent(name, gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), dateFormat, resultFilter);
-   }
+	}
 	
 	public static AllObservationValues getAllWeightValues(String name, String dateFormat, ResultFilter resultFilter,
 	                                                      ResultFilter outputFilter) {

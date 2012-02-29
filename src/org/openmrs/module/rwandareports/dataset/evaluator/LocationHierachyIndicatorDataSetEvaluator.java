@@ -217,7 +217,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		    }
 		    else if(bd instanceof RowPerPatientDataSetDefinition)
 		    {
-		    	row.addColumnValue(new DataSetColumn(bd.getName() + "PatientDataSet", bd.getName() + "PatientDataSet", SimpleDataSet.class), ds);
+		    	row.addColumnValue(new DataSetColumn(bd.getName(), bd.getName(), SimpleDataSet.class), ds);
 		    }
 		    else if(bd instanceof EncounterIndicatorDataSetDefinition)
 		    {
