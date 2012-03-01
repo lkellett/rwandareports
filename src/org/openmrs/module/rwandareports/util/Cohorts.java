@@ -27,6 +27,7 @@ import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition
 import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.DurationUnit;
 import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -82,6 +83,25 @@ public class Cohorts {
 		        concept.getId() + 
 		        " and value_numeric is not null and obs_datetime >= " +
 		        "ps.start_date and obs_datetime <= :beforeDate order by obs_datetime desc LIMIT 1) and ((o2.value_numeric/o1.value_numeric)*100) < 50");
+		patientsWithBaseLineObservation.setName(name);
+		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
+		return patientsWithBaseLineObservation;
+	}
+	
+	public static SqlCohortDefinition createPatientsWithDecline(String name, Concept concept, int decline) {
+		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+		        "select p.patient_id from patient p, obs o1, obs o2 where p.voided = 0 " +
+		        " and o1.concept_id = " +
+		        concept.getId() + 
+		        " and o1.obs_id = (select obs_id from obs where " +
+		        "voided = 0 and p.patient_id = person_id and concept_id = " +
+		        concept.getId() +
+		        " and value_numeric is not null and obs_datetime <= :beforeDate" +
+		        " order by value_numeric desc LIMIT 1) and o2.obs_id = (select obs_id from obs where voided = " +
+		        "0 and p.patient_id = person_id and concept_id = " +
+		        concept.getId() + 
+		        " and value_numeric is not null and obs_datetime < o1.obs_datetime " +
+		        " order by obs_datetime desc LIMIT 1) and ((o1.value_numeric - o2.value_numeric) > -" + decline + ")");
 		patientsWithBaseLineObservation.setName(name);
 		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
 		return patientsWithBaseLineObservation;
@@ -181,11 +201,45 @@ public class Cohorts {
 	}
 	
 	public static AgeCohortDefinition createUnder15AgeCohort(String name) {
-		AgeCohortDefinition over15Cohort = new AgeCohortDefinition();
-		over15Cohort.setName(name);
-		over15Cohort.setMaxAge(new Integer(15));
-		over15Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
-		return over15Cohort;
+		AgeCohortDefinition under15Cohort = new AgeCohortDefinition();
+		under15Cohort.setName(name);
+		under15Cohort.setMaxAge(new Integer(14));
+		under15Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return under15Cohort;
+	}
+	
+	public static AgeCohortDefinition createUnder3AgeCohort(String name) {
+		AgeCohortDefinition under3Cohort = new AgeCohortDefinition();
+		under3Cohort.setName(name);
+		under3Cohort.setMaxAge(new Integer(2));
+		under3Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return under3Cohort;
+	}
+	
+	public static AgeCohortDefinition create3to5AgeCohort(String name) {
+		AgeCohortDefinition threeTo5Cohort = new AgeCohortDefinition();
+		threeTo5Cohort.setName(name);
+		threeTo5Cohort.setMaxAge(new Integer(4));
+		threeTo5Cohort.setMinAge(new Integer(3));
+		threeTo5Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return threeTo5Cohort;
+	}
+	
+	public static AgeCohortDefinition createOver5AgeCohort(String name) {
+		AgeCohortDefinition over5Cohort = new AgeCohortDefinition();
+		over5Cohort.setName(name);
+		over5Cohort.setMinAge(new Integer(5));
+		over5Cohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return over5Cohort;
+	}
+	
+	public static AgeCohortDefinition createUnder18MontshAgeCohort(String name) {
+		AgeCohortDefinition under18monthsCohort = new AgeCohortDefinition();
+		under18monthsCohort.setName(name);
+		under18monthsCohort.setMaxAge(new Integer(18));
+		under18monthsCohort.setMaxAgeUnit(DurationUnit.MONTHS);
+		under18monthsCohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return under18monthsCohort;
 	}
 	
 	public static InProgramCohortDefinition createInProgram(String name, Program program) {
