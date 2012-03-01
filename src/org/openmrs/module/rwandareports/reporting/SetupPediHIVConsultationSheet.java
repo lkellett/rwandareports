@@ -237,21 +237,7 @@ public class SetupPediHIVConsultationSheet {
 		DeclineHighestCD4 declineCD4 = new DeclineHighestCD4();
 		declineCD4.setInitiationArt("StartART");
 		cd4Decline.setCalculator(declineCD4);
-		
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions cd4Decline60 = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		cd4Decline60.setName("cd4Decline60");
-		cd4Decline60.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
-		cd4Decline60.addPatientDataToBeEvaluated(startArt, new HashMap<String, Object>());
-		DeclineHighestCD4 declineCD460 = new DeclineHighestCD4();
-		declineCD460.setInitiationArt("StartART");
-		declineCD460.setDaysBefore(60);
-		cd4Decline60.setCalculator(declineCD460);
-		
-		List<RowPerPatientData> decline = new ArrayList<RowPerPatientData>();
-		decline.add(cd4Decline);
-		decline.add(cd4Decline60);
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMultiplePatientDataDefinitions("cd4DeclineFromHighest", decline), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(cd4Decline, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("state", "${state}");
