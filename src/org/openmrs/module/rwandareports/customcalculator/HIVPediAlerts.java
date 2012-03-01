@@ -122,20 +122,21 @@ public class HIVPediAlerts implements CustomCalculation{
 		if(age != null)
 		{
 			Integer ageInt = Integer.parseInt(age.getValueAsString());
+			WHOCalculations who = new WHOCalculations();
 			
 			Double zscore = null;
 			if(ageInt < 6)
 			{
 				if(heightWeight!= null && heightWeight.getValue() != null)
 				{
-					
+					zscore = Double.parseDouble(who.getHeightForWeightZRange(height.getObs(), weight.getObs()));
 				}
 			}
 			else
 			{
 				if(height != null && height.getValue() != null && weight != null && weight.getValue() != null)
 				{
-					WHOCalculations who = new WHOCalculations();
+					
 					String bmiAge = who.getCalculatedBmiForAge(height.getObs(), weight.getObs());
 					zscore = Double.parseDouble(bmiAge);
 				}

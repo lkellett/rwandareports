@@ -15,13 +15,11 @@ import org.openmrs.module.rowperpatientreports.patientdata.result.DrugOrdersResu
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.StringResult;
 
-public class DeclineHighestCD4 implements CustomCalculation{
+public class DeclineCD4 implements CustomCalculation{
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	private int daysBefore = 0;
-	
-	private boolean shortDisplay = false;
 	
 	private String initiationArt;
 	
@@ -82,16 +80,11 @@ public class DeclineHighestCD4 implements CustomCalculation{
 						{
 							DecimalFormat twoDigit = new DecimalFormat("#,##0.00");//formats to 2
 							
-							String resString = twoDigit.format(percentDecline) + "%";
-							if(!shortDisplay)
+							String resString = twoDigit.format(percentDecline) + "% CD4 decline since highest CD4 since art initiation";
+							if(daysBefore > 0)
 							{
-								resString = resString + " CD4 decline since highest CD4 since art initiation";
-								if(daysBefore > 0)
-								{
-									resString = resString + " or " + daysBefore + " days before art initiation"; 
-								}
+								resString = resString + " or " + daysBefore + " days before art initiation"; 
 							}
-							
 							
 							res.setValue(resString);
 						}
@@ -121,13 +114,5 @@ public class DeclineHighestCD4 implements CustomCalculation{
 	
     public void setInitiationArt(String initiationArt) {
     	this.initiationArt = initiationArt;
-    }
-	
-    public boolean isShortDisplay() {
-    	return shortDisplay;
-    }
-
-    public void setShortDisplay(boolean shortDisplay) {
-    	this.shortDisplay = shortDisplay;
     }
 }
