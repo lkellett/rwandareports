@@ -78,7 +78,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 						hierarchyValue = hierarchyValue.toUpperCase();
 					}	
 					
-					if(location.getValue() != null && location.getValue().equals(hierarchyValue))
+					if(location.getValue() != null && location.getValue().toUpperCase().equals(hierarchyValue))
 					{
 						addIteration(ret, getBaseCohort(l.getName(), LOCATION, l.getName()), l.getName(), context, lhdsd.getBaseDefinition());
 					}
