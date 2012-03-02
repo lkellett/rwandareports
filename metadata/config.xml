@@ -1261,6 +1261,74 @@
 		<description>The id of the form id for the PMTCT rdv form</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>reports.pmtctFlowFormID</property>
+		<defaultValue>484f7dcb-3c68-4859-8671-7e8d79c6cfab</defaultValue>
+		<description>The id of the form id for the PMTCT flow form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferToPMTCTFormID</property>
+		<defaultValue>1ed9ecb9-f0b1-41b5-a0f9-5ad08d5d020d</defaultValue>
+		<description>The id of the form id for the transfer to PMTCT form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferToCCFormID</property>
+		<defaultValue>265d0f02-a7f7-450e-8db4-cfd14b01dea4</defaultValue>
+		<description>The id of the form id for the transfer to Combined Clinic form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.birthWeight</property>
+		<defaultValue>3cf15b3a-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for birth weight</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tripleTherapyDuringPregnancy</property>
+		<defaultValue>3ce1c328-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking triple therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.monoTherapyDuringPregnancy</property>
+		<defaultValue>3ce1c1ac-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking mono therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.noTherapyDuringPregnancy</property>
+		<defaultValue>6e12fa0c-aae2-44f0-bd3d-2a36d7404c3c</defaultValue>
+		<description>The concept for taking no therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.prophylaxisDuringPregnancy</property>
+		<defaultValue>3ce1bd24-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.motherCD4</property>
+		<defaultValue>2d5792a4-aa13-46c4-a9e6-d326a9cfbc75</defaultValue>
+		<description>The concept for mothers CD4 count</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.changeToArtificialMilk</property>
+		<defaultValue>b2033997-64ad-418e-8d74-27b92748dca2</defaultValue>
+		<description>The concept for changing an exposed infant to artificial food</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pregnancyTestDate</property>
+		<defaultValue>647ce969-a8cb-42a6-b407-e916aae56b02</defaultValue>
+		<description>The concept for the pregnancy test date</description>
+	</globalProperty>
+	
+	
+	
 	<!-- Start of TracNet Report global properties -->
 	
 	

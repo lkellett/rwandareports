@@ -573,6 +573,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String DPA = "reports.dpaConcept";
 	
+	public final static String PREGNANCY_TEST_DATE = "reports.pregnancyTestDate";
+	
 	public final static String RWANDA_INSURANCE_TYPE = "registration.insuranceTypeConcept";
 	
 	public final static String MUTUELLE = "reports.mutuelle";
@@ -608,6 +610,19 @@ public class GlobalPropertiesManagement {
 	
 	public final static String LOCATION_OF_HOSPITALIZATION="reports.locationOfHospitalization";
 	
+	public final static String BIRTH_WEIGHT = "reports.birthWeight";
+	
+	public final static String TRIPLE_THERAPY_DURING_PREGNANCY = "reports.tripleTherapyDuringPregnancy";
+	
+	public final static String MONO_THERAPY_DURING_PREGNANCY = "reports.monoTherapyDuringPregnancy";
+	
+	public final static String NO_THERAPY_DURING_PREGNANCY = "reports.noTherapyDuringPregnancy";
+	
+	public final static String PROPHYLAXIS_FOR_MOTHER_IN_PMTCT = "reports.prophylaxisDuringPregnancy";
+	
+	public final static String MOTHER_CD4 = "reports.motherCD4";
+	
+	public final static String CHANGE_TO_ARTIFICIAL_MILK = "reports.changeToArtificialMilk";
 	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
@@ -667,6 +682,14 @@ public class GlobalPropertiesManagement {
 	public final static String PMTCT_DDB = "reports.pmtctDDBFormId";
 	
 	public final static String PMTCT_RDV = "reports.pmtctRDVFormId";
+	
+	public final static String PMTCT_FLOW = "reports.pmtctFlowFormID";
+	
+	public final static String ADULT_FLOW_VISIT = "rwandaadulthivflowsheet.Form_NewVisit";
+	
+	public final static String TRANSFER_TO_PMTCT = "reports.transferToPMTCTFormID";
+	
+	public final static String TRANSFER_TO_CC = "reports.transferToCCFormID";
 	
 	
 	//Drug concepts
@@ -764,8 +787,6 @@ public class GlobalPropertiesManagement {
 	public final static String NO="reports.noStatus";
 	public final static String PROGRAM_THAT_ORDERED_TEST="reports.programthatordered_test";
 	public final static String MATERNITY_WARD="maternity_ward";
-	public final static String PROPHYLAXIS_FOR_MOTHER_IN_PMTCT="";
-	public final static String TRIPLE_THERAPY_DURING_PREGNANCY="";
 	public final static String BIRTH_LOCATION_TYPE="report.birthlocationtype";
 	public final static String HOSPITAL="report.hospital";
 	public final static String HOUSE="report.house";
