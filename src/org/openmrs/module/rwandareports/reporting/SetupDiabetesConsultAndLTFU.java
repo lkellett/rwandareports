@@ -75,7 +75,7 @@ public class SetupDiabetesConsultAndLTFU {
 			}
 		}
 		h.purgeReportDefinition("Diabetes Consult");
-		h.purgeReportDefinition("Diabetes Lost to Follow Up");
+		h.purgeReportDefinition("Diabetes Late Visit");
 		
 	}
 	
@@ -96,7 +96,7 @@ public class SetupDiabetesConsultAndLTFU {
 	private ReportDefinition createLTFUReportDefinition() {
 
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Diabetes Lost to Follow Up");	
+		reportDefinition.setName("Diabetes Late Visit");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
 
