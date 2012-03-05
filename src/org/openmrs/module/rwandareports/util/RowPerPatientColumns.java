@@ -291,11 +291,7 @@ public class RowPerPatientColumns {
 	}
 	public static MostRecentObservation getMostRecentPatientPhoneNumber(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TELEPHONE_NUMBER_CONCEPT), dateFormat);
-	}
-	public static MostRecentObservation getMostRecentAccompagnateurStatus(String name, String dateFormat) {
-		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.PATIENT_HAS_ACCOMPAGNATEUR_CONCEPT), dateFormat);
-	}
-	
+	}	
 	public static MostRecentObservation getMostRecentWeight(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT), dateFormat);
 	}

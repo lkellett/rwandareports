@@ -27,6 +27,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalc
 import org.openmrs.module.rwandareports.customcalculator.DateDiffInDaysSinceLastDiabetesVisit;
 import org.openmrs.module.rwandareports.customcalculator.DiabetesAlerts;
 import org.openmrs.module.rwandareports.customcalculator.OnInsulin;
+import org.openmrs.module.rwandareports.customcalculator.PatientHasAccompagnateur;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
@@ -124,10 +125,16 @@ public class SetupDiabetesConsultAndLTFU {
         addCommonColumns(dataSetDefinition);
         
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentAccompagnateurStatus("Has accompagnateur",null), new HashMap<String, Object>());
 		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentDiabetesOrders("Regimen", "@ddMMMyy", new DrugDosageFrequencyFilter()), new HashMap<String, Object>());
 		
 		//Calculation definitions
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions patientHasAccompagnateur = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		patientHasAccompagnateur.addPatientDataToBeEvaluated(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
+		patientHasAccompagnateur.setName("Has accompagnateur");
+		patientHasAccompagnateur.setCalculator(new PatientHasAccompagnateur());
+		dataSetDefinition.addColumn(patientHasAccompagnateur, new HashMap<String, Object>());
+		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentHbA1c("RecentHbA1c", "@ddMMMyy"), new HashMap<String, Object>());
