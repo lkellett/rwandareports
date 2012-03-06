@@ -693,6 +693,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TRANSFER_TO_CC = "reports.transferToCCFormID";
 	
+	public final static String DIABETES_FLOW_VISIT = "report.diabetesFlowVisit";
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";

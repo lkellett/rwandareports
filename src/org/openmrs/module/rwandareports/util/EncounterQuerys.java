@@ -24,6 +24,30 @@ public class EncounterQuerys {
 		return formsCompleted;
 	}
 	
+	public static SqlEncounterQuery getFormsBetweenStartEndDates(String name, List<Form> forms)
+	{
+		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
+		StringBuilder query = new StringBuilder("select encounter_id from encounter where voided = 0 and form_id in (");
+		
+		int i = 0;
+		for(Form f: forms)
+		{
+			if(i > 0)
+			{
+				query.append(",");
+			}
+			query.append(f.getId());
+			i++;
+		}
+		
+		query.append(") and encounter_datetime >= :startDate and encounter_datetime <= :endDate");
+		formsCompleted.setQuery(query.toString());
+		formsCompleted.setName(name);
+		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
+		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
+		return formsCompleted;
+	}
+	
 	public static SqlEncounterQuery getFormsBetweenStartEndDatesForAProgramEnrollment(String name, Form form, Program program)
 	{
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
@@ -115,5 +139,6 @@ public class EncounterQuerys {
 		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
 		return formsCompleted;
 	}
+	
 	
 }

@@ -1279,6 +1279,12 @@
 		<defaultValue>1ed9ecb9-f0b1-41b5-a0f9-5ad08d5d020d</defaultValue>
 		<description>The id of the form id for the transfer to PMTCT form</description>
 	</globalProperty>
+
+	<globalProperty>
+		<property>report.diabetesFlowVisit</property>
+		<defaultValue>20db189c-90c5-45e2-824c-7c45d5008489</defaultValue>
+		<description>The id of the form id for the visit section of the diabetes flow sheet</description>
+	</globalProperty>
 	
 	<globalProperty>
 		<property>reports.transferToCCFormID</property>
