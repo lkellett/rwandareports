@@ -736,6 +736,13 @@
 		<description>Identifier type that should be returned for the IMB Id</description>
 	</globalProperty>
 	
+	
+	<globalProperty>
+		<property>reports.invalidimbIdIdentifier</property>
+		<defaultValue>Incorrect IMB ID</defaultValue>
+		<description>Identifier type that should be returned for the incorect IMB Id</description>
+	</globalProperty>  
+	
 	<globalProperty>
 		<property>reports.pmtctMotherRelationship</property>
 		<defaultValue>13</defaultValue>

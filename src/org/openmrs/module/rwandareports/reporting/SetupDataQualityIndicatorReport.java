@@ -22,6 +22,7 @@ import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
@@ -143,7 +144,7 @@ public class SetupDataQualityIndicatorReport {
 		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
-		createIndicators(rd);
+		createIndicatorsForReports(rd);
 		h.saveReportDefinition(rd);
 		createCustomWebRenderer(rd, "DataQualityWebRenderer");
 		
@@ -161,7 +162,7 @@ public class SetupDataQualityIndicatorReport {
 					
 					rdsites.setupDataSetDefinition();
 					
-					createIndicatorsForSites(rdsites);
+					createIndicatorsForReports(rdsites);
 					h.saveReportDefinition(rdsites);
 					createCustomWebRendererForSites(rdsites,  "DataWebRenderer");
 					
@@ -330,9 +331,6 @@ public class SetupDataQualityIndicatorReport {
 			
 			InProgramCohortDefinition inHFprogram=Cohorts.createInProgramParameterizableByDate("DQ: inHFprogram", hfPrograms, "onDate");
 			
-			
-			
-			
 			CompositionCohortDefinition onTBDrugsNotInTBProgHFExcluded = new CompositionCohortDefinition();
 			onTBDrugsNotInTBProgHFExcluded.setName("DQ: patients On TB Drugs Not In TB program and HF program excluded");
 			onTBDrugsNotInTBProgHFExcluded.getSearches().put("1",new Mapped(onTBDrugs, ParameterizableUtil.createParameterMappings("now=${now}")));
@@ -341,6 +339,16 @@ public class SetupDataQualityIndicatorReport {
 			onTBDrugsNotInTBProgHFExcluded.setCompositionString("NOT (2 OR 3) AND 1");			
 			
 			CohortIndicator patientsOnTBRegimenNotInTBProgramHFExcluded = Indicators.newCountIndicator("Patients with current TB regimen who are not in TB Program excluding Heart Failure Program", onTBDrugsNotInTBProgHFExcluded,null);		
+			
+			//======================================================================================
+			// 9. Patients with invalid identifier type
+			//======================================================================================
+			
+			SqlCohortDefinition patientsWithInvalidId=new SqlCohortDefinition();
+			patientsWithInvalidId.setName("patientsWithInvalidId");
+			patientsWithInvalidId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+gp.INVALID_IDENTIFIER+" ");
+			
+			CohortIndicator patientsWithInvalidIdInd = Indicators.newCountIndicator("Patients with invalid IMB ID", patientsWithInvalidId,null);		
 			
 			//======================================================================================
 			//  10. Active patients with no IMB or PHC ID
@@ -487,79 +495,16 @@ public class SetupDataQualityIndicatorReport {
 			//======================================================================================
 			// 17. Patients with no health center
 			//======================================================================================
-			unknown = Context.getLocationService().getLocation(1);
-			nyaru = Context.getLocationService().getLocation(25);
-			rwink = Context.getLocationService().getLocation(26);
-			mul = Context.getLocationService().getLocation(27);
-			ruk = Context.getLocationService().getLocation(28);
-			kirehe = Context.getLocationService().getLocation(29);
-			rusu = Context.getLocationService().getLocation(30);
-			rwan = Context.getLocationService().getLocation(31);
-			ruh = Context.getLocationService().getLocation(32);
-			gas = Context.getLocationService().getLocation(36);
-			ndego = Context.getLocationService().getLocation(37);
-			burera = Context.getLocationService().getLocation(38);
-			kabarondo = Context.getLocationService().getLocation(39);
-			kara = Context.getLocationService().getLocation(40);
-			nyami = Context.getLocationService().getLocation(41);
-			cyarubare = Context.getLocationService().getLocation(42);
-			rwikHosp = Context.getLocationService().getLocation(43);
-			kireHosp = Context.getLocationService().getLocation(44);
-			ntsinda = Context.getLocationService().getLocation(45);
-			kibungo = Context.getLocationService().getLocation(46);
-			testloc = Context.getLocationService().getLocation(47);
-			ruram = Context.getLocationService().getLocation(48);
-			gahara = Context.getLocationService().getLocation(49);
-			gashongora = Context.getLocationService().getLocation(50);
-			musaza = Context.getLocationService().getLocation(51);
-			kabuye = Context.getLocationService().getLocation(52);
-			nasho = Context.getLocationService().getLocation(53);
-			bukora = Context.getLocationService().getLocation(54);
-			nyabitare = Context.getLocationService().getLocation(55);
-			rutare = Context.getLocationService().getLocation(56);
-			List<Location> rwaLoc = new ArrayList<Location>();
-			rwaLoc.add(unknown);
-			rwaLoc.add(nyaru);
-			rwaLoc.add(rwink);
-			rwaLoc.add(mul);
-			rwaLoc.add(ruk);
-			rwaLoc.add(kirehe);
-			rwaLoc.add(rwan);
-			rwaLoc.add(rusu);
-			rwaLoc.add(ruh);
-			rwaLoc.add(gas);
-			rwaLoc.add(ndego);
-			rwaLoc.add(burera);
-			rwaLoc.add(kabarondo);
-			rwaLoc.add(kara);
-			rwaLoc.add(nyami);
-			rwaLoc.add(cyarubare);
-			rwaLoc.add(rwikHosp);
-			rwaLoc.add(kireHosp);
-			rwaLoc.add(ntsinda);
-			rwaLoc.add(kibungo);
-			rwaLoc.add(testloc);
-			rwaLoc.add(ruram);
-			rwaLoc.add(gahara);
-			rwaLoc.add(gashongora);
-			rwaLoc.add(musaza);
-			rwaLoc.add(kabuye);
-			rwaLoc.add(nasho);
-			rwaLoc.add(bukora);
-			rwaLoc.add(nyabitare);
-			rwaLoc.add(rutare);
-
+			
 			PersonAttributeCohortDefinition pihHealthCenter = new PersonAttributeCohortDefinition();
-			pihHealthCenter.setName("pihHealthCenter");
+			pihHealthCenter.setName("Patients at Health Center");
 			pihHealthCenter.setAttributeType(Context.getPersonService().getPersonAttributeTypeByName("Health Center"));
-			pihHealthCenter.setValueLocations(rwaLoc);
+			//pihHealthCenter.addParameter(new Parameter("valueLocations","valueLocations", Location.class));
 			
-			CompositionCohortDefinition patientWithnohealthCenter = new CompositionCohortDefinition();
-			patientWithnohealthCenter.setName("DQ: Patient with no HC ");
-			patientWithnohealthCenter.getSearches().put("1",new Mapped(pihHealthCenter,null));
-			patientWithnohealthCenter.setCompositionString("NOT 1");	
+			InverseCohortDefinition patientsWithoutHc=new InverseCohortDefinition(pihHealthCenter);
+			patientsWithoutHc.setName("patientsWithoutHc");
 			
-			CohortIndicator patientWithnohealthCenterIndicator = Indicators.newCountIndicator("Number of patients without HC", patientWithnohealthCenter,null);		
+			CohortIndicator patientWithnohealthCenterIndicator = Indicators.newCountIndicator("Number of patients without HC", patientsWithoutHc,null);		
 		
 			//======================================================================================
 			// 18. Patients with no encounter
@@ -638,6 +583,7 @@ public class SetupDataQualityIndicatorReport {
 		reportDefinition.addIndicator("6","Patients with current ARV regimen with incorrect treatment status(not 'On ART')",patientsOnARTRegimenNotOnARTStatus);
 		reportDefinition.addIndicator("7","Patients with treatment status 'On Antiretrovirals' without an ARV regimen",patientsOnARTStatusNotOnARTRegimen);
 		reportDefinition.addIndicator("8","Patients with current TB regimen not currently in TB program (excluding patients in HF program)",patientsOnTBRegimenNotInTBProgramHFExcluded);
+		reportDefinition.addIndicator("9","Patients with invalid IMB ID",patientsWithInvalidIdInd);
 		reportDefinition.addIndicator("10","Active patients with no IMB or PHC ID",patientsWithIMBOrPCIdentiferanyEncounterLastYearFromNowIndicator);
 		reportDefinition.addIndicator("11","Observations in the future (except return visit date)",patientsWithObsgreaterThanEncIndi);
 		reportDefinition.addIndicator("12","On initial TB treatment for longer than 8 months",patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimenIndicator);
@@ -677,7 +623,6 @@ public class SetupDataQualityIndicatorReport {
 		tbDrugsconcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_TREATMENT_DRUGS);
 		tbFirstLineDrugsConcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_FIRST_LINE_DRUG_SET);
 		tbSecondLineDrugsConcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_SECOND_LINE_DRUG_SET);
-		
 		imb=gp.getPatientIdentifier(GlobalPropertiesManagement.IMB_IDENTIFIER);
 		primaryCare=gp.getPatientIdentifier(GlobalPropertiesManagement.PC_IDENTIFIER);
 		reasonForExitingCare=gp.getConcept(GlobalPropertiesManagement.REASON_FOR_EXITING_CARE);
@@ -687,17 +632,7 @@ public class SetupDataQualityIndicatorReport {
 		 onOrAfterOnOrBeforeParamterNames.add("onOrAfter");
 		 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
 	}		
-
-			// indicator calculation by site	
-			private void createIndicators(PeriodIndicatorReportDefinition reportDefinition) {
-				createIndicatorsForReports(reportDefinition);
 				
-			}
-				// indicator calculation for all site
-				private void createIndicatorsForSites(PeriodIndicatorReportDefinition reportDefinition) {
-					createIndicatorsForReports(reportDefinition);
-				}
-	
 	private void createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {
     	final ReportDesign design = new ReportDesign();
     	design.setName(name);

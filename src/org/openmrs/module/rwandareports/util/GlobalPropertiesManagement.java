@@ -513,6 +513,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TRACNET_IDENTIFIER = "reports.tracIdentifier";
 	
+	public int INVALID_IDENTIFIER = 6; 
+	
 	//Concepts
 	
 	public final static String TELEPHONE_NUMBER_CONCEPT = "reports.telephoneNumberConcept"; 

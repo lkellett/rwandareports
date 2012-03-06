@@ -75,6 +75,7 @@ public class RenderDataQualityReportController {
             savedColumnKeys.add("6");
             savedColumnKeys.add("7");
             savedColumnKeys.add("8");
+            savedColumnKeys.add("9");
             savedColumnKeys.add("10");
             savedColumnKeys.add("11");
             savedColumnKeys.add("12");

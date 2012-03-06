@@ -123,6 +123,7 @@ public class RowPerPatientColumns {
 		
 		return id;
 	}
+
 	
 	public static RetrievePersonByRelationship getMother() {
 		RetrievePersonByRelationship mother = new RetrievePersonByRelationship();
