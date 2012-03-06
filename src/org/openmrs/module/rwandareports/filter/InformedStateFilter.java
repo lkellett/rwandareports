@@ -15,5 +15,10 @@ public class InformedStateFilter implements ResultFilter {
 		
 		return "Non";
 	}
+
+	public Object filterWhenNull() {
+	    
+	    return "Not Recorded";
+    }
 	
 }

@@ -35,4 +35,9 @@ public class LastThreeObsFilter implements ResultFilter {
 		Collections.sort(allObs, new ObsComparator());
 		return allObs;
 	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 }

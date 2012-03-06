@@ -19,5 +19,9 @@ public class BorFStateFilter implements ResultFilter {
 		
 		return state;
 	}
+
+	public Object filterWhenNull() {
+	    return null;
+    }
 	
 }

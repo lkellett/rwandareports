@@ -26,4 +26,9 @@ public class ObservationFilter implements ResultFilter {
 		return sb.toString();
 	}
 
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
 }

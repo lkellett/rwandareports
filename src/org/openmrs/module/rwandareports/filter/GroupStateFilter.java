@@ -10,5 +10,10 @@ public class GroupStateFilter implements ResultFilter {
 		String[] wordsState = state.split(" ");
 		return wordsState[(wordsState.length)-1];
 	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 	
 }

@@ -13,5 +13,10 @@ public class RemoveDecimalFilter implements ResultFilter {
 		}
 		
 		return result;
-	}	
+	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }	
 }

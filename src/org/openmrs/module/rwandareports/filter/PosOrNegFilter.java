@@ -19,5 +19,10 @@ public class PosOrNegFilter implements ResultFilter {
 		
 		return enrollment;
 	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 	
 }

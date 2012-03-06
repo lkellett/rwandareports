@@ -18,5 +18,9 @@ public Object filter(Object value) {
 			lastVist=lastEncounterName;
 		return lastVist;
 	}
+public Object filterWhenNull() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

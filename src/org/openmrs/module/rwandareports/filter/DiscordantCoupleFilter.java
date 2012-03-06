@@ -19,5 +19,10 @@ public class DiscordantCoupleFilter implements ResultFilter {
 			return "No";
 		}
 	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 	
 }

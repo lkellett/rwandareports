@@ -59,6 +59,12 @@ public class DateFormatFilter implements ResultFilter {
 	public void setFinalDateFormat(String finalDateFormat) {
 		this.finalDateFormat = finalDateFormat;
 	}
+
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 	
 	
 }

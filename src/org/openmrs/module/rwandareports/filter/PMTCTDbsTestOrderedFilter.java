@@ -35,5 +35,10 @@ public class PMTCTDbsTestOrderedFilter implements ResultFilter {
 	public void setConfirmConceptName(String confirmConceptName) {
 		this.confirmConceptName = confirmConceptName;
 	}
+
+	public Object filterWhenNull() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 	
 }

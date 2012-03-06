@@ -138,7 +138,10 @@ public class HIVPediAlerts implements CustomCalculation{
 				{
 					
 					String bmiAge = who.getCalculatedBmiForAge(height.getObs(), weight.getObs());
-					zscore = Double.parseDouble(bmiAge);
+					if(bmiAge != null && bmiAge.length() > 0)
+					{
+						zscore = Double.parseDouble(bmiAge);
+					}
 				}
 			}
 			

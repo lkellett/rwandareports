@@ -20,5 +20,9 @@ public class TreatmentStateFilter implements ResultFilter {
 		}		
 		return stateResult;
 	}
+public Object filterWhenNull() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

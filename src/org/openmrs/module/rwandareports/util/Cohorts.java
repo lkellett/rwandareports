@@ -96,10 +96,10 @@ public class Cohorts {
 		                + concept.getId() + " and o1.obs_id = (select obs_id from obs where "
 		                + "voided = 0 and p.patient_id = person_id and concept_id = " + concept.getId()
 		                + " and value_numeric is not null and obs_datetime <= :beforeDate"
-		                + " order by value_numeric desc LIMIT 1) and o2.obs_id = (select obs_id from obs where voided = "
+		                + " order by obs_datetime desc LIMIT 1) and o2.obs_id = (select obs_id from obs where voided = "
 		                + "0 and p.patient_id = person_id and concept_id = " + concept.getId()
 		                + " and value_numeric is not null and obs_datetime < o1.obs_datetime "
-		                + " order by obs_datetime desc LIMIT 1) and ((o1.value_numeric - o2.value_numeric) > -" + decline
+		                + " order by obs_datetime desc LIMIT 1) and ((o1.value_numeric - o2.value_numeric) < -" + decline
 		                + ")");
 		patientsWithBaseLineObservation.setName(name);
 		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
