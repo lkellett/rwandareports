@@ -19,7 +19,6 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -74,8 +73,8 @@ public class SetupNCDLateVisitandLTFUReport {
 		reportDefinition.setName("NCD Late Visit and Lost to Follow Up");
 		reportDefinition.addParameter(new Parameter("location","Health Center", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "Date",Date.class));
-
-		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(), ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
+			    ParameterizableUtil.createParameterMappings("location=${location}"));
 
 		for (Program program : diseases) {
 			for (FilterType filterType : FilterType.values()) {
@@ -212,15 +211,6 @@ public class SetupNCDLateVisitandLTFUReport {
 		diseases.add(gp.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM));
 		return diseases;
 	}
-
-	private PersonAttributeCohortDefinition getPatientAtHealthCenterCohort() {
-		PersonAttributeCohortDefinition patientAtHealthCenter = new PersonAttributeCohortDefinition();
-		patientAtHealthCenter.setName("Patients at Health Center");
-		patientAtHealthCenter.setAttributeType(Context.getPersonService().getPersonAttributeTypeByName("Health Center"));
-		patientAtHealthCenter.addParameter(new Parameter("valueLocations","valueLocations", Location.class));
-		return patientAtHealthCenter;
-	}
-
 	// we'll do two types of filtering: late visit filtering and lost to follow
 	// up filtering
 	private enum FilterType {

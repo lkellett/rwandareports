@@ -15,14 +15,13 @@ import org.openmrs.Program;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
-import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rwandareports.dataset.comparator.PMTCTDataSetRowComparator;
 import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
@@ -64,9 +63,8 @@ public class SetupNCDConsultationSheet {
 		reportDefinition.setName("NCD Consult Sheet");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
-				
-		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),
-			    ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
+			    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		for (Program program : diseases) {
 			createDataSetDefinition(reportDefinition,program,diseases.indexOf(program));			
@@ -125,15 +123,7 @@ public class SetupNCDConsultationSheet {
 		 diseases.add(gp.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM));
 		return diseases;
 	}
-	
-	private PersonAttributeCohortDefinition getPatientAtHealthCenterCohort(){
-		PersonAttributeCohortDefinition patientAtHealthCenter = new PersonAttributeCohortDefinition();
-		patientAtHealthCenter.setName("Patients at Health Center");
-		patientAtHealthCenter.setAttributeType(Context.getPersonService().getPersonAttributeTypeByName("Health Center"));			
-		patientAtHealthCenter.addParameter(new Parameter("valueLocations", "valueLocations", Location.class));
-		return patientAtHealthCenter;
-	}
-	
+
 	private DateObsCohortDefinition getDateObsCohort(){
          Concept nextVisitConcept = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
          

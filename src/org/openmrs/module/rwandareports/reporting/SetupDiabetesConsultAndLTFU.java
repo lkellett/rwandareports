@@ -15,7 +15,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
@@ -85,8 +84,8 @@ public class SetupDiabetesConsultAndLTFU {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("Diabetes Consult");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
-
-		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
+			    ParameterizableUtil.createParameterMappings("location=${location}"));
 
 		createConsultDataSetDefinition (reportDefinition,diabetesProgram);	
 		h.saveReportDefinition(reportDefinition);
@@ -100,8 +99,6 @@ public class SetupDiabetesConsultAndLTFU {
 		reportDefinition.setName("Diabetes Late Visit");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
-
-		reportDefinition.setBaseCohortDefinition(getPatientAtHealthCenterCohort(),ParameterizableUtil.createParameterMappings("valueLocations=${location}"));
 		createLTFUDataSetDefinition(reportDefinition,diabetesProgram);	
 
 		h.saveReportDefinition(reportDefinition);
@@ -208,14 +205,6 @@ public class SetupDiabetesConsultAndLTFU {
 	private void setupPrograms() {
 		diabetesProgram = gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM);
 		diabetesEncouters = gp.getEncounterTypeList(GlobalPropertiesManagement.DIABETES_VISIT);
-	}
-	
-	private PersonAttributeCohortDefinition getPatientAtHealthCenterCohort(){
-		PersonAttributeCohortDefinition patientAtHealthCenter = new PersonAttributeCohortDefinition();
-		patientAtHealthCenter.setName("Patients at Health Center");
-		patientAtHealthCenter.setAttributeType(Context.getPersonService().getPersonAttributeTypeByName("Health Center"));			
-		patientAtHealthCenter.addParameter(new Parameter("valueLocations", "valueLocations", Location.class));
-		return patientAtHealthCenter;
 	}
 	
 	//Add common columns for the two datasets
