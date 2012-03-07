@@ -131,10 +131,10 @@ public class SetupHivArtRegisterReport {
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
 		if (pedi) {
-			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 			    ParameterizableUtil.createParameterMappings("location=${location}"));
 		} else {
-			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+			reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 			    ParameterizableUtil.createParameterMappings("location=${location}"));
 		}
 		

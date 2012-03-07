@@ -115,7 +115,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
-		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);

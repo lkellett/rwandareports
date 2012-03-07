@@ -3713,7 +3713,7 @@ public class SetupTracNetRwandaReportBySite {
 				malnourishedWitadherenceCounselingInd, "status=hivPos");
 		// rd.addIndicator("9.6","rwandareports.tracnetreport.indicator.lactatingMalnutrTherapThisMonth",patientReferedForFamilyPlaningMalnurished,"age=age15To49");
 
-		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 				ParameterizableUtil
 						.createParameterMappings("location=${location}"));
 

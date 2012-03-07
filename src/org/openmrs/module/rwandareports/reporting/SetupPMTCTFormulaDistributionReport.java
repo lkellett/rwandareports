@@ -68,7 +68,7 @@ public class SetupPMTCTFormulaDistributionReport {
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
-		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);

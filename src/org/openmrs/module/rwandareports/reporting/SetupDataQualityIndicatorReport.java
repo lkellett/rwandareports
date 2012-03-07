@@ -141,7 +141,7 @@ public class SetupDataQualityIndicatorReport {
 		rd.setupDataSetDefinition();
 		
 		
-		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createIndicatorsForReports(rd);

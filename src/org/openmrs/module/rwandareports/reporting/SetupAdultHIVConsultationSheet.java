@@ -80,7 +80,7 @@ public class SetupAdultHIVConsultationSheet {
 		
 		reportDefinition.addParameter(new Parameter("state", "Group", ProgramWorkflowState.class, stateProperties));
 		
-		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		createDataSetDefinition(reportDefinition);

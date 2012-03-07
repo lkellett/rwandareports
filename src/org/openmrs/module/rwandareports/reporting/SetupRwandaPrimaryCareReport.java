@@ -2120,7 +2120,7 @@ public class SetupRwandaPrimaryCareReport {
 		rd.addIndicator("7.16.m", "Male Number of patients requested VACCINATION SERVICE",
 		    malePatientsrequestVaccinationServiceIndicator);
 		
-		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort(),
+		rd.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 		    ParameterizableUtil.createParameterMappings("location=${location}"));
 		
 		h.saveReportDefinition(rd);
