@@ -24,7 +24,7 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rwandareports.customcalculator.DateDiffInDaysSinceLastDiabetesVisit;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rwandareports.customcalculator.DiabetesAlerts;
 import org.openmrs.module.rwandareports.customcalculator.OnInsulin;
 import org.openmrs.module.rwandareports.customcalculator.PatientHasAccompagnateur;
@@ -193,13 +193,9 @@ public class SetupDiabetesConsultAndLTFU {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getPatientAddress("Address", true, true, true, true), new HashMap<String, Object>());
 						
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("AccompName"), new HashMap<String, Object>());
-						
-		CustomCalculationBasedOnMultiplePatientDataDefinitions daysSinceLastVisit = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		daysSinceLastVisit.addPatientDataToBeEvaluated(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
-		daysSinceLastVisit.setName("Days since last Visit");
-		daysSinceLastVisit.setCalculator(new DateDiffInDaysSinceLastDiabetesVisit( diabetesEncouters));
-		dataSetDefinition.addColumn(daysSinceLastVisit, new HashMap<String, Object>());
-			
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getDifferenceSinceLastEncounter("Days since last Visit", diabetesEncouters, DateDiffType.DAYS), new HashMap<String, Object>());
+		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
 		mappings.put("endDate", "${endDate}");

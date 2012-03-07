@@ -3,7 +3,6 @@ package org.openmrs.module.rwandareports.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
@@ -15,7 +14,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrd
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.BaselineObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CurrentOrdersRestrictedByConceptSet;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfAllProgramEnrolment;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfObsAfterDateOfOtherDefinition;
@@ -28,7 +28,6 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugO
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstRecordedObservationWithCodedConceptAnswer;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FullHistoryOfProgramWorkflowStates;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.ObsValueAfterDateOfOtherDefinition;
@@ -46,8 +45,8 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.ResultFilt
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePersonByRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
-import org.openmrs.module.rwandareports.definition.LastWeekMostRecentObservation;
 import org.openmrs.module.rwandareports.definition.CurrentPatientProgram;
+import org.openmrs.module.rwandareports.definition.LastWeekMostRecentObservation;
 
 public class RowPerPatientColumns {
 	
@@ -186,20 +185,26 @@ public class RowPerPatientColumns {
 		return lastEncounter;
 	}
 	
-	public static DateDiffInMonths getDifferenceInMonthsSinceLastEncounter(String name, List<EncounterType> encounterTypes) {
-		DateDiffInMonths lastVisit = new DateDiffInMonths();
+	public static DateDiff getDifferenceSinceLastEncounter(String name, List<EncounterType> encounterTypes,DateDiffType differenceType) {
+		DateDiff lastVisit = new DateDiff();
 		lastVisit.setName(name);
+		if (differenceType == null)
+			differenceType = DateDiffType.DAYS;  // Should prevent null values instead 
+		lastVisit.setDateDiffType(differenceType);
 		lastVisit.setEncounterTypes(encounterTypes);
 		return lastVisit;
 	}
-	
-	public static DateDiffInMonths getDifferenceInMonthsSinceLastObservation(String name, Concept concept) {
-		DateDiffInMonths lastObs = new DateDiffInMonths();
+
+	public static DateDiff getDifferenceSinceLastObservation(String name, Concept concept, DateDiffType differenceType) {
+		DateDiff lastObs = new DateDiff();
 		lastObs.setName(name);
+		if (differenceType == null)
+			differenceType = DateDiffType.DAYS;  // Should prevent null values instead 
+		lastObs.setDateDiffType(differenceType);
 		lastObs.setConcept(concept);
 		return lastObs;
 	}
-		
+	
 	public static MultiplePatientDataDefinitions getMultiplePatientDataDefinitions(String name,
 	                                                                               List<RowPerPatientData> definitions) {
 		MultiplePatientDataDefinitions mult = new MultiplePatientDataDefinitions();

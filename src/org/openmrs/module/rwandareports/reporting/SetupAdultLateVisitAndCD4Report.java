@@ -34,7 +34,8 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
@@ -443,8 +444,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition8.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition9.addColumn(lastEncounterType, new HashMap<String, Object>());
 		
-		DateDiffInMonths lateVisitInMonth = RowPerPatientColumns.getDifferenceInMonthsSinceLastEncounter(
-		    "Late visit in months", clinicalEncoutersExcLab);
+		DateDiff lateVisitInMonth = RowPerPatientColumns.getDifferenceSinceLastEncounter(
+		    "Late visit in months", clinicalEncoutersExcLab, DateDiffType.MONTHS);
 		lateVisitInMonth.addParameter(new Parameter("endDate", "endDate", Date.class));
 		dataSetDefinition1.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition2.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
@@ -478,8 +479,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition8.addColumn(cd4Count, new HashMap<String, Object>());
 		dataSetDefinition9.addColumn(cd4Count, new HashMap<String, Object>());
 		
-		DateDiffInMonths lateCD4InMonths = RowPerPatientColumns.getDifferenceInMonthsSinceLastObservation(
-		    "Late CD4 in months", cd4);
+		DateDiff lateCD4InMonths = RowPerPatientColumns.getDifferenceSinceLastObservation(
+		    "Late CD4 in months", cd4, DateDiffType.MONTHS);
 		lateCD4InMonths.addParameter(new Parameter("endDate", "endDate", Date.class));
 		dataSetDefinition1.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition2.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));

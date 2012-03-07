@@ -35,7 +35,7 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiffInMonths;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
@@ -45,6 +45,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientPro
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
@@ -451,8 +452,8 @@ public class SetupPediatricLateVisitAndCD4Report {
 		dataSetDefinition9.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition10.addColumn(lastEncounterType, new HashMap<String, Object>());
 		
-		DateDiffInMonths lateVisitInMonth = RowPerPatientColumns.getDifferenceInMonthsSinceLastEncounter(
-		    "Late visit in months", clinicalEncoutersExcLab);
+		DateDiff lateVisitInMonth = RowPerPatientColumns.getDifferenceSinceLastEncounter(
+		    "Late visit in months", clinicalEncoutersExcLab, DateDiffType.MONTHS);
 		lateVisitInMonth.addParameter(new Parameter("endDate", "endDate", Date.class));
 		dataSetDefinition1.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition2.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
@@ -485,8 +486,8 @@ public class SetupPediatricLateVisitAndCD4Report {
 		dataSetDefinition8.addColumn(cd4Percentage, new HashMap<String, Object>());
 		dataSetDefinition10.addColumn(cd4Percentage, new HashMap<String, Object>());
 		
-		DateDiffInMonths lateCD4InMonths = RowPerPatientColumns.getDifferenceInMonthsSinceLastObservation(
-		    "Late CD4 in months", cd4);
+		DateDiff lateCD4InMonths = RowPerPatientColumns.getDifferenceSinceLastObservation(
+		    "Late CD4 in months", cd4, DateDiffType.MONTHS);
 		lateCD4InMonths.addParameter(new Parameter("endDate", "endDate", Date.class));
 		dataSetDefinition1.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition2.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
@@ -495,8 +496,8 @@ public class SetupPediatricLateVisitAndCD4Report {
 		dataSetDefinition5.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition9.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
-		DateDiffInMonths lateCD4PercentInMonths = RowPerPatientColumns.getDifferenceInMonthsSinceLastObservation(
-		    "Late CD4Perc in months", cd4Percent);
+		DateDiff lateCD4PercentInMonths = RowPerPatientColumns.getDifferenceSinceLastObservation(
+		    "Late CD4Perc in months", cd4Percent, DateDiffType.MONTHS);
 		lateCD4PercentInMonths.addParameter(new Parameter("endDate", "endDate", Date.class));
 		dataSetDefinition6.addColumn(lateCD4PercentInMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition7.addColumn(lateCD4PercentInMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
