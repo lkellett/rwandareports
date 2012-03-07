@@ -726,4 +726,24 @@ public class Cohorts {
 		
 		return patientOnRegimen;
 	}
+	
+	public static SqlCohortDefinition getPatientsWithLateVisitBasedOnReturnDateConcept(String name, EncounterType encounterType)
+	{
+		Concept returnVisit = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+		
+		StringBuilder query = new StringBuilder("select p.patient_id from patient p, obs o, encounter e where p.voided = 0 and o.obs_id = (select obs_id o2 from obs o2, encounter e2 where o2.voided = 0 and p.patient_id = o2.person_id and o2.concept_id = ");
+		query.append(returnVisit.getId());
+		query.append(" and o2.value_datetime is not null and o2.encounter_id = e2.encounter_id and e2.encounter_type = ");
+		query.append(encounterType.getId());
+		query.append(" order by o2.obs_datetime desc LIMIT 1) and e.encounter_id = (select encounter_id from encounter where encounter_type = ");
+		query.append(encounterType.getId());
+		query.append(" and patient_id = p.patient_id order by encounter_datetime desc LIMIT 1) and e.patient_id = o.person_id and p.patient_id = e.patient_id and o.value_datetime > e.encounter_datetime  and o.value_datetime < :endDate");
+		
+		SqlCohortDefinition lateVisit = new SqlCohortDefinition(query.toString());
+		lateVisit.setName(name);
+		lateVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		return lateVisit;
+
+	}
 }
