@@ -162,19 +162,10 @@ public class SetupDiabetesConsultAndLTFU {
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition.addParameter(new Parameter("endDate", "enDate", Date.class));
 		
-		//Add filters (we need patients enrolled in the diabetes program who had no diabetes encounter within last 30 days)
+		//Add filters (patients enrolled in the diabetes program)
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate(program.getName()+"Cohort", program), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
-		
-		// Patients without Any diabetes Encounter in last 30 days.
-		EncounterCohortDefinition patientsWithDiabetesEncounters = Cohorts.createEncounterParameterizedByDate("patientsWithDiabetesEncounters", "onOrAfter", diabetesEncouters);
-		
-		CompositionCohortDefinition patientsWithoutDiabetesEncounters = new CompositionCohortDefinition();
-		patientsWithoutDiabetesEncounters.setName("patientsWithoutDiabetesEncounters");
-		patientsWithoutDiabetesEncounters.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-		patientsWithoutDiabetesEncounters.getSearches().put("patientsWithDiabetesEncounters",new Mapped<CohortDefinition>(patientsWithDiabetesEncounters, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
-		patientsWithoutDiabetesEncounters.setCompositionString("NOT patientsWithDiabetesEncounters");
-		
-		dataSetDefinition.addFilter(patientsWithoutDiabetesEncounters,ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-30d}"));	
+		//patients with late visits
+		dataSetDefinition.addFilter(Cohorts.getPatientsWithLateVisitBasedOnReturnDateConcept("patientsWithoutDiabetesEncounters", gp.getEncounterType(GlobalPropertiesManagement.DIABETES_VISIT)),ParameterizableUtil.createParameterMappings("endDate=${endDate-7d}"));	
 		
 		//Add Columns
 		addCommonColumns(dataSetDefinition);
