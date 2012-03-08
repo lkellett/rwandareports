@@ -158,34 +158,34 @@ public class SetupPMTCTFormCompletionSheet {
 	private void createIndicators(EncounterIndicatorDataSetDefinition dsd) {
 		
 		SqlEncounterQuery patientsWithVisit = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsWithVisit", adultFlowVisit, pmtctPregnancyProgram);
-		SqlEncounterQuery visitForms = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("visitForms", adultFlowVisit, pmtctPregnancyProgram);
+		SqlEncounterQuery visitForms = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("visitForms", adultFlowVisit, pmtctPregnancyProgram);
 		SqlEncounterQuery pregnantYes = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingCodedObservationValue("pregnantYes", adultFlowVisit, pregnancyStatus, yes, pmtctPregnancyProgram);
 		
 		SqlEncounterQuery patientsCCWithVisit = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsCCWithVisit", adultFlowVisit, pmtctCombinedMotherProgram);
-		SqlEncounterQuery visitCCForms = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("visitCCForms", adultFlowVisit, pmtctCombinedMotherProgram);
+		SqlEncounterQuery visitCCForms = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("visitCCForms", adultFlowVisit, pmtctCombinedMotherProgram);
 		SqlEncounterQuery contraception = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("contraception", adultFlowVisit, familyPlanning, pmtctCombinedMotherProgram);
 		
-		SqlEncounterQuery expDDB = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("expDDB", pmtctDDB, pmtctCombinedInfantProgram);
+		SqlEncounterQuery expDDB = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("expDDB", pmtctDDB, pmtctCombinedInfantProgram);
 		SqlEncounterQuery patientsExpDDB = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsExpDDB", pmtctDDB, pmtctCombinedInfantProgram);
 		
 		SqlEncounterQuery birthWeight = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("birthWeight", pmtctDDB, birthWeightConcept, pmtctCombinedInfantProgram);
 		SqlEncounterQuery therapyWhilePregnant = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingCodedObservationValue("therapyWhilePregnant", pmtctDDB, therapyDuringPregnancy, therapyAnswers, pmtctCombinedInfantProgram);
 		SqlEncounterQuery motherCD4 = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("motherCD4", pmtctDDB, motherCD4Concept, pmtctCombinedInfantProgram);
 		
-		SqlEncounterQuery expRDV = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("expRDV", pmtctRDV, pmtctCombinedInfantProgram);
+		SqlEncounterQuery expRDV = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("expRDV", pmtctRDV, pmtctCombinedInfantProgram);
 		SqlEncounterQuery patientsExpRDV = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsExpRDV", pmtctRDV, pmtctCombinedInfantProgram);
 		
 		SqlEncounterQuery artificial = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("artificial", pmtctRDV, changeToArtificial, pmtctCombinedInfantProgram);
 		SqlEncounterQuery nextVisit = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("nextVisit", pmtctRDV, nextVisitConcept, pmtctCombinedInfantProgram);
 		
-		SqlEncounterQuery pregTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("pregTrans", transferToPMTCT, pmtctPregnancyProgram);
+		SqlEncounterQuery pregTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("pregTrans", transferToPMTCT, pmtctPregnancyProgram);
 		SqlEncounterQuery patientsPregTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsPregTrans", transferToPMTCT, pmtctPregnancyProgram);
 		
 		SqlEncounterQuery dpa = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("dpa", transferToPMTCT, dpaConcept, pmtctPregnancyProgram);
 		SqlEncounterQuery ddr = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("ddr", transferToPMTCT, ddrConcept, pmtctPregnancyProgram);
 		SqlEncounterQuery pregnancyTest = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("pregnancyTest", transferToPMTCT, pregnancyTestConcept, pmtctPregnancyProgram);
 		
-		SqlEncounterQuery ccTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("ccTrans", transferToCC, pmtctCombinedMotherProgram);
+		SqlEncounterQuery ccTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollment("ccTrans", transferToCC, pmtctCombinedMotherProgram);
 		SqlEncounterQuery patientsCCTrans = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient("patientsCCTrans", transferToCC, pmtctCombinedMotherProgram);
 		
 		SqlEncounterQuery delivery = EncounterQuerys.getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation("delivery", transferToPMTCT, dateDelivery, pmtctCombinedMotherProgram);
