@@ -86,7 +86,7 @@ public class SetupNCDConsultationSheet {
 		//Add Filters	
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate(program.getName()+"Cohort", program), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
-        dataSetDefinition.addFilter(getDateObsCohort(), ParameterizableUtil.createParameterMappings("value1=${endDate},value2=${endDate+7d}"));
+        dataSetDefinition.addFilter(Cohorts.createDateObsCohortDefinition(gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), RangeComparator.GREATER_EQUAL,RangeComparator.LESS_EQUAL, TimeModifier.ANY), ParameterizableUtil.createParameterMappings("value1=${endDate},value2=${endDate+7d}"));
          
      	DateFormatFilter dateFilter = new DateFormatFilter();
 		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
@@ -122,20 +122,5 @@ public class SetupNCDConsultationSheet {
 		 diseases.add(gp.getProgram(GlobalPropertiesManagement.HYPERTENSION_PROGRAM));
 		 diseases.add(gp.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM));
 		return diseases;
-	}
-
-	private DateObsCohortDefinition getDateObsCohort(){
-         Concept nextVisitConcept = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
-         
-         DateObsCohortDefinition dueThatWeek = new DateObsCohortDefinition();
-         dueThatWeek.setOperator1(RangeComparator.GREATER_EQUAL);
-         dueThatWeek.setOperator2(RangeComparator.LESS_EQUAL);
-         dueThatWeek.setTimeModifier(TimeModifier.ANY);
-         dueThatWeek.addParameter(new Parameter("value1", "value1", Date.class));
-         dueThatWeek.addParameter(new Parameter("value2", "value2", Date.class));
-         dueThatWeek.setName("patients due that week");
-         dueThatWeek.setGroupingConcept(nextVisitConcept);
-         return dueThatWeek;
-		
 	}
 }

@@ -746,4 +746,16 @@ public class Cohorts {
 		return lateVisit;
 
 	}
+	public static DateObsCohortDefinition createDateObsCohortDefinition(Concept concept, RangeComparator operator1, RangeComparator operator2, TimeModifier timeModifier){        
+        DateObsCohortDefinition due = new DateObsCohortDefinition();
+        due.setOperator1(operator1);
+        due.setOperator2(operator2);
+        due.setTimeModifier(timeModifier);
+        due.addParameter(new Parameter("value1", "value1", Date.class));
+        due.addParameter(new Parameter("value2", "value2", Date.class));
+        due.setName("patients due");
+        due.setGroupingConcept(concept);
+        return due;
+		
+	}
 }
