@@ -51,7 +51,7 @@ public class EncounterQuerys {
 	public static SqlEncounterQuery getFormsBetweenStartEndDatesForAProgramEnrollment(String name, Form form, Program program)
 	{
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
-		formsCompleted.setQuery("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime)");
+		formsCompleted.setQuery("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime)x where 1=1 ");
 		formsCompleted.setName(name);
 		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
 		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
@@ -61,7 +61,7 @@ public class EncounterQuerys {
 	public static SqlEncounterQuery getFormsBetweenStartEndDatesForAProgramEnrollmentGroupedByPatient(String name, Form form, Program program)
 	{
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
-		formsCompleted.setQuery("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime group by e.patient_id)");
+		formsCompleted.setQuery("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime group by e.patient_id)x where 1=1");
 		formsCompleted.setName(name);
 		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
 		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
@@ -71,7 +71,7 @@ public class EncounterQuerys {
 	public static SqlEncounterQuery getFormsBetweenStartEndDatesForAProgramEnrollmentContainingObservation(String name, Form form, Concept concept, Program program)
 	{
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
-		formsCompleted.setQuery("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and (o.value_boolean is not null or o.value_coded is not null or o.value_datetime is not null or o.value_numeric is not null))");
+		formsCompleted.setQuery("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and (o.value_boolean is not null or o.value_coded is not null or o.value_datetime is not null or o.value_numeric is not null))x where 1=1 ");
 		formsCompleted.setName(name);
 		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
 		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
@@ -83,7 +83,7 @@ public class EncounterQuerys {
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
 		
 		StringBuilder query = new StringBuilder();
-		query.append("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id in(");
+		query.append("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id in(");
 		
 		int i = 0;
 		for(Concept c: concepts)
@@ -95,7 +95,7 @@ public class EncounterQuerys {
 			query.append(c.getId());
 			i++;
 		}
-		query.append(" and (o.value_boolean is not null or o.value_coded is not null or o.value_datetime is not null or o.value_numeric is not null))");
+		query.append(" and (o.value_boolean is not null or o.value_coded is not null or o.value_datetime is not null or o.value_numeric is not null))x where 1=1 ");
 		
 		formsCompleted.setQuery(query.toString());
 		formsCompleted.setName(name);
@@ -107,7 +107,7 @@ public class EncounterQuerys {
 	public static SqlEncounterQuery getFormsBetweenStartEndDatesForAProgramEnrollmentContainingCodedObservationValue(String name, Form form, Concept concept, Concept answer, Program program)
 	{
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
-		formsCompleted.setQuery("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and o.value_coded = " + answer.getId() + ")");
+		formsCompleted.setQuery("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and o.value_coded = " + answer.getId() + ")x where 1=1 ");
 		formsCompleted.setName(name);
 		formsCompleted.addParameter(new Parameter("startDate", "startDate", Date.class));
 		formsCompleted.addParameter(new Parameter("endDate", "endDate", Date.class));
@@ -119,7 +119,7 @@ public class EncounterQuerys {
 		SqlEncounterQuery formsCompleted = new SqlEncounterQuery();
 		
 		StringBuilder query = new StringBuilder();
-		query.append("select encounter_id from encounter where encounter_id in (select e.encounter_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and o.value_coded in (");
+		query.append("select encounter_id, patient_id from (select e.encounter_id, pp.patient_id from encounter e, patient_program pp, obs o where e.voided = 0 and e.form_id = " + form.getFormId() + " and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate and e.patient_id = pp.patient_id and pp.program_id = " + program.getProgramId() + " and pp.date_enrolled <= e.encounter_datetime and if(pp.date_completed is null, :endDate, pp.date_completed) >= e.encounter_datetime and o.voided = 0 and o.encounter_id = e.encounter_id and o.concept_id = " + concept.getId() + " and o.value_coded in (");
 		
 		int i = 0;
 		for(Concept c: answer)
@@ -131,7 +131,7 @@ public class EncounterQuerys {
 			query.append(c.getId());
 			i++;
 		}
-		query.append("))");
+		query.append("))x where 1=1 ");
 		
 		formsCompleted.setQuery(query.toString());
 		formsCompleted.setName(name);
