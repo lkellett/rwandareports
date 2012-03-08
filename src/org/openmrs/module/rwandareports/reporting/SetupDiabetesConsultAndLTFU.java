@@ -22,7 +22,6 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalc
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rwandareports.customcalculator.DiabetesAlerts;
 import org.openmrs.module.rwandareports.customcalculator.OnInsulin;
-import org.openmrs.module.rwandareports.customcalculator.PatientHasAccompagnateur;
 import org.openmrs.module.rwandareports.filter.AccompagnateurStatusFilter;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
