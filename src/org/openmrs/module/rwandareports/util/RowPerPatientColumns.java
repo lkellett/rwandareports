@@ -370,12 +370,16 @@ public class RowPerPatientColumns {
 	
 	public static PatientRelationship getAccompRelationship(String name) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
-		        .getRelationshipTypeId(), "A");
+		        .getRelationshipTypeId(), "A",null);
+	}
+	public static PatientRelationship getAccompRelationship(String name, ResultFilter accompagnateurFilter) {
+		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
+		        .getRelationshipTypeId(), "A",accompagnateurFilter);
 	}
 	
 	public static PatientRelationship getMotherRelationship(String name) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.MOTHER_RELATIONSHIP)
-		        .getRelationshipTypeId(), "A");
+		        .getRelationshipTypeId(), "A", null);
 	}
 	
 	public static CurrentOrdersRestrictedByConceptSet getCurrentARTOrders(String name, String dateFormat,
@@ -465,8 +469,11 @@ public class RowPerPatientColumns {
 		return oe;
 	}
 	
-	public static PatientRelationship getPatientRelationship(String name, int relationshipTypeId, String side) {
+	public static PatientRelationship getPatientRelationship(String name, int relationshipTypeId, String side, ResultFilter accompagnateurFilter) {
 		PatientRelationship rel = new PatientRelationship();
+		if(accompagnateurFilter != null){
+		rel.setResultFilter(accompagnateurFilter);
+		}
 		rel.setName(name);
 		rel.setRelationshipTypeId(relationshipTypeId);
 		rel.setRetrievePersonAorB(side);
