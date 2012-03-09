@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.Drug;
+import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Program;
@@ -21,6 +22,7 @@ import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition
 import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -110,6 +112,11 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 	
 	private List<Drug> onAceInhibitorsDrugs = new ArrayList<Drug>();
 	
+	List<Concept> neuropathyConcepts=new ArrayList<Concept>();
+	
+	List<Concept> insulinConcepts=new ArrayList<Concept>();
+	List<Concept> metforminAndGlibenclimideConcepts=new ArrayList<Concept>();
+		
 	public void setup() throws Exception {
 		
 		setUpProperties();
@@ -621,7 +628,11 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//C4: Of total patients seen in the last quarter, % with height weight recorded at last visit
 		
-		SqlCohortDefinition BMIAtLastVist = new SqlCohortDefinition(
+		SqlCohortDefinition heightAtLastVist=Cohorts.getPatientsWithObservationAtLastVisit("heightAtLastVist", height, DMEncounterType);
+		SqlCohortDefinition weightAtLastVist=Cohorts.getPatientsWithObservationAtLastVisit("weightAtLastVist", weight, DMEncounterType);
+		
+		
+		/*SqlCohortDefinition BMIAtLastVist = new SqlCohortDefinition(
 		        "select distinct height.patient_id from (select lastenc.encounter_id,lastenc.patient_id from obs o,(select * from (select * from encounter e where e.encounter_type="
 		                + DMEncounterType.getId()
 		                + " or e.form_id="
@@ -634,17 +645,19 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		                + DDBform.getId()
 		                + " order by e.encounter_datetime desc) as lastencbypatient group by lastencbypatient.patient_id) lastenc where o.encounter_id=lastenc.encounter_id and o.concept_id="
 		                + weight.getId() + " and o.voided=0) as weight where weight.encounter_id=height.encounter_id");
-		
+	*/	
 		CompositionCohortDefinition patientsSeenAndBMIAtLastVist = new CompositionCohortDefinition();
 		patientsSeenAndBMIAtLastVist.setName("patientsSeenAndBMIAtLastVist");
 		patientsSeenAndBMIAtLastVist.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsSeenAndBMIAtLastVist.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-		patientsSeenAndBMIAtLastVist.getSearches().put("1", new Mapped<CohortDefinition>(BMIAtLastVist, null));
+		patientsSeenAndBMIAtLastVist.getSearches().put("1", new Mapped<CohortDefinition>(heightAtLastVist, null));
+		patientsSeenAndBMIAtLastVist.getSearches().put("2", new Mapped<CohortDefinition>(weightAtLastVist, null));
+		
 		patientsSeenAndBMIAtLastVist.getSearches().put(
-		    "2",
+		    "3",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsSeenAndBMIAtLastVist.setCompositionString("1 AND 2");
+		patientsSeenAndBMIAtLastVist.setCompositionString("1 AND 2 AND 3");
 		
 		CohortIndicator patientsSeenAndBMIAtLastVistCountIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndBMIAtLastVistCountIndicator", patientsSeenAndBMIAtLastVist,
@@ -652,25 +665,30 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//C5: Of total patients seen in the last quarter, % with BP recorded at last visit
 		
-		SqlCohortDefinition BPAtLastVist = new SqlCohortDefinition(
+		SqlCohortDefinition systolicBPAtLastVist=Cohorts.getPatientsWithObservationAtLastVisit("systolicBPAtLastVist", systolicBP, DMEncounterType);
+		SqlCohortDefinition diastolicBPAtLastVist=Cohorts.getPatientsWithObservationAtLastVisit("systolicBPAtLastVist", diastolicBP, DMEncounterType);
+		
+		/*SqlCohortDefinition BPAtLastVist = new SqlCohortDefinition(
 		        "select o.person_id from obs o,(select * from (select * from encounter e where (e.encounter_type="
 		                + DMEncounterType.getId()
 		                + " or e.form_id="
 		                + DDBform.getId()
 		                + ") and e.voided=0 order by e.encounter_datetime desc) as lastencbypatient group by lastencbypatient.patient_id) as lastenc where lastenc.encounter_id=o.encounter_id and (o.concept_id= "
 		                + diastolicBP.getId() + " or o.concept_id= " + systolicBP.getId()
-		                + ") and o.voided=0 group by o.person_id");
+		                + ") and o.voided=0 group by o.person_id");*/
 		
 		CompositionCohortDefinition patientsSeenAndBPAtLastVist = new CompositionCohortDefinition();
 		patientsSeenAndBPAtLastVist.setName("patientsSeenAndBPAtLastVist");
 		patientsSeenAndBPAtLastVist.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsSeenAndBPAtLastVist.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-		patientsSeenAndBPAtLastVist.getSearches().put("1", new Mapped<CohortDefinition>(BPAtLastVist, null));
+		patientsSeenAndBPAtLastVist.getSearches().put("1", new Mapped<CohortDefinition>(systolicBPAtLastVist, null));
+		patientsSeenAndBPAtLastVist.getSearches().put("2", new Mapped<CohortDefinition>(diastolicBPAtLastVist, null));
+		
 		patientsSeenAndBPAtLastVist.getSearches().put(
-		    "2",
+		    "3",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsSeenAndBPAtLastVist.setCompositionString("1 AND 2");
+		patientsSeenAndBPAtLastVist.setCompositionString("(1 OR 2) AND 3");
 		
 		CohortIndicator patientsSeenAndBPAtLastVistCountIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndBPAtLastVistCountIndicator", patientsSeenAndBPAtLastVist,
@@ -678,7 +696,11 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//C6: Of total patients seen in the last year, % with Neuropathy checked in the last year
 		
-		SqlCohortDefinition neuropathyChecked = new SqlCohortDefinition(
+		
+		
+		SqlCohortDefinition neuropathyChecked=Cohorts.getPatientsWithObservationsBetweenStartDateAndEndDate("neuropathyChecked", neuropathyConcepts);
+		
+		/*SqlCohortDefinition neuropathyChecked = new SqlCohortDefinition(
 		        "select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and (e.form_id="
 		                + DDBform.getId()
 		                + " or e.encounter_type="
@@ -690,7 +712,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		                + ") and o.voided=0 and e.voided=0 and o.obs_datetime>= :start and o.obs_datetime<= :end and o.value_numeric is NOT NULL");
 		neuropathyChecked.setName("neuropathyChecked");
 		neuropathyChecked.addParameter(new Parameter("start", "start", Date.class));
-		neuropathyChecked.addParameter(new Parameter("end", "end", Date.class));
+		neuropathyChecked.addParameter(new Parameter("end", "end", Date.class));*/
 		
 		CompositionCohortDefinition patientsSeenAndNeuropathyChecked = new CompositionCohortDefinition();
 		patientsSeenAndNeuropathyChecked.setName("patientsSeenAndNeuropathyChecked");
@@ -740,16 +762,22 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		CohortIndicator patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndNotOnAnyDMRegimenCountMonthIndicator", patientsSeenAndNotOnAnyDMRegimen,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
-		
+	
 		//D2: Of total patients seen in the last quarter, % on any type of insulin at last visit
 		
-		SqlCohortDefinition patientOnInsulin = new SqlCohortDefinition(
-		        "select o.patient_id from orders o,(select * from (select * from encounter e where (e.encounter_type=42 or e.form_id=83) and e.voided=0 order by e.encounter_datetime desc) as lastencbypatient group by lastencbypatient.patient_id) as lastenc where lastenc.patient_id>=o.patient_id and lastenc.encounter_datetime>=o.start_date and (o.concept_id= "
+		
+		
+		SqlCohortDefinition patientOnInsulinAtLastVist =Cohorts.getPatientsOnRegimenAtLastVisit("patientOnInsulinAtLastVist",insulinConcepts,DMEncounterType);
+		
+		
+		
+		/*SqlCohortDefinition patientOnInsulin = new SqlCohortDefinition(
+		        "select o.patient_id from orders o,(select * from (select * from encounter e where (e.encounter_type="+DMEncounterType.getId()+" or e.form_id="+DDBform.getId()+") and e.voided=0 order by e.encounter_datetime desc) as lastencbypatient group by lastencbypatient.patient_id) as lastenc where lastenc.patient_id>=o.patient_id and lastenc.encounter_datetime>=o.start_date and (o.concept_id= "
 		                + insulin7030.getId()
 		                + " or o.concept_id= "
 		                + insulinLente.getId()
 		                + " or o.concept_id= "
-		                + insulinRapide.getId() + ") and o.discontinued=0 and o.voided=0 group by o.patient_id;");
+		                + insulinRapide.getId() + ") and o.discontinued=0 and o.voided=0 group by o.patient_id;");*/
 	
 		CompositionCohortDefinition patientsSeenAndOnInsulin = new CompositionCohortDefinition();
 		patientsSeenAndOnInsulin.setName("patientsSeenAndOnInsulin");
@@ -759,7 +787,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsSeenAndOnInsulin.getSearches().put("2", new Mapped<CohortDefinition>(patientOnInsulin, null));
+		patientsSeenAndOnInsulin.getSearches().put("2", new Mapped<CohortDefinition>(patientOnInsulinAtLastVist, null));
 		patientsSeenAndOnInsulin.setCompositionString("1 AND 2");
 		
 		CohortIndicator patientsSeenAndOnInsulinCountQuarterIndicator = Indicators.newCountIndicator(
@@ -768,45 +796,54 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//D3: Of total patients seen in the last quarter and on any type of insulin at last visit, % who are on metformin
 		
+		
+		SqlCohortDefinition onMetformin=Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("onMetformin", metformin);
+		
+		/*
 		SqlCohortDefinition onMetformin = new SqlCohortDefinition(
 		        "select distinct patient_id from orders where concept_id = " + metformin.getId()
 		                + " and voided=0 and discontinued=0");
 		
-		CompositionCohortDefinition patientsSeenAndOnInsulinAndOnMetformin = new CompositionCohortDefinition();
+	*/	CompositionCohortDefinition patientsSeenAndOnInsulinAndOnMetformin = new CompositionCohortDefinition();
 		patientsSeenAndOnInsulinAndOnMetformin.setName("patientsSeenAndOnInsulinAndOnMetformin");
 		patientsSeenAndOnInsulinAndOnMetformin.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsSeenAndOnInsulinAndOnMetformin.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsSeenAndOnInsulinAndOnMetformin.addParameter(new Parameter("endDate", "endDate", Date.class));		
 		patientsSeenAndOnInsulinAndOnMetformin.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenAndOnInsulin, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsSeenAndOnInsulinAndOnMetformin.getSearches().put("2", new Mapped<CohortDefinition>(onMetformin, null));
+		patientsSeenAndOnInsulinAndOnMetformin.getSearches().put("2", new Mapped<CohortDefinition>(onMetformin, ParameterizableUtil.createParameterMappings("endDate=${endDate}")));
 		patientsSeenAndOnInsulinAndOnMetformin.setCompositionString("1 AND 2");
 		
 		CohortIndicator patientsSeenAndOnInsulinAndOnMetforminCountQuarterIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndOnInsulinAndOnMetforminCountQuarterIndicator", patientsSeenAndOnInsulinAndOnMetformin,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+		    ParameterizableUtil.createParameterMappings("endDate=${endDate},onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
 		
 		//D4: Of total patients seen in the last quarter and on any type of insulin at last visit, % who are on mixed insulin
 		
-		SqlCohortDefinition onInsulinMixte = new SqlCohortDefinition(
+		
+		SqlCohortDefinition onInsulinMixte=Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("onInsulinMixte", insulin7030);
+		
+	/*	SqlCohortDefinition onInsulinMixte = new SqlCohortDefinition(
 		        "select distinct patient_id from orders where concept_id = " + insulin7030.getId()
 		                + " and voided=0 and discontinued=0");
-		
+		*/
 		CompositionCohortDefinition patientsSeenAndOnInsulinAndOnInsulinMixte = new CompositionCohortDefinition();
 		patientsSeenAndOnInsulinAndOnInsulinMixte.setName("patientsSeenAndOnInsulinAndOnMetformin");
 		patientsSeenAndOnInsulinAndOnInsulinMixte.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsSeenAndOnInsulinAndOnInsulinMixte.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsSeenAndOnInsulinAndOnInsulinMixte.addParameter(new Parameter("endDate", "endDate", Date.class));
 		patientsSeenAndOnInsulinAndOnInsulinMixte.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenAndOnInsulin, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-		patientsSeenAndOnInsulinAndOnInsulinMixte.getSearches().put("2", new Mapped<CohortDefinition>(onInsulinMixte, null));
+		patientsSeenAndOnInsulinAndOnInsulinMixte.getSearches().put("2", new Mapped<CohortDefinition>(onInsulinMixte, ParameterizableUtil.createParameterMappings("endDate=${endDate}")));
 		patientsSeenAndOnInsulinAndOnInsulinMixte.setCompositionString("1 AND 2");
 		
 		CohortIndicator patientsSeenAndOnInsulinAndOnInsulinMixteCountQuarterIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndOnInsulinAndOnInsulinMixteCountQuarterIndicator", patientsSeenAndOnInsulinAndOnInsulinMixte,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+		    ParameterizableUtil.createParameterMappings("endDate=${endDate},onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
 		
 		//D5: Of total patients seen in the last quarter and on any type of insulin at last visit, % who have accompanateurs
 		
@@ -835,25 +872,33 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//D6: Of total patients seen in the last quarter, % on oral medications only (metformin and/or glibenclimide)
 		
-		SqlCohortDefinition onMetforminOrGlibenclimide = new SqlCohortDefinition(
+		
+		
+		
+		SqlCohortDefinition onMetforminOrGlibenclimide=Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("onMetforminOrGlibenclimide", metforminAndGlibenclimideConcepts);
+		
+		/*SqlCohortDefinition onMetforminOrGlibenclimide = new SqlCohortDefinition(
 		        "select distinct patient_id from orders where (concept_id = " + glibenclimide.getId() + " or concept_id = "
 		                + metformin.getId() + ") and voided=0 and discontinued=0");
+		
+		*/
 		
 		CompositionCohortDefinition patientsSeenAndOnMetforminOrGlibenclimide = new CompositionCohortDefinition();
 		patientsSeenAndOnMetforminOrGlibenclimide.setName("patientsSeenAndOnMetforminOrGlibenclimide");
 		patientsSeenAndOnMetforminOrGlibenclimide.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsSeenAndOnMetforminOrGlibenclimide.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsSeenAndOnMetforminOrGlibenclimide.addParameter(new Parameter("endDate", "endDate", Date.class));		
 		patientsSeenAndOnMetforminOrGlibenclimide.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
 		patientsSeenAndOnMetforminOrGlibenclimide.getSearches().put("2",
-		    new Mapped<CohortDefinition>(onMetforminOrGlibenclimide, null));
+		    new Mapped<CohortDefinition>(onMetforminOrGlibenclimide, ParameterizableUtil.createParameterMappings("endDate=${endDate}")));
 		patientsSeenAndOnMetforminOrGlibenclimide.setCompositionString("1 AND 2");
 		
 		CohortIndicator patientsSeenAndOnMetforminOrGlibenclimideCountQuarterIndicator = Indicators.newCountIndicator(
 		    "patientsSeenAndOnMetforminOrGlibenclimideCountQuarterIndicator", patientsSeenAndOnMetforminOrGlibenclimide,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+		    ParameterizableUtil.createParameterMappings("endDate=${endDate},onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
 		
 		//E1: Of total active patients, % who died
 		
@@ -876,19 +921,22 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//E2: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
 		
-		SqlCohortDefinition patientHospitalized = new SqlCohortDefinition(
+		
+		SqlCohortDefinition patientHospitalized=Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate("patientHospitalized", DMEncounterType, locOfHosp);
+		
+		/*SqlCohortDefinition patientHospitalized = new SqlCohortDefinition(
 		        "select distinct o.person_id from obs o,encounter e where o.encounter_id=e.encounter_id and o.concept_id="
 		                + locOfHosp.getId() + " and e.encounter_type=" + DMEncounterType.getId()
 		                + " and o.obs_datetime>= :start and o.obs_datetime<= :end and o.voided=0 and e.voided=0");
 		patientHospitalized.addParameter(new Parameter("start", "start", Date.class));
 		patientHospitalized.addParameter(new Parameter("end", "end", Date.class));
-		
+		*/
 		CompositionCohortDefinition activeAndHospitalizedPatients = new CompositionCohortDefinition();
 		activeAndHospitalizedPatients.setName("activeAndHospitalizedPatients");
 		activeAndHospitalizedPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		activeAndHospitalizedPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-		activeAndHospitalizedPatients.addParameter(new Parameter("end", "end", Date.class));
-		activeAndHospitalizedPatients.addParameter(new Parameter("start", "start", Date.class));
+		activeAndHospitalizedPatients.addParameter(new Parameter("endDate", "endDate", Date.class));
+		activeAndHospitalizedPatients.addParameter(new Parameter("startDate", "startDate", Date.class));
 		activeAndHospitalizedPatients.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
@@ -896,7 +944,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		activeAndHospitalizedPatients.getSearches().put(
 		    "2",
 		    new Mapped<CohortDefinition>(patientHospitalized, ParameterizableUtil
-		            .createParameterMappings("end=${end},start=${start}")));
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		activeAndHospitalizedPatients.setCompositionString("1 AND 2");
 		
 		CohortIndicator activeAndHospitalizedPatientsCountQuarterIndicator = Indicators
@@ -904,32 +952,37 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		            "activeAndHospitalizedPatientsCountQuarterIndicator",
 		            activeAndHospitalizedPatients,
 		            ParameterizableUtil
-		                    .createParameterMappings("end=${endDate},start=${endDate-3m+1d},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		                    .createParameterMappings("endDate=${endDate},startDate=${endDate-3m+1d},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
 		
 		//E3: Of total active patients, % with no visit 14 weeks or more past last visit date
 		
-		SqlCohortDefinition withDiabetesVisit = new SqlCohortDefinition(
+		
+		
+		EncounterCohortDefinition withDiabetesVisit=Cohorts.createEncounterParameterizedByDate("withDiabetesVisit", onOrAfterOnOrBefore, DMEncounterType);
+		
+		
+		/*SqlCohortDefinition withDiabetesVisit = new SqlCohortDefinition(
 		        "select patient_id from encounter where (encounter_type=" + DMEncounterType.getId() + " or form_id="
 		                + DDBform.getId() + ") and encounter_datetime>= :start and encounter_datetime<= :end and voided=0");
 		withDiabetesVisit.addParameter(new Parameter("end", "end", Date.class));
 		withDiabetesVisit.addParameter(new Parameter("start", "start", Date.class));
-		
+		*/
 		CompositionCohortDefinition activeAndNotwithDiabetesVisitInFourteenWeeksPatients = new CompositionCohortDefinition();
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.setName("activeAndNotwithDiabetesVisitInFourteenWeeksPatients");
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients
 		        .addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore",
 		        Date.class));
-		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("end", "end", Date.class));
+		/*activeAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("end", "end", Date.class));
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("start", "start", Date.class));
-		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
+		*/activeAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
 		    "2",
 		    new Mapped<CohortDefinition>(withDiabetesVisit, ParameterizableUtil
-		            .createParameterMappings("end=${end},start=${start}")));
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-14w}")));
 		activeAndNotwithDiabetesVisitInFourteenWeeksPatients.setCompositionString("1 AND (NOT 2)");
 		
 		CohortIndicator activeAndNotwithDiabetesVisitInFourteenWeeksPatientsCountQuarterIndicator = Indicators
@@ -937,7 +990,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		            "activeAndNotwithDiabetesVisitInFourteenWeeksPatientsNumeratorCountQuarterIndicator",
 		            activeAndNotwithDiabetesVisitInFourteenWeeksPatients,
 		            ParameterizableUtil
-		                    .createParameterMappings("end=${endDate},start=${endDate-14w},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		                    .createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
 		
 		//E4: Of total active patients on insulin at last visit, % with no visit 14 weeks or more past last visit date
 		
@@ -948,18 +1001,18 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		        "onOrAfter", Date.class));
 		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("onOrBefore",
 		        "onOrBefore", Date.class));
-		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients
+		/*activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients
 		        .addParameter(new Parameter("end", "end", Date.class));
 		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.addParameter(new Parameter("start", "start",
 		        Date.class));
-		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
+		*/activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsSeenAndOnInsulin, ParameterizableUtil
 		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
 		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.getSearches().put(
 		    "2",
 		    new Mapped<CohortDefinition>(withDiabetesVisit, ParameterizableUtil
-		            .createParameterMappings("end=${end},start=${start}")));
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-14w}")));
 		activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients.setCompositionString("1 AND (NOT 2)");
 		
 		CohortIndicator activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatientsNumeratorCountQuarterIndicatorrs = Indicators
@@ -967,7 +1020,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		            "activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatientsNumeratorCountQuarterIndicator",
 		            activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatients,
 		            ParameterizableUtil
-		                    .createParameterMappings("end=${endDate},start=${endDate-14w},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		                    .createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
 		
 		CohortIndicator activeAndOnInsulinAndNotwithDiabetesVisitInFourteenWeeksPatientsDenominatoCountQuarterIndicatorrs = Indicators
 		        .newCountIndicator(
@@ -977,19 +1030,23 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		//E5: Of patients who have had HbA1c tested in the last quarter, % with last HbA1c <8 
 		
-		SqlCohortDefinition patientsWithLastHbA1cLessThanEight = new SqlCohortDefinition(
+		
+		NumericObsCohortDefinition patientsWithLastHbA1cLessThanEight=Cohorts.createNumericObsCohortDefinition("patientsWithLastHbA1cLessThanEight", hbA1c, 8.0, RangeComparator.LESS_THAN, TimeModifier.LAST);
+		
+		
+		/*SqlCohortDefinition patientsWithLastHbA1cLessThanEight = new SqlCohortDefinition(
 		        "select lasthba1cvalue.person_id from (select * from (select * from obs where concept_id="
 		                + hbA1c.getId()
 		                + " and voided=0 order by obs_datetime desc) as lasthba1c group by lasthba1c.person_id) as lasthba1cvalue where lasthba1cvalue.value_numeric<8");
-		
+		*/
 		CompositionCohortDefinition patientsTestedForHbA1cWithLastHbA1cLessThanEight = new CompositionCohortDefinition();
 		patientsTestedForHbA1cWithLastHbA1cLessThanEight.setName("patientsTestedForHbA1cWithLastHbA1cLessThanEight");
-		patientsTestedForHbA1cWithLastHbA1cLessThanEight.addParameter(new Parameter("end", "end", Date.class));
-		patientsTestedForHbA1cWithLastHbA1cLessThanEight.addParameter(new Parameter("start", "start", Date.class));
+		patientsTestedForHbA1cWithLastHbA1cLessThanEight.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsTestedForHbA1cWithLastHbA1cLessThanEight.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
 		patientsTestedForHbA1cWithLastHbA1cLessThanEight.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsTestedForHbA1c, ParameterizableUtil
-		            .createParameterMappings("onOrBefore=${end},onOrAfter=${start}")));
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
 		patientsTestedForHbA1cWithLastHbA1cLessThanEight.getSearches().put("2",
 		    new Mapped<CohortDefinition>(patientsWithLastHbA1cLessThanEight, null));
 		patientsTestedForHbA1cWithLastHbA1cLessThanEight.setCompositionString("1 AND 2");
@@ -997,7 +1054,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		CohortIndicator patientsTestedForHbA1cWithLastHbA1cLessThanEightNumeratorCountQuarterIndicatorrs = Indicators
 		        .newCountIndicator("patientsTestedForHbA1cWithLastHbA1cLessThanEightNumeratorCountQuarterIndicator",
 		            patientsTestedForHbA1cWithLastHbA1cLessThanEight,
-		            ParameterizableUtil.createParameterMappings("end=${endDate},start=${endDate-3m+1d}"));
+		            ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
 		
 		CohortIndicator patientsTestedForHbA1cWithLastHbA1cLessThanEightDenominatoCountQuarterIndicatorrs = Indicators
 		        .newCountIndicator("patientsTestedForHbA1cWithLastHbA1cLessThanEightDenominatorCountQuarterIndicator",
@@ -1347,6 +1404,9 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		sensationInRightFoot = gp.getConcept(GlobalPropertiesManagement.SENSATION_IN_RIGHT_FOOT);
 		sensationInLeftFoot = gp.getConcept(GlobalPropertiesManagement.SENSATION_IN_LEFT_FOOT);
 		
+		neuropathyConcepts.add(sensationInLeftFoot);
+		neuropathyConcepts.add(sensationInRightFoot);
+		
 		lisinopril = gp.getConcept(GlobalPropertiesManagement.LISINOPRIL);
 		captopril = gp.getConcept(GlobalPropertiesManagement.CAPTOPRIL);
 		
@@ -1360,10 +1420,19 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		insulin7030 = gp.getConcept(GlobalPropertiesManagement.INSULIN_70_30);
 		insulinLente = gp.getConcept(GlobalPropertiesManagement.INSULIN_LENTE);
 		insulinRapide = gp.getConcept(GlobalPropertiesManagement.INSULIN_RAPIDE);
+		
+		insulinConcepts.add(insulin7030);
+		insulinConcepts.add(insulinLente);
+		insulinConcepts.add(insulinRapide);
+		
 		diabetesDrugConcepts = gp.getConceptsByConceptSet(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUG_SET);
 		
 		metformin = gp.getConcept(GlobalPropertiesManagement.METFORMIN_DRUG);
-		glibenclimide = gp.getConcept(GlobalPropertiesManagement.GLIBENCLAMIDE_DRUG);
+		glibenclimide = gp.getConcept(GlobalPropertiesManagement.GLIBENCLAMIDE_DRUG);		
+		
+		metforminAndGlibenclimideConcepts.add(metformin);
+		metforminAndGlibenclimideConcepts.add(glibenclimide);
+		
 		diedState = DMProgram.getWorkflow(28).getState("PATIENT DIED");
 		admitToHospital = gp.getConcept(GlobalPropertiesManagement.HOSPITAL_ADMITTANCE);
 		locOfHosp = gp.getConcept(GlobalPropertiesManagement.LOCATION_OF_HOSPITALIZATION);
