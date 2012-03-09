@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-		<require_module>org.openmrs.module.heightweighttracker</require_module>
+		<!-- <require_module>org.openmrs.module.heightweighttracker</require_module> -->
 	</require_modules>
 
 	<extension>
@@ -149,6 +149,32 @@
 		<description>
 			The current state that signifies a patient is on ART's
 		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>report.died</property>
+		<defaultValue>PATIENT DIED</defaultValue>
+		<description>The patient's died workflow state to use in programs </description>
+	</globalProperty>
+	
+		<globalProperty>
+		<property>reports.assistancestatus</property>
+		<defaultValue>ASSISTANCE STATUS</defaultValue>
+		<description>
+			The workflow used for patients in Nutrition program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.diabeteworkflow</property>
+		<defaultValue>Diabetes treatment status</defaultValue>
+		<description>The workflow used for patients in Diabete program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.chronicrespiratorystate</property>
+		<defaultValue>CRD treatment status</defaultValue>
+		<description>The workflow used for patients in chronic respiratory disease program</description>
 	</globalProperty>
 	
 	<globalProperty>

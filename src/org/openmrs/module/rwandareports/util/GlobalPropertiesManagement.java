@@ -487,6 +487,15 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TB_TREATMENT_GROUP_WORKFLOW = "reports.tbworkflowgroup";
 	
+    public final static String ASSISTANCE_STATUS_WORKFLOW = "reports.assistancestatus";
+	
+	public final static String DIABETE_TREATMENT_WORKFLOW= "reports.diabeteworkflow";
+	
+	public final static String CRD_TREATMENT_WORKFLOW="reports.chronicrespiratorystate";
+	
+	public final static String PREGNANCY_STATUS_WORKFLOW = "reports.pregnantStatus";
+	
+	
 	//ProgramWorkflowState
 	public final static String ON_ANTIRETROVIRALS_STATE = "reports.hivonartstate";
 	
@@ -506,6 +515,11 @@ public class GlobalPropertiesManagement {
 	
 	public final static String FORMULA_STATE_THREE = "reports.formulaStateThree";
 	
+	public final static String PATIENT_PREGNANT_STATE = "reports.patientpregnant";
+	
+	public final static String PATIENT_DIED_STATE="report.died";
+	
+	
 	//Identifiers
 	public final static String IMB_IDENTIFIER = "reports.imbIdIdentifier"; 
 	
@@ -513,7 +527,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TRACNET_IDENTIFIER = "reports.tracIdentifier";
 	
-	public int INVALID_IDENTIFIER = 6; 
+	
 	
 	//Concepts
 	
@@ -765,11 +779,9 @@ public class GlobalPropertiesManagement {
 	
 	//Order types
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
-	public final static String PATIENT_PREGNANT_STATE = "reports.patientpregnant";
-	public final static String PREGNANCY_STATUS_WORKFLOW = "reports.pregnantStatus";
 	
 	
-	//-------------------------------------------------
+//-------------------------------------------------
 //  TRACNET REPORT INDICATORS
 //-------------------------------------------------	
 	//Programs
@@ -826,5 +838,10 @@ public class GlobalPropertiesManagement {
 	public final static String USINF_INJECTABLE="report.injectable";
 	public final static String USING_ORALCONTRAC="report.orals";
 	public final static String REFERED_FOR_FP="report.referedforfp";
+    public final int INVALID_IDENTIFIER = 6;
+	public final int IMB_ID = 5; 
+	public final int PHC_ID = 8; 
+	public final int EIGHT_MONTHS = 240; 
+	public final int NINETEEN_MONTHS = 570; 
 	
 }
