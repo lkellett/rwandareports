@@ -527,13 +527,11 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TRACNET_IDENTIFIER = "reports.tracIdentifier";
 	
-	
+	public int INVALID_IDENTIFIER = 6; 
 	
 	//Concepts
 	
 	public final static String TELEPHONE_NUMBER_CONCEPT = "reports.telephoneNumberConcept"; 
-	
-	public final static String PATIENT_HAS_ACCOMPAGNATEUR_CONCEPT = "reports.patientHasAccompagnateurConcept"; 
 	
 	public final static String WEIGHT_CONCEPT = "reports.weightConcept"; 
 	
@@ -781,7 +779,7 @@ public class GlobalPropertiesManagement {
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
 	
 	
-//-------------------------------------------------
+	//-------------------------------------------------
 //  TRACNET REPORT INDICATORS
 //-------------------------------------------------	
 	//Programs
@@ -838,9 +836,7 @@ public class GlobalPropertiesManagement {
 	public final static String USINF_INJECTABLE="report.injectable";
 	public final static String USING_ORALCONTRAC="report.orals";
 	public final static String REFERED_FOR_FP="report.referedforfp";
-    public final int INVALID_IDENTIFIER = 6;
-	public final int IMB_ID = 5; 
-	public final int PHC_ID = 8; 
+	 
 	public final int EIGHT_MONTHS = 240; 
 	public final int NINETEEN_MONTHS = 570; 
 	

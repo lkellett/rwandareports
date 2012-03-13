@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-		<!-- <require_module>org.openmrs.module.heightweighttracker</require_module> -->
+		<require_module>org.openmrs.module.heightweighttracker</require_module>
 	</require_modules>
 
 	<extension>
@@ -31,13 +31,6 @@
 
 	<mappingFiles>
 	</mappingFiles>
-	
-	<globalProperty>
-		<property>rwandareports.saveIndicatorsIndependentlyOfReportDefinition</property>
-		<defaultValue>true</defaultValue>
-		<description>Saving Indicators independently of the ReportDefinition (true or false)</description>
-	</globalProperty>
-	
 	
 	<globalProperty>
 		<property>reports.hivprogramname</property>
@@ -190,14 +183,6 @@
 		<defaultValue>1426</defaultValue>
 		<description>
 			The concept id of the patient telephone number concept
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.patientHasAccompagnateurConcept</property>
-		<defaultValue>3293</defaultValue>
-		<description>
-			The concept id of the patient has Accompagnateur concept
 		</description>
 	</globalProperty>
 	
@@ -827,12 +812,6 @@
 		<property>reports.dbsConfirmationConcept</property>
 		<defaultValue>6962</defaultValue>
 		<description>The id of the concept for the DBS confirmation test</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>t</property>
-		<defaultValue>856</defaultValue>
-		<description>The id of the concept for the Viral Load test</description>
 	</globalProperty>
 	
 	<globalProperty>
