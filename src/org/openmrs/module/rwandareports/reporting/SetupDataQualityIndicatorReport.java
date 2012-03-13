@@ -292,6 +292,7 @@ public class SetupDataQualityIndicatorReport {
 			// 9. Patients with imb invalid identifier type
 			//======================================================================================
 			
+			
 			SqlCohortDefinition imbIds=Cohorts.getIMBId("DQ:IMB IDs");
 			SqlCohortDefinition pciIds=Cohorts.getPciId("DQ: PCI IDs");
 			SqlCohortDefinition patswithInvalidImb=Cohorts.getInvalidIMB("DQ: patients with invalid IMB");
@@ -501,7 +502,19 @@ public class SetupDataQualityIndicatorReport {
 			//======================================================================================
 			
 			
-			SqlCohortDefinition patientsOnArtbeforeHivEnrollment=Cohorts.getPatientsOnArtbeforeHivEnrollment("DQ: on art before period");
+			SqlCohortDefinition patientsOnArtbeforeHivEnrollment=new SqlCohortDefinition();
+			patientsOnArtbeforeHivEnrollment.setName("");
+			patientsOnArtbeforeHivEnrollment.setQuery("SELECT pp.patient_id " +
+						"FROM ( SELECT pp.patient_id a, pp.patient_program_id b, pws.program_workflow_state_id c, " +
+						"group_concat(ps.patient_state_id order by ps.patient_state_id desc) d " +
+						"FROM patient_program pp, program_workflow pw, program_workflow_state pws, patient_state ps " +
+						"WHERE pp.program_id = pw.program_id AND pw.program_workflow_id = pws.program_workflow_id " +
+						"AND pws.program_workflow_state_id = ps.state AND ps.patient_program_id = pp.patient_program_id " +
+						"AND pw.concept_id="+GlobalPropertiesManagement.TREATMENT_STATUS_ID+" and pws.concept_id="+GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT+" AND pw.retired = 0 AND pp.voided = 0 AND ps.voided = 0 " +
+						"GROUP BY pp.patient_id, pp.patient_program_id) most_recent_state, patient_program pp, program_workflow pw, program_workflow_state pws, patient_state ps " +
+						"WHERE most_recent_state.d=ps.patient_state_id AND pp.program_id = pw.program_id " +
+						"AND pw.program_workflow_id = pws.program_workflow_id AND pws.program_workflow_state_id = ps.state " +
+						"AND ps.patient_program_id = pp.patient_program_id AND ps.start_date < pp.date_enrolled");
 			
 			SqlCohortDefinition patientswithouttransferInForm=new SqlCohortDefinition();
 			patientswithouttransferInForm.setName("patientswithouttransferInForm");
@@ -617,4 +630,6 @@ public class SetupDataQualityIndicatorReport {
     	ReportService rs = Context.getService(ReportService.class);
     	rs.saveReportDesign(design);
     }	
+	
+
 }

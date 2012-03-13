@@ -787,4 +787,63 @@ public class Cohorts {
 		query.addParameter(new Parameter("endDate", "endDate", Date.class));
 		return query;
 }
+	
+	public static SqlCohortDefinition getInvalidIMB(String name) {
+		
+		SqlCohortDefinition invalidimb = new SqlCohortDefinition();
+		invalidimb.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+gp.INVALID_IDENTIFIER+" ");
+		invalidimb.setName(name);
+		
+		return invalidimb;
+	}
+	
+public static SqlCohortDefinition getIMBId(String name) {
+		
+		SqlCohortDefinition imbId = new SqlCohortDefinition();
+		imbId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+gp.IMB_IDENTIFIER+" ");
+		imbId.setName(name);
+		
+		return imbId;
+	}
+
+    public static SqlCohortDefinition getPciId(String name) {
+	
+	SqlCohortDefinition phcId = new SqlCohortDefinition();
+	phcId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+gp.PHC_ID+" ");
+	phcId.setName(name);
+	
+	return phcId;
+     }
+   
+   
+    public static SqlCohortDefinition getArtDrugs(String name){
+    	List<Concept> artDrugsconcepts;
+    	artDrugsconcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.ART_DRUGS_SET);
+		String stringOfIdsOfConcepts=null;
+		for(Concept concept:artDrugsconcepts){
+			stringOfIdsOfConcepts=stringOfIdsOfConcepts+","+concept.getId();	
+		}
+		SqlCohortDefinition onARTDrugs=new SqlCohortDefinition();
+		onARTDrugs.setQuery("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+stringOfIdsOfConcepts+") and o.discontinued=0 and auto_expire_date is null and o.voided=0");
+		onARTDrugs.setName(name);
+		
+		return onARTDrugs;
+      }
+    
+    public static SqlCohortDefinition getTbDrugs(String name){
+    	List<Concept> tbDrugsconcepts;
+    	tbDrugsconcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_TREATMENT_DRUGS);
+		String stringOfIdsOfTbDrugsConcepts=null;
+		for(Concept concept:tbDrugsconcepts){
+			stringOfIdsOfTbDrugsConcepts=stringOfIdsOfTbDrugsConcepts+","+concept.getId();	
+		}
+		SqlCohortDefinition onTBDrugs=new SqlCohortDefinition();
+		onTBDrugs.setQuery("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+stringOfIdsOfTbDrugsConcepts+") and o.discontinued=0 and (auto_expire_date is null or auto_expire_date > :now) and o.voided=0");
+	    onTBDrugs.addParameter(new Parameter("now","now",Date.class));
+	    onTBDrugs.setName(name);
+		
+		return onTBDrugs;
+      }
+      
+      
 }

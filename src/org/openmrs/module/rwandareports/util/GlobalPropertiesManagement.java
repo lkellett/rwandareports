@@ -603,6 +603,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TEMPERATURE = "concept.temperature";
 	
+	public final static String TREATMENT_STATUS_ID = "concept.treatmentStatusId";
+	
 
 	public final static String GLUCOSE="reports.glucoseConcept";
 	

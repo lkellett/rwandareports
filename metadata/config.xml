@@ -1763,4 +1763,13 @@
 		<defaultValue>365</defaultValue> 
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
+		
+		
+		<globalProperty>
+		<property>concept.treatmentStatusId</property>
+		<defaultValue>1484</defaultValue> 
+		<description>The treatment status concept id used in DQ report </description> 		
+		</globalProperty> 
+		
+		
 </module>
