@@ -692,7 +692,7 @@
 	
 	<globalProperty>
 		<property>concept.returnVisitDate</property>
-		<defaultValue>5096</defaultValue>
+		<defaultValue>3ce94df0-26fe-102b-80cb-0017a47871b2</defaultValue>
 		<description>
 			The concept id of the Return Visit Date concept
 		</description>
@@ -1164,7 +1164,7 @@
 	</globalProperty>	
 	<globalProperty>
 		<property>reports.DiabetesIncounterType</property>
-		<defaultValue>42</defaultValue>
+		<defaultValue>27</defaultValue>
 		<description>
           This global property for diabetes encounter type id. 
 		</description>
@@ -1200,7 +1200,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>reports.HbA1cConcept</property>
-		<defaultValue>7127</defaultValue>
+		<defaultValue>7051</defaultValue>
 		<description>The id of the concept for the HbA1c</description>
 	</globalProperty>
 	<globalProperty>
@@ -1281,7 +1281,7 @@
 	
 	<globalProperty>
 		<property>reports.transferToPMTCTFormID</property>
-		<defaultValue>1ed9ecb9-f0b1-41b5-a0f9-5ad08d5d020d</defaultValue>
+		<defaultValue>93468362-24b3-4255-9234-027e0fdc2fc4</defaultValue>
 		<description>The id of the form id for the transfer to PMTCT form</description>
 	</globalProperty>
 
