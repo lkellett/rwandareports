@@ -776,6 +776,7 @@ public class Cohorts {
 			if (i > 0)
 				query.append(",");
 			query.append(concept.getId());
+			i++;
 		}
 		query.append(") and o.discontinued=0 and o.voided=0 group by o.patient_id");
 		regimenAtLastVist.setQuery(query.toString());
