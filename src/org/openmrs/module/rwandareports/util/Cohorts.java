@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Drug;
 import org.openmrs.EncounterType;
@@ -39,6 +41,7 @@ import org.openmrs.module.rwandareports.definition.DrugsActiveCohortDefinition;
 public class Cohorts {
 	
 	private static GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
+	public Log log = LogFactory.getLog(getClass());
 	
 	public static SqlCohortDefinition createParameterizedLocationCohort(String name) {
 		
@@ -802,9 +805,8 @@ public class Cohorts {
 	public static SqlCohortDefinition getInvalidIMB(String name) {
 		
 		SqlCohortDefinition invalidimb = new SqlCohortDefinition();
-		invalidimb
-		        .setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="
-		                + gp.INVALID_IDENTIFIER + " ");
+		PatientIdentifierType invalidimbIdentifier = gp.getPatientIdentifier(GlobalPropertiesManagement.INVALID_IMB_IDENTIFIER);
+		invalidimb.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+invalidimbIdentifier.getId()+" ");
 		invalidimb.setName(name);
 		
 		return invalidimb;
@@ -813,8 +815,8 @@ public class Cohorts {
 	public static SqlCohortDefinition getIMBId(String name) {
 		
 		SqlCohortDefinition imbId = new SqlCohortDefinition();
-		imbId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="
-		        + gp.IMB_IDENTIFIER + " ");
+		PatientIdentifierType imbIdentifier = gp.getPatientIdentifier(GlobalPropertiesManagement.IMB_IDENTIFIER);
+		imbId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+imbIdentifier.getId()+" ");
 		imbId.setName(name);
 		
 		return imbId;
@@ -825,8 +827,7 @@ public class Cohorts {
 		SqlCohortDefinition phcId = new SqlCohortDefinition();
 		
 		PatientIdentifierType primaryCareId = gp.getPatientIdentifier(GlobalPropertiesManagement.PC_IDENTIFIER);
-		phcId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="
-		        + primaryCareId.getId() + " ");
+		phcId.setQuery("select distinct pp.patient_id from patient pp, patient_identifier pi, patient_identifier_type pit where pp.patient_id=pi.patient_id and pit.patient_identifier_type_id=pi.identifier_type and pi.identifier_type="+primaryCareId.getId()+ " ");
 		phcId.setName(name);
 		
 		return phcId;

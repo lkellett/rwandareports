@@ -527,7 +527,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TRACNET_IDENTIFIER = "reports.tracIdentifier";
 	
-	public int INVALID_IDENTIFIER = 6; 
+	public final static String INVALID_IMB_IDENTIFIER = "reports.invalidimbIdIdentifier"; 
 	
 	//Concepts
 	
@@ -603,9 +603,6 @@ public class GlobalPropertiesManagement {
 	
 	public final static String TEMPERATURE = "concept.temperature";
 	
-	public final static String TREATMENT_STATUS_ID = "concept.treatmentStatusId";
-	
-
 	public final static String GLUCOSE="reports.glucoseConcept";
 	
 	public final static String DIASTOLIC_BLOOD_PRESSURE="reports.DiastolicBPConcept";
@@ -841,5 +838,9 @@ public class GlobalPropertiesManagement {
 	 
 	public final int EIGHT_MONTHS = 240; 
 	public final int NINETEEN_MONTHS = 570; 
+	public final static int ON_ART_TREATMENT_STATUS_ID = 1577;
+	public final static int TREATMENT_STATUS_ID = 1484;
+	
+
 	
 }

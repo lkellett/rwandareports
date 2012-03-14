@@ -304,6 +304,8 @@ public class SetupDataQualityIndicatorReport {
 			patientsWithInvalidIdsnotWIthImbOrPciIds.getSearches().put("3",new Mapped(pciIds, null));
 			patientsWithInvalidIdsnotWIthImbOrPciIds.setCompositionString("NOT (2 OR 3) AND 1");
 			
+			log.info("<<<<<<<<<<<<<<<<<<<<<<<<<< IMB ID"+imbIds+"PHC ID"+pciIds+"Invalid ID"+patswithInvalidImb+"method imb id"+Cohorts.getIMBId("ff")+"method imb id"+Cohorts.getPciId("ss")+"method invalid imb"+Cohorts.getInvalidIMB("gg"));
+			
 			CohortIndicator patientsWithInvalidIdInd = Indicators.newCountIndicator("patients with invalid id check digit", patientsWithInvalidIdsnotWIthImbOrPciIds,null);		
 			
 			//======================================================================================
@@ -510,11 +512,13 @@ public class SetupDataQualityIndicatorReport {
 						"FROM patient_program pp, program_workflow pw, program_workflow_state pws, patient_state ps " +
 						"WHERE pp.program_id = pw.program_id AND pw.program_workflow_id = pws.program_workflow_id " +
 						"AND pws.program_workflow_state_id = ps.state AND ps.patient_program_id = pp.patient_program_id " +
-						"AND pw.concept_id="+GlobalPropertiesManagement.TREATMENT_STATUS_ID+" and pws.concept_id="+GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT+" AND pw.retired = 0 AND pp.voided = 0 AND ps.voided = 0 " +
+						"AND pw.concept_id="+GlobalPropertiesManagement.TREATMENT_STATUS_ID+" and pws.concept_id="+GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_ID+" AND pw.retired = 0 AND pp.voided = 0 AND ps.voided = 0 " +
 						"GROUP BY pp.patient_id, pp.patient_program_id) most_recent_state, patient_program pp, program_workflow pw, program_workflow_state pws, patient_state ps " +
 						"WHERE most_recent_state.d=ps.patient_state_id AND pp.program_id = pw.program_id " +
 						"AND pw.program_workflow_id = pws.program_workflow_id AND pws.program_workflow_state_id = ps.state " +
 						"AND ps.patient_program_id = pp.patient_program_id AND ps.start_date < pp.date_enrolled");
+			
+			log.info("<<<<<<<<<<<<<<<<<< Test????????????????????????"+patientsOnArtbeforeHivEnrollment);
 			
 			SqlCohortDefinition patientswithouttransferInForm=new SqlCohortDefinition();
 			patientswithouttransferInForm.setName("patientswithouttransferInForm");
