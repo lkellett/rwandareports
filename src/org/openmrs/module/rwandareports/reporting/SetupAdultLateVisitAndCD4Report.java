@@ -46,6 +46,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRel
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.customcalculator.BMI;
+import org.openmrs.module.rwandareports.customcalculator.BMICalculation;
 import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.customcalculator.DifferenceBetweenLastTwoObs;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
@@ -527,7 +528,10 @@ public class SetupAdultLateVisitAndCD4Report {
 		bmi.setName("BMI");
 		bmi.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
 		bmi.addPatientDataToBeEvaluated(height, new HashMap<String, Object>());
-		bmi.setCalculator(new BMI());
+		BMICalculation bmiCalc = new BMICalculation();
+		bmiCalc.setHeightName(height.getName());
+		bmiCalc.setWeightName(weight.getName());
+		bmi.setCalculator(bmiCalc);
 		dataSetDefinition6.addColumn(bmi, new HashMap<String, Object>());
 		
 		AllObservationValues allCD4 = RowPerPatientColumns.getAllCD4Values("allCD4Obs", "dd-mmm-yyyy", null, null);

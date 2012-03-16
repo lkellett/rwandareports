@@ -7,13 +7,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
-import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
 
-public class BMI implements CustomCalculation{
+public class BMICalculation implements CustomCalculation{
 
+	private String heightName = "height";
+	private String weightName = "weight";
+	
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	public PatientDataResult calculateResult(List<PatientDataResult> results, EvaluationContext context) {
@@ -26,20 +28,17 @@ public class BMI implements CustomCalculation{
 		for(PatientDataResult result: results)
 		{
 			
-			if(result.getName().equals("weightObs"))
+			if(result.getName().equals(weightName))
 			{
-				AllObservationValuesResult wt = (AllObservationValuesResult)result;
+				ObservationResult wt = (ObservationResult)result;
 				
-				if(wt.getValue() != null)
+				if(wt.getValue() != null && wt.getValue().trim().length() != 0)
 				{
-					if(wt.getValue().size() > 0)
-					{
-						weight = wt.getValue().get(wt.getValue().size()-1).getValueNumeric();
-					}
+					weight = Double.parseDouble(wt.getValue());
 				}
 			}
 			
-			if(result.getName().equals("RecentHeight"))
+			if(result.getName().equals(heightName))
 			{
 				ObservationResult heightOb = (ObservationResult)result;
 				
@@ -65,4 +64,26 @@ public class BMI implements CustomCalculation{
 		
 		return res;
 	}
+
+	
+    public String getHeightName() {
+    	return heightName;
+    }
+
+	
+    public void setHeightName(String heightName) {
+    	this.heightName = heightName;
+    }
+
+	
+    public String getWeightName() {
+    	return weightName;
+    }
+
+	
+    public void setWeightName(String weightName) {
+    	this.weightName = weightName;
+    }
+	
+	
 }
