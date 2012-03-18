@@ -636,7 +636,7 @@
 	
 	<globalProperty>
 		<property>reports.pregnancyDeliveryDateConcept</property>
-		<defaultValue>6188</defaultValue>
+		<defaultValue>5599</defaultValue>
 		<description>
 			The concept id of pregnancy due date concept 
 		</description>
