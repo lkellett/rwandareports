@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.reporting;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
@@ -77,7 +79,9 @@ public class SetupDataQualityIndicatorReport {
 	private List<Concept> tbFirstLineDrugsConcepts;
 	private List<Concept> tbSecondLineDrugsConcepts;	
 	private Concept reasonForExitingCare;
-    public Concept transferOut;
+    private Concept transferOut;
+    private Concept height;
+	private Concept weight;
     private List<String> onOrAfterOnOrBeforeParamterNames = new ArrayList<String>();
    
 	public void setup() throws Exception {
@@ -149,7 +153,7 @@ public class SetupDataQualityIndicatorReport {
 			//======================================================================================================================================================================================================
 			// 1. Any patients who are in Pediatric HIV program or in the Adult HIV program AND on ART whose accompagnateur is not listed in EMR (or who are incorrectly identified as status 'on antiretrovirals')
 			//======================================================================================================================================================================================================
-				
+			
 			List<Program> hivPrograms=new ArrayList<Program>();
 			hivPrograms.add(pediHIV);
 			hivPrograms.add(adultHIV);		
@@ -303,9 +307,7 @@ public class SetupDataQualityIndicatorReport {
 			patientsWithInvalidIdsnotWIthImbOrPciIds.getSearches().put("2",new Mapped(imbIds, null));
 			patientsWithInvalidIdsnotWIthImbOrPciIds.getSearches().put("3",new Mapped(pciIds, null));
 			patientsWithInvalidIdsnotWIthImbOrPciIds.setCompositionString("NOT (2 OR 3) AND 1");
-			
-			log.info("<<<<<<<<<<<<<<<<<<<<<<<<<< IMB ID"+imbIds+"PHC ID"+pciIds+"Invalid ID"+patswithInvalidImb+"method imb id"+Cohorts.getIMBId("ff")+"method imb id"+Cohorts.getPciId("ss")+"method invalid imb"+Cohorts.getInvalidIMB("gg"));
-			
+		
 			CohortIndicator patientsWithInvalidIdInd = Indicators.newCountIndicator("patients with invalid id check digit", patientsWithInvalidIdsnotWIthImbOrPciIds,null);		
 			
 			//======================================================================================
@@ -317,7 +319,7 @@ public class SetupDataQualityIndicatorReport {
 			parameterNames.add("onOrAfter");
 			parameterNames.add("onOrBefore");
 			EncounterCohortDefinition anyEncounter=Cohorts.createEncounterParameterizedByDate("DQ: any encounter", parameterNames);
-			
+		
 			CompositionCohortDefinition patientsWithoutIMBOrPCIdentiferWithAnyEncounterLastYearFromNow = new CompositionCohortDefinition();
 			patientsWithoutIMBOrPCIdentiferWithAnyEncounterLastYearFromNow.setName("DQ: patients without IMB or Primary Care Identifier ids but with any encounter in last year from now");
 			patientsWithoutIMBOrPCIdentiferWithAnyEncounterLastYearFromNow.getSearches().put("1",new Mapped(anyEncounter, ParameterizableUtil.createParameterMappings("onOrAfter=${now-12m},onOrBefore=${now}")));
@@ -331,7 +333,7 @@ public class SetupDataQualityIndicatorReport {
 			// 11. Observations in the future (except return visit date)
 			//======================================================================================
 			
-			SqlCohortDefinition patientsWithObsgreaterThanEnc=new SqlCohortDefinition("select o.person_id from obs o inner join encounter enc where enc.encounter_id=o.encounter_id and o.person_id=enc.patient_id and o.obs_datetime < enc.encounter_datetime ");
+			SqlCohortDefinition patientsWithObsgreaterThanEnc=new SqlCohortDefinition("select o.person_id from obs o inner join encounter enc where enc.encounter_id=o.encounter_id and o.person_id=enc.patient_id and o.obs_datetime > enc.encounter_datetime and o.voided=0 and o.void_reason is null");
 			
 			CohortIndicator patientsWithObsgreaterThanEncIndi = Indicators.newCountIndicator("Observations in the future", patientsWithObsgreaterThanEnc, null);
 			//======================================================================================
@@ -387,7 +389,10 @@ public class SetupDataQualityIndicatorReport {
 			// 14. Patients with a visit in last 12 months who do not have a correctly structured address
 			//======================================================================================
 			
-			SqlCohortDefinition patientsWithNoStructuredAddress=new SqlCohortDefinition("select distinct(p.patient_id) from patient p,person_address pa where p.patient_id=pa.person_id and pa.preferred=1 and p.voided=0 and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.neighborhood_cell is null or pa.address1 is null)");
+			SqlCohortDefinition patientsWithNoStructuredAddress=new SqlCohortDefinition("select distinct(p.patient_id) from patient p,person_address pa " +
+					"where p.patient_id=pa.person_id and pa.preferred=1 and p.voided=0 and pa.voided=0 " +
+					"and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.neighborhood_cell is null or pa.address1 is null " +
+					"or pa.state_province='' or pa.county_district='' or pa.neighborhood_cell is null or pa.address1='' )");
 			
 			CompositionCohortDefinition patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow = new CompositionCohortDefinition();
 			patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow.setName("DQ: patients With No Structured Address and with any encounter in last year from now");
@@ -396,7 +401,7 @@ public class SetupDataQualityIndicatorReport {
 			patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow.setCompositionString("1 AND 2");
 			
 			CohortIndicator patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNowIndicator = Indicators.newCountIndicator("Number of patients With No Structured Address and with any encounter in last year from now", patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow,null);		
-			
+		
 			//======================================================================================
 			// 15. Patients whose status status 'deceased' but enrolled in program
 			//======================================================================================
@@ -460,7 +465,6 @@ public class SetupDataQualityIndicatorReport {
 			PersonAttributeCohortDefinition pihHealthCenter = new PersonAttributeCohortDefinition();
 			pihHealthCenter.setName("Patients at Health Center");
 			pihHealthCenter.setAttributeType(Context.getPersonService().getPersonAttributeTypeByName("Health Center"));
-			//pihHealthCenter.addParameter(new Parameter("valueLocations","valueLocations", Location.class));
 			
 			InverseCohortDefinition patientsWithoutHc=new InverseCohortDefinition(pihHealthCenter);
 			patientsWithoutHc.setName("patientsWithoutHc");
@@ -482,28 +486,48 @@ public class SetupDataQualityIndicatorReport {
 			//======================================================================================
 			// 19. Patients with a BMI <12  or  >35
 			//======================================================================================
-			
-			 SqlCohortDefinition patientWithLessThan12=new SqlCohortDefinition();
-			 patientWithLessThan12.setName("patientWithLessThan12");
-			 patientWithLessThan12.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandareports.HEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandareports.WEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<=12.0");
-			
-			 SqlCohortDefinition patientWithMoreThan35=new SqlCohortDefinition();
-			 patientWithMoreThan35.setName("patientWithMoreThan35");
-			 patientWithMoreThan35.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandareports.HEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandareports.WEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)>=35.0");
-			
-			 CompositionCohortDefinition patientsWithBMIMoreThan35LessThan12= new CompositionCohortDefinition();
-			 patientsWithBMIMoreThan35LessThan12.setName("DQ: patients with BMI less than 12 or more that 35");
-			 patientsWithBMIMoreThan35LessThan12.getSearches().put("1",new Mapped(patientWithLessThan12, null));
-			 patientsWithBMIMoreThan35LessThan12.getSearches().put("2",new Mapped(patientWithMoreThan35, null));;
-			 patientsWithBMIMoreThan35LessThan12.setCompositionString("1 OR 2");
+			 
+			 SqlCohortDefinition bmilow=new SqlCohortDefinition();
+			 bmilow.setName("bmilow");
+			 bmilow.setQuery("select w.person_id from " +
+			 	"(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.concept_id='"+height.getId()+"' " +
+			 	"order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h," +
+			 	"(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.concept_id='"+weight.getId()+"' " +
+			 	"order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w " +
+			 	"where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<12.0");
 				
-			CohortIndicator patientsWithBMIMoreThan35LessThan12Indicator = Indicators.newCountIndicator("Number with BMI value", patientsWithBMIMoreThan35LessThan12,null);		
-
+			 SqlCohortDefinition bmihight=new SqlCohortDefinition();
+			 bmihight.setName("bmihight");
+			 bmihight.setQuery("select w.person_id from " +
+			 	"(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.concept_id='"+height.getId()+"' " +
+			 	"order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h," +
+			 	"(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.concept_id='"+weight.getId()+"' " +
+			 	"order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w " +
+			 	"where w.person_id=h.person_id ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)>35.0");
+			 
+			 SqlCohortDefinition patientWithLowBMI=new SqlCohortDefinition();
+			 patientWithLowBMI.setName("patientWithLowBMI");
+			 patientWithLowBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandamohreports.hivclinicalreport.HEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandamohreports.hivclinicalreport.WEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<12.0");
+			
+			 
+			 SqlCohortDefinition patientWithHighBMI=new SqlCohortDefinition();
+			 patientWithHighBMI.setName("patientWithHighBMI");
+			 patientWithHighBMI.setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandamohreports.hivclinicalreport.HEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"+Context.getAdministrationService().getGlobalProperty("rwandamohreports.hivclinicalreport.WEIGHTConceptuuid")+"' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w where w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)>35.0");
+			
+			 CompositionCohortDefinition bmimoreorless = new CompositionCohortDefinition();
+			 bmimoreorless.setName("bmimoreorless");
+			 bmimoreorless.getSearches().put("1",new Mapped(patientWithLowBMI, null));
+			 bmimoreorless.getSearches().put("2",new Mapped(patientWithHighBMI, null));;
+			 bmimoreorless.setCompositionString("1 OR 2");
+				
+			
+			CohortIndicator patientsWithBMIMoreThan35 = Indicators.newCountIndicator("BMI >15", patientWithLowBMI,null);		
+	
 			//======================================================================================
 			// 20. Patients <15 in Adult HIV program or PMTCT-combined clinic mother or PMTCT pregnancy
 			//======================================================================================
 			
-			
+				
 			SqlCohortDefinition patientsOnArtbeforeHivEnrollment=new SqlCohortDefinition();
 			patientsOnArtbeforeHivEnrollment.setName("");
 			patientsOnArtbeforeHivEnrollment.setQuery("SELECT pp.patient_id " +
@@ -517,8 +541,6 @@ public class SetupDataQualityIndicatorReport {
 						"WHERE most_recent_state.d=ps.patient_state_id AND pp.program_id = pw.program_id " +
 						"AND pw.program_workflow_id = pws.program_workflow_id AND pws.program_workflow_state_id = ps.state " +
 						"AND ps.patient_program_id = pp.patient_program_id AND ps.start_date < pp.date_enrolled");
-			
-			log.info("<<<<<<<<<<<<<<<<<< Test????????????????????????"+patientsOnArtbeforeHivEnrollment);
 			
 			SqlCohortDefinition patientswithouttransferInForm=new SqlCohortDefinition();
 			patientswithouttransferInForm.setName("patientswithouttransferInForm");
@@ -555,9 +577,9 @@ public class SetupDataQualityIndicatorReport {
 		reportDefinition.addIndicator("15","Patients whose status deceased but enrolled in program",patientExitedfromcareinProgramsIndicator);
 		reportDefinition.addIndicator("16","Patients who status is transferred out but is currently enrolled in program ",patientTransferedOutinProgramsIndicator);
 		reportDefinition.addIndicator("17","Patients with no health center",patientWithnohealthCenterIndicator);
-		reportDefinition.addIndicator("18","Patients with no encounter",patientsWithNoEncounterInProgramIndicator);
-		reportDefinition.addIndicator("19","Patients with a BMI <12  or  >35",patientsWithBMIMoreThan35LessThan12Indicator);
-		reportDefinition.addIndicator("20","Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer in' form",patientsOnArtbeforeHivEnrollmentIndicator);
+		reportDefinition.addIndicator("18","Patients in a program with no encounter",patientsWithNoEncounterInProgramIndicator);
+    	reportDefinition.addIndicator("19","Patients With BMI <12 or >35",patientsWithBMIMoreThan35);
+		reportDefinition.addIndicator("20","Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer in form' ",patientsOnArtbeforeHivEnrollmentIndicator);
 		
 	}
 	
@@ -610,7 +632,9 @@ public class SetupDataQualityIndicatorReport {
 			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.HYPERTENSION_PROGRAM);
 		diedInEpil=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
 			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.EPILEPSY_PROGRAM);
-	
+        height = gp.getConcept(GlobalPropertiesManagement.HEIGHT_CONCEPT);
+		
+		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 		 onOrAfterOnOrBeforeParamterNames.add("onOrAfter");
 		 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
 	}		
