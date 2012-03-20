@@ -200,8 +200,8 @@ $(document).ready(function(){
 <td rowspan="1" class="tabletd">TracNet Report</td>
 <td>TracNet Report</td>
 <td>At site</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_tracNetReport.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a></td>	
+<td><!--  <a href="${pageContext.request.contextPath}/module/rwandareports/register_tracNetReport.form" onclick=msgreg(this)>(Re) register</a>--></td>
+<td><!--  <a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a>--></td>	
 </tr>
 <tr>
 <td rowspan="4" class="tabletd">NCD Reports</td>
