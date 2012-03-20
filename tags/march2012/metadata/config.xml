@@ -1,0 +1,1767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.0">
+
+	<!-- HIV ART Register Module Properties -->
+	<id>rwandareports</id>
+	<name>Rwanda Reports</name>
+	<version>2.1</version>
+	<package>org.openmrs.module.@MODULE_ID@</package>
+	<author>PIH</author>
+	<description>Module to register reports for IMB Rwanda</description>
+	<activator>@MODULE_PACKAGE@.RwandaReportsModuleActivator</activator>
+	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
+	<require_version>1.4.0</require_version>
+	
+
+	<require_modules>
+		<require_module>org.openmrs.module.rowperpatientreports</require_module>
+		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
+	    <require_module>org.openmrs.module.heightweighttracker</require_module> 
+	</require_modules>
+
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>@MODULE_PACKAGE@.extension.html.ManageAdminListExt</class>
+	</extension>
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+
+	<mappingFiles>
+	</mappingFiles>
+	
+	<globalProperty>
+		<property>reports.hivprogramname</property>
+		<defaultValue>HIV PROGRAM</defaultValue>
+		<description>
+			The name of the HIV PROGRAM to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctCombinedMotherProgramname</property>
+		<defaultValue>PMTCT Combined Clinic - Mother</defaultValue>
+		<description>
+			The name of the PMTCT Combined Clinic - Mother to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediInitialEncounter</property>
+		<defaultValue>3</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediRdvEncounter</property>
+		<defaultValue>4</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivDiagnosisDate</property>
+		<defaultValue>2515</defaultValue>
+		<description>
+			The concept id of the Date of HIV Diagnosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediFlowsheetEncounter</property>
+		<defaultValue>37</defaultValue>
+		<description>
+			The id for the Pediatric Initial Encounter Type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tbprogramname</property>
+		<defaultValue>TUBERCULOSIS PROGRAM</defaultValue>
+		<description>
+			The name of the TB PROGRAM to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivworkflowstatus</property>
+		<defaultValue>TREATMENT STATUS</defaultValue>
+		<description>
+			The workflow status that is used to determine if patients are on ART
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.visitconcept</property>
+		<defaultValue>6959</defaultValue>
+		<description>
+			The concept for the visit flowsheet construct
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tbworkflowgroup</property>
+		<defaultValue>TUBERCULOSIS TREATMENT GROUP</defaultValue>
+		<description>
+			The workflow group for patients in TB program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivworkflowstatusinformed</property>
+		<defaultValue>INFORMED STATUS</defaultValue>
+		<description>
+			The workflow status that is used to determine if patients have been informed of diagnosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivworkflowstatuscounselling</property>
+		<defaultValue>COUNSELING GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the counselling group for the patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivtreatmentstatus</property>
+		<defaultValue>TREATMENT GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the group of the HIV patients
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivonartstate</property>
+		<defaultValue>ON ANTIRETROVIRALS</defaultValue>
+		<description>
+			The current state that signifies a patient is on ART's
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>report.died</property>
+		<defaultValue>PATIENT DIED</defaultValue>
+		<description>The patient's died workflow state to use in programs </description>
+	</globalProperty>
+	
+		<globalProperty>
+		<property>reports.assistancestatus</property>
+		<defaultValue>ASSISTANCE STATUS</defaultValue>
+		<description>
+			The workflow used for patients in Nutrition program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.diabeteworkflow</property>
+		<defaultValue>Diabetes treatment status</defaultValue>
+		<description>The workflow used for patients in Diabete program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.chronicrespiratorystate</property>
+		<defaultValue>CRD treatment status</defaultValue>
+		<description>The workflow used for patients in chronic respiratory disease program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.weightConcept</property>
+		<defaultValue>5089</defaultValue>
+		<description>
+			The concept id of the weight concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.telephoneNumberConcept</property>
+		<defaultValue>1426</defaultValue>
+		<description>
+			The concept id of the patient telephone number concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heightConcept</property>
+		<defaultValue>5090</defaultValue>
+		<description>
+			The concept id of the height concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4Concept</property>
+		<defaultValue>5497</defaultValue>
+		<description>
+			The concept id of the cd4 count concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.onArtTreatmentStatusConcept</property>
+		<defaultValue>1577</defaultValue>
+		<description>
+			The concept id of the concept for the On ART Treatment status workflow state
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.patientDiedConcept</property>
+		<defaultValue>1811</defaultValue>
+		<description>
+			The concept id of the patient died concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4LabConcept</property>
+		<defaultValue>657</defaultValue>
+		<description>
+			The concept id of the cd4 lab concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ddb_echocardiograph_result</property>
+		<defaultValue>75b3b477-a8ab-4eba-9912-c8bca53b0bbf</defaultValue>
+		<description>
+			The concept id of the ddb echocardiograph result
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.notDone</property>
+		<defaultValue>3cd75550-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of the not done
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.serumCreatinine</property>
+		<defaultValue>3cd4374e-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of the serum creatinine lab test
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heartFailureDiagnosis</property>
+		<defaultValue>e6bb1491-43b5-46b8-ba55-bd1ad188123c</defaultValue>
+		<description>
+			The concept id of the heart failure diagnosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cardiomyopathy</property>
+		<defaultValue>3ce8c3d0-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of cardiomyopathy
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.mitralStenosis</property>
+		<defaultValue>d29a5578-15cd-419c-9d30-473e922c027d</defaultValue>
+		<description>
+			The concept id of mitral stenosis
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.rhuematicHeartDisease</property>
+		<defaultValue>3cceab1c-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of rhuematicHeartDisease
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertensiveHeartDisease</property>
+		<defaultValue>fe7787ea-59ba-4427-b3df-62e9dc74d4a3</defaultValue>
+		<description>
+			The concept id of hypertensive heart disease
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pericardialDisease</property>
+		<defaultValue>1ccfc018-bcf0-45b1-973a-2fdad7a773be</defaultValue>
+		<description>
+			The concept id of pericardial disease
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.congenitalHeartFailure</property>
+		<defaultValue>d4c6945e-9328-4d0c-91c5-20c853f0afa6</defaultValue>
+		<description>
+			The concept id of congenital heart failure
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heartFailureSurgeryWorkflow</property>
+		<defaultValue>0a09f514-83d2-4997-aa04-7f4be4989f86</defaultValue>
+		<description>
+			The id of the heart failure surgery workflow
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heartFailureSurgeryPostOperativeWorkflowState</property>
+		<defaultValue>3fb4ac89-52c3-427c-8127-519f6bb8b6e8</defaultValue>
+		<description>
+			The id of the heart failure surgery post operative workflow state
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.patientsUsingFamilyPlanning</property>
+		<defaultValue>3cdcf172-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for patients using family planning
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.furosemide</property>
+		<defaultValue>3ccce886-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for furosemide
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.atenolol</property>
+		<defaultValue>d53d1bc4-1b19-4c03-9aae-61e7662acc0e</defaultValue>
+		<description>
+			The id of the concept for atenolol;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.carvedilol</property>
+		<defaultValue>b4307c45-16dc-428a-b194-e6ed6470b264</defaultValue>
+		<description>
+			The id of the concept for carvedilol;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.aldactone</property>
+		<defaultValue>65d46f90-9352-41c9-9705-38f67f097fdd</defaultValue>
+		<description>
+			The id of the concept for aldactone;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.lisinopril</property>
+		<defaultValue>44299055-6e5f-4548-af34-dcf5e13bb6a5</defaultValue>
+		<description>
+			The id of the concept for lisinopril;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.captopril</property>
+		<defaultValue>4add1344-ec52-41e3-b5b9-267f19d99aa2</defaultValue>
+		<description>
+			The id of the concept for captopril;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.warfarin</property>
+		<defaultValue>98649fa2-a68b-4bbd-b570-95a718a94924</defaultValue>
+		<description>
+			The id of the concept for warfarin;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.penicillin</property>
+		<defaultValue>3cd42dc6-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for penicillin;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pulse</property>
+		<defaultValue>3ce93824-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for pulse;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.reasonForExitingCare</property>
+		<defaultValue>3cde5ef4-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for reason for exiting care;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.patientDied</property>
+		<defaultValue>3cdd446a-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The id of the concept for reason for patient died;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.internationalNormalizedRatio</property>
+		<defaultValue>16e928e5-bdfb-4ec8-a9c2-9d64c78a0ce5</defaultValue>
+		<description>
+			The id of the concept for internationNormalizedRatio;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.disposition</property>
+		<defaultValue>0af3dbde-15f5-102d-96e4-000c29c2a5d7</defaultValue>
+		<description>
+			The id of the concept for disposition;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.admitToHospital</property>
+		<defaultValue>6c047a20-c2bf-43ef-9e88-6da7b17e8c1a</defaultValue>
+		<description>
+			The id of the concept for admit to hospital;
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labOrderType</property>
+		<defaultValue>4</defaultValue>
+		<description>
+			The lab test order type
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.heartfailureprogramname</property>
+		<defaultValue>HEART FAILURE PROGRAM</defaultValue>
+		<description>
+			The program name for the heart failure program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.CRDprogramname</property>
+		<defaultValue>Chronic respiratory disease program</defaultValue>
+		<description>
+			The program name for the Chronic respiratory disease program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertensionprogram</property>
+		<defaultValue>Hypertension program</defaultValue>
+		<description>
+			The program name for the Hypertension program 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>dq.report.oractaprogram</property>
+		<defaultValue>9</defaultValue>
+		<description>
+			The program name for the Hypertension program 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.epilepsyprogramname</property>
+		<defaultValue>Epilepsy program</defaultValue>
+		<description>
+			The program name for the Epilepsy program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pedihivprogramname</property>
+		<defaultValue>PEDIATRIC HIV PROGRAM</defaultValue>
+		<description>
+			The program name for the pediatric hiv program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctprogramname</property>
+		<defaultValue>PMTCT PROGRAM</defaultValue>
+		<description>
+			The program name for the pmtct program
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivpreartstate</property>
+		<defaultValue>FOLLOWING</defaultValue>
+		<description>
+			The current state that signifies a patient is pre ART's 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivencountertypes</property>
+		<defaultValue>ADULT INITIAL VISIT:ADULT RETURN VISIT:PEDIATRIC INITIAL VISIT:PEDIATRIC RETURN VISIT:ADULT HIV FLOWSHEET</defaultValue>
+		<description>
+			All of the encounter types that signify a HIV visit
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.adultflowsheetencounter</property>
+		<defaultValue>24</defaultValue>
+		<description>
+			The Adult HIV Flowsheet encounter id that is used to return the io and side effects for a patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferEncounter</property>
+		<defaultValue>504ca1b7-ae18-434a-89d9-cf80f1ad3407</defaultValue>
+		<description>
+			The Encounter Type that denotes a Transfer Patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.viralLoadConcept</property>
+		<defaultValue>859</defaultValue>
+		<description>
+			The Viral Load Concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pediflowsheetencounter</property>
+		<defaultValue>37</defaultValue>
+		<description>
+			The Pedi HIV Flowsheet encounter id that is used to return the io and side effects for a patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctGaveBirthStatus</property>
+		<defaultValue>GAVE BIRTH</defaultValue>
+		<description>
+			The workflow status that indicates a pmtct patient has given birth
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.currentlocation</property>
+		<defaultValue>Rwinkwavu Health Center</defaultValue>
+		<description>
+			The current location to be used by the reports
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctcombinedprogramname</property>
+		<defaultValue>PMTCT Combined Clinic - Infant</defaultValue>
+		<description>
+			The Program name for the PMTCT Combined clinic
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tbTestConcept</property>
+		<defaultValue>2136</defaultValue>
+		<description>
+			The concept id of the TB test concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ioConcept</property>
+		<defaultValue>6900</defaultValue>
+		<description>
+			The concept id of the IO group construct
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.sideEffectConcept</property>
+		<defaultValue>1295</defaultValue>
+		<description>
+			The concept id of the Side effects group construct
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allSecondLineArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all Second Line ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.testOrderedConcept</property>
+		<defaultValue>1271</defaultValue>
+		<description>
+			The concept id for test ordered
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labTestDateConcept</property>
+		<defaultValue>3267</defaultValue>
+		<description>
+			The concept id for the labratory test date
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allFirstLineArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all First Line ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pregnancyDeliveryDateConcept</property>
+		<defaultValue>5599</defaultValue>
+		<description>
+			The concept id of pregnancy due date concept 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ctxTreatmentConcept</property>
+		<defaultValue>916</defaultValue>
+		<description>
+			The concept id of the CTX Treatment drug concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.insulineDrugs</property>
+		<defaultValue>282,279,6746,6872</defaultValue>
+		<description>
+			A comma separated list of insuline drug concepts id's
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tbTreatmentConcept</property>
+		<defaultValue>1159</defaultValue>
+		<description>
+			The concept id of all the TB Treatment drug concept set 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.cd4PercentageConcept</property>
+		<defaultValue>730</defaultValue>
+		<description>
+			The concept id of the cd4 percentage concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.stageConcept</property>
+		<defaultValue>1480</defaultValue>
+		<description>
+			The concept id of the stage concept
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.allArtDrugsConceptSet</property>
+		<defaultValue>1085</defaultValue>
+		<description>
+			The concept id of the concept set that contains all ART drugs
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>concept.returnVisitDate</property>
+		<defaultValue>3ce94df0-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of the Return Visit Date concept
+		</description>
+	</globalProperty>
+	
+	<!-- Start Late Visit And CD4 Global Property -->
+	<globalProperty>
+		<property>ClinicalencounterTypeIds.labTestExcl</property>
+		<defaultValue>1,2,3,4</defaultValue>
+		<description>
+			Clinical Encounter Type to find patients who have have not had a clinical encounter (lab test excluded)		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>ClinicalencounterTypeIds.labTestIncl</property>
+		<defaultValue>1,2,3,4,9</defaultValue>
+		<description>
+			Clinical Encounter Type to find patients who have have had a clinical encounter (lab test included)		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>hiv.programid.adult</property>
+		<defaultValue>3</defaultValue>
+		<description>Id for Adult HIV program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>tb.programid</property>
+		<defaultValue>4</defaultValue>
+		<description>Id for TB program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>hiv.programid.pediatric</property>
+		<defaultValue>10</defaultValue>
+		<description>Id for Pediatric HIV program</description>
+	</globalProperty>
+	<!-- End Late Visit And CD4 Global Property -->
+	<globalProperty>
+		<property>reports.imbIdIdentifier</property>
+		<defaultValue>IMB ID</defaultValue>
+		<description>Identifier type that should be returned for the Primary Care</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tracIdentifier</property>
+		<defaultValue>TRACnet ID</defaultValue>
+		<description>Identifier type that should be returned for the TRACnet ID</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.primaryCareIdIdentifier</property>
+		<defaultValue>Primary Care</defaultValue>
+		<description>Identifier type that should be returned for the IMB Id</description>
+	</globalProperty>
+	
+	
+	<globalProperty>
+		<property>reports.invalidimbIdIdentifier</property>
+		<defaultValue>Incorrect IMB ID</defaultValue>
+		<description>Identifier type that should be returned for the incorect IMB Id</description>
+	</globalProperty>  
+	
+	<globalProperty>
+		<property>reports.pmtctMotherRelationship</property>
+		<defaultValue>13</defaultValue>
+		<description>The id of the Relationship that represents the mother in the PMTCT program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctFeedingStatusWorkflowName</property>
+		<defaultValue>Feeding status</defaultValue>
+		<description>The name of the workflow for the feeding status</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.preArtStatusConcept</property>
+		<defaultValue>1490</defaultValue>
+		<description>The concept id for the Pre Art status concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctRelationshipStatusWorkflowName</property>
+		<defaultValue>Relationship status</defaultValue>
+		<description>The name of the workflow for the relationship status</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.accompagnatuerRelationship</property>
+		<defaultValue>1</defaultValue>
+		<description>The id of the Relationship that represents the accompagnatuer</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctNextVisitConcept</property>
+		<defaultValue>5096</defaultValue>
+		<description>The id of the concept for next pmtct visit</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dbsConcept</property>
+		<defaultValue>1553</defaultValue>
+		<description>The id of the concept for the DBS test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.serotestConcept</property>
+		<defaultValue>1040</defaultValue>
+		<description>The id of the concept for the serotest</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dbsInitialConcept</property>
+		<defaultValue>6961</defaultValue>
+		<description>The id of the concept for the DBS initial test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dbsConfirmationConcept</property>
+		<defaultValue>6962</defaultValue>
+		<description>The id of the concept for the DBS confirmation test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctDiscordantCoupleWorkflowState</property>
+		<defaultValue>Discordant Couple</defaultValue>
+		<description>The workflow state representing a discordant couple</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.labEncounterType</property>
+		<defaultValue>9</defaultValue>
+		<description>The id for the lab encounter type</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ExposedInfantEncounterType</property>
+		<defaultValue>27</defaultValue>
+		<description>The id for the exposed infant encounter type</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivTestConcept</property>
+		<defaultValue>2169</defaultValue>
+		<description>The id of the concept for the HIV test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.notestDone</property>
+		<defaultValue>3083</defaultValue> 
+		<description>patient pregnant workflow concept name</description> 	
+		</globalProperty>
+	
+	<globalProperty>
+		<property>reports.ddrConcept</property>
+		<defaultValue>968</defaultValue>
+		<description>The id of the concept for the DDR concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dpaConcept</property>
+		<defaultValue>5596</defaultValue>
+		<description>The id of the concept for the DPA concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.positiveHivTestConcept</property>
+		<defaultValue>703</defaultValue>
+		<description>The id of the concept for the positive HIV test result</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.negativeHivTestConcept</property>
+		<defaultValue>664</defaultValue>
+		<description>The id of the concept for the positive HIV test result</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.undeterminateHivTestConcept</property>
+		<defaultValue>1138</defaultValue>
+		<description>The id of the concept for the positive HIV test result</description>
+	</globalProperty>
+	
+	
+	<globalProperty>
+		<property>reports.birthWeightConcept</property>
+		<defaultValue>5916</defaultValue>
+		<description>The id of the concept for the Birth date</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.infantFeedingMethodConcept</property>
+		<defaultValue>1151</defaultValue>
+		<description>The id of the concept for the infant feeding method</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.infantHivTestTypeConcept</property>
+		<defaultValue>1867</defaultValue>
+		<description>The id of the concept for the infant hiv type test</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hivTestDateConcept</property>
+		<defaultValue>1837</defaultValue>
+		<description>The id of the concept for the infant hiv test date</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.breastFedStatusConcept</property>
+		<defaultValue>6911</defaultValue>
+		<description>The id of the concept for the breast fed status concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.weanedConcept</property>
+		<defaultValue>1152</defaultValue>
+		<description>The id of the concept for the weaned concept</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.formulaStateOne</property>
+		<defaultValue>6967</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.formulaStateTwo</property>
+		<defaultValue>6965</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.formulaStateThree</property>
+		<defaultValue>6970</defaultValue>
+		<description>The state id for formula feeding one</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.breastfeedingStateOne</property>
+		<defaultValue>6966</defaultValue>
+		<description>The state id for breast feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.breastfeedingStateTwo</property>
+		<defaultValue>6964</defaultValue>
+		<description>The state id for breast feeding one</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.breastfeedingStateThree</property>
+		<defaultValue>7079</defaultValue>
+		<description>The state id for breast feeding one</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dataqualitymultipleencounters</property>
+		<defaultValue>1,2,3,4,6,7</defaultValue>
+		<description>Used by the data quality report to find patients that have multiple encounters on the same day, this should be a list of encounter type ids</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.mutuelle</property>
+		<defaultValue>465d1588-a6f6-41ac-9b9c-cc4fdf140e78</defaultValue>
+		<description>The concept id for mutuelle</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.rama</property>
+		<defaultValue>b20600d3-a818-47e7-be3d-d7bfef2acf9a</defaultValue>
+		<description>The concept id for rama</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.mmi</property>
+		<defaultValue>95faec27-62af-472f-bdd8-a238b96af067</defaultValue>
+		<description>The concept id for mmi</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.mediplan</property>
+		<defaultValue>df1b90ba-1903-438d-8de3-2676bcf8bed3</defaultValue>
+		<description>The concept id for mediplan</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.corar</property>
+		<defaultValue>61d2c4cf-1513-48d4-8ee8-e1899ccc1431</defaultValue>
+		<description>The concept id for corar</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.primaryCareServiceRequested</property>
+		<defaultValue>2cda28df-2fe7-42e0-bb2f-376c9f803537</defaultValue>
+		<description>The concept id for the primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.vctProgram</property>
+		<defaultValue>3cdc8426-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept id for the vct program primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.antenatalClinic</property>
+		<defaultValue>3ce1e268-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept id for the antenatal clinic primary care service requested</description>
+	</globalProperty>
+					
+	<globalProperty>
+		<property>reports.familyPlanningServices</property>
+		<defaultValue>3ce1e268-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept id for the familyPlanningServices primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.mutuelleServices</property>
+		<defaultValue>2fe609b9-166a-4b9b-a117-a5478382fcf5</defaultValue>
+		<description>The concept id for the mutuelleServices primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.accountingOfficeServices</property>
+		<defaultValue>1dd9fd8b-c048-4dd7-997c-85926d3204c0</defaultValue>
+		<description>The concept id for the accounting office Services primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.integratedManagementOfAdultIllnessServices</property>
+		<defaultValue>c7970a71-eaa4-4518-84b2-2a698fefb9ab</defaultValue>
+		<description>The concept id for the integrated management of adult illness primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.integratedManagementOfChildhoodIllnessServices</property>
+		<defaultValue>68ee1d12-193f-42f5-a0d1-c66aa6169c11</defaultValue>
+		<description>The concept id for the integrated management of childhood illness primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.infectiousDiseasesClinicService</property>
+		<defaultValue>ed9359b6-6d5c-4d04-b368-68c8511b3f6a</defaultValue>
+		<description>The concept id for the infectious diseases clinic primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.socialWorkerService</property>
+		<defaultValue>96f39042-ee67-47eb-8d7c-22816cd9d13a</defaultValue>
+		<description>The concept id for the social worker service primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctService</property>
+		<defaultValue>77408f95-1aaf-4ebb-9b20-285e3984a1d4</defaultValue>
+		<description>The concept id for the pmtct primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.laboratoryService</property>
+		<defaultValue>4e78fc3c-7901-4687-b969-a26fcb13218b</defaultValue>
+		<description>The concept id for the laboratory service primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pharmacyService</property>
+		<defaultValue>cccb52b8-0924-453e-b9a2-b4cf33392a9c</defaultValue>
+		<description>The concept id for the pharmacy service primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.maternityService</property>
+		<defaultValue>c967aea0-5eda-4eaf-8c92-142c6b9463de</defaultValue>
+		<description>The concept id for the maternity service primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hospitalizationService</property>
+		<defaultValue>a48b0182-709d-4c00-8333-11a409f20126</defaultValue>
+		<description>The concept id for the hospitalization service primary care service requested</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.vaccinationService</property>
+		<defaultValue>16edb286-a2c0-4b35-a3b6-101ea2bbb231</defaultValue>
+		<description>The concept id for the vaccination service primary care service requested</description>
+	</globalProperty>
+	
+	<!-- /Rwanda Report Module Properties -->
+	
+	<!-- start of Rwanda Primary Report Module Properties -->
+	
+	<globalProperty>
+		<property>primarycarereport.registration.encountertypeid</property>
+		<defaultValue>20</defaultValue>
+		<description>The id of Registration encounter type</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>primarycarereport.vitals.encountertypeid</property>
+		<defaultValue>21</defaultValue>
+		<description>The id of Vitals encounter type</description>
+	</globalProperty>
+	<!-- End of Rwanda Primary Report Module Properties -->
+	
+	<!-- Start Heart Failure report global properties  -->
+	<globalProperty>
+		<property>cardiologyreporting.cardilogyEncounterTypes</property>
+		<defaultValue>1,2,23</defaultValue>
+		<description>
+			This global property is used to get all forms of heart failure program. The default values are incounterType IDs of those forms.  
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>cardiologyreporting.cardilogyConsultationFormId</property>
+		<defaultValue>82</defaultValue>
+		<description>
+			This global property is used to get Cardiology Consultation Form . The default value is form ID.  
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>cardiologyreporting.hFDonneDeBaseFormId</property>
+		<defaultValue>77</defaultValue>
+		<description>
+          This global property is used to get Heart failure donne de Base Form . The default value is form ID. 
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.nutritionprogram</property>
+		<defaultValue>NUTRITION PROGRAM</defaultValue>
+		<description>
+			The name of the NUTRITION PROGRAM to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.oractaprogram</property>
+		<defaultValue>9</defaultValue>
+		<description>The name of the ORACTA STUDY to be used</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.chronicrespiratoryprogram</property>
+		<defaultValue>Chronic respiratory disease program</defaultValue>
+		<description>
+			The name of the Chronic respiratory disease program to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertension</property>
+		<defaultValue>Hypertension program</defaultValue>
+		<description>
+			The name of the Hypertension program to be used
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.epilepsyprogram</property>
+		<defaultValue>Epilepsy program</defaultValue>
+		<description>
+			The name of the Epilepsy program to be used
+		</description>
+	</globalProperty>	
+	<!-- End Heart Failure report global properties  -->
+	<!-- Start of DM report global properties  -->
+	
+	<globalProperty>
+		<property>reports.diabetesprogram</property>
+		<defaultValue>12</defaultValue>
+		<description>
+			The name of the DIABETES PROGRAM to be used
+		</description>
+	</globalProperty>	
+	<globalProperty>
+		<property>reports.DiabetesIncounterType</property>
+		<defaultValue>27</defaultValue>
+		<description>
+          This global property for diabetes encounter type id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.AdultInitialVisitIncounterType</property>
+		<defaultValue>1</defaultValue>
+		<description>
+          This global property for ADULT INITIAL VISIT  encounter type id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.DiabetesDDBForm</property>
+		<defaultValue>83</defaultValue>
+		<description>
+          This global property for Diabetes DDB form which can be Form Name or Form Id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.glucoseConcept</property>
+		<defaultValue>887</defaultValue>
+		<description>The id of the concept for the SERUM GLUCOSE</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.DiastolicBPConcept</property>
+		<defaultValue>5086</defaultValue>
+		<description>The id of the concept for the Diastolic Blood Pressure</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SystolicBPConcept</property>
+		<defaultValue>5085</defaultValue>
+		<description>The id of the concept for the Systolic Blood Pressure</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.HbA1cConcept</property>
+		<defaultValue>7051</defaultValue>
+		<description>The id of the concept for the HbA1c</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SensationInRightFootConcept</property>
+		<defaultValue>6737</defaultValue>
+		<description>The id of the concept for the 	Sensation in right foot</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.SensationInLeftFootConcept</property>
+		<defaultValue>6736</defaultValue>
+		<description>The id of the concept for the 	Sensation in left foot</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.diabetesTreatmentDrugConceptSet</property>
+		<defaultValue>6868</defaultValue>
+		<description>The id of the concept set for DIABETES TREATMENT DRUGS </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulin7030Concept</property>
+		<defaultValue>6746</defaultValue>
+		<description>The id of the concept for the 	INSULIN 70/30 </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulinlenteConcept</property>
+		<defaultValue>279</defaultValue>
+		<description>The id of the concept for the 	INSULIN LENTE </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.insulinrapideConcept</property>
+		<defaultValue>282</defaultValue>
+		<description>The id of the concept for the 	INSULIN Regular </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.metforminConcept</property>
+		<defaultValue>4052</defaultValue>
+		<description>The id of the concept for the METFORMIN drug </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.glibenclamideConcept</property>
+		<defaultValue>4046</defaultValue>
+		<description>The id of the concept for the GLIBENCLAMIDE drug </description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.hospitalAdmittanceConcept</property>
+		<defaultValue>3290</defaultValue>
+		<description>The id of the concept for the Hospital Admittance</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.locationOfHospitalization</property>
+		<defaultValue>3134</defaultValue>
+		<description>The id of the concept for the LOCATION OF HOSPITALIZATION</description>
+	</globalProperty>	
+	<!-- End of DM report global properties  -->
+	
+	<globalProperty>
+		<property>reports.hieghtWeightPercentage</property>
+		<defaultValue>2438e295-d9da-4d5c-bacc-13c313e34755</defaultValue>
+		<description>The id of the concept for the height weight percentage in kids</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctDDBFormId</property>
+		<defaultValue>cd066311-66c2-415b-82ce-a3b74bf95517</defaultValue>
+		<description>The id of the form id for the PMTCT ddb form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctRDVFormId</property>
+		<defaultValue>100d09a9-2889-4da4-97dd-f243b372e6cf</defaultValue>
+		<description>The id of the form id for the PMTCT rdv form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctFlowFormID</property>
+		<defaultValue>484f7dcb-3c68-4859-8671-7e8d79c6cfab</defaultValue>
+		<description>The id of the form id for the PMTCT flow form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferToPMTCTFormID</property>
+		<defaultValue>93468362-24b3-4255-9234-027e0fdc2fc4</defaultValue>
+		<description>The id of the form id for the transfer to PMTCT form</description>
+	</globalProperty>
+
+	<globalProperty>
+		<property>report.diabetesFlowVisit</property>
+		<defaultValue>20db189c-90c5-45e2-824c-7c45d5008489</defaultValue>
+		<description>The id of the form id for the visit section of the diabetes flow sheet</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferToCCFormID</property>
+		<defaultValue>265d0f02-a7f7-450e-8db4-cfd14b01dea4</defaultValue>
+		<description>The id of the form id for the transfer to Combined Clinic form</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.birthWeight</property>
+		<defaultValue>3cf15b3a-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for birth weight</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.tripleTherapyDuringPregnancy</property>
+		<defaultValue>3ce1c328-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking triple therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.monoTherapyDuringPregnancy</property>
+		<defaultValue>3ce1c1ac-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking mono therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.noTherapyDuringPregnancy</property>
+		<defaultValue>6e12fa0c-aae2-44f0-bd3d-2a36d7404c3c</defaultValue>
+		<description>The concept for taking no therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.prophylaxisDuringPregnancy</property>
+		<defaultValue>3ce1bd24-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The concept for taking therapy during pregnancy</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.motherCD4</property>
+		<defaultValue>2d5792a4-aa13-46c4-a9e6-d326a9cfbc75</defaultValue>
+		<description>The concept for mothers CD4 count</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.changeToArtificialMilk</property>
+		<defaultValue>b2033997-64ad-418e-8d74-27b92748dca2</defaultValue>
+		<description>The concept for changing an exposed infant to artificial food</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pregnancyTestDate</property>
+		<defaultValue>647ce969-a8cb-42a6-b407-e916aae56b02</defaultValue>
+		<description>The concept for the pregnancy test date</description>
+	</globalProperty>
+	
+	
+	
+	<!-- Start of TracNet Report global properties -->
+	
+	
+	<globalProperty>
+		<property>pmtct.pregnancy.programid</property>
+		<defaultValue>6</defaultValue>
+		<description>Id for PMTCT program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>pmtct.combinedinfant.programid</property>
+		<defaultValue>16</defaultValue>
+		<description>Id for PMTCT program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>pmtct.combinedmother.programid</property>
+		<defaultValue>17</defaultValue>
+		<description>Id for PMTCT program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>pep.tracnet.programid</property>
+		<defaultValue>3</defaultValue>
+		<description>Id for PEP program</description>
+	</globalProperty>
+	
+	<!-- ENCOUNTER IDS -->
+	<globalProperty>
+	 <property>encounter.tracnet.cpnEncounterId</property>
+	<defaultValue>5</defaultValue> 
+	<description>CPN Encounter id. </description> 	
+	</globalProperty> 
+	
+	<globalProperty>
+		<property>encounter.tracnet.maternityEncounterId</property>
+		<defaultValue>10</defaultValue> 
+		<description>Maternity Encounter id </description> 	
+		</globalProperty> 
+	
+	  <globalProperty>
+		<property>encounter.tracnet.pcrEncounterId</property>
+		<defaultValue>7</defaultValue> 
+		<description>PCR Encounter Id. </description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>encounter.tracnet.serologyTestAt9MonthId</property>
+		<defaultValue>8</defaultValue> 
+		<description>Serology Test at 9 Month encounter id. </description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>encounter.tracnet.serologyTestAt18MonthId</property>
+		<defaultValue>9</defaultValue> 
+		<description>Serology Test at 18 Month encounter id. </description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.antiretroviraldrugs</property>
+		<defaultValue>1085</defaultValue> 
+		<description>antiretroviral Drugs</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>moh.tracnetreport.arvDrugs</property>
+		<defaultValue>"3cd466b0-26fe-102b-80cb-0017a47871b2","3cd44248-26fe-102b-80cb-0017a47871b2","3cd25622-26fe-102b-80cb-0017a47871b2","3cd24e3e-26fe-102b-80cb-0017a47871b2","3cd43d98-26fe-102b-80cb-0017a47871b2","3cd25956-26fe-102b-80cb-0017a47871b2","3cd252f8-26fe-102b-80cb-0017a47871b2","3cec4ba4-26fe-102b-80cb-0017a47871b2","3cd24984-26fe-102b-80cb-0017a47871b2","3cd43a64-26fe-102b-80cb-0017a47871b2","3cd45166-26fe-102b-80cb-0017a47871b2","3cf09cb8-26fe-102b-80cb-0017a47871b2","3cd444be-26fe-102b-80cb-0017a47871b2","3cd25168-26fe-102b-80cb-0017a47871b2","3ce83c3a-26fe-102b-80cb-0017a47871b2","3ce1b734-26fe-102b-80cb-0017a47871b2","3cdc4ec0-26fe-102b-80cb-0017a47871b2","3cd3ef46-26fe-102b-80cb-0017a47871b2","3cd43ffa-26fe-102b-80cb-0017a47871b2"</defaultValue>
+		<description>Those are the concept Ids of ARVs drugs used by TracNet Report</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>tracnetreport.firstLineRegimen</property>
+		<defaultValue>"3cd25622-26fe-102b-80cb-0017a47871b2","3cd466b0-26fe-102b-80cb-0017a47871b2","3cd44248-26fe-102b-80cb-0017a47871b2","3cd24e3e-26fe-102b-80cb-0017a47871b2","3cd25956-26fe-102b-80cb-0017a47871b2","3cd252f8-26fe-102b-80cb-0017a47871b2", "3cec4ba4-26fe-102b-80cb-0017a47871b2", "3cd24984-26fe-102b-80cb-0017a47871b2","3cd43a64-26fe-102b-80cb-0017a47871b2","3cd45166-26fe-102b-80cb-0017a47871b2","3cf09cb8-26fe-102b-80cb-0017a47871b2","3cd444be-26fe-102b-80cb-0017a47871b2","3cd25168-26fe-102b-80cb-0017a47871b2","3ce83c3a-26fe-102b-80cb-0017a47871b2","3ce1b734-26fe-102b-80cb-0017a47871b2","3cdc4ec0-26fe-102b-80cb-0017a47871b2"</defaultValue>
+		<description>A list of First Line Regimen Drugs (a set of concepts represented as drug). </description> 		
+		</globalProperty>
+				
+		<globalProperty>
+		<property>tracnet.listOfTBDrugs</property>
+		<defaultValue>656, 767, 745, 5829, 438, 1411, 1417, 1406, 740, 1418, 755, 955, 1414,1413, 1419, 1415, 1633, 450, 2459, 2460</defaultValue> 
+		<description>A list of TB Drugs. </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>tracnet.nevirapine</property>
+		<defaultValue>631</defaultValue> 
+		<description>patient on nevirapine</description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>tracnet.azt3TC</property>
+		<defaultValue>631,630</defaultValue> 
+		<description>patient on triple therapy</description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>tracnet.bitherapy</property>
+		<defaultValue>631</defaultValue> 
+		<description>patient on bitherapy</description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>tracnet.cotrimoxazole</property>
+		<defaultValue>916</defaultValue> 
+		<description>patient on cotrimo</description> 		
+		</globalProperty>
+		
+		
+		<globalProperty>
+		<property>tracnetreport.secondLineRegimen</property>
+		<defaultValue>"3cd43ffa-26fe-102b-80cb-0017a47871b2","3cd3ef46-26fe-102b-80cb-0017a47871b2","3cd43d98-26fe-102b-80cb-0017a47871b2"</defaultValue>
+			<description>A list of Second Line Regimen Drugs (a set of concepts represented as drug). </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.reasonpatientstartedProphylalxisdrug</property>
+		<defaultValue>1496</defaultValue> 
+		<description>reason patient started arv for prophylaxis concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.exposedtobloodorbloodproduct</property>
+		<defaultValue>1494</defaultValue> 
+		<description>exposure to blood or blood product concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.sexualAssault</property>
+		<defaultValue>165</defaultValue> 
+		<description>sexual assault concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.sexualContactWithPospartner</property>
+		<defaultValue>1496</defaultValue> 
+		<description>sexual contact with hivPositive partner concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>moh.tracnetreport.prophylaxisConceptsIds</property>
+		<defaultValue>"3cd51772-26fe-102b-80cb-0017a47871b2","3cd3ec30-26fe-102b-80cb-0017a47871b2","3cccd95e-26fe-102b-80cb-0017a47871b2","3cd27a8a-26fe-102b-80cb-0017a47871b2","3cd444be-26fe-102b-80cb-0017a47871b2,"3cd252f8-26fe-102b-80cb-0017a47871b"</defaultValue>
+		<description>
+			prophylaxis drug concepts uuids used by TracnetReport
+		</description>
+	</globalProperty>
+
+	<globalProperty>
+		<property>report.estimatedDateOfConfinement</property>
+		<defaultValue>5596</defaultValue> 
+		<description>estimated date of confinement concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.dateofdelivery</property>
+		<defaultValue>5599</defaultValue> 
+		<description>estimated date of confinement concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.pregnancy_status</property>
+		<defaultValue>5272</defaultValue> 
+		<description>pregnancy status concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.yesStatus</property>
+		<defaultValue>1065</defaultValue> 
+		<description>yes concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.noStatus</property>
+		<defaultValue>1066</defaultValue> 
+		<description>no concept uuid</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.programthatordered_test</property>
+		<defaultValue>3ce1e0e2-26fe-102b-80cb-0017a47871b2</defaultValue> 
+		<description>program that ordered test concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>maternity_ward</property>
+		<defaultValue>3ce1e6e6-26fe-102b-80cb-0017a47871b2</defaultValue> 
+		<description>maternity ward concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.birthlocationtype</property>
+		<defaultValue>3528</defaultValue> 
+		<description>birth location type concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>report.hospital</property>
+		<defaultValue>2070</defaultValue> 
+		<description>hospital concept id</description> 	
+		</globalProperty>  
+		
+		<globalProperty>
+		<property>report.house</property>
+		<defaultValue>3527</defaultValue> 
+		<description>house concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.heatccenter</property>
+		<defaultValue>3566</defaultValue> 
+		<description>healt center concept id</description> 	
+		</globalProperty>  
+		
+		<globalProperty>
+		<property>report.feedmethod</property>
+		<defaultValue>1151</defaultValue> 
+		<description>infant feeding method concept id</description> 	
+		</globalProperty>   
+		
+		<globalProperty>
+		<property>report.breastfeed</property>
+		<defaultValue>5526</defaultValue> 
+		<description>breastfeed exclusively concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>report.usingformula</property>
+		<defaultValue>5254</defaultValue> 
+		<description>infant formula concept id</description> 	
+		</globalProperty>  
+		
+		<globalProperty>
+		<property>report.tbscreeningtest</property>
+		<defaultValue>2136</defaultValue> 
+		<description>tb screening test concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.socioeconomicassistance</property>
+		<defaultValue>2157</defaultValue> 
+		<description>socio economic assistance concept id</description> 	
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.nutritionalaid</property>
+		<defaultValue>1400</defaultValue> 
+		<description>nutritional aid concept id</description> 	
+		</globalProperty>  
+		
+		<globalProperty>
+		<property>report.patienttransferedOut</property>
+		<defaultValue>1744</defaultValue> 
+		<description>patient transfered out concept id</description> 	
+		</globalProperty>  
+		
+		<globalProperty>
+		<property>report.patienttransferedIn</property>
+		<defaultValue>2536</defaultValue> 
+		<description>patient transfered in concept id</description> 	
+		</globalProperty>
+	
+		<globalProperty>
+		<property>reports.whostage</property>
+		<defaultValue>1480</defaultValue> 
+		<description>who stage concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage4p</property>
+		<defaultValue>1223</defaultValue> 
+		<description>who stage 4 concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage3p</property>
+		<defaultValue>1222</defaultValue> 
+		<description>who stage 3 ped concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage2p</property>
+		<defaultValue>1221</defaultValue> 
+		<description>who stage 2 ped concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage1p</property>
+		<defaultValue>1220</defaultValue> 
+		<description>who stage 1 ped concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostageunkown</property>
+		<defaultValue>1067</defaultValue> 
+		<description>Who stage ped or adult unkown concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage4ad</property>
+		<defaultValue>1207</defaultValue> 
+		<description>who stage 4 adult concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage3ad</property>
+		<defaultValue>1206</defaultValue> 
+		<description>who stage 3 adult concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage2ad</property>
+		<defaultValue>1205</defaultValue> 
+		<description>who stage 2 adult concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.whostage1ad</property>
+		<defaultValue>1204</defaultValue> 
+		<description>who stage 1 adult concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.stitest</property>
+		<defaultValue>1607</defaultValue> 
+		<description>current oportunistic infection (used as sti test) concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.tuberculosis</property>
+		<defaultValue>58</defaultValue> 
+		<description>tuberculosis test concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.reasontherapeuticFailed</property>
+		<defaultValue>6923</defaultValue> 
+		<description>therapeutic failed test concept id</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.pooradherence</property>
+		<defaultValue>1759</defaultValue> 
+		<description>poor adherence concept uuid concept id</description> 	
+		</globalProperty>
+		
+		<!-- ANTENATAL DATA ELEMENT -->
+		<globalProperty>
+		<property>reports.pregnantStatus</property>
+		<defaultValue>PREGNANCY STATUS</defaultValue> 
+		<description>pregnancy status workflow concept name</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.patientpregnant</property>
+		<defaultValue>PATIENT PREGNANT</defaultValue> 
+		<description>patient pregnant workflow concept name</description> 	
+		</globalProperty>
+		
+		<globalProperty>
+		<property>report.dateResultOfHIVTestReceived</property>
+		<defaultValue>6549</defaultValue> 
+		<description>Date Result Of HIV Test Received concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.rprtest</property>
+		<defaultValue>1478</defaultValue> 
+		<description>rpr test concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.reactiveanswer</property>
+		<defaultValue>1228</defaultValue> 
+		<description>rpr test concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.partnerStatus</property>
+		<defaultValue>3082</defaultValue> 
+		<description>testing status of partner concept id. </description> 		
+		</globalProperty> 
+		
+		
+		<globalProperty>
+		<property>report.fplaning</property>
+		<defaultValue>374</defaultValue> 
+		<description>family planning concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.usingCondom</property>
+		<defaultValue>190</defaultValue> 
+		<description>using condoms concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.injectable</property>
+		<defaultValue>5279</defaultValue> 
+		<description>using injectables concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.orals</property>
+		<defaultValue>780</defaultValue> 
+		<description>orals concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>report.referedforfp</property>
+		<defaultValue>6734</defaultValue> 
+		<description>rerefer for fp concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>rwandareports.tracnetreport.moreThan12Months</property>
+		<defaultValue>365</defaultValue> 
+		<description>a year time period in days. </description> 		
+		</globalProperty> 
+			
+</module>
