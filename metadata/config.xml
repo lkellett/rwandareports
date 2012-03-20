@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>2.1</version>
+	<version>2.2</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>
@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	    <require_module>org.openmrs.module.heightweighttracker</require_module> 
+	    <require_module>org.openmrs.module.heightweighttracker</require_module>
 	</require_modules>
 
 	<extension>
@@ -1764,4 +1764,5 @@
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
 			
+		
 </module>
