@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	    <require_module>org.openmrs.module.heightweighttracker</require_module>
+	    <require_module>org.openmrs.module.heightweighttracker</require_module> 
 	</require_modules>
 
 	<extension>
@@ -800,6 +800,12 @@
 		<property>reports.serotestConcept</property>
 		<defaultValue>1040</defaultValue>
 		<description>The id of the concept for the serotest</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.childSerologyConcept</property>
+		<defaultValue>3ce17b70-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>The id of the concept for the child serology construct</description>
 	</globalProperty>
 	
 	<globalProperty>
@@ -1764,5 +1770,4 @@
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
 			
-		
 </module>

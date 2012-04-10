@@ -16,7 +16,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
@@ -37,7 +36,6 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.renderer.DataQualityReportWebRenderer;
 import org.openmrs.module.rwandareports.renderer.DataQualityWebRendererForSites;
 import org.openmrs.module.rwandareports.util.Cohorts;
-import org.openmrs.module.rwandareports.util.GetDate;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.Indicators;
 
@@ -340,8 +338,8 @@ public class SetupDataQualityIndicatorReport {
 			// 12. On initial TB treatment for longer than 8 months
 			//======================================================================================
 			
-			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<'"+GetDate.getCalendarMonthDate(-8)+"' and pp.voided=false and pp.date_completed is null");
-			
+			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<:startDate and pp.voided=false and pp.date_completed is null");
+			patientsInTBTooLong.addParameter(new Parameter("startDate", "startDate", Date.class));
 			String tbFirstLineDrugsConceptIds=null;
 			
 			for(Concept concept:tbFirstLineDrugsConcepts){
@@ -364,16 +362,16 @@ public class SetupDataQualityIndicatorReport {
 			
 			CompositionCohortDefinition patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen = new CompositionCohortDefinition();
 			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.setName("DQ: patients In TB Program Too long on First Line Regimen and Not on Second Line regimen");
-			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.getSearches().put("1",new Mapped(patientsInTBTooLong, null));
+			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.getSearches().put("1",new Mapped(patientsInTBTooLong, ParameterizableUtil.createParameterMappings("startDate=${now-8m}")));
 			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.getSearches().put("2",new Mapped(onTBFirstLineDrugs, null));
 			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.getSearches().put("3",new Mapped(onTBSecondLineDrugs, null));
 			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.setCompositionString("1 AND 2 AND (NOT 3)");
+			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.addParameter(new Parameter("now", "now", Date.class));
 			
-			
-			
+					
 			CohortIndicator patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimenIndicator = Indicators.newCountIndicator(
 				    "PMTCTDQ: Number patients In TB Program Too long on First Line Regimen and Not on Second Line regimen", patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen,
-				    null);
+				    ParameterizableUtil.createParameterMappings("now=${now}"));
 			//======================================================================================
 			//  13. Patients over 100 years old
 			//======================================================================================

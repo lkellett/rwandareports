@@ -770,6 +770,9 @@ public class GlobalPropertiesManagement {
 	public final static String SERUM_CREATININE = "reports.serumCreatinine";
 	
 	public final static String HIV_TEST = "reports.hivTestConcept";
+	
+	//Group constructs
+	public final static String CHILD_SEROLOGY_CONSTRUCT = "reports.childSerologyConcept";
 
 	//Lab Panel Concepts 
 	public final static String CD4_PANEL_LAB_CONCEPT = "reports.cd4LabConcept";

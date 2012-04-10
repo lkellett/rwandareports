@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.text.AsyncBoxView.ChildState;
+
 import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Location;
@@ -45,6 +47,8 @@ public class SetupCombinedHFCSPConsultationReport {
 	
 	private Concept dbsConcept;
 	
+	private Concept childSerologyConcept;
+	
 	public void setup() throws Exception {
 		
 		setupProperties();
@@ -67,12 +71,12 @@ public class SetupCombinedHFCSPConsultationReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Combined HFCSP consultation");
+		h.purgeReportDefinition("Combined Clinic Consultation sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Combined HFCSP consultation");
+		reportDefinition.setName("Combined Clinic Consultation sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
@@ -128,14 +132,14 @@ public class SetupCombinedHFCSPConsultationReport {
 		DateOfBirth dob = new DateOfBirth();
 		
 		dataSetDefinition.addColumn(
-		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("firstDBSTest", dbsConcept, dob, "ddMMMyy"),
+		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("firstDBSTest", dbsConcept, childSerologyConcept, dob, "ddMMMyy"),
 		    new HashMap<String, Object>());
 		
 		DateOfObsAfterDateOfOtherDefinition firstDbsDate = RowPerPatientColumns.getDateOfObsAfterDateOfOtherDefinition(
-		    "firstDBSDate", dbsConcept, dob);
+		    "firstDBSDate", dbsConcept, childSerologyConcept, dob);
 		
 		dataSetDefinition.addColumn(
-		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("confDBSTest", dbsConcept, firstDbsDate, "ddMMMyy"),
+		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("confDBSTest", dbsConcept, childSerologyConcept, firstDbsDate, "ddMMMyy"),
 		    new HashMap<String, Object>());
 		
 		DateOfNextTestDueFromBirth firstSero = new DateOfNextTestDueFromBirth();
@@ -153,15 +157,15 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(secondSero, new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(
-		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("firstSeroTest", seroConcept, dob, "ddMMMyy"),
+		    RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("firstSeroTest", seroConcept, childSerologyConcept, dob, "ddMMMyy"),
 		    new HashMap<String, Object>());
 		
 		DateOfObsAfterDateOfOtherDefinition firstSeroDate = RowPerPatientColumns.getDateOfObsAfterDateOfOtherDefinition(
-		    "firstSeroDate", seroConcept, dob);
+		    "firstSeroDate", seroConcept, childSerologyConcept, dob);
 		new DateOfObsAfterDateOfOtherDefinition();
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("secondSeroTest",
-		    seroConcept, firstSeroDate, "ddMMMyy"), new HashMap<String, Object>());
+		    seroConcept, childSerologyConcept, firstSeroDate, "ddMMMyy"), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "ddMMMyy"),
 		    new HashMap<String, Object>());
@@ -191,5 +195,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		seroConcept = gp.getConcept(GlobalPropertiesManagement.SERO_TEST);
 		
 		dbsConcept = gp.getConcept(GlobalPropertiesManagement.DBS_CONCEPT);
+		
+		childSerologyConcept = gp.getConcept(GlobalPropertiesManagement.CHILD_SEROLOGY_CONSTRUCT);
 	}
 }

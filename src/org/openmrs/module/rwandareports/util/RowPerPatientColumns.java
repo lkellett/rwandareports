@@ -534,6 +534,21 @@ public class RowPerPatientColumns {
 		return ovadood;
 	}
 	
+	public static ObsValueAfterDateOfOtherDefinition getObsValueAfterDateOfOtherDefinition(String name, Concept concept, Concept groupConcept,
+	                                                                                       DateOfPatientData patientData,
+	                                                                                       String dateFormat) {
+		ObsValueAfterDateOfOtherDefinition ovadood = new ObsValueAfterDateOfOtherDefinition();
+		ovadood.setConcept(concept);
+		ovadood.setName(name);
+		ovadood.setDateOfPatientData(patientData, new HashMap<String, Object>());
+		ovadood.setGroupConcept(groupConcept);
+		if (dateFormat != null) {
+			ovadood.setDateFormat(dateFormat);
+		}
+		
+		return ovadood;
+	}
+	
 	public static BaselineObservation getBaselineObservation(String name, Concept concept, DateOfPatientData patientData,
 	                                                         String dateFormat) {
 		BaselineObservation baseline = new BaselineObservation();
@@ -584,6 +599,16 @@ public class RowPerPatientColumns {
 		DateOfObsAfterDateOfOtherDefinition dooadood = new DateOfObsAfterDateOfOtherDefinition();
 		dooadood.setConcept(concept);
 		dooadood.setName(name);
+		dooadood.setDateOfPatientData(patientData, new HashMap<String, Object>());
+		return dooadood;
+	}
+	
+	public static DateOfObsAfterDateOfOtherDefinition getDateOfObsAfterDateOfOtherDefinition(String name, Concept concept, Concept group,
+	                                                                                         DateOfPatientData patientData) {
+		DateOfObsAfterDateOfOtherDefinition dooadood = new DateOfObsAfterDateOfOtherDefinition();
+		dooadood.setConcept(concept);
+		dooadood.setName(name);
+		dooadood.setGroupConcept(group);
 		dooadood.setDateOfPatientData(patientData, new HashMap<String, Object>());
 		return dooadood;
 	}
