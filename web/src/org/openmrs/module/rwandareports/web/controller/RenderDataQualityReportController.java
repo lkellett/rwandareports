@@ -87,6 +87,7 @@ public class RenderDataQualityReportController {
             savedColumnKeys.add("18");
             savedColumnKeys.add("19");
             savedColumnKeys.add("20");
+            savedColumnKeys.add("21");
             List<DQReportModel> dQRList=new ArrayList<DQReportModel>();
             
             for (String savedColumnKey : savedColumnKeys) {
