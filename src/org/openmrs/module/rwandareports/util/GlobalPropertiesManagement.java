@@ -637,6 +637,12 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CHANGE_TO_ARTIFICIAL_MILK = "reports.changeToArtificialMilk";
 	
+	public final static String PEAK_FLOW_AFTER_SALBUTAMOL="reports.peakFlowAfterSalbutamolConcept";
+	
+	public final static String ASTHMA_CLASSIFICATION="reports.asthmaclassificationConcept";
+	
+	public final static String ASTHMA_CLASSIFICATION_ORDER="reports.asthmaclassificationorder";
+	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -680,6 +686,9 @@ public class GlobalPropertiesManagement {
 
 	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
+	public final static String ASTHMA_VISIT="reports.AsthmaEncounterType";
+	
+	
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";
 	
@@ -705,6 +714,9 @@ public class GlobalPropertiesManagement {
 	public final static String TRANSFER_TO_CC = "reports.transferToCCFormID";
 	
 	public final static String DIABETES_FLOW_VISIT = "report.diabetesFlowVisit";
+	
+	public final static String ASTHMA_DDB = "reports.asthmaDDBformId";
+	
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";
@@ -751,6 +763,8 @@ public class GlobalPropertiesManagement {
 	public final static String DIABETES_TREATMENT_DRUG_SET= "reports.diabetesTreatmentDrugConceptSet";
 	
 	public final static String METFORMIN_DRUG="reports.metforminConcept";
+	
+	public final static String CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS="reports.asthmaTreatmentConceptSet";
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
