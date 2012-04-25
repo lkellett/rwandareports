@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	    <require_module>org.openmrs.module.heightweighttracker</require_module> 
+	    <require_module>org.openmrs.module.heightweighttracker</require_module>
 	</require_modules>
 
 	<extension>
@@ -800,12 +800,6 @@
 		<property>reports.serotestConcept</property>
 		<defaultValue>1040</defaultValue>
 		<description>The id of the concept for the serotest</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>reports.childSerologyConcept</property>
-		<defaultValue>3ce17b70-26fe-102b-80cb-0017a47871b2</defaultValue>
-		<description>The id of the concept for the child serology construct</description>
 	</globalProperty>
 	
 	<globalProperty>
@@ -1769,5 +1763,57 @@
 		<defaultValue>365</defaultValue> 
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
+		
+		<!-- start Asthma consult sheet -->
+		<globalProperty>
+		<property>reports.AsthmaEncounterType</property>
+		<defaultValue>41</defaultValue> 
+		<description>Astma encounter type id </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.asthmaDDBformId</property>
+		<defaultValue>85</defaultValue> 
+		<description>Astma DDB form id </description> 		
+		</globalProperty>
+		
+		
+		<globalProperty>
+		<property>reports.asthmaTreatmentConceptSet</property>
+		<defaultValue>6869</defaultValue>
+		<description>
+			The concept id of all the Asthma Treatment drug concept set 
+		</description>
+	    </globalProperty>
+		
+		<globalProperty>
+		<property>reports.peakFlowAfterSalbutamolConcept</property>
+		<defaultValue>6765</defaultValue>
+		<description>
+			The concept id of Peak flow after salbutamol 
+		</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.asthmaclassificationConcept</property>
+		<defaultValue>7096</defaultValue>
+		<description>
+			The concept id of asthma classification 
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
+		<property>reports.asthmaclassificationorder</property>
+		<defaultValue>intermittent asthma:1,Mild persistent asthma:2,Moderate Persistent Asthma:3,Severe Persistent Asthma:4,Severe uncontrolled asthma:5</defaultValue>
+		<description>
+			The step down asthma classification order, the name should be a concept name and order should be an integer. the name and order are separated by ':' and classes are delimited by ',' 
+		</description>
+	    </globalProperty>
+		
+		
+		
+		<!-- end Asthma consult sheet -->
+		
 			
+		
 </module>
