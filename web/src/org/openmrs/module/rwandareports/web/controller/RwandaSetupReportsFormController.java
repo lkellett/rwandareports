@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.web.controller;
 
 import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
+import org.openmrs.module.rwandareports.reporting.SetupAsthmaConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
@@ -12,6 +13,7 @@ import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupPMTCTCombinedClinicMotherMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
@@ -166,7 +168,18 @@ public class RwandaSetupReportsFormController {
 		new SetupTBConsultationSheet().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+
+	@RequestMapping("/module/rwandareports/register_asthmaConsultationSheet")
+	public ModelAndView registerAsthmaConsultationSheet() throws Exception {
+		new SetupAsthmaConsultationSheet().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 	
+	@RequestMapping("/module/rwandareports/remove_asthmaConsultationSheet")
+	public ModelAndView removeAsthmaConsultationSheet() throws Exception {
+		new SetupAsthmaConsultationSheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 //Remove/Register Adult Late visit And CD4
 	
 	@RequestMapping("/module/rwandareports/register_adultLatevisitAndCD4")
@@ -347,6 +360,20 @@ public class RwandaSetupReportsFormController {
 		new SetupTracNetRwandaReportBySite().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	
+	//Remove/Register TracNet report
+	
+	@RequestMapping("/module/rwandareports/register_pmtctCombinedClinicMotherMonthlyReport")
+	public ModelAndView registerPMTCTCombinedClinicMotherMonthly() throws Exception {
+		new SetupPMTCTCombinedClinicMotherMonthlyReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_pmtctCombinedClinicMotherMonthlyReport")
+	public ModelAndView removePMTCTCombinedClinicMotherMonthly() throws Exception {
+		new SetupPMTCTCombinedClinicMotherMonthlyReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
 	
 	
 
