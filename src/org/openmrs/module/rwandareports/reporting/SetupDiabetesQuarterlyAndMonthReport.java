@@ -1482,7 +1482,10 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		metforminAndGlibenclimideConcepts.add(metformin);
 		metforminAndGlibenclimideConcepts.add(glibenclimide);
 		
-		diedState = DMProgram.getWorkflow(28).getState("PATIENT DIED");
+	//	diedState = DMProgram.getWorkflow(28).getState("PATIENT DIED");
+		
+		diedState=DMProgram.getWorkflowByName(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.DIABETE_TREATMENT_WORKFLOW)).getState(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.PATIENT_DIED_STATE));
+		
 		admitToHospital = gp.getConcept(GlobalPropertiesManagement.HOSPITAL_ADMITTANCE);
 		locOfHosp = gp.getConcept(GlobalPropertiesManagement.LOCATION_OF_HOSPITALIZATION);
 	}
