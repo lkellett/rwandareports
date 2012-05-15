@@ -664,6 +664,8 @@ public class GlobalPropertiesManagement {
 	//Encounters
 	public final static String ADULT_FLOWSHEET_ENCOUNTER = "reports.adultflowsheetencounter";
 	
+	public final static String ADULT_HIV_FLOWSHEET_ENCOUNTER="reports.adulthivflowsheetencounter";
+	
 	public final static String CLINICAL_ENCOUNTER_TYPES = "ClinicalencounterTypeIds.labTestIncl";
 	
 	public final static String CLINICAL_ENCOUNTER_TYPES_EXC_LAB_TEST = "ClinicalencounterTypeIds.labTestExcl";
