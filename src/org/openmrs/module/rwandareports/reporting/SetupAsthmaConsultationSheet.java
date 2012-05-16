@@ -27,6 +27,8 @@ import org.openmrs.module.rwandareports.customcalculator.AsthmaClassificationAle
 import org.openmrs.module.rwandareports.customcalculator.BMI;
 import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.customcalculator.HIVAdultAlerts;
+import org.openmrs.module.rwandareports.dataset.comparator.PMTCTDataSetRowComparator;
+import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 import org.openmrs.module.rwandareports.filter.DrugDosageFrequencyFilter;
 import org.openmrs.module.rwandareports.filter.DrugNameFilter;
 import org.openmrs.module.rwandareports.filter.LastThreeObsFilter;
@@ -95,7 +97,8 @@ public class SetupAsthmaConsultationSheet {
 	private void createDataSetDefinition(ReportDefinition reportDefinition) {
 		// Create new dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
-		dataSetDefinition.setName("Asthma Consultation Dataset");
+		dataSetDefinition.setName("Asthma Consultation Data Set");
+		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		//dataSetDefinition.addParameter(new Parameter("endDate", "enDate", Date.class));
 		
@@ -105,11 +108,14 @@ public class SetupAsthmaConsultationSheet {
 		dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), null);
 		
 		
+		DateFormatFilter dateFilter = new DateFormatFilter();
+		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
+		
 		//Add Columns
 		
-	
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("return visit date", null), new HashMap<String, Object>());
 		
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		
@@ -138,80 +144,12 @@ public class SetupAsthmaConsultationSheet {
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(asthmaClassification, new HashMap<String, Object>());
 		alert.setCalculator(new AsthmaClassificationAlerts());
-		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
-		
+		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());	
 		
 	
-		
-		/*dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentWeight("RecentWeight", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentTbTest("RecentTB", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentCD4("CD4Test", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentViralLoad("ViralLoad", "@ddMMMyy"),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("AccompName"), new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentARTOrders("Regimen", "@ddMMMyy", new DrugNameFilter()),
-		    new HashMap<String, Object>());
-		
-		dataSetDefinition.addColumn(
-		    RowPerPatientColumns.getCurrentTBOrders("TB Treatment", "@ddMMMyy", new DrugNameFilter()),
-		    new HashMap<String, Object>());
-		
-		//Calculation definitions
-		MostRecentObservation mostRecentHeight = RowPerPatientColumns.getMostRecentHeight("RecentHeight", null);
-		
-		AllObservationValues weight = RowPerPatientColumns.getAllWeightValues("weightObs", "ddMMMyy",
-		    new LastThreeObsFilter(), new ObservationFilter());
-		
-		AllObservationValues cd4Test = RowPerPatientColumns.getAllCD4Values("CD4Test", "ddMMMyy", new LastThreeObsFilter(),
-		    new ObservationFilter());
-		
-		ObservationInMostRecentEncounterOfType io = RowPerPatientColumns.getIOInMostRecentEncounterOfType("IO",
-		    flowsheetAsthmas);
-		
-		ObservationInMostRecentEncounterOfType sideEffect = RowPerPatientColumns.getSideEffectInMostRecentEncounterOfType(
-		    "SideEffects", flowsheetAsthmas);
-		
-		AllObservationValues allCD4 = RowPerPatientColumns.getAllCD4Values("allCD4Obs", "ddMMMyy",
-		    null, null);
-		
-		FirstDrugOrderStartedRestrictedByConceptSet startArt = RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy");
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		alert.setName("alert");
-		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
-		alert.setCalculator(new HIVAdultAlerts());
-		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions bmi = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		bmi.setName("bmi");
-		bmi.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
-		bmi.addPatientDataToBeEvaluated(mostRecentHeight, new HashMap<String, Object>());
-		bmi.setCalculator(new BMI());
-		dataSetDefinition.addColumn(bmi, new HashMap<String, Object>());
-		
-		CustomCalculationBasedOnMultiplePatientDataDefinitions cd4Decline = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-		cd4Decline.setName("cd4Decline");
-		cd4Decline.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
-		cd4Decline.addPatientDataToBeEvaluated(startArt, new HashMap<String, Object>());
-		DeclineHighestCD4 declineCD4 = new DeclineHighestCD4();
-		declineCD4.setInitiationArt("StartART");
-		cd4Decline.setCalculator(declineCD4);
-		dataSetDefinition.addColumn(cd4Decline, new HashMap<String, Object>());
-		*/
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
+		//mappings.put("endDate", new Date());
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}
@@ -231,8 +169,6 @@ public class SetupAsthmaConsultationSheet {
 	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
 	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)),'%Y-%m-%d')) and o.value_datetime<=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)+6),'%Y-%m-%d')) order by o.value_datetime");
 	    return cohortquery;
-    }
-	
-	
+    }	
 	
 }
