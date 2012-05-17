@@ -855,10 +855,11 @@ public class GlobalPropertiesManagement {
 	public final static String USING_ORALCONTRAC="report.orals";
 	public final static String REFERED_FOR_FP="report.referedforfp";
 	 
-	public final int EIGHT_MONTHS = 240; 
+	public final int EIGHTANDHALF_MONTHS = 255; 
 	public final int NINETEEN_MONTHS = 570; 
 	public final static int ON_ART_TREATMENT_STATUS_ID = 1577;
 	public final static int TREATMENT_STATUS_ID = 1484;
+	
 	
 
 	
