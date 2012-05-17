@@ -717,6 +717,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String DIABETES_FLOW_VISIT = "report.diabetesFlowVisit";
 	
+	public final static String ASTHMA_FLOW_VISIT = "ashtmadata.Flowsheet";
+	
 	public final static String ASTHMA_DDB = "reports.asthmaDDBformId";
 	
 	
