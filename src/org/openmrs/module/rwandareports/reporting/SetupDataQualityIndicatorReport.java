@@ -1,10 +1,12 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -16,7 +18,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
@@ -24,13 +25,15 @@ import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.SetComparator;
+import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.indicator.CohortIndicator;
+import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
+import org.openmrs.module.reporting.query.encounter.definition.SqlEncounterQuery;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.PeriodIndicatorReportDefinition;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
@@ -38,7 +41,6 @@ import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rwandareports.renderer.DataQualityReportWebRenderer;
 import org.openmrs.module.rwandareports.renderer.DataQualityWebRendererForSites;
 import org.openmrs.module.rwandareports.util.Cohorts;
-import org.openmrs.module.rwandareports.util.GetDate;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.Indicators;
 
@@ -91,6 +93,7 @@ public class SetupDataQualityIndicatorReport {
 		
 		createReportDefinition();
 		createReportDefinitionAllSites();
+		
 	}
 	
 	public void delete() {
@@ -127,7 +130,8 @@ public class SetupDataQualityIndicatorReport {
 		createIndicatorsForReports(rd);
 		h.saveReportDefinition(rd);
 		createCustomWebRenderer(rd, "DataQualityWebRenderer");
-		
+	
+		h.saveReportDefinition(rd);
 		return rd;
 	}
 	
@@ -149,7 +153,7 @@ public class SetupDataQualityIndicatorReport {
 					return rdsites;
 				}
 		
-		@SuppressWarnings({ "unchecked", "rawtypes"})
+			@SuppressWarnings({ "unchecked", "rawtypes"}) 	
 		private void createIndicatorsForReports(PeriodIndicatorReportDefinition reportDefinition) {
 			//======================================================================================================================================================================================================
 			// 1. Any patients who are in Pediatric HIV program or in the Adult HIV program AND on ART whose accompagnateur is not listed in EMR (or who are incorrectly identified as status 'on antiretrovirals')
@@ -179,7 +183,7 @@ public class SetupDataQualityIndicatorReport {
 			CohortIndicator patientsInHIVOnARTWithoutAccompIndicator = Indicators.newCountIndicator(
 				    "hivOnARTWithoutAccompDQ: Number of patients in HIV program on ART and without Accompagnateur", patientsInHIVAndOnARTWithoutAccomp,
 				    null);
-			
+		
 			//======================================================================================
 			// 2. Patients enrolled in PMTCT Pregnancy for more than 8 months
 			//======================================================================================
@@ -342,7 +346,7 @@ public class SetupDataQualityIndicatorReport {
 			//"enc.encounter_id=o.encounter_id and o.person_id=enc.patient_id and o.obs_datetime > enc.encounter_datetime and o.voided=0 and o.void_reason is null");
 			//CohortIndicator patientsWithObsgreaterThanEncIndi = Indicators.newCountIndicator("Observations in the future", patientsWithObsgreaterThanEnc, null);
 			
-			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<'"+GetDate.getCalendarMonthDate(-8)+"' and pp.voided=false and pp.date_completed is null");
+			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<'"+getDate(-8)+"' and pp.voided=false and pp.date_completed is null");
 			String tbFirstLineDrugsConceptIds=null;
 			for(Concept concept:tbFirstLineDrugsConcepts){
 				tbFirstLineDrugsConceptIds=tbFirstLineDrugsConceptIds+","+concept.getId();	
@@ -576,7 +580,7 @@ public class SetupDataQualityIndicatorReport {
 		//======================================================================================
 		//  Add global filters to the report
 		//======================================================================================
-		
+				
 		reportDefinition.addIndicator("1", "patients who are in Pediatric or Adult HIV program AND on ART whose accompagnateur is not listed in EMR", patientsInHIVOnARTWithoutAccompIndicator);		
 		reportDefinition.addIndicator("2", "Patients enrolled in PMTCT Pregnancy for more than 8 months and a half", patientsInPMTCTTooLongIndicator);
 		reportDefinition.addIndicator("3", "Patients enrolled in Combined Clinic Mother for more than 19 months", patientsInPMTCTCCMTooLongIndicator);
@@ -599,7 +603,9 @@ public class SetupDataQualityIndicatorReport {
 		reportDefinition.addIndicator("20","Patients With Missing program enrollment start date",patientsMissingprogramsEnrolStartDateindicator);
 	    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic Ð Infant program who donÕt have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
 		
-	}
+	} 
+		
+	
 	private void setUpProperties() {
 		pmtct=gp.getProgram(GlobalPropertiesManagement.PMTCT);
 		pmtctCombinedClinicInfant=gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);	
@@ -654,16 +660,16 @@ public class SetupDataQualityIndicatorReport {
 		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 		 onOrAfterOnOrBeforeParamterNames.add("onOrAfter");
 		 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
-	}		
-				
-	private void createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {
+	}
+			
+	private ReportDesign createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {
     	final ReportDesign design = new ReportDesign();
     	design.setName(name);
     	design.setReportDefinition(rd);
     	design.setRendererType(DataQualityReportWebRenderer.class);
     	
     	ReportService rs = Context.getService(ReportService.class);
-    	rs.saveReportDesign(design);
+    	return rs.saveReportDesign(design);
     }
 	
 	private void createCustomWebRendererForSites(ReportDefinition rd, String name) throws IOException {
@@ -671,10 +677,20 @@ public class SetupDataQualityIndicatorReport {
     	design.setName(name);
     	design.setReportDefinition(rd);
     	design.setRendererType(DataQualityWebRendererForSites.class);
-    	
     	ReportService rs = Context.getService(ReportService.class);
     	rs.saveReportDesign(design);
     }	
+	
+	public static String getDate(int months){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, months);
+		Date monthsBackOrNext = cal.getTime();
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		String stringDate=sdf.format(monthsBackOrNext);
+		
+		return stringDate;
+	}
 	
 
 }
