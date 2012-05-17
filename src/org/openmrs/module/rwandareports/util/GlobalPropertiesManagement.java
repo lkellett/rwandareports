@@ -663,9 +663,7 @@ public class GlobalPropertiesManagement {
 	
 	//Encounters
 	public final static String ADULT_FLOWSHEET_ENCOUNTER = "reports.adultflowsheetencounter";
-	
-	public final static String ADULT_HIV_FLOWSHEET_ENCOUNTER="reports.adulthivflowsheetencounter";
-	
+
 	public final static String CLINICAL_ENCOUNTER_TYPES = "ClinicalencounterTypeIds.labTestIncl";
 	
 	public final static String CLINICAL_ENCOUNTER_TYPES_EXC_LAB_TEST = "ClinicalencounterTypeIds.labTestExcl";
@@ -716,8 +714,6 @@ public class GlobalPropertiesManagement {
 	public final static String TRANSFER_TO_CC = "reports.transferToCCFormID";
 	
 	public final static String DIABETES_FLOW_VISIT = "report.diabetesFlowVisit";
-	
-	public final static String ASTHMA_FLOW_VISIT = "ashtmadata.Flowsheet";
 	
 	public final static String ASTHMA_DDB = "reports.asthmaDDBformId";
 	

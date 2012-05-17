@@ -291,21 +291,6 @@
 	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.adulthivflowsheetencounter</property>
-		<defaultValue>25</defaultValue>
-		<description>
-			The Adult HIV Flowsheet encounter id that is used to return the id and side effects for a patient
-		</description>
-	</globalProperty>
-	
-	<globalProperty>
-		<property>ashtmadata.Flowsheet</property>
-		<defaultValue>29</defaultValue>
-		<description>The id of the form id for the visit section of the asthma flow sheet</description>
-	</globalProperty>
-	
-	
-	<globalProperty>
 		<property>reports.pericardialDisease</property>
 		<defaultValue>1ccfc018-bcf0-45b1-973a-2fdad7a773be</defaultValue>
 		<description>

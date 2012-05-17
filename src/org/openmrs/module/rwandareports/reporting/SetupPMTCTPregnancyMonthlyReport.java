@@ -329,7 +329,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
         height = gp.getConcept(GlobalPropertiesManagement.HEIGHT_CONCEPT);
 		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 		viralLoad = gp.getConcept(GlobalPropertiesManagement.VIRAL_LOAD_TEST);
-		adultHivFlowsheetEncounter = gp.getEncounterTypeList(GlobalPropertiesManagement.ADULT_HIV_FLOWSHEET_ENCOUNTER);
+		adultHivFlowsheetEncounter = gp.getEncounterTypeList(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER);
 		onOrAfterOnOrBefore.add("onOrAfter");
 		onOrAfterOnOrBefore.add("onOrBefore");	
 	}

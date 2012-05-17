@@ -164,7 +164,7 @@ public class SetupAsthmaLateVisit {
 		
 		asthmaProgram = gp.getProgram(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_PROGRAM);
         
-		asthmaflowsheet = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_FLOW_VISIT);
+		asthmaflowsheet = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT);
         
         asthmaDDBFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB).getFormId();
         
