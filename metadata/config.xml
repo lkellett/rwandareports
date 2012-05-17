@@ -298,6 +298,12 @@
 		</description>
 	</globalProperty>
 	
+	<globalProperty>
+		<property>ashtmadata.Flowsheet</property>
+		<defaultValue>29</defaultValue>
+		<description>The id of the form id for the visit section of the asthma flow sheet</description>
+	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.pericardialDisease</property>
