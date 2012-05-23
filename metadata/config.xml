@@ -211,6 +211,12 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>report.heartFailureProgram</property>
+		<defaultValue>11</defaultValue>
+		<description>The concept id for the heart failure program</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.patientDiedConcept</property>
 		<defaultValue>1811</defaultValue>
 		<description>
