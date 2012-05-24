@@ -50,4 +50,13 @@ public class EncounterIndicatorResult implements IndicatorResult{
     public void setResult(EncounterQueryResult result) {
     	this.result = result;
     }
+
+	@Override
+    public String toString() {
+		if(result != null)
+		{
+			return String.valueOf(result.getSize());
+		}
+		return null;
+    }
 }

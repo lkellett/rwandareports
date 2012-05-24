@@ -42,7 +42,7 @@ public class EncounterIndicatorDataSetEvaluator implements DataSetEvaluator {
 		{
 			IndicatorResult result = Context.getService(IndicatorService.class).evaluate(ei, context);
 			DataSetRow row = new DataSetRow();
-			row.addColumnValue(new DataSetColumn(ei.getName(), ei.getName(), Number.class), result.getValue());
+			row.addColumnValue(new DataSetColumn(ei.getName(), ei.getName(), Object.class), result);
 			ret.addRow(row);
 		}
 		
