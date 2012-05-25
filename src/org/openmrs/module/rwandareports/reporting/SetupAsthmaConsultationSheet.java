@@ -86,7 +86,7 @@ public class SetupAsthmaConsultationSheet {
 				
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),ParameterizableUtil.createParameterMappings("location=${location}"));
-		
+		reportDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
 		createDataSetDefinition(reportDefinition);
 		
 		h.saveReportDefinition(reportDefinition);
@@ -100,12 +100,14 @@ public class SetupAsthmaConsultationSheet {
 		dataSetDefinition.setName("Asthma Consultation Data Set");
 		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
-		//dataSetDefinition.addParameter(new Parameter("endDate", "enDate", Date.class));
+		dataSetDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
 		
 		//Add filters
-		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
+		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
-		dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), null);
+		dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), ParameterizableUtil.createParameterMappings("end=${endDate+7d},start=${endDate}"));
+		
+		//dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
 		
 		DateFormatFilter dateFilter = new DateFormatFilter();
@@ -149,6 +151,7 @@ public class SetupAsthmaConsultationSheet {
 	
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
+		mappings.put("endDate", "${endDate}");
 		//mappings.put("endDate", new Date());
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
@@ -165,9 +168,14 @@ public class SetupAsthmaConsultationSheet {
 	}
 	
 	
-	private SqlCohortDefinition getMondayToSundayPatientReturnVisit() {
+	private SqlCohortDefinition getMondayToSundayPatientReturnVisit() {		
+		
 	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
-	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)),'%Y-%m-%d')) and o.value_datetime<=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)+6),'%Y-%m-%d')) order by o.value_datetime");
+	    //cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)),'%Y-%m-%d')) and o.value_datetime<=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)+6),'%Y-%m-%d')) order by o.value_datetime");
+	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>= :start and o.value_datetime<= :end order by o.value_datetime");
+	    cohortquery.addParameter(new Parameter("start","start",Date.class));
+	    cohortquery.addParameter(new Parameter("end","end",Date.class));	    
+	    //cohortquery.addParameter(new Parameter("endDate","endDate",Date.class));
 	    return cohortquery;
     }	
 	
