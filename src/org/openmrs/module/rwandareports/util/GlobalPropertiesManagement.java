@@ -442,7 +442,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PMTCT_COMBINED_CLINIC_PROGRAM = "reports.pmtctcombinedprogramname";
 	
-	public final static String HEART_FAILURE_PROGRAM = "report.heartFailureProgram";
+	/*public final static String HEART_FAILURE_PROGRAM = "report.heartFailureProgram";*/
 	
 	public final static String PEDI_HIV_PROGRAM = "reports.pedihivprogramname";
 	
@@ -458,7 +458,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String HYPERTENSION_PROGRAM ="reports.hypertensionprogram";
 	
-	public final static String EPILEPSY_PROGRAMm ="reports.epilepsyprogramname";
+	/*public final static String EPILEPSY_PROGRAMm ="reports.epilepsyprogramname";*/
 	
 	public final static String DM_PROGRAM = "reports.diabetesprogram";
 	
@@ -468,7 +468,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String CHRONIC_RESPIRATORY_PROGRAM = "reports.chronicrespiratoryprogram";
 	
-	public final static String HYPERTENTION_PROGRAM = "reports.hypertension";
+	/*public final static String HYPERTENTION_PROGRAM = "reports.hypertension";*/
 	
 	public final static String EPILEPSY_PROGRAM = "reports.epilepsyprogram";
 	
@@ -639,9 +639,13 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PEAK_FLOW_AFTER_SALBUTAMOL="reports.peakFlowAfterSalbutamolConcept";
 	
+	public final static String PEAK_FLOW_BEFORE_SALBUTAMOL="reports.peakFlowBeforeSalbutamolConcept";
+	
 	public final static String ASTHMA_CLASSIFICATION="reports.asthmaclassificationConcept";
 	
 	public final static String ASTHMA_CLASSIFICATION_ORDER="reports.asthmaclassificationorder";
+	
+	public final static String SMOKING_HISTORY="reports.smokingHistory"; 
 	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
@@ -687,6 +691,8 @@ public class GlobalPropertiesManagement {
 	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
 	public final static String ASTHMA_VISIT="reports.AsthmaEncounterType";
+	
+	public final static String ASTHMA_RENDEVOUS_VISIT_FORM="reports.AsthmaRendevousVisitForm";
 	
 	
 	//RelationshipTypes
@@ -799,10 +805,10 @@ public class GlobalPropertiesManagement {
 //  TRACNET REPORT INDICATORS
 //-------------------------------------------------	
 	//Programs
-	public final static String PMTCT_PREGNANCY_PROGRAM = "pmtct.pregnancy.programid";
-	public final static String PMTCT_COMBINED_INFANT = "pmtct.combinedinfant.programid";
-	public final static String PMTCT_COMBINED_MOTHER= "pmtct.combinedmother.programid";
-	public final static String ANTIRETROVIRAL_DRUGS = "reports.antiretroviraldrugs";
+	/*public final static String PMTCT_PREGNANCY_PROGRAM = "pmtct.pregnancy.programid";*/
+	/*public final static String PMTCT_COMBINED_INFANT = "pmtct.combinedinfant.programid";*/
+	/*public final static String PMTCT_COMBINED_MOTHER= "pmtct.combinedmother.programid";*/
+	/*public final static String ANTIRETROVIRAL_DRUGS = "reports.antiretroviraldrugs";*/
 	public final static String REASON_PATIENT_STARTED_ARVS_FOR_PROPHYLAXIS = "reports.reasonpatientstartedProphylalxisdrug";
 	public final static String EXPOSURE_TO_BLOOD_OR_BLOOD_PRODUCTS = "reports.exposedtobloodorbloodproduct";
 	public final static String SEXUAL_ASSAULT="reports.sexualAssault";

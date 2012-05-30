@@ -314,7 +314,7 @@ public class SetupPMTCTFormCompletionSheet {
 		
 		pmtctCombinedInfantProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
 		pmtctCombinedMotherProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_MOTHER_PROGRAM);
-		pmtctPregnancyProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+		pmtctPregnancyProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT);
 		
 		programs.add(pmtctCombinedInfantProgram);
 		programs.add(pmtctCombinedMotherProgram);

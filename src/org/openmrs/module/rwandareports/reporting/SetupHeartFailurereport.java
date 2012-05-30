@@ -182,7 +182,7 @@ public class SetupHeartFailurereport {
 		
 		//Patient In Heart Failure Program
 		InProgramCohortDefinition patientsInHFProgram = Cohorts.createInProgramParameterizableByDate("patientsInHFProgram",
-		    heartFailure);
+		    heartFailure,onOrAfterOnOrBeforeParamterNames);
 		
 		//============================================================================
 		//  1.1.m & 1.1.f % male and female
@@ -328,7 +328,7 @@ public class SetupHeartFailurereport {
 		// ===============================================================================   
 		
 		NumericObsCohortDefinition patientsWithCreatinineCohortDef = Cohorts.createNumericObsCohortDefinition(
-		    "patientsWithCreatinineCohortDef", serumCreatinine, 0.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
+		    "patientsWithCreatinineCohortDef",onOrAfterOnOrBeforeParamterNames, serumCreatinine, 0.0, RangeComparator.GREATER_THAN, TimeModifier.LAST);
 		
 		CompositionCohortDefinition hfPatientWithoutCreatinineCompositionCohortDef = new CompositionCohortDefinition();
 		hfPatientWithoutCreatinineCompositionCohortDef.setName("hfPatientWithoutCreatinineCompositionCohortDef");
@@ -1387,10 +1387,10 @@ public class SetupHeartFailurereport {
 	}
 	
 	private void setupProperties() {
-		heartFailure = gp.getProgram(GlobalPropertiesManagement.HEART_FAILURE_PROGRAM);
+		heartFailure = gp.getProgram(GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME);
 		
 		postOp = gp.getProgramWorkflowState(GlobalPropertiesManagement.HEART_FAILURE_POST_OPERATIVE_STATE,
-		    GlobalPropertiesManagement.HEART_FAILURE_SURGERY_STATUS, GlobalPropertiesManagement.HEART_FAILURE_PROGRAM);
+		    GlobalPropertiesManagement.HEART_FAILURE_SURGERY_STATUS, GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME);
 		
 		cardiologyForm = gp.getFormList(GlobalPropertiesManagement.CARDIOLOGY_CONSULT_FORM);
 		cardiologyDDB = gp.getFormList(GlobalPropertiesManagement.CARDIOLOGY_DDB);

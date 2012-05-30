@@ -566,7 +566,7 @@ public class SetupDataQualityIndicatorReport {
 			infantsWithNoMotherAcc.setName("DQ: Patients With no Mothers Accompagnateur");
 			
 			 CompositionCohortDefinition infantsInPmtctClinicInfant = new CompositionCohortDefinition();
-			 infantsInPmtctClinicInfant.setName("DQ: Patients currently enrolled in the PMTCT Combined Clinic Ð Infant program who donÕt have a non-voided Mother/Child relationship");
+			 infantsInPmtctClinicInfant.setName("DQ: Patients currently enrolled in the PMTCT Combined Clinic ï¿½ Infant program who donï¿½t have a non-voided Mother/Child relationship");
 			 infantsInPmtctClinicInfant.getSearches().put("1",new Mapped(infantsWithNoMotherAcc, null));
 			 infantsInPmtctClinicInfant.getSearches().put("2",new Mapped(inPmtctInfantprogram, ParameterizableUtil.createParameterMappings("onDate=${now}")));
 			 infantsInPmtctClinicInfant.setCompositionString("2 AND (NOT 1)");
@@ -600,7 +600,7 @@ public class SetupDataQualityIndicatorReport {
     	reportDefinition.addIndicator("18","Patients With BMI <12 or >35",patientsWithBMIMoreThan35);
 		reportDefinition.addIndicator("19","Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer inform",patientsOnArtbeforeHivEnrollmentIndicator);
 		reportDefinition.addIndicator("20","Patients With Missing program enrollment start date",patientsMissingprogramsEnrolStartDateindicator);
-	    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic Ð Infant program who donÕt have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
+	    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic ï¿½ Infant program who donï¿½t have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
 		
 	} 
 		
@@ -612,11 +612,11 @@ public class SetupDataQualityIndicatorReport {
 		pediHIV=gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);	
 	    adultHIV=gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);	
 		tb=gp.getProgram(GlobalPropertiesManagement.TB_PROGRAM);
-		heartFailure=gp.getProgram(GlobalPropertiesManagement.HEART_FAILURE_PROGRAM);
+		heartFailure=gp.getProgram(GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME);
 		dmprogram=gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM);
 		nutritionpro=gp.getProgram(GlobalPropertiesManagement.NUTRITION_PROGRAM);
 		chronicrespiratory=gp.getProgram(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_PROGRAM);
-		hypertention=gp.getProgram(GlobalPropertiesManagement.HYPERTENTION_PROGRAM);
+		hypertention=gp.getProgram(GlobalPropertiesManagement.HYPERTENSION_PROGRAM);
 		epilepsy=gp.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM);
 		adultOnART = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
 			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
@@ -641,11 +641,11 @@ public class SetupDataQualityIndicatorReport {
 		diedInNutri=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
 			    GlobalPropertiesManagement.ASSISTANCE_STATUS_WORKFLOW, GlobalPropertiesManagement.NUTRITION_PROGRAM);
 		diedInPmtct=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
-			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
 		diedInPmtctgroup=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
-			    GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+			    GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
 		diedInHf=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
-			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.HEART_FAILURE_PROGRAM);
+			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME);
 		diedInDiab=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
 			    GlobalPropertiesManagement.DIABETE_TREATMENT_WORKFLOW, GlobalPropertiesManagement.DM_PROGRAM);
 		diedInChr=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,

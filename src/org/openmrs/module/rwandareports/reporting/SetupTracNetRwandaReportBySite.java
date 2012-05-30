@@ -1582,8 +1582,8 @@ public class SetupTracNetRwandaReportBySite {
 						pregnantReceivedCompleteCourseThisMonth,
 						ParameterizableUtil
 								.createParameterMappings("biStart=${startDate},biEnd=${endDate},onDate=${endDate}"));
-		// 11 Nombre de nouveaux nés des mères séropositives ayant reçu ARV
-		// prophylaxie à la naissance
+		// 11 Nombre de nouveaux nÔøΩs des mÔøΩres sÔøΩropositives ayant reÔøΩu ARV
+		// prophylaxie ÔøΩ la naissance
 
 		// -----------------------------------------------------------------------------------------------------------------------------------------------
 		// PMTCT: HIV INFANT EXPOSED
@@ -3728,9 +3728,9 @@ public class SetupTracNetRwandaReportBySite {
 		pediatrichivProgram = gp
 				.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		pmtctpregnantProgram = gp
-				.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+				.getProgram(GlobalPropertiesManagement.PMTCT);
 		pmtctcombinedInfant = gp
-				.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_INFANT);
+				.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
 		pmtctcombinedMother = gp
 				.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_MOTHER_PROGRAM);
 		patientstartedarvforprophylaxis = gp
@@ -3800,18 +3800,18 @@ public class SetupTracNetRwandaReportBySite {
 		pregnatWithPregnancyStatus = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.PATIENT_PREGNANT_STATE,
 				GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+				GlobalPropertiesManagement.PMTCT);
 		pregnantOnArtstate = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
 				GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+				GlobalPropertiesManagement.PMTCT);
 		rprTest = gp.getConcept(GlobalPropertiesManagement.RPR_TEST);
 		reactiveAnswer = gp
 				.getConcept(GlobalPropertiesManagement.RPR_REACTIVE_ANWER);
 		gaveBirthinpmtctstate = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.GAVE_BIRTH,
 				GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
+				GlobalPropertiesManagement.PMTCT);
 		familyplaning = gp
 				.getConcept(GlobalPropertiesManagement.METHOD_OF_FAMILY_PLANNING);
 		condoms = gp.getConcept(GlobalPropertiesManagement.USING_CONDOMS);
