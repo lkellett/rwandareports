@@ -3,6 +3,7 @@ package org.openmrs.module.rwandareports.web.controller;
 import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupAsthmaQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
@@ -361,7 +362,7 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	//Remove/Register TracNet report
+	//Remove/Register PMTCT Combined Clinic Mother Monthly Report report
 	
 	@RequestMapping("/module/rwandareports/register_pmtctCombinedClinicMotherMonthlyReport")
 	public ModelAndView registerPMTCTCombinedClinicMotherMonthly() throws Exception {
@@ -374,7 +375,18 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+//Remove/Register Asthma Quarterly And Month Report
 	
+	@RequestMapping("/module/rwandareports/register_asthmaQuarterlyAndMonthReport")
+	public ModelAndView registerAsthmaQuarterlyAndMonthReport() throws Exception {
+		new SetupAsthmaQuarterlyAndMonthReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_asthmaQuarterlyAndMonthReport")
+	public ModelAndView removeAsthmaQuarterlyAndMonthReport() throws Exception {
+		new SetupAsthmaQuarterlyAndMonthReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 	
 
 }

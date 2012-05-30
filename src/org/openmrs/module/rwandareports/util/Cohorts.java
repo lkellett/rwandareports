@@ -670,6 +670,89 @@ public class Cohorts {
 		return query;
 	}
 	
+	
+	
+	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name, List<Form> forms,
+	                                                                                         List<Concept> concepts) {
+		SqlCohortDefinition query = new SqlCohortDefinition();
+		StringBuilder queryStr = new StringBuilder();
+		queryStr.append("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id in(");
+		
+		int i = 0;
+		for (Form f : forms) {
+			if (i > 0) {
+				queryStr.append(",");
+			}
+			queryStr.append(f.getFormId());
+			
+			i++;
+		}
+		
+		queryStr.append(") and o.concept_id in (");
+		
+		int j=0;
+		
+		for (Concept concept : concepts) {
+			if (j > 0) {
+				queryStr.append(",");
+			}
+			queryStr.append(concept.getConceptId());			
+			j++;
+        }		
+		queryStr.append(") and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		query.setQuery(queryStr.toString());
+		query.setName(name);
+		query.addParameter(new Parameter("startDate", "startDate", Date.class));
+		query.addParameter(new Parameter("endDate", "endDate", Date.class));
+		return query;
+	}
+	
+	
+	public static SqlCohortDefinition getPatientsWithTwoObservationsBothInFormBetweenStartAndEndDate(String name,Form form,
+	                                                                                         Concept concept1,Concept concept2) {
+		SqlCohortDefinition query = new SqlCohortDefinition();
+		StringBuilder queryStr = new StringBuilder();
+		queryStr.append("select distinct firstSelect.person_id from ");
+		
+		
+		
+		queryStr.append("(select distinct o.person_id,o.encounter_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id =");
+		
+		queryStr.append(form.getFormId());
+		queryStr.append(" and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		
+		queryStr.append(" and o.concept_id =" + concept1.getConceptId()+") as firstSelect,");
+		
+		
+		
+		
+        queryStr.append("(select distinct o.person_id,o.encounter_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id =");
+		
+		queryStr.append(form.getFormId());
+		queryStr.append(" and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		
+		queryStr.append(" and o.concept_id =" + concept2.getConceptId()+") as secondSelect");
+		
+		
+		
+		
+		
+		queryStr.append(" where firstSelect.encounter_id = secondSelect.encounter_id");
+		
+		
+		
+				
+				
+		//queryStr.append(" and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		query.setQuery(queryStr.toString());
+		query.setName(name);
+		query.addParameter(new Parameter("startDate", "startDate", Date.class));
+		query.addParameter(new Parameter("endDate", "endDate", Date.class));
+		return query;
+	}
+	
+	
+	
 	public static CompositionCohortDefinition getNewPatientsWithObservationAtIntakeBetweenStartAndEndDate(String name,
 	                                                                                                      Program program,
 	                                                                                                      Form form,
@@ -677,7 +760,7 @@ public class Cohorts {
 		SqlCohortDefinition glucoseAtIntake = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate("atIntake",
 		    form, concept);
 		
-		CompositionCohortDefinition patientEnrolledInDM = Cohorts.createEnrolledInProgramDuringPeriod("EnrolledInProgram",
+		CompositionCohortDefinition patientEnrolledInProgram = Cohorts.createEnrolledInProgramDuringPeriod("EnrolledInProgram",
 		    program);
 		
 		CompositionCohortDefinition getNewPatientsWithObservation = new CompositionCohortDefinition();
@@ -686,7 +769,7 @@ public class Cohorts {
 		getNewPatientsWithObservation.addParameter(new Parameter("endDate", "endDate", Date.class));
 		getNewPatientsWithObservation.getSearches().put(
 		    "1",
-		    new Mapped<CohortDefinition>(patientEnrolledInDM, ParameterizableUtil
+		    new Mapped<CohortDefinition>(patientEnrolledInProgram, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")));
 		getNewPatientsWithObservation.getSearches().put(
 		    "2",
@@ -785,6 +868,26 @@ public class Cohorts {
 		regimenAtLastVist.setQuery(query.toString());
 		
 		return regimenAtLastVist;
+	}
+	
+	public static SqlCohortDefinition getPatientsEverNotOnRegimen(String name, List<Concept> concepts) {
+		SqlCohortDefinition patientsEverNotOnRegimen = new SqlCohortDefinition();
+		
+		StringBuilder query = new StringBuilder(
+		        "select o.patient_id from orders o where o.concept_id in ( ");
+		
+		int i = 0;
+		
+		for (Concept concept : concepts) {
+			if (i > 0)
+				query.append(",");
+			query.append(concept.getId());
+			i++;
+		}
+		query.append(") and o.voided=0");
+		patientsEverNotOnRegimen.setQuery(query.toString());
+		
+		return patientsEverNotOnRegimen;
 	}
 	
 	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name,
