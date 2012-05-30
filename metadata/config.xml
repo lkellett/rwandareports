@@ -32,13 +32,7 @@
 	<mappingFiles>
 	</mappingFiles>
 	
-	<globalProperty>
-		<property>reports.hivprogramname</property>
-		<defaultValue>HIV PROGRAM</defaultValue>
-		<description>
-			The name of the HIV PROGRAM to be used
-		</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.pmtctCombinedMotherProgramname</property>
@@ -474,21 +468,9 @@
 		</description>
 	</globalProperty>
 	
-	<globalProperty>
-		<property>dq.report.oractaprogram</property>
-		<defaultValue>9</defaultValue>
-		<description>
-			The program name for the Hypertension program 
-		</description>
-	</globalProperty>
 	
-	<globalProperty>
-		<property>reports.epilepsyprogramname</property>
-		<defaultValue>Epilepsy program</defaultValue>
-		<description>
-			The program name for the Epilepsy program
-		</description>
-	</globalProperty>
+	
+	
 	
 	<globalProperty>
 		<property>reports.pedihivprogramname</property>
@@ -559,13 +541,7 @@
 		</description>
 	</globalProperty>
 	
-	<globalProperty>
-		<property>reports.pediflowsheetencounter</property>
-		<defaultValue>37</defaultValue>
-		<description>
-			The Pedi HIV Flowsheet encounter id that is used to return the io and side effects for a patient
-		</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.pmtctGaveBirthStatus</property>
@@ -730,17 +706,9 @@
 		<description>Id for Adult HIV program</description>
 	</globalProperty>
 	
-	<globalProperty>
-		<property>tb.programid</property>
-		<defaultValue>4</defaultValue>
-		<description>Id for TB program</description>
-	</globalProperty>
 	
-	<globalProperty>
-		<property>hiv.programid.pediatric</property>
-		<defaultValue>10</defaultValue>
-		<description>Id for Pediatric HIV program</description>
-	</globalProperty>
+	
+	
 	<!-- End Late Visit And CD4 Global Property -->
 	<globalProperty>
 		<property>reports.imbIdIdentifier</property>
@@ -797,11 +765,7 @@
 		<description>The id of the Relationship that represents the accompagnatuer</description>
 	</globalProperty>
 	
-	<globalProperty>
-		<property>reports.pmtctNextVisitConcept</property>
-		<defaultValue>5096</defaultValue>
-		<description>The id of the concept for next pmtct visit</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.dbsConcept</property>
@@ -888,11 +852,7 @@
 	</globalProperty>
 	
 	
-	<globalProperty>
-		<property>reports.birthWeightConcept</property>
-		<defaultValue>5916</defaultValue>
-		<description>The id of the concept for the Birth date</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.infantFeedingMethodConcept</property>
@@ -1150,13 +1110,7 @@
 		</description>
 	</globalProperty>
 	
-	<globalProperty>
-		<property>reports.hypertension</property>
-		<defaultValue>Hypertension program</defaultValue>
-		<description>
-			The name of the Hypertension program to be used
-		</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>reports.epilepsyprogram</property>
@@ -1363,23 +1317,9 @@
 	<!-- Start of TracNet Report global properties -->
 	
 	
-	<globalProperty>
-		<property>pmtct.pregnancy.programid</property>
-		<defaultValue>6</defaultValue>
-		<description>Id for PMTCT program</description>
-	</globalProperty>
 	
-	<globalProperty>
-		<property>pmtct.combinedinfant.programid</property>
-		<defaultValue>16</defaultValue>
-		<description>Id for PMTCT program</description>
-	</globalProperty>
 	
-	<globalProperty>
-		<property>pmtct.combinedmother.programid</property>
-		<defaultValue>17</defaultValue>
-		<description>Id for PMTCT program</description>
-	</globalProperty>
+	
 	
 	<globalProperty>
 		<property>pep.tracnet.programid</property>
@@ -1418,11 +1358,7 @@
 		<description>Serology Test at 18 Month encounter id. </description> 	
 		</globalProperty>
 		
-		<globalProperty>
-		<property>reports.antiretroviraldrugs</property>
-		<defaultValue>1085</defaultValue> 
-		<description>antiretroviral Drugs</description> 	
-		</globalProperty> 
+		
 		
 		<globalProperty>
 		<property>moh.tracnetreport.arvDrugs</property>
@@ -1505,11 +1441,7 @@
 		</description>
 	</globalProperty>
 
-	<globalProperty>
-		<property>report.estimatedDateOfConfinement</property>
-		<defaultValue>5596</defaultValue> 
-		<description>estimated date of confinement concept id</description> 	
-		</globalProperty>
+	
 		
 		<globalProperty>
 		<property>reports.dateofdelivery</property>
@@ -1777,7 +1709,7 @@
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
 		
-		<!-- start Asthma consult sheet -->
+		<!-- start Asthma consult sheet  & asthma monthly quaterly indicator report -->
 		<globalProperty>
 		<property>reports.AsthmaEncounterType</property>
 		<defaultValue>41</defaultValue> 
@@ -1808,6 +1740,14 @@
 	    </globalProperty>
 	    
 	    <globalProperty>
+		<property>reports.peakFlowBeforeSalbutamolConcept</property>
+		<defaultValue>6763</defaultValue>
+		<description>
+			The concept id of Peak flow before salbutamol 
+		</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
 		<property>reports.asthmaclassificationConcept</property>
 		<defaultValue>7096</defaultValue>
 		<description>
@@ -1823,9 +1763,18 @@
 		</description>
 	    </globalProperty>
 		
+		<globalProperty>
+		<property>reports.smokingHistory</property>
+		<defaultValue>1551</defaultValue> 
+		<description>concept id for smoking history concept </description> 		
+		</globalProperty>
 		
-		
-		<!-- end Asthma consult sheet -->
+		<globalProperty>
+		<property>reports.AsthmaRendevousVisitForm</property>
+		<defaultValue>1ba547f7-e955-4e90-869e-ae4a72430e57</defaultValue> 
+		<description>Astma visit, Rendevous form id or uuid or name </description> 		
+		</globalProperty>
+		<!-- end Asthma consult sheet & asthma monthly quaterly indicator report -->
 		
 			
 		
