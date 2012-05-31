@@ -26,7 +26,7 @@ public class HIVResearchExtractionExclusions implements CustomEvaluator {
 		result.setName(name);
 		result.setDefinition(name);
 		
-		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		Program adultHiv = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		

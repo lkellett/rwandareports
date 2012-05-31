@@ -30,7 +30,7 @@ public class CD4AtAnniversary implements CustomEvaluator {
 	
 	public PatientDataResult evaluate(Patient patient, String name, EvaluationContext context) {
 		
-		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		Program adultHiv = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		
@@ -43,13 +43,13 @@ public class CD4AtAnniversary implements CustomEvaluator {
 		    GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		
 		ProgramWorkflow treatmentStatusPmtct = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW,
-		    GlobalPropertiesManagement.PMTCT);
+		    GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		ProgramWorkflowState onArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		
 		ProgramWorkflowState onArtPedi = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		
-		ProgramWorkflowState onArtPmtct = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+		ProgramWorkflowState onArtPmtct = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 	
 		
 		List<Program> hivPrograms = new ArrayList<Program>();

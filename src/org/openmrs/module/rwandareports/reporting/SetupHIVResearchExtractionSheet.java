@@ -212,13 +212,13 @@ public class SetupHIVResearchExtractionSheet {
 		pw.add(treatAdult);
 		ProgramWorkflow treatPedi = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		pw.add(treatPedi);
-		ProgramWorkflow treatPMTCT = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+		ProgramWorkflow treatPMTCT = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		pw.add(treatPMTCT);
 		
 		pws.add(onArt);
 		pws.add(onArtPedi);
 		
-		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		tb = gp.getProgram(GlobalPropertiesManagement.TB_PROGRAM);
 		

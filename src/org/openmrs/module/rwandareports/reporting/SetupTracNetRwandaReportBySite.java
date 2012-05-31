@@ -3728,7 +3728,7 @@ public class SetupTracNetRwandaReportBySite {
 		pediatrichivProgram = gp
 				.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		pmtctpregnantProgram = gp
-				.getProgram(GlobalPropertiesManagement.PMTCT);
+				.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		pmtctcombinedInfant = gp
 				.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
 		pmtctcombinedMother = gp
@@ -3800,18 +3800,18 @@ public class SetupTracNetRwandaReportBySite {
 		pregnatWithPregnancyStatus = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.PATIENT_PREGNANT_STATE,
 				GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT);
+				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		pregnantOnArtstate = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
 				GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT);
+				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		rprTest = gp.getConcept(GlobalPropertiesManagement.RPR_TEST);
 		reactiveAnswer = gp
 				.getConcept(GlobalPropertiesManagement.RPR_REACTIVE_ANWER);
 		gaveBirthinpmtctstate = gp.getProgramWorkflowState(
 				GlobalPropertiesManagement.GAVE_BIRTH,
 				GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW,
-				GlobalPropertiesManagement.PMTCT);
+				GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		familyplaning = gp
 				.getConcept(GlobalPropertiesManagement.METHOD_OF_FAMILY_PLANNING);
 		condoms = gp.getConcept(GlobalPropertiesManagement.USING_CONDOMS);

@@ -606,7 +606,7 @@ public class SetupDataQualityIndicatorReport {
 		
 	
 	private void setUpProperties() {
-		pmtct=gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		pmtct=gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		pmtctCombinedClinicInfant=gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);	
 		pmtctCombinedClinicMother=gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_MOTHER_PROGRAM);
 		pediHIV=gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);	
@@ -623,7 +623,7 @@ public class SetupDataQualityIndicatorReport {
 		pediOnART=gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
 			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		PMTCTOnART=gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE,
-			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		tbFirstLineDrugsConcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_FIRST_LINE_DRUG_SET);
 		tbSecondLineDrugsConcepts=gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_SECOND_LINE_DRUG_SET);
 		reasonForExitingCare=gp.getConcept(GlobalPropertiesManagement.REASON_FOR_EXITING_CARE);
@@ -641,9 +641,9 @@ public class SetupDataQualityIndicatorReport {
 		diedInNutri=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
 			    GlobalPropertiesManagement.ASSISTANCE_STATUS_WORKFLOW, GlobalPropertiesManagement.NUTRITION_PROGRAM);
 		diedInPmtct=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
-			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		diedInPmtctgroup=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
-			    GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+			    GlobalPropertiesManagement.PREGNANCY_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		diedInHf=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,
 			    GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.HEART_FAILURE_PROGRAM_NAME);
 		diedInDiab=gp.getProgramWorkflowState(GlobalPropertiesManagement.PATIENT_DIED_STATE,

@@ -482,7 +482,7 @@
 	
 	<globalProperty>
 		<property>reports.pmtctprogramname</property>
-		<defaultValue>PMTCT PROGRAM</defaultValue>
+		<defaultValue>PMTCT Pregnancy PROGRAM</defaultValue>
 		<description>
 			The program name for the pmtct program
 		</description>

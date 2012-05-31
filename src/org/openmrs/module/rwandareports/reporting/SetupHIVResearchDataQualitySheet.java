@@ -264,7 +264,7 @@ public class SetupHIVResearchDataQualitySheet {
 		
 		art = gp.getConcept(GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT);
 		
-		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		artSet = gp.getConcept(GlobalPropertiesManagement.ART_DRUGS_SET);
 	}

@@ -790,7 +790,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 	private void setUpProperties() {
 		hivProgram = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		pediHivProgram = gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
-		pmtctProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		pmtctProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		pmtctCombinedMotherProgram = gp.getProgram(GlobalPropertiesManagement.PMTCT_COMBINED_MOTHER_PROGRAM);
 		
 		pediPreArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.FOLLOWING_STATE,

@@ -444,7 +444,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PEDI_HIV_PROGRAM = "reports.pedihivprogramname";
 	
-	public final static String PMTCT = "reports.pmtctprogramname";
+	public final static String PMTCT_PREGNANCY_PROGRAM = "reports.pmtctprogramname";
 	
 	public final static String PMTCT_COMBINED_MOTHER_PROGRAM = "reports.pmtctCombinedMotherProgramname";
 	

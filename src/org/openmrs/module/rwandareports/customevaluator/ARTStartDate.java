@@ -34,7 +34,7 @@ public class ARTStartDate implements CustomEvaluator {
 		result.setName(name);
 		result.setDefinition(name);
 		
-		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		Program pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		Program adultHiv = gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		
@@ -44,13 +44,13 @@ public class ARTStartDate implements CustomEvaluator {
 		
 		ProgramWorkflow treatmentStatusPedi = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		
-		ProgramWorkflow treatmentStatusPmtct = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+		ProgramWorkflow treatmentStatusPmtct = gp.getProgramWorkflow(GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		ProgramWorkflowState onArt = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.ADULT_HIV_PROGRAM);
 		
 		ProgramWorkflowState onArtPedi = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PEDI_HIV_PROGRAM);
 		
-		ProgramWorkflowState onArtPmtct = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT);
+		ProgramWorkflowState onArtPmtct = gp.getProgramWorkflowState(GlobalPropertiesManagement.ON_ANTIRETROVIRALS_STATE, GlobalPropertiesManagement.TREATMENT_STATUS_WORKFLOW, GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 	
 		List<PatientProgram> programs = Context.getProgramWorkflowService().getPatientPrograms(patient,
 		    null, null, null, null, null, false);

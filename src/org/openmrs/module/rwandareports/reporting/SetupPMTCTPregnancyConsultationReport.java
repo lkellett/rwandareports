@@ -209,7 +209,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 	
 	private void setUpProperties() {
 		
-		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT);
+		pmtct = gp.getProgram(GlobalPropertiesManagement.PMTCT_PREGNANCY_PROGRAM);
 		
 		hivTest = gp.getConcept(GlobalPropertiesManagement.HIV_TEST);
 		
