@@ -2,6 +2,7 @@ package org.openmrs.module.rwandareports.reporting;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -51,9 +52,11 @@ public class SetupAsthmaConsultationSheet {
 	//private EncounterType flowsheetAsthmas;
 	
 	private Form rendevousForm;
-	private int asthmaDDBFormId ;
+	private Form asthmaDDBForm;
 	
-	private Concept returnVisitDate;
+	//private Concept returnVisitDate;
+	
+	private List<Form> DDBAndRendezvousForms;
 	
 	public void setup() throws Exception {
 		
@@ -107,7 +110,7 @@ public class SetupAsthmaConsultationSheet {
 		//Add filters
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
-		dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), ParameterizableUtil.createParameterMappings("end=${endDate+7d},start=${endDate}"));
+		dataSetDefinition.addFilter(Cohorts.getMondayToSundayPatientReturnVisit(DDBAndRendezvousForms), ParameterizableUtil.createParameterMappings("end=${endDate+7d},start=${endDate}"));
 		
 		//dataSetDefinition.addFilter(getMondayToSundayPatientReturnVisit(), ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
@@ -166,12 +169,15 @@ public class SetupAsthmaConsultationSheet {
 		
 		rendevousForm=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM);
 		
-		asthmaDDBFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB).getFormId();
+		asthmaDDBForm=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB);
 		
-		returnVisitDate=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+		//returnVisitDate=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+		
+		DDBAndRendezvousForms.add(rendevousForm);
+		DDBAndRendezvousForms.add(asthmaDDBForm);
 	}
 	
-	
+	/*
 	private SqlCohortDefinition getMondayToSundayPatientReturnVisit() {		
 		
 	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
@@ -181,6 +187,6 @@ public class SetupAsthmaConsultationSheet {
 	    cohortquery.addParameter(new Parameter("end","end",Date.class));	    
 	    //cohortquery.addParameter(new Parameter("endDate","endDate",Date.class));
 	    return cohortquery;
-    }	
-	
+    }
+	*/
 }
