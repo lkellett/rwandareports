@@ -1005,4 +1005,26 @@ public class Cohorts {
 		
 	}
 	
+private SqlCohortDefinition getMondayToSundayPatientReturnVisit(List<Form> forms) {		
+		
+	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
+	    Concept returnVisitDate=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+	    StringBuilder formIds=new StringBuilder() ;
+	    int i=0;
+	    for (Form form : forms) {
+	       if(i==0){
+	    	  formIds.append(form.getFormId()); 
+	       } else{
+	    	   formIds.append(",");
+	    	   formIds.append(form.getFormId());
+	       }
+	    	i++;   
+        }	    
+	    //cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)),'%Y-%m-%d')) and o.value_datetime<=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)+6),'%Y-%m-%d')) order by o.value_datetime");
+	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where form_id in ("+formIds.toString()+")order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>= :start and o.value_datetime<= :end order by o.value_datetime");
+	    cohortquery.addParameter(new Parameter("start","start",Date.class));
+	    cohortquery.addParameter(new Parameter("end","end",Date.class));	    
+	    return cohortquery;
+    }
+	
 }
