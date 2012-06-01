@@ -1005,7 +1005,7 @@ public class Cohorts {
 		
 	}
 	
-public SqlCohortDefinition getMondayToSundayPatientReturnVisit(List<Form> forms) {		
+public static SqlCohortDefinition getMondayToSundayPatientReturnVisit(List<Form> forms) {		
 		
 	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
 	    Concept returnVisitDate=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
