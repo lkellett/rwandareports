@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	    <require_module>org.openmrs.module.heightweighttracker</require_module>
+	  <!--  <require_module>org.openmrs.module.heightweighttracker</require_module> --> 
 	</require_modules>
 
 	<extension>
@@ -354,6 +354,12 @@
 		<description>
 			The id of the concept for aldactone;
 		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>adultflowsheet.Form_ddbId</property>
+		<defaultValue>ab35557d-b558-4c19-90d4-dbde7260c5b8</defaultValue>
+		<description>The id of the form id for the visit section of the asthma donne de base</description>
 	</globalProperty>
 	
 	<globalProperty>
@@ -805,7 +811,7 @@
 	
 	<globalProperty>
 		<property>reports.ExposedInfantEncounterType</property>
-		<defaultValue>27</defaultValue>
+		<defaultValue>26</defaultValue>
 		<description>The id for the exposed infant encounter type</description>
 	</globalProperty>
 	
@@ -1318,6 +1324,11 @@
 	
 	
 	
+	<globalProperty>
+		<property>pmtct.combinedinfant.programid</property>
+		<defaultValue>16</defaultValue>
+		<description>Id for PMTCT infant program</description>
+	</globalProperty>
 	
 	
 	
