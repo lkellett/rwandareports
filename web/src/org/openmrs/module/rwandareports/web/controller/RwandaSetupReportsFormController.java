@@ -3,10 +3,12 @@ package org.openmrs.module.rwandareports.web.controller;
 import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupAsthmaLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
+import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
@@ -19,6 +21,7 @@ import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionRepo
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormulaDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyConsultationReport;
+import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPediHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorByDistrictReport;
@@ -375,7 +378,30 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-//Remove/Register Asthma Quarterly And Month Report
+	//Remove/Register PMTCT Pregnancy Monthly Report
+	@RequestMapping("/module/rwandareports/register_PMTCTMonthlyreport")
+	public ModelAndView registerPMTCTMonthly() throws Exception {
+		new SetupPMTCTPregnancyMonthlyReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+			
+	@RequestMapping("/module/rwandareports/remove_PMTCTMonthlyreport")
+	public ModelAndView removePMTCTMonthly() throws Exception {
+	    new SetupPMTCTPregnancyMonthlyReport().delete();
+			return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	// Remove/Register Combined Monthly Infant.
+	@RequestMapping("/module/rwandareports/register_pmtctCombinedClinicInfantMonthlyReport")
+	public ModelAndView registerPMTCTCombinedClinicInfantMotherMonthly() throws Exception {
+		new SetupExposedClinicInfantMonthly().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_pmtctCombinedClinicInfantMonthlyReport")
+	public ModelAndView removePMTCTCombinedClinicInfantMotherMonthly() throws Exception {
+		new SetupExposedClinicInfantMonthly().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+//Remove/Register Asthma Quarterly And Monthly Report
 	
 	@RequestMapping("/module/rwandareports/register_asthmaQuarterlyAndMonthReport")
 	public ModelAndView registerAsthmaQuarterlyAndMonthReport() throws Exception {
@@ -387,6 +413,20 @@ public class RwandaSetupReportsFormController {
 		new SetupAsthmaQuarterlyAndMonthReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	
+//Remove/Register Asthma Late Visit Report
+	
+	@RequestMapping("/module/rwandareports/register_asthmaLateVisitReport")
+	public ModelAndView registerAsthmaLateVisitReport() throws Exception {
+		new SetupAsthmaLateVisit().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_asthmaLateVisitReport")
+	public ModelAndView removeAsthmaLateVisitReport() throws Exception {
+		new SetupAsthmaLateVisit().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
 	
 
 }
