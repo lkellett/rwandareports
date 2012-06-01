@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
@@ -47,8 +48,9 @@ public class SetupAsthmaConsultationSheet {
 	//properties retrieved from global variables
 	private Program asthmaProgram;
 	
-	private EncounterType flowsheetAsthmas;
+	//private EncounterType flowsheetAsthmas;
 	
+	private Form rendevousForm;
 	private int asthmaDDBFormId ;
 	
 	private Concept returnVisitDate;
@@ -160,7 +162,9 @@ public class SetupAsthmaConsultationSheet {
 	private void setupProperties() {
 		asthmaProgram = gp.getProgram(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_PROGRAM);
 		
-		flowsheetAsthmas = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT);
+	//	flowsheetAsthmas = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT);
+		
+		rendevousForm=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM);
 		
 		asthmaDDBFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB).getFormId();
 		
@@ -172,7 +176,7 @@ public class SetupAsthmaConsultationSheet {
 		
 	    SqlCohortDefinition cohortquery=new SqlCohortDefinition();
 	    //cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)),'%Y-%m-%d')) and o.value_datetime<=(select DATE_FORMAT(CURDATE()+(- (select IF(DAYOFWEEK(CURDATE())=1,6,DAYOFWEEK(CURDATE())-2) as sun)+6),'%Y-%m-%d')) order by o.value_datetime");
-	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or encounter_type="+flowsheetAsthmas.getEncounterTypeId()+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>= :start and o.value_datetime<= :end order by o.value_datetime");
+	    cohortquery.setQuery("select o.person_id from obs o,(select * from (select * from encounter where (form_id="+asthmaDDBFormId+" or form_id="+rendevousForm+") order by encounter_datetime desc) as ordred_enc group by ordred_enc.patient_id) as last_enc where o.encounter_id=last_enc.encounter_id and last_enc.voided=0 and o.voided=0 and o.concept_id="+returnVisitDate.getConceptId()+" and o.value_datetime>= :start and o.value_datetime<= :end order by o.value_datetime");
 	    cohortquery.addParameter(new Parameter("start","start",Date.class));
 	    cohortquery.addParameter(new Parameter("end","end",Date.class));	    
 	    //cohortquery.addParameter(new Parameter("endDate","endDate",Date.class));
