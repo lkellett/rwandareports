@@ -114,7 +114,7 @@ $(document).ready(function(){
 </tr>
 <tr>
 <tr>
-<td rowspan="6" class="tabletd">PMTCT Reports</td>
+<td rowspan="8" class="tabletd">PMTCT Reports</td>
 <td>Combined HFCSP Consultation Sheet</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_combinedHSCSPConsultation.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -150,6 +150,19 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctCombinedClinicMotherMonthlyReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctCombinedClinicMotherMonthlyReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
+<tr>
+<td>Combined Clinic Infant Monthly Report</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctCombinedClinicInfantMonthlyReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctCombinedClinicInfantMonthlyReport.form" onclick=msgrem(this)>Remove</a></td>	
+</tr>
+<tr>
+<td>PMTCT Pregnancy Report</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_PMTCTMonthlyreport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_PMTCTMonthlyreport.form" onclick=msgrem(this)>Remove</a></td>	
+</tr>
+<tr>
 <td rowspan="2" class="tabletd">Patient Follow-up</td>
 <td>Adult Late Visit And CD4</td>
 <td>At site</td>
@@ -209,7 +222,7 @@ $(document).ready(function(){
 <td><!--  <a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a>--></td>	
 </tr>
 <tr>
-<td rowspan="6" class="tabletd">NCD Reports</td>
+<td rowspan="7" class="tabletd">NCD Reports</td>
 <td>Diabetes Quarterly and Monthly Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_DiabetesQuarterlyAndMonthReport.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -244,6 +257,12 @@ $(document).ready(function(){
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_asthmaQuarterlyAndMonthReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_asthmaQuarterlyAndMonthReport.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>Asthma Late Visit Report</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_asthmaLateVisitReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_asthmaLateVisitReport.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 </table>
 <%@ include file="/WEB-INF/template/footer.jsp"%>
