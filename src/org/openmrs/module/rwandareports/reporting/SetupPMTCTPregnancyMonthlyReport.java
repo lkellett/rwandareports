@@ -72,6 +72,9 @@ public class SetupPMTCTPregnancyMonthlyReport {
 	private Concept weight;
 	private Concept viralLoad;
 	private List<EncounterType>adultHivFlowsheetEncounter;
+	private EncounterType adultHivFlowsheet;
+	private int adultflowsheetnewvisitForm;
+	 private Concept nextVisitConcept;
 	private List<String> onOrAfterOnOrBefore = new ArrayList<String>();
 	
 	public void setup() throws Exception {
@@ -127,7 +130,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition3.setName("Patients in PMTCT With BMI below 18.5 dataSetDefinition");
 		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition4.setName("Patients in PMTCT With Viral load > 20 in the last 3 months dataSetDefinition");
-	
+		
 
 		InProgramCohortDefinition patientsInpmtctProgram = Cohorts.createInProgramParameterizableByDate(
 		    "patientsInpmtctProgram", pmtctProgram);
@@ -146,25 +149,14 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		//  1. Patients who have missed their visit by more than a week in pmtct program
 		//==================================================================
 
-		SqlCohortDefinition missedRdvbymorethanaWeek=new SqlCohortDefinition("" +
-				"SELECT DISTINCT pp.patient_id FROM patient_program pp " +
-				"INNER JOIN " +
-				"(SELECT enc.patient_id patient, MAX(enc.encounter_datetime) max_date FROM encounter enc " +
-				"INNER JOIN encounter_type et ON enc.encounter_type = et.encounter_type_id " +
-				"INNER JOIN patient p ON enc.patient_id = p.patient_id " +
-				"WHERE et.encounter_type_id = 25 " +
-				"GROUP BY enc.encounter_datetime) sel ON sel.patient = pp.patient_id " +
-				"INNER JOIN patient p ON pp.patient_id = p.patient_id " +
-				"INNER JOIN person pe ON p.patient_id = pe.person_id " +
-				"INNER JOIN obs ON pp.patient_id = obs.person_id " +
-				"INNER JOIN encounter enc ON p.patient_id = enc.patient_id " +
-				"INNER JOIN form f ON enc.form_id = f.form_id " +
-				"WHERE pe.dead = 0 AND p.voided = 0 AND enc.voided=0 AND pp.program_id = 6 AND f.form_id = 106 AND obs.concept_id = 5096 " +
-				"AND obs.value_datetime > enc.encounter_datetime AND DATEDIFF(:endDate, obs.value_datetime) > 7");
-		missedRdvbymorethanaWeek.setName("missedRdvbymorethanaWeek");
-		missedRdvbymorethanaWeek.addParameter(new Parameter("endDate", "endDate", Date.class));
+		SqlCohortDefinition missedRdvbymorethanaWeekd=new SqlCohortDefinition("select o.person_id from obs o, (select * from " +
+		  		"(select * from encounter where encounter_type="+adultHivFlowsheet.getEncounterTypeId()+" or form_id="+adultflowsheetnewvisitForm+" and voided=0 order by encounter_datetime desc) " +
+		  		"as e group by patient_id) as last_encounters where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 " +
+		  		"and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 ");
+		missedRdvbymorethanaWeekd.setName("missedRdvbymorethanaWeek");
+		missedRdvbymorethanaWeekd.addParameter(new Parameter("endDate", "endDate", Date.class));
 		 
-		 dataSetDefinition1.addFilter(missedRdvbymorethanaWeek,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		 dataSetDefinition1.addFilter(missedRdvbymorethanaWeekd,ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
 		//==================================================================
 		//  2. Patients in PMTCT program with No CD4 in the last 6 months
@@ -246,7 +238,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition2.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(birthdate, new HashMap<String, Object>());
-	
+		
 		MostRecentObservation cd4Countdate = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", "@ddMMMyy");
 		dataSetDefinition2.addColumn(cd4Countdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Countdate, new HashMap<String, Object>());
@@ -330,6 +322,9 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 		viralLoad = gp.getConcept(GlobalPropertiesManagement.VIRAL_LOAD_TEST);
 		adultHivFlowsheetEncounter = gp.getEncounterTypeList(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER);
+		adultHivFlowsheet=gp.getEncounterType(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER);
+		adultflowsheetnewvisitForm=gp.getForm(GlobalPropertiesManagement.ADULT_FLOWSHEET_VISIT).getFormId();
+		nextVisitConcept=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
 		onOrAfterOnOrBefore.add("onOrAfter");
 		onOrAfterOnOrBefore.add("onOrBefore");	
 	}
