@@ -699,6 +699,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String DIABETES_DDB_FORM="reports.DiabetesDDBForm";
 	
+	public final static String DIABETES_RDV_FORM="reports.DiabetesRDVForm";
+	
 	public final static String CARDIOLOGY_DDB = "cardiologyreporting.hFDonneDeBaseFormId";
 
 	public final static String PMTCT_DDB = "reports.pmtctDDBFormId";

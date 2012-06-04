@@ -1,5 +1,6 @@
 package org.openmrs.module.rwandareports.reporting;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
@@ -33,6 +35,7 @@ public class SetupDiabetesConsultAndLTFU {
 
 	Helper h = new Helper();
 	GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
+	private List<Form> diabetesRendezvousForms = new ArrayList<Form>(); //Diabetes forms which can be used to set a next return visit date
 	
 	//properties retrieved from global variables
 	private Program diabetesProgram;
@@ -80,6 +83,7 @@ public class SetupDiabetesConsultAndLTFU {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("Diabetes Consult");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
+		reportDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
 			    ParameterizableUtil.createParameterMappings("location=${location}"));
 
@@ -112,6 +116,7 @@ public class SetupDiabetesConsultAndLTFU {
 		//Add filters
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate(program.getName()+"Cohort", program), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
+		dataSetDefinition.addFilter(Cohorts.getMondayToSundayPatientReturnVisit(diabetesRendezvousForms), ParameterizableUtil.createParameterMappings("end=${endDate+7d},start=${endDate}"));
 				
 		//Add Columns
          
@@ -139,7 +144,7 @@ public class SetupDiabetesConsultAndLTFU {
 								
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
-		mappings.put("endDate", new Date());
+		mappings.put("endDate", "${endDate}");
 		
 		reportDefinition.addDataSetDefinition("dataset1", dataSetDefinition, mappings);
 		
@@ -185,6 +190,8 @@ public class SetupDiabetesConsultAndLTFU {
 
 
 	private void setupPrograms() {
+		diabetesRendezvousForms.add(gp.getForm(GlobalPropertiesManagement.DIABETES_DDB_FORM)) ;
+		diabetesRendezvousForms.add(gp.getForm(GlobalPropertiesManagement.DIABETES_RDV_FORM)) ;
 		diabetesProgram = gp.getProgram(GlobalPropertiesManagement.DM_PROGRAM);
 		diabetesEncouters = gp.getEncounterTypeList(GlobalPropertiesManagement.DIABETES_VISIT);
 	}

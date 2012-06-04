@@ -1157,6 +1157,13 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
+		<property>reports.DiabetesRDVForm</property>
+		<defaultValue>129</defaultValue>
+		<description>
+          This global property for Diabetes rendez-vous form which can be Form Name or Form Id. 
+		</description>
+	</globalProperty>
+	<globalProperty>
 		<property>reports.glucoseConcept</property>
 		<defaultValue>887</defaultValue>
 		<description>The id of the concept for the SERUM GLUCOSE</description>
