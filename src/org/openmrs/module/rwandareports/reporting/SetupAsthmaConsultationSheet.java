@@ -1,5 +1,6 @@
 package org.openmrs.module.rwandareports.reporting;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class SetupAsthmaConsultationSheet {
 	
 	//private Concept returnVisitDate;
 	
-	private List<Form> DDBAndRendezvousForms;
+	private List<Form> DDBAndRendezvousForms=new ArrayList<Form>();
 	
 	public void setup() throws Exception {
 		
