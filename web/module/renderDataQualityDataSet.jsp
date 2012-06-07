@@ -121,6 +121,8 @@ $(function() {
 
 <div id="page" style="display:block;">
 	<div id="container">
+		
+		<!-- INDICATOR REPORT DSD -->
 		<div id="portal">
 		<c:forEach var="cohort" items="${dQRList}" varStatus="cohortNum">
 		<c:set var="patientsNumInOneDataSet" value="${fn:length(cohort.dataSet.rows)}" />
@@ -184,12 +186,68 @@ $(function() {
 		
 								
 			</div><!-- column -->
-			<br clear="both"/>
+			</c:forEach>
+		</div><!-- portal -->
+		
+		
+		<!-- ENCOUNTER DATA PROBLEM 
+		<div id="portal">
+		<c:forEach var="cohort" items="${dQRListenc}" varStatus="cohortNum">
+		<c:set var="patientsNumInOneDataSetenc" value="${fn:length(cohort.encounters)}" />
+		<c:set var="patientsNumInAllDataSetsenc" value="${patientsNumInOneDataSetenc + patientsNumInOneDataSetenc}" />				
+		</c:forEach>
+		<br /><h3>There are ${patientsNumInOneDataSetenc} total encounters problems</h3> <br /><br />
+		 <c:forEach var="cohortResults" items="${dQRListenc}" varStatus="loopTimes">
+			<div class="cohortResultsColumn">				
+			
+		
+					<h3>${cohortResults.selectedEncounter}: ${cohortResults.selectedEncounter} (${fn:length(cohortResults.encounters)} encounters)</h3>
+        
+		 <c:if test="${!empty cohortResults.encounters}">
+						<table class="display">
+							<thead>
+							<tr>
+									<th>encounterId</th>
+									<th>EncounterDate</th>
+									<th>patientId</th>
+									<th>givenName</th>
+									<th>familyName</th>
+									<th>age</th>
+									<th>gender</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+					<c:forEach var="encdsd" items="${cohortResults.encounters}" varStatus="encNum">
+					
+							<tr>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.encounterId}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.encounterDatetime}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patientId}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.givenName}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.familyName}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.age}</a></c:if></td>
+	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.gender}</a></c:if></td>
+	                   
+	                       
+							</tr>
+							
+							</c:forEach>
+							</tbody>
+							<tfoot>
+							</tfoot>
+						</table>
+					</c:if>
+		
+								
+			</div>
+		<br clear="both"/>
 			</c:forEach>
 		
-		</div><!-- portal -->
-	</div><!-- container -->
-</div><!-- page -->
+		</div>
+		<br/>
+	</div>
+</div>-->
 
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
