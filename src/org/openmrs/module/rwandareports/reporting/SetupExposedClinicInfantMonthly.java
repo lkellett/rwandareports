@@ -19,37 +19,30 @@ import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.DurationUnit;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
-import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfNextTestDueFromBirth;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
-import org.openmrs.module.rwandareports.customcalculator.DaysLate;
 import org.openmrs.module.rwandareports.filter.BorFStateFilter;
 import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
-import org.openmrs.module.rwandareports.util.Indicators;
 import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
 
 public class SetupExposedClinicInfantMonthly {
@@ -65,7 +58,9 @@ public class SetupExposedClinicInfantMonthly {
 	private ProgramWorkflow feedingState;
 	private List<EncounterType>exposedInfantEncounter;
 	private EncounterType exposedInfantEncountertype;
-   
+    private Concept cotrimoxazole;
+    private Concept nevirapine;
+    
     public void setup() throws Exception {
 		
 		setupProperties();
@@ -189,10 +184,10 @@ public class SetupExposedClinicInfantMonthly {
 				//  3. Patients enrolled in pmtct infant pro and without encounter in more than 2 months
 				//=======================================================================================
 				 
-				SqlCohortDefinition patientsInPMTCTCforLongtime=new SqlCohortDefinition("select DISTINCT patient_id FROM patient_program pp,program p WHERE pp.program_id=p.program_id AND p.name='"+pmtctinfantProgram.getName()+"' AND DATEDIFF(:onDate,pp.date_enrolled) >= "+gp.TWO_MONTHS+" AND pp.voided=false AND pp.date_completed is null");
+				SqlCohortDefinition patientsInPMTCTCforLongtime=new SqlCohortDefinition("select DISTINCT patient_id FROM patient_program pp,program p WHERE pp.program_id=p.program_id AND p.name='"+pmtctinfantProgram.getName()+"' AND DATEDIFF(:onDate,pp.date_enrolled) >= 60 AND pp.voided=false AND pp.date_completed is null");
 				patientsInPMTCTCforLongtime.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
-			    SqlCohortDefinition patientsWithExposedInfantEncounter = new SqlCohortDefinition("select DISTINCT p.patient_id FROM encounter en, patient p WHERE en.patient_id=p.patient_id AND en.encounter_type="+exposedInfantEncountertype.getEncounterTypeId()+" AND DATEDIFF(:encDate,en.encounter_datetime) >= "+gp.TWO_MONTHS+" AND en.void_reason is null AND p.void_reason is null");
+			    SqlCohortDefinition patientsWithExposedInfantEncounter = new SqlCohortDefinition("select DISTINCT p.patient_id FROM encounter en, patient p WHERE en.patient_id=p.patient_id AND en.encounter_type="+exposedInfantEncountertype.getEncounterTypeId()+" AND DATEDIFF(:encDate,en.encounter_datetime) >= 60 AND en.void_reason is null AND p.void_reason is null");
 				patientsWithExposedInfantEncounter.addParameter(new Parameter("encDate", "encDate",Date.class));
 				
 				CompositionCohortDefinition patientsWithouthEncInProgram = new CompositionCohortDefinition();
@@ -218,8 +213,8 @@ public class SetupExposedClinicInfantMonthly {
 				less6WeeksOfAge.addParameter(new Parameter("effectiveDate","effectiveDate", Date.class));
 				
 				// On Nevirapine
-				String onNvp = Context.getAdministrationService().getGlobalProperty("tracnet.nevirapine");
-				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+GlobalPropertiesManagement.NVP_DRUG+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
+	
+				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+nevirapine.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
 				onNevirapineOntime.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
 				CompositionCohortDefinition atlessthan6weeksOnNvpSus = new CompositionCohortDefinition();
@@ -243,7 +238,7 @@ public class SetupExposedClinicInfantMonthly {
                 atleast6WeeksOfAge.addParameter(new Parameter("effectiveDate","effectiveDate", Date.class));
                 
              // On Bactrim
-				SqlCohortDefinition infantsonBactrim = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+GlobalPropertiesManagement.BACTRIM_DRUG+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
+				SqlCohortDefinition infantsonBactrim = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+cotrimoxazole.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
 				infantsonBactrim.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
 				CompositionCohortDefinition morethan6weeksOnBactrim = new CompositionCohortDefinition();
@@ -384,6 +379,9 @@ public class SetupExposedClinicInfantMonthly {
 		feedingState = gp.getProgramWorkflow(GlobalPropertiesManagement.FEEDING_GROUP_WORKFLOW, GlobalPropertiesManagement.PMTCT_COMBINED_CLINIC_PROGRAM);
 		exposedInfantEncounter = gp.getEncounterTypeList(GlobalPropertiesManagement.EXPOSED_INFANT_ENCOUNTER);
 		exposedInfantEncountertype=gp.getEncounterType(GlobalPropertiesManagement.EXPOSED_INFANT_ENCOUNTER);
+		cotrimoxazole=gp.getConcept(GlobalPropertiesManagement.COTRIMOXAZOLE_DRUG);
+		nevirapine=gp.getConcept(GlobalPropertiesManagement.NEVIRAPINE_DRUG);
+		
 	} 
 	
 	
