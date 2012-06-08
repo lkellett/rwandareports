@@ -44,13 +44,14 @@ public class SetupAsthmaLateVisit {
     private Concept nextVisitConcept;
     private int asthmaDDBFormId;
     private EncounterType asthmaflowsheet;
-    public void setup() throws Exception {
+    
+	public void setup() throws Exception {
 		
 		setupProperties();
 		
 		ReportDefinition rd = createReportDefinition();
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "AsthmaLateVisitTemplate.xls",
-		    "XlsAsthmaLateVisitTemplate.xls_", null);
+		    "AsthmaLateVisitTemplate", null);
 		
 		Properties props = new Properties();
 		props.put(
@@ -64,13 +65,12 @@ public class SetupAsthmaLateVisit {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("XlsAsthmaLateVisitTemplate".equals(rd.getName())) {
+			if ("AsthmaLateVisitTemplate".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
 		h.purgeReportDefinition("Asthma/COPD Late Visit");
 	}
-	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("Asthma/COPD Late Visit");

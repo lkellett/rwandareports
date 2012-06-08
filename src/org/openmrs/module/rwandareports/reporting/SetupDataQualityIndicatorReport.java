@@ -386,8 +386,8 @@ public class SetupDataQualityIndicatorReport {
 				// 13. Patients with a visit in last 12 months who do not have a correctly structured address
 				//======================================================================================
 				
-				SqlCohortDefinition patientsWithNoStructuredAddress=new SqlCohortDefinition("select distinct(p.patient_id) from patient p,person_address pa where p.patient_id=pa.person_id and pa.preferred=1 and p.voided=0 and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.neighborhood_cell is null or pa.address1 is null " +
-						"or pa.state_province='' or pa.county_district='' or pa.neighborhood_cell is null or pa.address1='' )");
+				SqlCohortDefinition patientsWithNoStructuredAddress=new SqlCohortDefinition("select distinct(p.patient_id) from patient p,person_address pa where p.patient_id=pa.person_id and pa.preferred=1 and p.voided=0 and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.address3 is null or pa.address1 is null " +
+						"or pa.state_province='' or pa.county_district='' or pa.address3 is null or pa.address1='' )");
 				
 				CompositionCohortDefinition patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow = new CompositionCohortDefinition();
 				patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow.setName("DQ: patients With No Structured Address and with any encounter in last year from now");

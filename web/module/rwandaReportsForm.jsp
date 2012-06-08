@@ -153,14 +153,14 @@ $(document).ready(function(){
 <tr>
 <td>Combined Clinic Infant Monthly Report</td>
 <td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctCombinedClinicInfantMonthlyReport.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctCombinedClinicInfantMonthlyReport.form" onclick=msgrem(this)>Remove</a></td>	
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctCombinedClinicInfantReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctCombinedClinicInfantReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td>PMTCT Pregnancy Report</td>
 <td>Central</td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_PMTCTMonthlyreport.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_PMTCTMonthlyreport.form" onclick=msgrem(this)>Remove</a></td>	
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_pmtctPregMonthlyReport.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctPregMonthlyReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Patient Follow-up</td>
@@ -260,9 +260,9 @@ $(document).ready(function(){
 </tr>
 <tr>
 <td>Asthma Late Visit Report</td>
-<td>At site</td>
+<td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_asthmaLateVisitReport.form" onclick=msgreg(this)>(Re) register</a></td>
-<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_asthmaLateVisitReport.form" onclick=msgrem(this)>Remove</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_asthmaLateVisitReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 </table>
 <%@ include file="/WEB-INF/template/footer.jsp"%>

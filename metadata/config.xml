@@ -1397,7 +1397,7 @@
 		</globalProperty>
 		
 		<globalProperty>
-		<property>tracnet.nevirapine</property>
+		<property>report.nevirapine</property>
 		<defaultValue>631</defaultValue> 
 		<description>patient on nevirapine</description> 		
 		</globalProperty>
@@ -1419,7 +1419,6 @@
 		<defaultValue>916</defaultValue> 
 		<description>patient on cotrimo</description> 		
 		</globalProperty>
-		
 		
 		<globalProperty>
 		<property>report.two_months</property>

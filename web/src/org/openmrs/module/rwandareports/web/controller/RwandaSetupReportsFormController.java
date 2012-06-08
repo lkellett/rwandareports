@@ -378,29 +378,7 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	//Remove/Register PMTCT Pregnancy Monthly Report
-	@RequestMapping("/module/rwandareports/register_PMTCTMonthlyreport")
-	public ModelAndView registerPMTCTMonthly() throws Exception {
-		new SetupPMTCTPregnancyMonthlyReport().setup();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-			
-	@RequestMapping("/module/rwandareports/remove_PMTCTMonthlyreport")
-	public ModelAndView removePMTCTMonthly() throws Exception {
-	    new SetupPMTCTPregnancyMonthlyReport().delete();
-			return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-	// Remove/Register Combined Monthly Infant.
-	@RequestMapping("/module/rwandareports/register_pmtctCombinedClinicInfantMonthlyReport")
-	public ModelAndView registerPMTCTCombinedClinicInfantMotherMonthly() throws Exception {
-		new SetupExposedClinicInfantMonthly().setup();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-	@RequestMapping("/module/rwandareports/remove_pmtctCombinedClinicInfantMonthlyReport")
-	public ModelAndView removePMTCTCombinedClinicInfantMotherMonthly() throws Exception {
-		new SetupExposedClinicInfantMonthly().delete();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
+	
 //Remove/Register Asthma Quarterly And Monthly Report
 	
 	@RequestMapping("/module/rwandareports/register_asthmaQuarterlyAndMonthReport")
@@ -417,16 +395,41 @@ public class RwandaSetupReportsFormController {
 //Remove/Register Asthma Late Visit Report
 	
 	@RequestMapping("/module/rwandareports/register_asthmaLateVisitReport")
-	public ModelAndView registerAsthmaLateVisitReport() throws Exception {
+	public ModelAndView registerAsthmaLateVisit() throws Exception {
 		new SetupAsthmaLateVisit().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	@RequestMapping("/module/rwandareports/remove_asthmaLateVisitReport")
-	public ModelAndView removeAsthmaLateVisitReport() throws Exception {
+	public ModelAndView removeregisterAsthmaLateVisit() throws Exception {
 		new SetupAsthmaLateVisit().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+//Remove/Register PMTCT Pregnancy Monthly Report
 	
-
+	@RequestMapping("/module/rwandareports/register_pmtctPregMonthlyReport")
+	public ModelAndView registerPMTCTPregMonthlyVisit() throws Exception {
+		new SetupPMTCTPregnancyMonthlyReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_pmtctPregMonthlyReport")
+	public ModelAndView removePMTCTPregMonthlyVisit() throws Exception {
+		new SetupPMTCTPregnancyMonthlyReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+   //Remove/Register Combined Infant Monthly Report
+	
+	@RequestMapping("/module/rwandareports/register_pmtctCombinedClinicInfantReport")
+	public ModelAndView registerPMTCTCombinedInfantReport() throws Exception {
+		new SetupExposedClinicInfantMonthly().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_pmtctCombinedClinicInfantReport")
+	public ModelAndView removePMTCTCombinedInfantReport() throws Exception {
+		new SetupExposedClinicInfantMonthly().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	
 }

@@ -12,49 +12,34 @@ import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Program;
-import org.openmrs.ProgramWorkflow;
-import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InStateCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
-import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
-import org.openmrs.module.reporting.indicator.CohortIndicator;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateDiff.DateDiffType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.FirstDrugOrderStartedRestrictedByConceptSet;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RecentEncounterType;
-import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.customcalculator.BMICalculation;
-import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
-import org.openmrs.module.rwandareports.customcalculator.DifferenceBetweenLastTwoObs;
-import org.openmrs.module.rwandareports.filter.GroupStateFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
-import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
-import org.openmrs.module.rwandareports.util.Indicators;
 import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
 
 public class SetupPMTCTPregnancyMonthlyReport {
@@ -83,7 +68,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		
 		ReportDefinition rd = createReportDefinition();
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PMTCTPregMonthlyTemplate.xls",
-		    "XlsPMTCTPregMonthlyTemplate.xls_", null);
+		    "PMTCTPregMonthlyTemplate", null);
 		
 		Properties props = new Properties();
 		props.put(
@@ -97,16 +82,15 @@ public class SetupPMTCTPregnancyMonthlyReport {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("XlsPMTCTPregMonthlyTemplate".equals(rd.getName())) {
+			if ("PMTCTPregMonthlyTemplate".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Pregnancy Monthly Report");
+		h.purgeReportDefinition("PMTCT Pregnancy Report");
 	}
-	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Pregnancy Monthly Report");
+		reportDefinition.setName("PMTCT Pregnancy Report");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -120,7 +104,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 	}
 	
 	private void createDataSetDefinition(ReportDefinition reportDefinition) {
-		
+	   
 		// in PMTCT Program  dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition1 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition1.setName("Patients in PMTCT Who have missed their visit by more than a week dataSetDefinition");
@@ -296,7 +280,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		
 		dataSetDefinition1.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
-    	dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));
+    	        dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition4.addParameter(new Parameter("location", "Location", Location.class));
 		
 		dataSetDefinition1.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -328,4 +312,5 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		onOrAfterOnOrBefore.add("onOrAfter");
 		onOrAfterOnOrBefore.add("onOrBefore");	
 	}
+	
 }
