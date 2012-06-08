@@ -688,6 +688,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ASTHMA_RENDEVOUS_VISIT_FORM="reports.AsthmaRendevousVisitForm";
 	
+	public final static String EXPOSED_INFANT_ENCOUNTER="report.exposed_infantencounter";
+	
+	public final static String ADULT_FLOWSHEET_VISIT = "adultflowsheet.Form_ddbId";
+	
 	
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";
@@ -749,6 +753,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String GLIBENCLAMIDE_DRUG="reports.glibenclamideConcept";
 	
+	public final static String COTRIMOXAZOLE_DRUG="reports.ctxTreatmentConcept";
+	
+	public final static String NEVIRAPINE_DRUG="reports.glibenclamideConcept";
+	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
 	
@@ -787,8 +795,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String HIV_TEST = "reports.hivTestConcept";
 	
-	//Group constructs
-	public final static String CHILD_SEROLOGY_CONSTRUCT = "reports.childSerologyConcept";
+	//Group constructs  
+	//public final static String CHILD_SEROLOGY_CONSTRUCT = "reports.childSerologyConcept";
+
+	public final static String CHILD_SEROLOGY_CONSTRUCT = "reports.serotestConcept";
 
 	//Lab Panel Concepts 
 	public final static String CD4_PANEL_LAB_CONCEPT = "reports.cd4LabConcept";
@@ -850,7 +860,7 @@ public class GlobalPropertiesManagement {
 	public final static String USINF_INJECTABLE="report.injectable";
 	public final static String USING_ORALCONTRAC="report.orals";
 	public final static String REFERED_FOR_FP="report.referedforfp";
-	 
+
 	public final int EIGHTANDHALF_MONTHS = 255; 
 	public final int NINETEEN_MONTHS = 570; 
 	public final static int ON_ART_TREATMENT_STATUS_ID = 1577;
