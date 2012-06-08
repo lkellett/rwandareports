@@ -1422,6 +1422,12 @@
 		
 		
 		<globalProperty>
+		<property>report.two_months</property>
+		<defaultValue>60</defaultValue> 
+		<description>patient age</description> 		
+		</globalProperty>
+		
+		<globalProperty>
 		<property>tracnetreport.secondLineRegimen</property>
 		<defaultValue>"3cd43ffa-26fe-102b-80cb-0017a47871b2","3cd3ef46-26fe-102b-80cb-0017a47871b2","3cd43d98-26fe-102b-80cb-0017a47871b2"</defaultValue>
 			<description>A list of Second Line Regimen Drugs (a set of concepts represented as drug). </description> 		
@@ -1794,6 +1800,18 @@
 		</globalProperty>
 		<!-- end Asthma consult sheet & asthma monthly quaterly indicator report -->
 		
+		<globalProperty>
+		<property>report.exposed_infantencounter</property>
+		<defaultValue>26</defaultValue> 
+		<description>Exposed Infant Encounter</description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>adultflowsheet.Form_ddbId</property>
+		<defaultValue>ab35557d-b558-4c19-90d4-dbde7260c5b8</defaultValue>
+		<description>The id of the form id for the visit section of the asthma donne de base</description>
+	</globalProperty>
+	
 			
 		
 </module>
