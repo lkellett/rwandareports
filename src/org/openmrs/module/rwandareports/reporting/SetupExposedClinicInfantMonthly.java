@@ -214,7 +214,7 @@ public class SetupExposedClinicInfantMonthly {
 				
 				// On Nevirapine
 	
-				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+nevirapine.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
+				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+nevirapine.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");				
 				onNevirapineOntime.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
 				CompositionCohortDefinition atlessthan6weeksOnNvpSus = new CompositionCohortDefinition();

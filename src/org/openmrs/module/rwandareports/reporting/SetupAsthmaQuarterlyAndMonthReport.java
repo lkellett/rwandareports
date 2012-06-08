@@ -75,66 +75,10 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private List<Form> DDBforms = new ArrayList<Form>();
 	
-	private List<Concept> asthmasMedications;
+	private List<Concept> asthmasMedications = new ArrayList<Concept>();
 	
 	
-	/*private int asthmaEncounterTypeId;	
 	
-	private Form DiabetesFlowVisit;
-	
-	private List<EncounterType> patientsSeenEncounterTypes = new ArrayList<EncounterType>();
-	
-	private List<String> onOrBefOnOrAf = new ArrayList<String>();
-	
-	private Concept glucose;
-	
-	private Concept weight;
-	
-	private Concept height;
-	
-	private Concept diastolicBP;
-	
-	private Concept systolicBP;
-	
-	private Concept hbA1c;
-	
-	private Concept sensationInRightFoot;
-	
-	private Concept sensationInLeftFoot;
-	
-	private Concept creatinine;
-	
-	private Concept insulin7030;
-	
-	private Concept insulinLente;
-	
-	private Concept insulinRapide;
-	
-	private Concept lisinopril;
-	
-	private Concept captopril;
-	
-	private List<Concept> lisinoprilCaptopril = new ArrayList<Concept>();
-	
-	private List<Concept> diabetesDrugConcepts = new ArrayList<Concept>();
-	
-	private Concept metformin;
-	
-	private Concept glibenclimide;
-	
-	private ProgramWorkflowState diedState;
-	
-	private Concept admitToHospital;
-	
-	private Concept locOfHosp;
-	
-	private List<Drug> onAceInhibitorsDrugs = new ArrayList<Drug>();
-	
-	List<Concept> neuropathyConcepts = new ArrayList<Concept>();
-	
-	List<Concept> insulinConcepts = new ArrayList<Concept>();
-	
-	List<Concept> metforminAndGlibenclimideConcepts = new ArrayList<Concept>();*/
 	
 	public void setup() throws Exception {
 		
@@ -156,7 +100,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		// Quarterly Report Definition: Start
 		
-		ReportDefinition quarterlyRd = new ReportDefinition();
+		/*ReportDefinition quarterlyRd = new ReportDefinition();
 		quarterlyRd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		quarterlyRd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -167,7 +111,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		quarterlyRd.addDataSetDefinition(createQuarterlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
-		
+		*/
 		// Quarterly Report Definition: End
 		
 		
@@ -176,9 +120,9 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		monthlyRd.setBaseCohortDefinition(patientInAsthmaProgram,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}"));
 		
-		quarterlyRd.setBaseCohortDefinition(patientInAsthmaProgram,
+		/*quarterlyRd.setBaseCohortDefinition(patientInAsthmaProgram,
 		    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrAfter=${endDate}"));
-		
+		*/
 		h.saveReportDefinition(monthlyRd);
 		//h.saveReportDefinition(quarterlyRd);
 		
@@ -190,12 +134,12 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		monthlyDesign.setProperties(monthlyProps);
 		h.saveReportDesign(monthlyDesign);
 		
-		ReportDesign quarterlyDesign = h.createRowPerPatientXlsOverviewReportDesign(quarterlyRd,
-		    "Asthma_Indicator_Quarterly_Report.xls", "Asthma Indicator Quarterly Report (Excel)", null);
+		/*ReportDesign quarterlyDesign = h.createRowPerPatientXlsOverviewReportDesign(quarterlyRd,
+		    "Asthma_Indicator_Quarterly_Report.xls", "Asthma Indicator Quarterly Report (Excel)", null);*/
 		Properties quarterlyProps = new Properties();
 		quarterlyProps.put("repeatingSections", "sheet:1,dataset:Encounter Quarterly Data Set");
 		
-		quarterlyDesign.setProperties(quarterlyProps);
+		//quarterlyDesign.setProperties(quarterlyProps);
 		//h.saveReportDesign(quarterlyDesign);
 		
 	}
@@ -501,15 +445,12 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	private void setUpProperties() {
 		asthmaProgram = gp.getProgram(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_PROGRAM);
 		asthmaPrograms.add(asthmaProgram);
-	//	asthmaEncounterTypeId = Integer.parseInt(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.ASTHMA_VISIT));
 		asthmaEncounterType = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT);
 		DDBform = gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB);
 		rendevousForm=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM);
 		
 		DDBforms.add(DDBform);
-		//DDBforms.add(DiabetesFlowVisit);
-		
-	//	patientsSeenEncounterTypes.add(asthmaEncounterType);
+
 		
 		onOrAfterOnOrBefore.add("onOrAfter");
 		onOrAfterOnOrBefore.add("onOrBefore");
@@ -517,8 +458,6 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		enrolledOnOrAfterOnOrBefore.add("enrolledOnOrAfter");
 		enrolledOnOrAfterOnOrBefore.add("enrolledOnOrBefore");
 		
-		/*peacFlowConcepts.add(gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_AFTER_SALBUTAMOL));
-		peacFlowConcepts.add(gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_BEFORE_SALBUTAMOL));*/
 		
 		peakFlowAfterSalbutamol=gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_AFTER_SALBUTAMOL);
 		peakFlowBeforeSalbutamol=gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_BEFORE_SALBUTAMOL);
