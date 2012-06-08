@@ -17,7 +17,7 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	  <!--  <require_module>org.openmrs.module.heightweighttracker</require_module> --> 
+	   <require_module>org.openmrs.module.heightweighttracker</require_module> 
 	</require_modules>
 
 	<extension>
