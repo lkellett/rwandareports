@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>2.1</version>
+	<version>2.1.1</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>
@@ -800,6 +800,12 @@
 		<property>reports.serotestConcept</property>
 		<defaultValue>1040</defaultValue>
 		<description>The id of the concept for the serotest</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.childSerologyConcept</property>
+		<defaultValue>2168</defaultValue>
+		<description>The id of the concept for the child serology construct</description>
 	</globalProperty>
 	
 	<globalProperty>

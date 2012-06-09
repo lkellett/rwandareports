@@ -340,7 +340,7 @@ public class SetupDataQualityIndicatorReport {
 			// 12. On initial TB treatment for longer than 8 months
 			//======================================================================================
 			
-			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<'"+GetDate.getCalendarMonthDate(-8)+"' and pp.voided=false and pp.date_completed is null");
+			SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled< DATE_SUB(pp.date_enrolled,INTERVAL 8 MONTH) and pp.voided=false and pp.date_completed is null");
 			
 			String tbFirstLineDrugsConceptIds=null;
 			
@@ -350,7 +350,7 @@ public class SetupDataQualityIndicatorReport {
 				
 			}		
 			
-			SqlCohortDefinition onTBFirstLineDrugs=new SqlCohortDefinition("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+tbFirstLineDrugsConceptIds+") and o.discontinued=0 and (auto_expire_date is null or auto_expire_date > :now) and o.voided=0");
+			SqlCohortDefinition onTBFirstLineDrugs=new SqlCohortDefinition("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+tbFirstLineDrugsConceptIds+") and o.discontinued=0 and (auto_expire_date is null or auto_expire_date > now()) and o.voided=0");
 			
 	        String tbFirstSecondDrugsConceptIds=null;
 			
@@ -360,7 +360,7 @@ public class SetupDataQualityIndicatorReport {
 				
 			}
 			
-			SqlCohortDefinition onTBSecondLineDrugs=new SqlCohortDefinition("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+tbFirstSecondDrugsConceptIds+") and o.discontinued=0 and (auto_expire_date is null or auto_expire_date > :now) and o.voided=0");
+			SqlCohortDefinition onTBSecondLineDrugs=new SqlCohortDefinition("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+tbFirstSecondDrugsConceptIds+") and o.discontinued=0 and (auto_expire_date is null or auto_expire_date > now()) and o.voided=0");
 			
 			CompositionCohortDefinition patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen = new CompositionCohortDefinition();
 			patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.setName("DQ: patients In TB Program Too long on First Line Regimen and Not on Second Line regimen");
@@ -391,8 +391,8 @@ public class SetupDataQualityIndicatorReport {
 			
 			SqlCohortDefinition patientsWithNoStructuredAddress=new SqlCohortDefinition("select distinct(p.patient_id) from patient p,person_address pa " +
 					"where p.patient_id=pa.person_id and pa.preferred=1 and p.voided=0 and pa.voided=0 " +
-					"and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.neighborhood_cell is null or pa.address1 is null " +
-					"or pa.state_province='' or pa.county_district='' or pa.neighborhood_cell is null or pa.address1='' )");
+					"and (pa.state_province is null or pa.county_district is null or pa.city_village is null or pa.address3 is null or pa.address1 is null " +
+					"or pa.state_province='' or pa.county_district='' or pa.address3 is null or pa.address1='' )");
 			
 			CompositionCohortDefinition patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow = new CompositionCohortDefinition();
 			patientsWithNoStructuredAddressWithAnyEncounterLastYearFromNow.setName("DQ: patients With No Structured Address and with any encounter in last year from now");

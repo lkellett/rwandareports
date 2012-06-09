@@ -92,7 +92,8 @@ public class SetupAdultHIVConsultationSheet {
 	
 	private void createDataSetDefinition(ReportDefinition reportDefinition) {
 		// Create new dataset definition 
-		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
+		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();		
+		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		dataSetDefinition.addParameter(new Parameter("state", "State", ProgramWorkflowState.class));
 		
 		//Add Filters

@@ -655,6 +655,9 @@ public class GlobalPropertiesManagement {
 	public static final String HOSPITALIZATION_SERVICE = "reports.hospitalizationService";				
 	public static final String VACCINATION_SERVICE = "reports.vaccinationService";	
 	
+	//Group constructs  
+	public final static String CHILD_SEROLOGY_CONSTRUCT = "reports.childSerologyConcept";
+	
 	//Encounters
 	public final static String ADULT_FLOWSHEET_ENCOUNTER = "reports.adultflowsheetencounter";
 	

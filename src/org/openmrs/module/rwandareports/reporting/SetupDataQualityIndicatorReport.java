@@ -351,11 +351,11 @@ public class SetupDataQualityIndicatorReport {
 				//"enc.encounter_id=o.encounter_id and o.person_id=enc.patient_id and o.obs_datetime > enc.encounter_datetime and o.voided=0 and o.void_reason is null");
 				//CohortIndicator patientsWithObsgreaterThanEncIndi = Indicators.newCountIndicator("Observations in the future", patientsWithObsgreaterThanEnc, null);
 				
-				SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled<'"+getDate(-8)+"' and pp.voided=false and pp.date_completed is null");
+				SqlCohortDefinition patientsInTBTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+tb.getName()+"' and pp.date_enrolled< DATE_SUB(pp.date_enrolled,INTERVAL 8 MONTH) and pp.voided=false and pp.date_completed is null");
 				String tbFirstLineDrugsConceptIds=null;
 				for(Concept concept:tbFirstLineDrugsConcepts){
 					tbFirstLineDrugsConceptIds=tbFirstLineDrugsConceptIds+","+concept.getId();	
-				}		
+				}	
 				
 				SqlCohortDefinition onTBFirstLineDrugs=new SqlCohortDefinition("select distinct o.patient_id from orders o,concept c where o.concept_id=c.concept_id and c.concept_id in ("+tbFirstLineDrugsConceptIds+") and o.discontinued=0 and (auto_expire_date is null) and o.voided=0");
 		        String tbFirstSecondDrugsConceptIds=null;
@@ -703,16 +703,5 @@ public class SetupDataQualityIndicatorReport {
 	    	ReportService rs = Context.getService(ReportService.class);
 	    	rs.saveReportDesign(design);
 	    }	
-		
-		public static String getDate(int months){
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.MONTH, months);
-			Date monthsBackOrNext = cal.getTime();
-			
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			String stringDate=sdf.format(monthsBackOrNext);
-			
-			return stringDate;
-		}
 
 }

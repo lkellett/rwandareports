@@ -236,7 +236,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 		} else if (value.equals("countyDistrict")) {
 			return "county_district";
 		} else if (value.equals("neighbourhoodCell")) {
-			return "neighbourhood_cell";
+			return "address3";
 		}
 
 		else if (value.equals("townshipDivision")) {

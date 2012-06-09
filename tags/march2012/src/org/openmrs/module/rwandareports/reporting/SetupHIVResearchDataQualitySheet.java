@@ -102,19 +102,19 @@ public class SetupHIVResearchDataQualitySheet {
 		
 		// Create new dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
-		dataSetDefinition.setName("BaselineCD4");
+		dataSetDefinition.setName("BaselineCD4PatientDataSet");
 		
 		RowPerPatientDataSetDefinition dataSetDefinition2 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition2.setName("BaselineWeight");
+		dataSetDefinition2.setName("BaselineWeightPatientDataSet");
 		
 		RowPerPatientDataSetDefinition dataSetDefinition3 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition3.setName("TransferPatients");
+		dataSetDefinition3.setName("TransferPatientsPatientDataSet");
 		
 		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition4.setName("NoDiagnosis");
+		dataSetDefinition4.setName("NoDiagnosisPatientDataSet");
 		
 		RowPerPatientDataSetDefinition dataSetDefinition5 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition5.setName("RegimenStateDiff");
+		dataSetDefinition5.setName("RegimenStateDiffPatientDataSet");
 		
 		CompositionCohortDefinition onAllArt = new CompositionCohortDefinition();
 		onAllArt.setName("onArt");

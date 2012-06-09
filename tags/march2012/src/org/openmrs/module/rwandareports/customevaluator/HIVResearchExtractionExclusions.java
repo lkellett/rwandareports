@@ -161,7 +161,7 @@ public class HIVResearchExtractionExclusions implements CustomEvaluator {
 					{
 						List<PatientState> states = adultHivP.statesInWorkflow(treatmentStatusAdult, false);
 						
-						if(states.get(states.size()-1).getState().getId().equals(following.getId()))
+						if(states.size() > 0 && states.get(states.size()-1).getState().getId().equals(following.getId()))
 						{
 							result.setValue("Exclude");
 						}
