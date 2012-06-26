@@ -88,9 +88,9 @@ public class SetupDataQualityIndicatorReport {
     private Concept transferOut;
     private Concept height;
 	private Concept weight;
-    private List<String> onOrAfterOnOrBeforeParamterNames = new ArrayList<String>();
-    
-    private RelationshipType motherChildRelationship;
+    private List<String> onOrAfterOnOrBeforeParamterNames = new ArrayList<String>();    
+    private RelationshipType motherChildRelationship;    
+    private List<Program> allPrograms=new ArrayList<Program>();
    
 	public void setup() throws Exception {
 		
@@ -560,8 +560,23 @@ public class SetupDataQualityIndicatorReport {
 				// 20. Missing program enrollment start date
 				//======================================================================================
 				
+				
+				StringBuilder programs=new StringBuilder();
+				
+				int i=0;
+				
+				for (Program program : allPrograms) {
+					if(i==0){
+	                	programs.append(program.getProgramId());
+	                }else{
+	                	programs.append(",");
+	                	programs.append(program.getProgramId());
+	                }
+					i++;
+                }
+				
 				SqlCohortDefinition patientsMissingprogramsEnrolStartDate=new SqlCohortDefinition();
-				patientsMissingprogramsEnrolStartDate.setQuery("select distinct (p.patient_id) from patient_program pp, patient p, program pro where pp.patient_id=p.patient_id and pp.program_id=pro.program_id and (pro.program_id=3 or pro.program_id=4 or pro.program_id=5 or pro.program_id=6 or pro.program_id=10 or pro.program_id=11 or pro.program_id=12 or pro.program_id=13 or pro.program_id=14 or pro.program_id=15 or pro.program_id=16 or pro.program_id=17) and (pp.date_enrolled is null and p.void_reason is null and pp.void_reason is null) group by p.patient_id " );
+				patientsMissingprogramsEnrolStartDate.setQuery("select distinct (p.patient_id) from patient_program pp, patient p, program pro where pp.patient_id=p.patient_id and pp.program_id=pro.program_id and pro.program_id in ("+programs.toString()+") and pp.date_enrolled is null and p.voided=0 and pp.voided=0 ");
 				patientsMissingprogramsEnrolStartDate.setName("DQ: Patients in programs but with no program Enrollment dates");
 				 
 				CohortIndicator patientsMissingprogramsEnrolStartDateindicator = Indicators.newCountIndicator("DQ:Number of invalid dates and forms", patientsMissingprogramsEnrolStartDate,null);	
@@ -571,7 +586,7 @@ public class SetupDataQualityIndicatorReport {
 				//======================================================================================
 				
 				SqlCohortDefinition infantsWithNoMotherAcc=new SqlCohortDefinition();
-				infantsWithNoMotherAcc.setQuery(" select distinct rel.person_b FROM relationship rel, relationship_type relt, person pe WHERE rel.relationship=relt.relationship_type_id AND relt.relationship_type_id="+motherChildRelationship.getRelationshipTypeId()+" AND rel.voided=0 AND pe.voided=0 ");
+				infantsWithNoMotherAcc.setQuery(" select distinct rel.person_b FROM relationship rel, relationship_type relt, person pe WHERE rel.relationship=relt.relationship_type_id AND relt.relationship_type_id="+motherChildRelationship.getRelationshipTypeId()+" AND rel.voided=0 AND pe.voided=0 AND relt.retired=0 ");
 				infantsWithNoMotherAcc.setName("DQ: Patients With no Mothers Relationship");
 				
 				 CompositionCohortDefinition infantsInPmtctClinicInfant = new CompositionCohortDefinition();
@@ -687,6 +702,7 @@ public class SetupDataQualityIndicatorReport {
 			 onOrAfterOnOrBeforeParamterNames.add("onOrAfter");
 			 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
 			 motherChildRelationship=gp.getRelationshipType(GlobalPropertiesManagement.MOTHER_RELATIONSHIP);
+			 allPrograms=Context.getProgramWorkflowService().getAllPrograms(false);
 		}
 				
 		private ReportDesign createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {
