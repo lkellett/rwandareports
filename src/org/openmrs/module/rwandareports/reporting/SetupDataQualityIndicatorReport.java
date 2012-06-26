@@ -13,6 +13,7 @@ import org.openmrs.Concept;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
+import org.openmrs.RelationshipType;
 import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.ReportingConstants;
@@ -88,6 +89,8 @@ public class SetupDataQualityIndicatorReport {
     private Concept height;
 	private Concept weight;
     private List<String> onOrAfterOnOrBeforeParamterNames = new ArrayList<String>();
+    
+    private RelationshipType motherChildRelationship;
    
 	public void setup() throws Exception {
 		
@@ -568,11 +571,11 @@ public class SetupDataQualityIndicatorReport {
 				//======================================================================================
 				
 				SqlCohortDefinition infantsWithNoMotherAcc=new SqlCohortDefinition();
-				infantsWithNoMotherAcc.setQuery(" select distinct rel.person_b FROM relationship rel, relationship_type relt, person pe WHERE rel.person_a = pe.person_id AND rel.relationship=relt.relationship_type_id AND pe.gender='F' AND relt.relationship_type_id=13 AND pe.void_reason is null AND rel.voided=0 AND rel.void_reason is null order by rel.relationship desc ");
-				infantsWithNoMotherAcc.setName("DQ: Patients With no Mothers Accompagnateur");
+				infantsWithNoMotherAcc.setQuery(" select distinct rel.person_b FROM relationship rel, relationship_type relt, person pe WHERE rel.relationship=relt.relationship_type_id AND relt.relationship_type_id="+motherChildRelationship.getRelationshipTypeId()+" AND rel.voided=0 AND pe.voided=0 ");
+				infantsWithNoMotherAcc.setName("DQ: Patients With no Mothers Relationship");
 				
 				 CompositionCohortDefinition infantsInPmtctClinicInfant = new CompositionCohortDefinition();
-				 infantsInPmtctClinicInfant.setName("DQ: Patients currently enrolled in the PMTCT Combined Clinic Ð Infant program who donÕt have a non-voided Mother/Child relationship");
+				 infantsInPmtctClinicInfant.setName("DQ: Patients currently enrolled in the PMTCT Combined Clinic ï¿½ Infant program who donï¿½t have a non-voided Mother/Child relationship");
 				 infantsInPmtctClinicInfant.getSearches().put("1",new Mapped(infantsWithNoMotherAcc, null));
 				 infantsInPmtctClinicInfant.getSearches().put("2",new Mapped(inPmtctInfantprogram, ParameterizableUtil.createParameterMappings("onDate=${now}")));
 				 infantsInPmtctClinicInfant.setCompositionString("2 AND (NOT 1)");
@@ -605,7 +608,7 @@ public class SetupDataQualityIndicatorReport {
 		    	reportDefinition.addIndicator("18","Patients With BMI <12 or >35",patientsWithBMIMoreThan35);
 				reportDefinition.addIndicator("19","Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer inform",patientsOnArtbeforeHivEnrollmentIndicator);
 				reportDefinition.addIndicator("20","Patients With Missing program enrollment start date",patientsMissingprogramsEnrolStartDateindicator);
-			    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic Ð Infant program who donÕt have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
+			    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic ï¿½ Infant program who donï¿½t have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
 		
 	} 
 		
@@ -683,6 +686,7 @@ public class SetupDataQualityIndicatorReport {
 			weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 			 onOrAfterOnOrBeforeParamterNames.add("onOrAfter");
 			 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
+			 motherChildRelationship=gp.getRelationshipType(GlobalPropertiesManagement.MOTHER_RELATIONSHIP);
 		}
 				
 		private ReportDesign createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {
