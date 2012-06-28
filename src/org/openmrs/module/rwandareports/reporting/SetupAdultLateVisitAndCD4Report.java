@@ -49,12 +49,15 @@ import org.openmrs.module.rwandareports.customcalculator.BMI;
 import org.openmrs.module.rwandareports.customcalculator.BMICalculation;
 import org.openmrs.module.rwandareports.customcalculator.DeclineHighestCD4;
 import org.openmrs.module.rwandareports.customcalculator.DifferenceBetweenLastTwoObs;
+import org.openmrs.module.rwandareports.dataset.LocationHierachyIndicatorDataSetDefinition;
 import org.openmrs.module.rwandareports.filter.GroupStateFilter;
 import org.openmrs.module.rwandareports.filter.LastEncounterFilter;
 import org.openmrs.module.rwandareports.filter.TreatmentStateFilter;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
+import org.openmrs.module.rwandareports.widget.AllLocation;
+import org.openmrs.module.rwandareports.widget.LocationHierarchy;
 
 public class SetupAdultLateVisitAndCD4Report {
 	
@@ -99,15 +102,20 @@ public class SetupAdultLateVisitAndCD4Report {
 		ReportDesign designp = h.createRowPerPatientXlsOverviewReportDesign(rdp, "AdultLateVisitAndCD4PreARTTemplate.xls",
 		    "XlsAdultLateVisitAndCD4PreARTTemplate", null);
 		
-		createDataSetDefinition(rd, rdp);
+		ReportDefinition artDecline = createReportDefinitionArtDecline();
+		ReportDesign designa = h.createRowPerPatientXlsOverviewReportDesign(artDecline, "AdultLateVisitAndCD4DeclineTemplate.xls",
+		    "XlsAdultLateVisitAndCD4DeclineTemplate", null);
+		
+		createDataSetDefinition(rd, rdp, artDecline);
 		
 		h.saveReportDefinition(rd);
 		h.saveReportDefinition(rdp);
+		h.saveReportDefinition(artDecline);
 		
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultHIVLateCD4Count|sheet:3,row:8,dataset:HIVLostToFollowup|sheet:4,row:8,dataset:HIVLowBMI|sheet:5,row:8,dataset:DecliningInCD4ByMoreThan50|sheet:6,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months|sheet:7,row:8,dataset:DecliningInCD4By50Percent");
+		    "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultHIVLateCD4Count|sheet:3,row:8,dataset:HIVLostToFollowup|sheet:4,row:8,dataset:HIVLowBMI|sheet:6,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -120,18 +128,27 @@ public class SetupAdultLateVisitAndCD4Report {
 		designp.setProperties(propsp);
 		h.saveReportDesign(designp);
 		
+		Properties propsa = new Properties();
+		propsa.put(
+		    "repeatingSections",
+		    "sheet:1,dataset:dataSet|sheet:1,row:9,dataset:decline50Perc|sheet:2,dataset:dataSet|sheet:2,row:9,dataset:decline50");
+		
+		designa.setProperties(propsa);
+		h.saveReportDesign(designa);
+		
 		
 	}
 	
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("XlsAdultLateVisitAndCD4Template".equals(rd.getName()) || "XlsAdultLateVisitAndCD4PreARTTemplate".equals(rd.getName())) {
+			if ("XlsAdultLateVisitAndCD4Template".equals(rd.getName()) || "XlsAdultLateVisitAndCD4PreARTTemplate".equals(rd.getName()) || "XlsAdultLateVisitAndCD4DeclineTemplate".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
 		h.purgeReportDefinition("Adult ART HIV Monthly Report");
 		h.purgeReportDefinition("Adult Pre ART HIV Monthly Report");
+		h.purgeReportDefinition("Monthly Adult Art Decline");
 	}
 	
 	private ReportDefinition createReportDefinition() {
@@ -158,7 +175,19 @@ public class SetupAdultLateVisitAndCD4Report {
 		return reportDefinition;
 	}
 	
-	private void createDataSetDefinition(ReportDefinition art, ReportDefinition preArt) {
+	private ReportDefinition createReportDefinitionArtDecline() {
+		ReportDefinition reportDefinition = new ReportDefinition();
+		reportDefinition.setName("Monthly Adult Art Decline");
+		
+		Properties properties = new Properties();
+		properties.setProperty("hierarchyFields", "countyDistrict:District");
+		reportDefinition.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
+		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+		
+		return reportDefinition;
+	}
+	
+	private void createDataSetDefinition(ReportDefinition art, ReportDefinition preArt, ReportDefinition artDecline) {
 		//====================================================================
 		//           Patients Dataset definitions
 		//====================================================================
@@ -195,7 +224,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		//Patients whose cd4 has declined more than 50 in the last month for ART patients
 		RowPerPatientDataSetDefinition dataSetDefinition7 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition7.setName("Patients declining in CD4 more than 50 dataSetDefinition");
+		dataSetDefinition7.setName("decline50Perc");
 		
 		//Patients whose viral loads are greater than 20 in the last 3 months
 		RowPerPatientDataSetDefinition dataSetDefinition8 = new RowPerPatientDataSetDefinition();
@@ -203,7 +232,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		//50% decline from highest CD4 count from baseline CD4 after ART initiation 
 		RowPerPatientDataSetDefinition dataSetDefinition9 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition9.setName("Patients with CD4 count decline of more than 50%");
+		dataSetDefinition9.setName("decline50");
 		
 		//Adult HIV program Cohort definition
 		InProgramCohortDefinition adultHivProgramCohort = Cohorts.createInProgramParameterizableByDate(
@@ -356,8 +385,8 @@ public class SetupAdultLateVisitAndCD4Report {
 		SqlCohortDefinition patientWithLowBMI = new SqlCohortDefinition();
 		patientWithLowBMI.setName("patientWithLowBMI");
 		patientWithLowBMI
-		        .setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"
-		                + height.getUuid()
+		        .setQuery("select w.person_id from (select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.concept_id='"
+		                + height.getId()
 		                + "' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"
 		                + weight.getUuid()
 		                + "' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
@@ -675,15 +704,22 @@ public class SetupAdultLateVisitAndCD4Report {
 		art.addDataSetDefinition("AdultHIVLateCD4Count", dataSetDefinition3, mappings);
 		art.addDataSetDefinition("HIVLostToFollowup", dataSetDefinition4, mappings);
 		art.addDataSetDefinition("HIVLowBMI", dataSetDefinition6, mappings);
-		art.addDataSetDefinition("DecliningInCD4ByMoreThan50", dataSetDefinition7, mappings);
 		art.addDataSetDefinition("ViralLoadGreaterThan20InTheLast3Months", dataSetDefinition8, mappings);
-		art.addDataSetDefinition("DecliningInCD4By50Percent", dataSetDefinition9, mappings);
 		
 		preArt.addDataSetDefinition("AdultPreARTLateVisit", dataSetDefinition2, mappings);
 		preArt.addDataSetDefinition("AdultHIVLateCD4Count", dataSetDefinition3_1, mappings);
 		preArt.addDataSetDefinition("HIVLostToFollowup", dataSetDefinition4_1, mappings);
 		preArt.addDataSetDefinition("PreARTBelow350CD4", dataSetDefinition5, mappings);
 		preArt.addDataSetDefinition("HIVLowBMI", dataSetDefinition6_1, mappings);
+		
+		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition();
+		ldsd.setName("ARTDecline");
+		ldsd.addBaseDefinition(dataSetDefinition9);
+		ldsd.addBaseDefinition(dataSetDefinition7);
+		ldsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
+		artDecline.addDataSetDefinition("dataSet", ldsd, mappings);
 	}
 	
 	private void setupProperties() {

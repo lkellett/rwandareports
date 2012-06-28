@@ -73,10 +73,10 @@ public class Cohorts {
 	
 	public static SqlCohortDefinition createPatientsWithDeclineFromBaseline(String name, Concept concept,
 	                                                                        ProgramWorkflowState state) {
-		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
+			SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
 		        "select p.patient_id from patient p, person_attribute pa, person_attribute_type pat, obs o1, obs o2, patient_program pp, patient_state ps where p.voided = 0 and "
-		                + "p.patient_id = pa.person_id and pat.name = 'Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location "
-						+ "and pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id =  "
+		                + "p.patient_id = pa.person_id and pat.name = 'Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location and "
+						+ "pp.voided = 0 and ps.voided = 0 and ps.patient_program_id = pp.patient_program_id and pp.patient_id =  "
 		                + "p.patient_id and ps.state = "
 		                + state.getId()
 		                + " and o1.concept_id = "
@@ -90,15 +90,17 @@ public class Cohorts {
 		                + concept.getId()
 		                + " and value_numeric is not null and obs_datetime >= "
 		                + "ps.start_date and obs_datetime <= :beforeDate order by obs_datetime desc LIMIT 1) and ((o2.value_numeric/o1.value_numeric)*100) < 50");
-		patientsWithBaseLineObservation.setName(name);
-		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
-		patientsWithBaseLineObservation.addParameter(new Parameter("location", "location", Location.class));
-		return patientsWithBaseLineObservation;
+			patientsWithBaseLineObservation.setName(name);
+			patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
+			patientsWithBaseLineObservation.addParameter(new Parameter("location", "location", Location.class));
+			return patientsWithBaseLineObservation;
 	}
 	
 	public static SqlCohortDefinition createPatientsWithDecline(String name, Concept concept, int decline) {
 		SqlCohortDefinition patientsWithBaseLineObservation = new SqlCohortDefinition(
-		        "select p.patient_id from patient p, obs o1, obs o2 where p.voided = 0 " + " and o1.concept_id = "
+		        "select p.patient_id from patient p, person_attribute pa, person_attribute_type pat, obs o1, obs o2 where p.voided = 0 " 
+		        		+ "and p.patient_id = pa.person_id and pat.name = 'Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location "
+		        		+ "and o1.concept_id = "
 		                + concept.getId() + " and o1.obs_id = (select obs_id from obs where "
 		                + "voided = 0 and p.patient_id = person_id and concept_id = " + concept.getId()
 		                + " and value_numeric is not null and obs_datetime <= :beforeDate"
@@ -109,6 +111,7 @@ public class Cohorts {
 		                + ")");
 		patientsWithBaseLineObservation.setName(name);
 		patientsWithBaseLineObservation.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
+		patientsWithBaseLineObservation.addParameter(new Parameter("location", "location", Location.class));
 		return patientsWithBaseLineObservation;
 	}
 	
