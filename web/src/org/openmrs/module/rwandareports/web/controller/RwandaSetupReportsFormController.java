@@ -14,6 +14,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionShee
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
+import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTCombinedClinicMotherMonthlyReport;
@@ -431,5 +432,15 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+	@RequestMapping("/module/rwandareports/register_monthlyCD4Decline")
+	public ModelAndView registerMonthlyCD4Decline() throws Exception {
+		new SetupMonthlyCD4DeclineReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_monthlyCD4Decline")
+	public ModelAndView removeMonthlyCD4Decline() throws Exception {
+		new SetupMonthlyCD4DeclineReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 	
 }

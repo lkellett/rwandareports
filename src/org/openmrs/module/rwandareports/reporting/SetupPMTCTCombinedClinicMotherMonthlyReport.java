@@ -95,7 +95,7 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,row:8,dataset:LateVisit|sheet:2,row:8,dataset:LateCD4Count|sheet:3,row:8,dataset:LostToFollowup|sheet:4,row:8,dataset:LowBMI|sheet:5,row:8,dataset:DecliningInCD4ByMoreThan50|sheet:6,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months");
+		    "sheet:1,row:8,dataset:LateVisit|sheet:2,row:8,dataset:LateCD4Count|sheet:3,row:8,dataset:LostToFollowup|sheet:4,row:8,dataset:LowBMI|sheet:5,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -149,10 +149,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition4.setName("BMI below 18.5 ");
 		
-		//Patients whose cd4 has declined more than 50 in the last month for ART patients
-		RowPerPatientDataSetDefinition dataSetDefinition5 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition5.setName("declining in CD4 more than 50");
-		
 		//Patients whose viral loads are greater than 20 in the last 3 months
 		RowPerPatientDataSetDefinition dataSetDefinition6 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition6.setName("Viral Load greater than 20 in the last three months");
@@ -164,7 +160,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addFilter(pmtctCombinedClinicMotherProgramCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition3.addFilter(pmtctCombinedClinicMotherProgramCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition4.addFilter(pmtctCombinedClinicMotherProgramCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
-		dataSetDefinition5.addFilter(pmtctCombinedClinicMotherProgramCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		dataSetDefinition6.addFilter(pmtctCombinedClinicMotherProgramCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
 		//==================================================================
@@ -232,15 +227,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition4.addFilter(patientWithLowBMI, new HashMap<String, Object>());
 		
 		//==================================================================
-		//                5 . CD4 decline of more than 50
-		//==================================================================
-		
-		//Patients Declining in CD4 by more than 50
-		SqlCohortDefinition deciningInCD4MoreThan50 = Cohorts.createPatientsWithDecline("deciningInCD4MoreThan50", cd4, 50);
-		dataSetDefinition5.addFilter(deciningInCD4MoreThan50,
-		    ParameterizableUtil.createParameterMappings("beforeDate=${endDate}"));
-		
-		//==================================================================
 		//                6 . Patients who have a viral load >20
 		//==================================================================
 		
@@ -264,7 +250,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(imbType, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(imbType, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(imbType, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(imbType, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(imbType, new HashMap<String, Object>());
 		
 		PatientProperty givenName = RowPerPatientColumns.getFirstNameColumn("First Name");
@@ -272,7 +257,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(givenName, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(givenName, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(givenName, new HashMap<String, Object>());
 		
 		PatientProperty familyName = RowPerPatientColumns.getFamilyNameColumn("Last Name");
@@ -280,7 +264,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(familyName, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(familyName, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(familyName, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(familyName, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(familyName, new HashMap<String, Object>());
 		
 		PatientProperty gender = RowPerPatientColumns.getGender("Sex");
@@ -288,7 +271,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(gender, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(gender, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(gender, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(gender, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(gender, new HashMap<String, Object>());
 		
 		DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", null, null);
@@ -296,7 +278,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(birthdate, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(birthdate, new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",
@@ -305,7 +286,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(lastEncounterType, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(lastEncounterType, new HashMap<String, Object>());
 		
 		DateDiff lateVisitInMonth = RowPerPatientColumns.getDifferenceSinceLastEncounter(
@@ -315,7 +295,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition3.addColumn(lateVisitInMonth, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition4.addColumn(lateVisitInMonth, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(lateVisitInMonth, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(lateVisitInMonth, new HashMap<String, Object>());
 		
 		MostRecentObservation returnVisitDate = RowPerPatientColumns.getMostRecentReturnVisitDate(
@@ -323,7 +302,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition1.addColumn(returnVisitDate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(returnVisitDate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(returnVisitDate, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(returnVisitDate, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(returnVisitDate, new HashMap<String, Object>());
 		
 		MostRecentObservation cd4Count = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", null);
@@ -331,7 +309,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(cd4Count, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Count, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Count, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(cd4Count, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(cd4Count, new HashMap<String, Object>());
 		
 		DateDiff lateCD4InMonths = RowPerPatientColumns.getDifferenceSinceLastObservation(
@@ -341,7 +318,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition3.addColumn(lateCD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition4.addColumn(lateCD4InMonths, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(lateCD4InMonths, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(lateCD4InMonths, new HashMap<String, Object>());
 		
 		PatientRelationship accompagnateur = RowPerPatientColumns.getAccompRelationship("Accompagnateur");
@@ -349,7 +325,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(accompagnateur, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(accompagnateur, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(accompagnateur, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(accompagnateur, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(accompagnateur, new HashMap<String, Object>());
 		
 		PatientAddress address1 = RowPerPatientColumns.getPatientAddress("Address", true, true, true, true);
@@ -357,7 +332,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addColumn(address1, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(address1, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(address1, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(address1, new HashMap<String, Object>());
 		dataSetDefinition6.addColumn(address1, new HashMap<String, Object>());
 		
 		MostRecentObservation viralLoad = RowPerPatientColumns.getMostRecentViralLoad("Most recent viralLoad", null);
@@ -384,7 +358,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		decline.setName("Decline");
 		decline.addPatientDataToBeEvaluated(allCD4, new HashMap<String, Object>());
 		decline.setCalculator(new DifferenceBetweenLastTwoObs());
-		dataSetDefinition5.addColumn(decline, new HashMap<String, Object>());
 		
 		FirstDrugOrderStartedRestrictedByConceptSet startArt = RowPerPatientColumns.getDrugOrderForStartOfART("StartART", "dd-MMM-yyyy");
 		
@@ -401,14 +374,12 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		dataSetDefinition2.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition3.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition4.addParameter(new Parameter("location", "Location", Location.class));
-		dataSetDefinition5.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition6.addParameter(new Parameter("location", "Location", Location.class));
 		
 		dataSetDefinition1.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition2.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition3.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition4.addParameter(new Parameter("endDate", "End Date", Date.class));
-		dataSetDefinition5.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataSetDefinition6.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
@@ -419,7 +390,6 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 		reportDefinition.addDataSetDefinition("LateCD4Count", dataSetDefinition2, mappings);
 		reportDefinition.addDataSetDefinition("LostToFollowup", dataSetDefinition3, mappings);
 		reportDefinition.addDataSetDefinition("LowBMI", dataSetDefinition4, mappings);
-		reportDefinition.addDataSetDefinition("DecliningInCD4ByMoreThan50", dataSetDefinition5, mappings);
 		reportDefinition.addDataSetDefinition("ViralLoadGreaterThan20InTheLast3Months", dataSetDefinition6, mappings);
 	}
 	
