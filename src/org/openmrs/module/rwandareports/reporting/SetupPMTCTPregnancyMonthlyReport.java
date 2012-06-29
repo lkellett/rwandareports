@@ -217,13 +217,13 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition3.addColumn(gender, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(gender, new HashMap<String, Object>());
 		
-		DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", null, null);
+		DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", "dd-MM-yyyy", "dd-MM-yyyy");
 		dataSetDefinition1.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(birthdate, new HashMap<String, Object>());
 		
-		MostRecentObservation cd4Countdate = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", "@ddMMMyy");
+		MostRecentObservation cd4Countdate = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", "dd-MM-yyyy");
 		dataSetDefinition2.addColumn(cd4Countdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Countdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Countdate, new HashMap<String, Object>());
@@ -234,10 +234,10 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition3.addColumn(CD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition4.addColumn(CD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
-		MostRecentObservation weight = RowPerPatientColumns.getMostRecentWeight("Weight", "@ddMMMyy");
+		MostRecentObservation weight = RowPerPatientColumns.getMostRecentWeight("Weight", "dd-MM-yyyy");
 		dataSetDefinition3.addColumn(weight, new HashMap<String, Object>());
 		
-		MostRecentObservation height = RowPerPatientColumns.getMostRecentHeight("Height", "@ddMMMyy");
+		MostRecentObservation height = RowPerPatientColumns.getMostRecentHeight("Height", "dd-MM-yyyy");
 		dataSetDefinition3.addColumn(height, new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions bmi = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
@@ -250,11 +250,11 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		bmi.setCalculator(bmiCalc);
 		dataSetDefinition3.addColumn(bmi, new HashMap<String, Object>());
 		
-		MostRecentObservation viralLoad = RowPerPatientColumns.getMostRecentViralLoad("Last viralLoad", null);
+		MostRecentObservation viralLoad = RowPerPatientColumns.getMostRecentViralLoad("Last viralLoad", "dd-MM-yyyy");
 		dataSetDefinition4.addColumn(viralLoad, new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",
-			adultHivFlowsheetEncounter, new LastEncounterFilter());
+			adultHivFlowsheetEncounter,"dd-MM-yyyy", new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType, new HashMap<String, Object>());
 		
 		DateDiff lateVisitInMonth = RowPerPatientColumns.getDifferenceSinceLastEncounter(

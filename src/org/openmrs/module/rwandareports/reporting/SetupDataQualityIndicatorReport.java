@@ -10,8 +10,11 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.EncounterType;
 import org.openmrs.Location;
+import org.openmrs.OrderType;
 import org.openmrs.Program;
+import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.PatientSetService.TimeModifier;
@@ -91,6 +94,10 @@ public class SetupDataQualityIndicatorReport {
     private List<String> onOrAfterOnOrBeforeParamterNames = new ArrayList<String>();    
     private RelationshipType motherChildRelationship;    
     private List<Program> allPrograms=new ArrayList<Program>();
+    private List<Concept> allArtConceptDrug=new ArrayList<Concept>();
+    private Concept onAntiretroviral;
+    private OrderType drugOrderType;
+    private EncounterType transfeInEncounterType;
    
 	public void setup() throws Exception {
 		
@@ -529,30 +536,65 @@ public class SetupDataQualityIndicatorReport {
 				// 19. Patients <15 in Adult HIV program or PMTCT-combined clinic mother or PMTCT pregnancy
 				//======================================================================================
 				
-				SqlCohortDefinition patientsOnArtbeforeHivEnrollment=new SqlCohortDefinition();
-				patientsOnArtbeforeHivEnrollment.setName("patientsOnArtbeforeHivEnrollment");
-				patientsOnArtbeforeHivEnrollment.setQuery("SELECT pp.patient_id " +
-				"FROM ( SELECT pp.patient_id a, pp.patient_program_id b, pws.program_workflow_state_id c, " +
-				"group_concat(ps.patient_state_id order by ps.patient_state_id desc) d " +
-				"FROM patient_program pp, program pro, program_workflow pw, program_workflow_state pws, patient_state ps " +
-				"WHERE pp.program_id = pw.program_id AND pw.program_workflow_id = pws.program_workflow_id " +
-				"AND pp.program_id=pro.program_id AND pws.program_workflow_state_id = ps.state " +
-				"AND ps.patient_program_id = pp.patient_program_id AND pw.concept_id="+GlobalPropertiesManagement.TREATMENT_STATUS_ID+" and pws.concept_id="+GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_ID+" " +
-				"AND (pro.program_id=3 or pro.program_id=10) AND pp.date_completed is null AND pw.retired = 0 AND pp.voided = 0 AND ps.voided = 0 " +
-				"GROUP BY pp.patient_id, pp.patient_program_id) most_recent_state, patient_program pp, program_workflow pw, program_workflow_state pws, patient_state ps " +
-				"WHERE most_recent_state.d=ps.patient_state_id AND pp.program_id = pw.program_id AND pw.program_workflow_id = pws.program_workflow_id " +
-				"AND pws.program_workflow_state_id = ps.state AND ps.patient_program_id = pp.patient_program_id AND ps.start_date < pp.date_enrolled");
+				
+				StringBuilder allArtConceptDrugIds=new StringBuilder();
+				
+				int j=0;
+				
+				for (Concept conc : allArtConceptDrug) {
+					if(j==0){
+						allArtConceptDrugIds.append(conc.getConceptId());
+	                }else{
+	                	allArtConceptDrugIds.append(",");
+	                	allArtConceptDrugIds.append(conc.getConceptId());
+	                }
+					j++;
+                }
+				
+				
+				
+				SqlCohortDefinition patientsOnArtbeforeProgramEnrollmentDate=new SqlCohortDefinition();
+				patientsOnArtbeforeProgramEnrollmentDate.setName("patientsOnArtbeforeProgramEnrollmentDate");
+				patientsOnArtbeforeProgramEnrollmentDate.setQuery("select firstDrugOder.patient_id from patient_program pp,(select * from (select o.patient_id,o.start_date from orders o, order_type ot where o.order_type_id =ot.order_type_id and o.order_type_id="+drugOrderType.getOrderTypeId()+" and o.concept_id in ("+allArtConceptDrugIds.toString()+") and o.voided=0 and ot.retired=0 order by o.start_date) as orderedOrders group by orderedOrders.patient_id) as firstDrugOder where pp.patient_id=firstDrugOder.patient_id and firstDrugOder.start_date < pp.date_enrolled and pp.date_enrolled is not null and pp.date_completed is null and pp.voided=0");
+				
+				StringBuilder allProgramsIdsWithOnAntiRetroviralState=new StringBuilder();
+				int k=0;
+				
+				for (Program p : allPrograms) {
+					programworkflow:
+					for (ProgramWorkflow pw : p.getAllWorkflows()) {
+	                    for (ProgramWorkflowState pws : pw.getStates()) {	                    	
+	                    	if(pws.isRetired()==false && pws!=null && pws.getConcept().getName().toString().equalsIgnoreCase(onAntiretroviral.getName().toString()) && k==0){
+	                        	allProgramsIdsWithOnAntiRetroviralState.append(p.getProgramId());
+	                        	k++;
+	                        	break programworkflow;
+	                        }
+	                        else if(pws.isRetired()==false && pws!=null && pws.getConcept().getName().toString().equalsIgnoreCase(onAntiretroviral.getName().toString())){
+	                        	allProgramsIdsWithOnAntiRetroviralState.append(",");
+	                        	allProgramsIdsWithOnAntiRetroviralState.append(p.getProgramId());
+	                        	k++;
+	                        	break programworkflow;
+	                        }
+                        }
+                    }
+	                
+                }				
+				
+				SqlCohortDefinition patientsInOnArtStatebeforeProgramEnrollmentDate=new SqlCohortDefinition();
+				patientsInOnArtStatebeforeProgramEnrollmentDate.setName("patientsInOnArtStatebeforeHivEnrollment");
+				patientsInOnArtStatebeforeProgramEnrollmentDate.setQuery("select ppordered.patient_id from (select pp.patient_id,ps.start_date,pp.date_enrolled from patient_program pp,program_workflow pw,program_workflow_state pws,patient_state ps where pp.program_id in ("+allProgramsIdsWithOnAntiRetroviralState.toString()+") and pp.program_id= pw.program_id and pw.program_workflow_id=pws.program_workflow_id and pp.patient_program_id= ps.patient_program_id and pws.concept_id="+onAntiretroviral.getConceptId()+" and ps.start_date < pp.date_enrolled and pp.date_enrolled is not null and ps.end_date is null and pp.date_completed is null and pp.voided=0  and pw.retired=0 and ps.voided=0 and pws.retired=0 order by pp.date_enrolled) as ppordered group by ppordered.patient_id");
 				
 				SqlCohortDefinition patientswithouttransferInForm=new SqlCohortDefinition();
 				patientswithouttransferInForm.setName("patientswithouttransferInForm");
-				patientswithouttransferInForm.setQuery(" SELECT en.patient_id FROM encounter en, form f WHERE f.form_id=en.form_id AND en.encounter_type=f.encounter_type AND f.form_id=132 AND en.encounter_type=28 AND en.void_reason is null " );
+				patientswithouttransferInForm.setQuery("select distinct patient_id from encounter where encounter_type="+transfeInEncounterType.getEncounterTypeId()+" and form_id is not null and voided=0" );
+				
 				
 				 CompositionCohortDefinition patientsWithinvaliddatesandmissingforms= new CompositionCohortDefinition();
 				 patientsWithinvaliddatesandmissingforms.setName("DQ: patients with invalid dates and missing transfer in form");
-				 patientsWithinvaliddatesandmissingforms.getSearches().put("1",new Mapped(patientsOnArtbeforeHivEnrollment, null));
-				 patientsWithinvaliddatesandmissingforms.getSearches().put("2",new Mapped(patientswithouttransferInForm, null));
-				 //patientsWithinvaliddatesandmissingforms.getSearches().put("3",new Mapped(onArtbeforeProgrEnrollInAllHiv, null));
-				 patientsWithinvaliddatesandmissingforms.setCompositionString("1 AND (NOT 2)");
+				 patientsWithinvaliddatesandmissingforms.getSearches().put("1",new Mapped(patientsOnArtbeforeProgramEnrollmentDate, null));
+				 patientsWithinvaliddatesandmissingforms.getSearches().put("2",new Mapped(patientsInOnArtStatebeforeProgramEnrollmentDate, null));
+				 patientsWithinvaliddatesandmissingforms.getSearches().put("3",new Mapped(patientswithouttransferInForm, null));
+				 patientsWithinvaliddatesandmissingforms.setCompositionString("(1 OR 2) AND (NOT 3)");
 					
 				CohortIndicator patientsOnArtbeforeHivEnrollmentIndicator = Indicators.newCountIndicator("Number of invalid dates and forms", patientsWithinvaliddatesandmissingforms,null);	
 			
@@ -581,7 +623,7 @@ public class SetupDataQualityIndicatorReport {
 				 
 				CohortIndicator patientsMissingprogramsEnrolStartDateindicator = Indicators.newCountIndicator("DQ:Number of invalid dates and forms", patientsMissingprogramsEnrolStartDate,null);	
 				
-				//======================================================================================
+				//================================================================================lab======
 				// 21. PMTCT Infants without a mother relationship	
 				//======================================================================================
 				
@@ -703,6 +745,10 @@ public class SetupDataQualityIndicatorReport {
 			 onOrAfterOnOrBeforeParamterNames.add("onOrBefore");
 			 motherChildRelationship=gp.getRelationshipType(GlobalPropertiesManagement.MOTHER_RELATIONSHIP);
 			 allPrograms=Context.getProgramWorkflowService().getAllPrograms(false);
+			 allArtConceptDrug=gp.getConceptsByConceptSet(GlobalPropertiesManagement.ART_DRUGS_SET);
+			 onAntiretroviral=gp.getConcept(GlobalPropertiesManagement.ON_ART_TREATMENT_STATUS_CONCEPT);
+			 drugOrderType=gp.getOrderType(GlobalPropertiesManagement.DRUG_ORDER_TYPE);
+			 transfeInEncounterType=gp.getEncounterType(GlobalPropertiesManagement.TRANSFER_IN_ENCOUNTER_TYPE);
 		}
 				
 		private ReportDesign createCustomWebRenderer(ReportDefinition rd, String name) throws IOException {

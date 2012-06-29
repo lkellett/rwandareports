@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
+import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Program;
@@ -59,7 +60,8 @@ public class SetupExposedClinicInfantMonthly {
 	private List<EncounterType>exposedInfantEncounter;
 	private EncounterType exposedInfantEncountertype;
     private Concept cotrimoxazole;
-    private Concept nevirapine;
+    private String NVPSuspDrugId;
+    private String bactrimDrugId;
     
     public void setup() throws Exception {
 		
@@ -81,16 +83,16 @@ public class SetupExposedClinicInfantMonthly {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("ExposedClinicalinfantMonthly".equals(rd.getName())) {
+			if ("ExposedClinicalinfantMonthly.xls_".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Combined Clinic Infant Monthly Report");
+		h.purgeReportDefinition("Exposed Infant Monthly Clinical Report");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Combined Clinic Infant Monthly Report");
+		reportDefinition.setName("Exposed Infant Monthly Clinical Report");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -132,11 +134,11 @@ public class SetupExposedClinicInfantMonthly {
 				dataSetDefinition4.addFilter(patientsNotVoided, new HashMap<String, Object>());
 				dataSetDefinition5.addFilter(patientsNotVoided, new HashMap<String, Object>());
 				
-				dataSetDefinition1.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
-				dataSetDefinition2.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
-				dataSetDefinition3.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
-				dataSetDefinition4.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
-				dataSetDefinition5.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
+				dataSetDefinition1.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				dataSetDefinition2.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				dataSetDefinition3.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				dataSetDefinition4.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
+				dataSetDefinition5.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+pmtctinfantProgram.getName(), pmtctinfantProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 				  
                //==================================================================
 			  //  1. Patients without PCR and with at least 12 weeks of age
@@ -187,7 +189,10 @@ public class SetupExposedClinicInfantMonthly {
 				SqlCohortDefinition patientsInPMTCTCforLongtime=new SqlCohortDefinition("select DISTINCT patient_id FROM patient_program pp,program p WHERE pp.program_id=p.program_id AND p.name='"+pmtctinfantProgram.getName()+"' AND DATEDIFF(:onDate,pp.date_enrolled) >= 60 AND pp.voided=false AND pp.date_completed is null");
 				patientsInPMTCTCforLongtime.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
-			    SqlCohortDefinition patientsWithExposedInfantEncounter = new SqlCohortDefinition("select DISTINCT p.patient_id FROM encounter en, patient p WHERE en.patient_id=p.patient_id AND en.encounter_type="+exposedInfantEncountertype.getEncounterTypeId()+" AND DATEDIFF(:encDate,en.encounter_datetime) >= 60 AND en.void_reason is null AND p.void_reason is null");
+			   /* SqlCohortDefinition patientsWithExposedInfantEncounter = new SqlCohortDefinition("select DISTINCT p.patient_id FROM encounter en, patient p WHERE en.patient_id=p.patient_id AND en.encounter_type="+exposedInfantEncountertype.getEncounterTypeId()+" AND DATEDIFF(:encDate,en.encounter_datetime) >= 60 AND en.void_reason is null AND p.void_reason is null");
+				patientsWithExposedInfantEncounter.addParameter(new Parameter("encDate", "encDate",Date.class));
+				*/
+				SqlCohortDefinition patientsWithExposedInfantEncounter = new SqlCohortDefinition("select last_encounters.patient_id from (select * from (select * from encounter where encounter_type="+exposedInfantEncountertype.getEncounterTypeId()+" and voided=0 order by encounter_datetime desc) as e group by patient_id) as last_encounters where DATEDIFF(:encDate,last_encounters.encounter_datetime)>=60");
 				patientsWithExposedInfantEncounter.addParameter(new Parameter("encDate", "encDate",Date.class));
 				
 				CompositionCohortDefinition patientsWithouthEncInProgram = new CompositionCohortDefinition();
@@ -213,8 +218,12 @@ public class SetupExposedClinicInfantMonthly {
 				less6WeeksOfAge.addParameter(new Parameter("effectiveDate","effectiveDate", Date.class));
 				
 				// On Nevirapine
+				
+				/*SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+nevirapine.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");				
+				onNevirapineOntime.addParameter(new Parameter("onDate", "onDate",Date.class));
+				*/
 	
-				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+nevirapine.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");				
+				SqlCohortDefinition onNevirapineOntime = new SqlCohortDefinition("select DISTINCT  o.patient_id from drug_order do, orders o where do.order_id=o.order_id and do.drug_inventory_id="+NVPSuspDrugId+" and o.discontinued=0 and o.voided=0 AND o.start_date<= :onDate");				
 				onNevirapineOntime.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
 				CompositionCohortDefinition atlessthan6weeksOnNvpSus = new CompositionCohortDefinition();
@@ -238,9 +247,15 @@ public class SetupExposedClinicInfantMonthly {
                 atleast6WeeksOfAge.addParameter(new Parameter("effectiveDate","effectiveDate", Date.class));
                 
              // On Bactrim
-				SqlCohortDefinition infantsonBactrim = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+cotrimoxazole.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
+				/*SqlCohortDefinition infantsonBactrim = new SqlCohortDefinition("select DISTINCT o.patient_id from orders o,concept c WHERE o.concept_id=c.concept_id AND c.concept_id="+cotrimoxazole.getConceptId()+" AND o.discontinued=0 AND o.voided=0 AND o.start_date<= :onDate");
+				infantsonBactrim.addParameter(new Parameter("onDate", "onDate",Date.class));
+				*/
+                
+                SqlCohortDefinition infantsonBactrim = new SqlCohortDefinition("select DISTINCT  o.patient_id from drug_order do, orders o where do.order_id=o.order_id and do.drug_inventory_id="+bactrimDrugId+" and o.discontinued=0 and o.voided=0 AND o.start_date<= :onDate");
 				infantsonBactrim.addParameter(new Parameter("onDate", "onDate",Date.class));
 				
+                
+                
 				CompositionCohortDefinition morethan6weeksOnBactrim = new CompositionCohortDefinition();
 				morethan6weeksOnBactrim.setName("morethan6weeksOnBactrim");
 				morethan6weeksOnBactrim.addParameter(new Parameter("effectiveDate", "effectiveDate", Date.class));
@@ -276,18 +291,18 @@ public class SetupExposedClinicInfantMonthly {
         dataSetDefinition4.addColumn(familyName, new HashMap<String, Object>());
         dataSetDefinition5.addColumn(familyName, new HashMap<String, Object>());
        
-        DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", null, null);
+        DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", "dd-MM-yyyy", "dd-MM-yyyy");
         dataSetDefinition1.addColumn(birthdate, new HashMap<String, Object>());
         dataSetDefinition2.addColumn(birthdate, new HashMap<String, Object>());
         dataSetDefinition3.addColumn(birthdate, new HashMap<String, Object>());
         dataSetDefinition4.addColumn(birthdate, new HashMap<String, Object>());
         dataSetDefinition5.addColumn(birthdate, new HashMap<String, Object>());
         
-		dataSetDefinition1.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),new HashMap<String, Object>());
+		dataSetDefinition1.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null),new HashMap<String, Object>());
+		dataSetDefinition2.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null),new HashMap<String, Object>());
+		dataSetDefinition3.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null),new HashMap<String, Object>());
+		dataSetDefinition4.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null),new HashMap<String, Object>());
+		dataSetDefinition5.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null),new HashMap<String, Object>());
 		
         dataSetDefinition1.addColumn(RowPerPatientColumns.getAgeInMonths("ageInMonths"), new HashMap<String, Object>());
         dataSetDefinition1.addColumn(RowPerPatientColumns.getStateOfPatient("FeedingGroup", pmtctinfantProgram, feedingState, new BorFStateFilter()),new HashMap<String, Object>());
@@ -310,8 +325,8 @@ public class SetupExposedClinicInfantMonthly {
         dataSetDefinition5.addColumn(RowPerPatientColumns.getMotherRelationship("MotherName"), new HashMap<String, Object>());
         
         DateOfNextTestDueFromBirth firstDbsat6weeks = new DateOfNextTestDueFromBirth();
-        firstDbsat6weeks.setTimeUnit(Calendar.MONTH);
-        firstDbsat6weeks.setTimeIncrement(9);
+        firstDbsat6weeks.setTimeUnit(Calendar.WEEK_OF_YEAR);
+        firstDbsat6weeks.setTimeIncrement(6);
         firstDbsat6weeks.setName("firstDbsat6weeks");
         firstDbsat6weeks.setDateFormat("ddMMMyy");
 		dataSetDefinition1.addColumn(firstDbsat6weeks, new HashMap<String, Object>());
@@ -323,7 +338,7 @@ public class SetupExposedClinicInfantMonthly {
 		firstDbs.setDateFormat("ddMMMyy");
 		dataSetDefinition2.addColumn(firstDbs, new HashMap<String, Object>());
 		
-		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",exposedInfantEncounter, new LastEncounterFilter());
+		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",exposedInfantEncounter,"dd-MM-yyyy", new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(lastEncounterType, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(lastEncounterType, new HashMap<String, Object>());
@@ -380,7 +395,9 @@ public class SetupExposedClinicInfantMonthly {
 		exposedInfantEncounter = gp.getEncounterTypeList(GlobalPropertiesManagement.EXPOSED_INFANT_ENCOUNTER);
 		exposedInfantEncountertype=gp.getEncounterType(GlobalPropertiesManagement.EXPOSED_INFANT_ENCOUNTER);
 		cotrimoxazole=gp.getConcept(GlobalPropertiesManagement.COTRIMOXAZOLE_DRUG);
-		nevirapine=gp.getConcept(GlobalPropertiesManagement.NEVIRAPINE_DRUG);
+		NVPSuspDrugId=Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.NVP_Susp);
+		bactrimDrugId=Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.BACTRIM);
+		
 		
 	} 
 	

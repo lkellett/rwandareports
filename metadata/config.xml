@@ -449,6 +449,13 @@
 			The lab test order type
 		</description>
 	</globalProperty>
+	<globalProperty>
+		<property>reports.drugOrderType</property>
+		<defaultValue>1</defaultValue>
+		<description>
+			The drug test order type
+		</description>
+	</globalProperty>
 	
 	<globalProperty>
 		<property>reports.heartfailureprogramname</property>
@@ -536,6 +543,14 @@
 		<defaultValue>504ca1b7-ae18-434a-89d9-cf80f1ad3407</defaultValue>
 		<description>
 			The Encounter Type that denotes a Transfer Patient
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.transferInEncounterType</property>
+		<defaultValue>28</defaultValue>
+		<description>
+			The Encounter Type that denotes a Transfer in of Patient
 		</description>
 	</globalProperty>
 	
@@ -1817,6 +1832,16 @@
 		<description>The id of the form id for the visit section of the asthma donne de base</description>
 	</globalProperty>
 	
-			
+	<globalProperty>
+		<property>reports.NVPSuspDrug</property>
+		<defaultValue>21</defaultValue>
+		<description>The drug id of NVP Susp</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.BactrimDrug</property>
+		<defaultValue>130</defaultValue>
+		<description>The drug id of NVP Susp</description>
+	</globalProperty>
 		
 </module>

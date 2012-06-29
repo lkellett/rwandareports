@@ -374,7 +374,6 @@ public class GlobalPropertiesManagement {
 	     List<Drug> drugs = Context.getConceptService().getDrugsByConcept(concept);                 
 	     return drugs;
 	 }
-	
 	public ReportDefinition createReportDefinition(SetupQuarterlyViralLoadReport setupQuarterlyViralLoadReport) {
     	// PIH Quarterly Cross Site Indicator Report
     	ReportDefinition rd = new ReportDefinition();
@@ -684,6 +683,8 @@ public class GlobalPropertiesManagement {
 
 	public final static String TRANSFER_ENCOUNTER = "reports.transferEncounter";
 	
+	public final static String TRANSFER_IN_ENCOUNTER_TYPE = "reports.transferInEncounterType";
+	
 	public final static String ASTHMA_VISIT="reports.AsthmaEncounterType";
 	
 	public final static String ASTHMA_RENDEVOUS_VISIT_FORM="reports.AsthmaRendevousVisitForm";
@@ -804,6 +805,12 @@ public class GlobalPropertiesManagement {
 	
 	//Order types
 	public final static String LAB_ORDER_TYPE = "reports.labOrderType";
+	public final static String DRUG_ORDER_TYPE = "reports.drugOrderType";
+	
+	//Drug
+	public final static String NVP_Susp = "reports.NVPSuspDrug";
+	public final static String BACTRIM="reports.BactrimDrug";
+	
 	
 	
 	//-------------------------------------------------
