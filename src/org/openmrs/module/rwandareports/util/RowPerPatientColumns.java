@@ -1,13 +1,17 @@
 package org.openmrs.module.rwandareports.util;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AgeAtDateOfOtherDefinition;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConcept;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.AllDrugOrdersRestrictedByConceptSet;
@@ -46,7 +50,9 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.RetrievePe
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.StateOfPatient;
 import org.openmrs.module.rwandareports.definition.CurrentPatientProgram;
+import org.openmrs.module.rwandareports.definition.DrugRegimenInformation;
 import org.openmrs.module.rwandareports.definition.LastWeekMostRecentObservation;
+import org.openmrs.module.rwandareports.definition.RegimenDateInformation;
 
 public class RowPerPatientColumns {
 	
@@ -122,7 +128,6 @@ public class RowPerPatientColumns {
 		
 		return id;
 	}
-
 	
 	public static RetrievePersonByRelationship getMother() {
 		RetrievePersonByRelationship mother = new RetrievePersonByRelationship();
@@ -160,12 +165,12 @@ public class RowPerPatientColumns {
 		
 		return state;
 	}
-		
+	
 	public static CurrentPatientProgram getCurrentPatientProgram(String name, Program program) {
-		          CurrentPatientProgram ppr = new CurrentPatientProgram(program);
-		          ppr.setName(name);              
-                  return ppr;
-    }
+		CurrentPatientProgram ppr = new CurrentPatientProgram(program);
+		ppr.setName(name);
+		return ppr;
+	}
 	
 	public static RecentEncounterType getRecentEncounterType(String name, List<EncounterType> encounterTypes,
 	                                                         ResultFilter filter) {
@@ -185,21 +190,22 @@ public class RowPerPatientColumns {
 		return lastEncounter;
 	}
 	
-	public static DateDiff getDifferenceSinceLastEncounter(String name, List<EncounterType> encounterTypes,DateDiffType differenceType) {
+	public static DateDiff getDifferenceSinceLastEncounter(String name, List<EncounterType> encounterTypes,
+	                                                       DateDiffType differenceType) {
 		DateDiff lastVisit = new DateDiff();
 		lastVisit.setName(name);
 		if (differenceType == null)
-			differenceType = DateDiffType.DAYS;  // Should prevent null values instead 
+			differenceType = DateDiffType.DAYS; // Should prevent null values instead 
 		lastVisit.setDateDiffType(differenceType);
 		lastVisit.setEncounterTypes(encounterTypes);
 		return lastVisit;
 	}
-
+	
 	public static DateDiff getDifferenceSinceLastObservation(String name, Concept concept, DateDiffType differenceType) {
 		DateDiff lastObs = new DateDiff();
 		lastObs.setName(name);
 		if (differenceType == null)
-			differenceType = DateDiffType.DAYS;  // Should prevent null values instead 
+			differenceType = DateDiffType.DAYS; // Should prevent null values instead 
 		lastObs.setDateDiffType(differenceType);
 		lastObs.setConcept(concept);
 		return lastObs;
@@ -286,18 +292,23 @@ public class RowPerPatientColumns {
 	public static MostRecentObservation getMostRecentTbTest(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TB_TEST_CONCEPT), dateFormat);
 	}
+	
 	public static MostRecentObservation getMostRecentHbA1c(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HBA1C), dateFormat);
 	}
+	
 	public static MostRecentObservation getMostRecentCreatinine(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SERUM_CREATININE), dateFormat);
 	}
+	
 	public static MostRecentObservation getMostRecentSBP(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE), dateFormat);
 	}
+	
 	public static MostRecentObservation getMostRecentPatientPhoneNumber(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.TELEPHONE_NUMBER_CONCEPT), dateFormat);
-	}	
+	}
+	
 	public static MostRecentObservation getMostRecentWeight(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT), dateFormat);
 	}
@@ -340,14 +351,14 @@ public class RowPerPatientColumns {
 	}
 	
 	public static LastWeekMostRecentObservation getLastWeekMostRecentReturnVisitDate(String name, String dateFormat,
-            ResultFilter resultFilter) {
-        return getLastWeekMostRecent(name, gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), dateFormat, resultFilter);
+	                                                                                 ResultFilter resultFilter) {
+		return getLastWeekMostRecent(name, gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), dateFormat,
+		    resultFilter);
 	}
 	
 	public static MostRecentObservation getMostRecentPeakFlow(String name, String dateFormat) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_AFTER_SALBUTAMOL), dateFormat);
 	}
-	
 	
 	public static AllObservationValues getAllWeightValues(String name, String dateFormat, ResultFilter resultFilter,
 	                                                      ResultFilter outputFilter) {
@@ -361,13 +372,11 @@ public class RowPerPatientColumns {
 		    outputFilter);
 	}
 	
-	
-	public static AllObservationValues getAllAsthmaClassificationValues(String name, String dateFormat, ResultFilter resultFilter,
-	                                                   ResultFilter outputFilter) {
-		return getAllObservationValues(name, gp.getConcept(GlobalPropertiesManagement.ASTHMA_CLASSIFICATION), dateFormat, resultFilter,
-		    outputFilter);
+	public static AllObservationValues getAllAsthmaClassificationValues(String name, String dateFormat,
+	                                                                    ResultFilter resultFilter, ResultFilter outputFilter) {
+		return getAllObservationValues(name, gp.getConcept(GlobalPropertiesManagement.ASTHMA_CLASSIFICATION), dateFormat,
+		    resultFilter, outputFilter);
 	}
-	
 	
 	public static ObservationInMostRecentEncounterOfType getIOInMostRecentEncounterOfType(String name,
 	                                                                                      EncounterType encounterType) {
@@ -383,11 +392,12 @@ public class RowPerPatientColumns {
 	
 	public static PatientRelationship getAccompRelationship(String name) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
-		        .getRelationshipTypeId(), "A",null);
+		        .getRelationshipTypeId(), "A", null);
 	}
+	
 	public static PatientRelationship getAccompRelationship(String name, ResultFilter accompagnateurFilter) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
-		        .getRelationshipTypeId(), "A",accompagnateurFilter);
+		        .getRelationshipTypeId(), "A", accompagnateurFilter);
 	}
 	
 	public static PatientRelationship getMotherRelationship(String name) {
@@ -406,18 +416,18 @@ public class RowPerPatientColumns {
 		return getCurrentOrdersRestrictedByConceptSet(name, gp.getConcept(GlobalPropertiesManagement.TB_TREATMENT_DRUGS),
 		    dateFormat, drugFilter);
 	}
-
-	public static CurrentOrdersRestrictedByConceptSet getCurrentDiabetesOrders(String name, String dateFormat, ResultFilter drugFilter) {
-		return getCurrentOrdersRestrictedByConceptSet(name,gp.getConcept(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUG_SET),
-				dateFormat, drugFilter);
+	
+	public static CurrentOrdersRestrictedByConceptSet getCurrentDiabetesOrders(String name, String dateFormat,
+	                                                                           ResultFilter drugFilter) {
+		return getCurrentOrdersRestrictedByConceptSet(name,
+		    gp.getConcept(GlobalPropertiesManagement.DIABETES_TREATMENT_DRUG_SET), dateFormat, drugFilter);
 	}
 	
-	
-	public static CurrentOrdersRestrictedByConceptSet getCurrentAsthmaOrders(String name, String dateFormat, ResultFilter drugFilter) {
-		return getCurrentOrdersRestrictedByConceptSet(name,gp.getConcept(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS),
-				dateFormat, drugFilter);
+	public static CurrentOrdersRestrictedByConceptSet getCurrentAsthmaOrders(String name, String dateFormat,
+	                                                                         ResultFilter drugFilter) {
+		return getCurrentOrdersRestrictedByConceptSet(name,
+		    gp.getConcept(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS), dateFormat, drugFilter);
 	}
-	
 	
 	public static MostRecentObservation getMostRecent(String name, Concept concept, String dateFormat) {
 		MostRecentObservation mostRecent = new MostRecentObservation();
@@ -447,12 +457,10 @@ public class RowPerPatientColumns {
 		}
 		return mostRecent;
 	}
-		
-	public static LastWeekMostRecentObservation getLastWeekMostRecent(
-			String name, Concept concept, String dateFormat,
-			ResultFilter resultFilter) {
-		LastWeekMostRecentObservation mostRecent = getLastWeekMostRecent(name,
-				concept, dateFormat);
+	
+	public static LastWeekMostRecentObservation getLastWeekMostRecent(String name, Concept concept, String dateFormat,
+	                                                                  ResultFilter resultFilter) {
+		LastWeekMostRecentObservation mostRecent = getLastWeekMostRecent(name, concept, dateFormat);
 		if (resultFilter != null) {
 			mostRecent.setFilter(resultFilter);
 		}
@@ -489,10 +497,11 @@ public class RowPerPatientColumns {
 		return oe;
 	}
 	
-	public static PatientRelationship getPatientRelationship(String name, int relationshipTypeId, String side, ResultFilter accompagnateurFilter) {
+	public static PatientRelationship getPatientRelationship(String name, int relationshipTypeId, String side,
+	                                                         ResultFilter accompagnateurFilter) {
 		PatientRelationship rel = new PatientRelationship();
-		if(accompagnateurFilter != null){
-		rel.setResultFilter(accompagnateurFilter);
+		if (accompagnateurFilter != null) {
+			rel.setResultFilter(accompagnateurFilter);
 		}
 		rel.setName(name);
 		rel.setRelationshipTypeId(relationshipTypeId);
@@ -554,7 +563,8 @@ public class RowPerPatientColumns {
 		return ovadood;
 	}
 	
-	public static ObsValueAfterDateOfOtherDefinition getObsValueAfterDateOfOtherDefinition(String name, Concept concept, Concept groupConcept,
+	public static ObsValueAfterDateOfOtherDefinition getObsValueAfterDateOfOtherDefinition(String name, Concept concept,
+	                                                                                       Concept groupConcept,
 	                                                                                       DateOfPatientData patientData,
 	                                                                                       String dateFormat) {
 		ObsValueAfterDateOfOtherDefinition ovadood = new ObsValueAfterDateOfOtherDefinition();
@@ -583,8 +593,7 @@ public class RowPerPatientColumns {
 		return baseline;
 	}
 	
-	public static BaselineObservation getBaselineCD4(String name, 
-	                                                 String dateFormat) {
+	public static BaselineObservation getBaselineCD4(String name, String dateFormat) {
 		BaselineObservation baseline = new BaselineObservation();
 		baseline.setConcept(gp.getConcept(GlobalPropertiesManagement.CD4_TEST));
 		baseline.setName(name);
@@ -623,7 +632,8 @@ public class RowPerPatientColumns {
 		return dooadood;
 	}
 	
-	public static DateOfObsAfterDateOfOtherDefinition getDateOfObsAfterDateOfOtherDefinition(String name, Concept concept, Concept group,
+	public static DateOfObsAfterDateOfOtherDefinition getDateOfObsAfterDateOfOtherDefinition(String name, Concept concept,
+	                                                                                         Concept group,
 	                                                                                         DateOfPatientData patientData) {
 		DateOfObsAfterDateOfOtherDefinition dooadood = new DateOfObsAfterDateOfOtherDefinition();
 		dooadood.setConcept(concept);
@@ -654,7 +664,8 @@ public class RowPerPatientColumns {
 		return progEnrol;
 	}
 	
-	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, Boolean returnEarliest, String dateFormat) {
+	public static DateOfProgramEnrolment getDateOfProgramEnrolment(String name, Program program, Boolean returnEarliest,
+	                                                               String dateFormat) {
 		DateOfProgramEnrolment progEnrol = new DateOfProgramEnrolment();
 		progEnrol.setName(name);
 		progEnrol.setReturnEarliest(returnEarliest);
@@ -801,12 +812,42 @@ public class RowPerPatientColumns {
 		return firstRecorded;
 	}
 	
-	public static FullHistoryOfProgramWorkflowStates getFullHistoryOfProgramWorkflowStates(String name, List<ProgramWorkflow> workflows, String dateFormat)
-	{
+	public static FullHistoryOfProgramWorkflowStates getFullHistoryOfProgramWorkflowStates(String name,
+	                                                                                       List<ProgramWorkflow> workflows,
+	                                                                                       String dateFormat) {
 		FullHistoryOfProgramWorkflowStates history = new FullHistoryOfProgramWorkflowStates();
 		history.setName(name);
 		history.setWorkflows(workflows);
 		history.setDateFormat(dateFormat);
 		return history;
+	}
+	
+	public static DrugRegimenInformation getDrugRegimenInformation(String name) {
+		DrugRegimenInformation info = new DrugRegimenInformation();
+		info.setName(name);
+		
+		return info;
+	}
+	
+	public static DrugRegimenInformation getDrugRegimenInformationParameterized(String name, boolean showStartDate) {
+		DrugRegimenInformation info = new DrugRegimenInformation();
+		info.setName(name);
+		info.setShowStartDate(showStartDate);
+		info.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+		info.addParameter(new Parameter("untilDate", "untilDate", Date.class));
+		return info;
+	}
+	
+	public static RegimenDateInformation getRegimenDateInformationParameterized(String name, String format) {
+		RegimenDateInformation info = new RegimenDateInformation();
+		info.setName(name);
+		info.addParameter(new Parameter("asOfDate", "asOfDate", Date.class));
+		info.addParameter(new Parameter("untilDate", "untilDate", Date.class));
+		
+		if(format != null)
+		{
+			info.setDateFormat(format);
+		}
+		return info;
 	}
 }

@@ -17,7 +17,8 @@
 	<require_modules>
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
-	    <require_module>org.openmrs.module.heightweighttracker</require_module> 
+	    <require_module>org.openmrs.module.heightweighttracker</require_module>
+	    <require_module>org.openmrs.module.orderextension</require_module>  
 	</require_modules>
 
 	<extension>
@@ -131,6 +132,22 @@
 	</globalProperty>
 	
 	<globalProperty>
+		<property>reports.treatmentIntentWorkflow</property>
+		<defaultValue>TREATMENT GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the treatment intent of oncology patients
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.diagnosisWorkflow</property>
+		<defaultValue>TREATMENT GROUP</defaultValue>
+		<description>
+			The workflow status that is used to determine the diagnosis of oncology patients
+		</description>
+	</globalProperty>
+	
+	<globalProperty>
 		<property>reports.hivonartstate</property>
 		<defaultValue>ON ANTIRETROVIRALS</defaultValue>
 		<description>
@@ -143,6 +160,26 @@
 		<defaultValue>PATIENT DIED</defaultValue>
 		<description>The patient's died workflow state to use in programs </description>
 	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.premedication</property>
+		<defaultValue>7084</defaultValue>
+		<description>The concept that denotes an oncology drug as a premedication </description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.chemotherapy</property>
+		<defaultValue>7085</defaultValue>
+		<description>The concept that denotes an oncology drug as chemotherapy </description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.postmedication</property>
+		<defaultValue>7087</defaultValue>
+		<description>The concept that denotes an oncology drug as a postmedication </description>
+	</globalProperty>
+	
+	
 	
 		<globalProperty>
 		<property>reports.assistancestatus</property>
@@ -725,6 +762,12 @@
 		<property>hiv.programid.adult</property>
 		<defaultValue>3</defaultValue>
 		<description>Id for Adult HIV program</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.oncologyprogram</property>
+		<defaultValue>3</defaultValue>
+		<description>Id for Oncology program</description>
 	</globalProperty>
 	
 	

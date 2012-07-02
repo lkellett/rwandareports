@@ -465,6 +465,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String EPILEPSY_PROGRAM = "reports.epilepsyprogram";
 	
+	public final static String ONCOLOGY_PROGRAM = "reports.oncologyprogram";
+	
 	//ProgramWorkflow
 	public final static String TREATMENT_STATUS_WORKFLOW = "reports.hivworkflowstatus";
 	
@@ -487,6 +489,10 @@ public class GlobalPropertiesManagement {
 	public final static String CRD_TREATMENT_WORKFLOW="reports.chronicrespiratorystate";
 	
 	public final static String PREGNANCY_STATUS_WORKFLOW = "reports.pregnantStatus";
+	
+	public final static String TREATMENT_INTENT_WORKFLOW = "reports.treatmentIntentWorkflow";
+	
+	public final static String DIAGNOSIS_WORKFLOW = "reports.diagnosisWorkflow";
 	
 	
 	//ProgramWorkflowState
@@ -639,6 +645,12 @@ public class GlobalPropertiesManagement {
 	public final static String ASTHMA_CLASSIFICATION_ORDER="reports.asthmaclassificationorder";
 	
 	public final static String SMOKING_HISTORY="reports.smokingHistory"; 
+	
+	public final static String PREMEDICATION = "reports.premedication";
+	
+	public final static String CHEMOTHERAPY = "reports.chemotherapy";
+	
+	public final static String POSTMEDICATION = "reports.postmedication";
 	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	

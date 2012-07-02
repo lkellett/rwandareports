@@ -5,6 +5,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultLateVisitAndCD4Repor
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaQuarterlyAndMonthReport;
+import org.openmrs.module.rwandareports.reporting.SetupChemotherapyExpectedPatientList;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
@@ -17,6 +18,7 @@ import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupOncologyTreatmentAdministrationPlan;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTCombinedClinicMotherMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFormCompletionSheet;
@@ -316,8 +318,18 @@ public class RwandaSetupReportsFormController {
 		new SetupNCDConsultationSheet().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
-
 	
+	@RequestMapping("/module/rwandareports/register_monthlyCD4Decline")
+	public ModelAndView registerMonthlyCD4Decline() throws Exception {
+		new SetupMonthlyCD4DeclineReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	@RequestMapping("/module/rwandareports/remove_monthlyCD4Decline")
+	public ModelAndView removeMonthlyCD4Decline() throws Exception {
+		new SetupMonthlyCD4DeclineReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+
 	@RequestMapping("/module/rwandareports/register_hivResearchDataExtraction")
 	public ModelAndView registerHivResearchDataExtractionReport() throws Exception {
 		new SetupHIVResearchExtractionSheet().setup();
@@ -432,15 +444,28 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
-	@RequestMapping("/module/rwandareports/register_monthlyCD4Decline")
-	public ModelAndView registerMonthlyCD4Decline() throws Exception {
-		new SetupMonthlyCD4DeclineReport().setup();
-		return new ModelAndView(new RedirectView("rwandareports.form"));
-	}
-	@RequestMapping("/module/rwandareports/remove_monthlyCD4Decline")
-	public ModelAndView removeMonthlyCD4Decline() throws Exception {
-		new SetupMonthlyCD4DeclineReport().delete();
+	//Oncology Reports
+	@RequestMapping("/module/rwandareports/register_treatmentAdministrationPlan")
+	public ModelAndView registerTreatmentAdministrationPlan() throws Exception {
+		new SetupOncologyTreatmentAdministrationPlan().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+	@RequestMapping("/module/rwandareports/remove_treatmentAdministrationPlan")
+	public ModelAndView removeTreatmentAdministrationPlan() throws Exception {
+		new SetupOncologyTreatmentAdministrationPlan().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_chemotherapyPatientList")
+	public ModelAndView registerChemotherapyPatientList() throws Exception {
+		new SetupChemotherapyExpectedPatientList().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_chemotherapyPatientList")
+	public ModelAndView removeChemotherapyPatientList() throws Exception {
+		new SetupChemotherapyExpectedPatientList().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 }

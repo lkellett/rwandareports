@@ -12,10 +12,12 @@ import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.PatientSetService.TimeModifier;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CodedObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -37,6 +39,7 @@ import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.rwandareports.definition.DrugsActiveCohortDefinition;
+import org.openmrs.module.rwandareports.definition.PatientCohortDefinition;
 
 public class Cohorts {
 	
@@ -198,6 +201,15 @@ public class Cohorts {
 			allPatientsWithAccompagnateur.addParameter(new Parameter(parameterName, parameterName, Date.class));
 		}
 		return allPatientsWithAccompagnateur;
+	}
+	
+	public static PatientCohortDefinition createPatientCohort(String name) {
+		PatientCohortDefinition cohort = new PatientCohortDefinition();
+		cohort.setName(name);
+		//cohort.addParameter(new Parameter("patient", "patient", Patient.class));
+		Patient patient = Context.getPatientService().getPatient(61287);
+		cohort.setPatient(patient);
+		return cohort;
 	}
 	
 	public static AgeCohortDefinition createOver15AgeCohort(String name) {
