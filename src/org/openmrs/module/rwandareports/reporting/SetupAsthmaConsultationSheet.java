@@ -15,6 +15,8 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.SortCriteria;
+import org.openmrs.module.reporting.common.SortCriteria.SortDirection;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -104,7 +106,11 @@ public class SetupAsthmaConsultationSheet {
 		// Create new dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
 		dataSetDefinition.setName("Asthma Consultation Data Set");
-		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
+		
+		SortCriteria sortCriteria = new SortCriteria();
+		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		dataSetDefinition.setSortCriteria(sortCriteria);
+		
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
 		

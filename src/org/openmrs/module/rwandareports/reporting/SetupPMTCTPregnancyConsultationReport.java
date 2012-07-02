@@ -9,6 +9,8 @@ import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.common.SortCriteria;
+import org.openmrs.module.reporting.common.SortCriteria.SortDirection;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -100,7 +102,10 @@ public class SetupPMTCTPregnancyConsultationReport {
 		// Create new dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
-		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
+		
+		SortCriteria sortCriteria = new SortCriteria();
+		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		dataSetDefinition.setSortCriteria(sortCriteria);
 		
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("pmtct: In Program", pmtct),
 		    ParameterizableUtil.createParameterMappings("onDate=${now}"));

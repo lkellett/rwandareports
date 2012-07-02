@@ -16,6 +16,8 @@ import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.DateObsCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
+import org.openmrs.module.reporting.common.SortCriteria;
+import org.openmrs.module.reporting.common.SortCriteria.SortDirection;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -79,7 +81,11 @@ public class SetupNCDConsultationSheet {
 		// Create new dataset definition 
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
 		dataSetDefinition.setName(program.getName() + " Data Set");
-		dataSetDefinition.setComparator(new PMTCTDataSetRowComparator());
+		
+		SortCriteria sortCriteria = new SortCriteria();
+		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		dataSetDefinition.setSortCriteria(sortCriteria);
+		
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition.addParameter(new Parameter("endDate", "enDate", Date.class));
 		
