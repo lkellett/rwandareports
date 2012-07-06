@@ -30,13 +30,13 @@ public class RegimenDateEvaluator implements RowPerPatientDataEvaluator{
 		RegimenDateInformation pd = (RegimenDateInformation)patientData;
 		par.setFormat(pd.getDateFormat());
 		
-		Integer regimenId = pd.getRegimen();
+		Integer regimenId = Integer.parseInt(pd.getRegimen());
 
 		DrugRegimen regimen = null;
 		
 		if(regimenId != null)
 		{
-			regimen = Context.getService(OrderExtensionService.class).getDrugRegimen(pd.getRegimen());
+			regimen = Context.getService(OrderExtensionService.class).getDrugRegimen(regimenId);
 		}
 		else
 		{

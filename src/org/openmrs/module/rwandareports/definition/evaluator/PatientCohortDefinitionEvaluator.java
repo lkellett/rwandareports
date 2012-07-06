@@ -14,7 +14,9 @@
 package org.openmrs.module.rwandareports.definition.evaluator;
 
 import org.openmrs.Cohort;
+import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
@@ -38,6 +40,15 @@ public class PatientCohortDefinitionEvaluator implements CohortDefinitionEvaluat
     public EvaluatedCohort evaluate(CohortDefinition cohortDefinition, EvaluationContext context) {
     	PatientCohortDefinition definition = (PatientCohortDefinition) cohortDefinition;
 		
+    	if(definition.getPatient() == null)
+    	{
+    		if(definition.getPatientId() != null)
+    		{
+    			Patient patient = Context.getPatientService().getPatient(Integer.parseInt(definition.getPatientId()));
+    			definition.setPatient(patient);
+    		}
+    	}
+    	//TODO fix paramter stuff
     	Cohort c =  new Cohort();
     	c.addMember(definition.getPatient().getId());
     	

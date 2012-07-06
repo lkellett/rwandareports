@@ -13,11 +13,6 @@
  */
 package org.openmrs.module.rwandareports.definition;
 
-import java.util.Date;
-import java.util.List;
-
-import org.openmrs.Concept;
-import org.openmrs.Drug;
 import org.openmrs.Patient;
 import org.openmrs.module.reporting.cohort.definition.BaseCohortDefinition;
 import org.openmrs.module.reporting.definition.configuration.ConfigurationProperty;
@@ -31,8 +26,13 @@ public class PatientCohortDefinition extends BaseCohortDefinition {
     
 	//***** PROPERTIES *****
 
-	@ConfigurationProperty(required=true)
+	@ConfigurationProperty(required=false)
 	private Patient patient;
+	
+	@ConfigurationProperty(required=false)
+	private String patientId;
+	
+	
 
 	//***** CONSTRUCTORS *****
 
@@ -62,5 +62,13 @@ public class PatientCohortDefinition extends BaseCohortDefinition {
 	
     public void setPatient(Patient patient) {
     	this.patient = patient;
+    }
+	
+    public String getPatientId() {
+    	return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+    	this.patientId = patientId;
     }
 }

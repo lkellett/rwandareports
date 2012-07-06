@@ -10,7 +10,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPati
 public class DrugRegimenInformation extends BasePatientData implements RowPerPatientData {
 
 	@ConfigurationProperty(required=false)
-	private Integer regimen = null;
+	private String regimen = null;
 	
 	@ConfigurationProperty(required=false)
 	private Concept indication = null;
@@ -28,11 +28,11 @@ public class DrugRegimenInformation extends BasePatientData implements RowPerPat
 	private boolean showStartDate = true;
 
 	
-    public Integer getRegimen() {
+    public String getRegimen() {
     	return regimen;
     }
 	
-    public void setRegimen(Integer regimen) {
+    public void setRegimen(String regimen) {
     	this.regimen = regimen;
     }
 	

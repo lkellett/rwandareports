@@ -64,7 +64,7 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 		
 		if(dsd.getDrugRegimen() != null)
 		{
-			DrugRegimen regimen =  Context.getService(OrderExtensionService.class).getDrugRegimen(dsd.getDrugRegimen());
+			DrugRegimen regimen =  Context.getService(OrderExtensionService.class).getDrugRegimen(Integer.parseInt(dsd.getDrugRegimen()));
 			if(dsd.getIndication() != null)
 			{
 				for(ExtendedDrugOrder order: regimen.getMembers())

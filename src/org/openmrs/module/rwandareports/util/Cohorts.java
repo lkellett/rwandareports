@@ -206,9 +206,7 @@ public class Cohorts {
 	public static PatientCohortDefinition createPatientCohort(String name) {
 		PatientCohortDefinition cohort = new PatientCohortDefinition();
 		cohort.setName(name);
-		//cohort.addParameter(new Parameter("patient", "patient", Patient.class));
-		Patient patient = Context.getPatientService().getPatient(61287);
-		cohort.setPatient(patient);
+		cohort.addParameter(new Parameter("patientId", "patientId", String.class));
 		return cohort;
 	}
 	

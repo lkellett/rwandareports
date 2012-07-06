@@ -15,7 +15,7 @@ public class ExtendedDrugOrderDataSetDefinition extends BaseDataSetDefinition {
 	//***** PROPERTIES *****
 	
 	@ConfigurationProperty
-	Integer drugRegimen = null;
+	String drugRegimen = null;
 	
 	@ConfigurationProperty
 	Concept indication = null;
@@ -30,15 +30,15 @@ public class ExtendedDrugOrderDataSetDefinition extends BaseDataSetDefinition {
 		
 	}
 	
-    public Integer getDrugRegimen() {
+    public String getDrugRegimen() {
     	return drugRegimen;
     }
-	
-    public void setDrugRegimen(Integer drugRegimen) {
+    
+    public void setDrugRegimen(String drugRegimen) {
     	this.drugRegimen = drugRegimen;
     }
-	
-    public Concept getIndication() {
+
+	public Concept getIndication() {
     	return indication;
     }
 

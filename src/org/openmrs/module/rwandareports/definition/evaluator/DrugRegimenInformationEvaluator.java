@@ -28,13 +28,13 @@ public class DrugRegimenInformationEvaluator implements RowPerPatientDataEvaluat
 		StringResult par = new StringResult(patientData, context);
 		DrugRegimenInformation pd = (DrugRegimenInformation)patientData;
 	
-		Integer regimenId = pd.getRegimen();
+		Integer regimenId = Integer.parseInt(pd.getRegimen());
 
 		DrugRegimen regimen = null;
 		
 		if(regimenId != null)
 		{
-			regimen = Context.getService(OrderExtensionService.class).getDrugRegimen(pd.getRegimen());
+			regimen = Context.getService(OrderExtensionService.class).getDrugRegimen(regimenId);
 		}
 		else
 		{

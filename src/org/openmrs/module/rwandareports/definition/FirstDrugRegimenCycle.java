@@ -5,13 +5,13 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPati
 
 public class FirstDrugRegimenCycle extends BasePatientData implements RowPerPatientData {
 
-	private Integer regimen = null;
+	private String regimen = null;
 	
-    public Integer getRegimen() {
+    public String getRegimen() {
     	return regimen;
     }
 	
-    public void setRegimen(Integer regimen) {
+    public void setRegimen(String regimen) {
     	this.regimen = regimen;
     }
 }

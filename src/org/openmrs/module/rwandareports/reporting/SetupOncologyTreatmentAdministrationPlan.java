@@ -5,11 +5,12 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.Patient;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.orderextension.DrugRegimen;
-import org.openmrs.module.orderextension.api.OrderExtensionService;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
+import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
@@ -68,10 +69,10 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		ReportDefinition reportDefinition = new ReportDefinition();
 		reportDefinition.setName("Chemotherapy Treatment Administration Plan");
 		
-		//reportDefinition.addParameter(new Parameter("Patient", "patient", Patient.class));
-		//reportDefinition.addParameter(new Parameter("DrugRegimen", "drugRegimen", DrugRegimen.class));
-		//reportDefinition.setBaseCohortDefinition(Cohorts.createPatientCohort("patientCohort"), ParameterizableUtil.createParameterMappings("patient=${patient}"));
-		reportDefinition.setBaseCohortDefinition(Cohorts.createPatientCohort("patientCohort"), new HashMap<String, Object>());
+		reportDefinition.addParameter(new Parameter("patientId", "patientId", String.class));
+		reportDefinition.addParameter(new Parameter("regimenId", "regimenId", String.class));
+		
+		reportDefinition.setBaseCohortDefinition(Cohorts.createPatientCohort("patientCohort"), ParameterizableUtil.createParameterMappings("patientId=${patientId}"));
 		
 		createDataSetDefinitions(reportDefinition);
 		
@@ -82,7 +83,8 @@ public class SetupOncologyTreatmentAdministrationPlan {
 	
 	private void createDataSetDefinitions(ReportDefinition reportDefinition) {
 		// Create new dataset definition 
-		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();		
+		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
+		dataSetDefinition.addParameter(new Parameter("regimen", "regimen", String.class));
 		dataSetDefinition.setName("demoDataSet");
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
@@ -98,35 +100,34 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		    
 		dataSetDefinition.addColumn(RowPerPatientColumns.getStateOfPatient("intent", oncologyProgram, treatmentIntent, null), new HashMap<String, Object>());
 		
-		//TODO: needs to be passed in as parameters
-		Integer regimen = new Integer(343);
 		FirstDrugRegimenCycle fdc = new FirstDrugRegimenCycle();
 		fdc.setName("firstCycle");
-		fdc.setRegimen(regimen);
-		dataSetDefinition.addColumn(fdc, new HashMap<String, Object>());
+		fdc.addParameter(new Parameter("regimen", "regimen", String.class));
+		dataSetDefinition.addColumn(fdc, ParameterizableUtil.createParameterMappings("regimen=${regimen}"));
 		
 		DrugRegimenInformation info = RowPerPatientColumns.getDrugRegimenInformation("regimenInfo");
-		info.setRegimen(regimen);
-		dataSetDefinition.addColumn(info, new HashMap<String, Object>());
+		info.addParameter(new Parameter("regimen", "regimen", String.class));
+		dataSetDefinition.addColumn(info, ParameterizableUtil.createParameterMappings("regimen=${regimen}"));
 		
 		//Premedication dataSet
 		ExtendedDrugOrderDataSetDefinition premedicationDS = new ExtendedDrugOrderDataSetDefinition();
 		premedicationDS.setIndication(premedication);
-		premedicationDS.setDrugRegimen(regimen);
+		premedicationDS.addParameter(new Parameter("drugRegimen", "drugRegimen", String.class));
 		
 		//Chemotherapy dataSet
 		ExtendedDrugOrderDataSetDefinition chemotherapyDS = new ExtendedDrugOrderDataSetDefinition();
 		chemotherapyDS.setIndication(chemotherapy);
-		chemotherapyDS.setDrugRegimen(regimen);
+		chemotherapyDS.addParameter(new Parameter("drugRegimen", "drugRegimen", String.class));
 		
 		//Postmedication dataSet
 		ExtendedDrugOrderDataSetDefinition postmedicationDS = new ExtendedDrugOrderDataSetDefinition();
 		postmedicationDS.setIndication(postmedication);
-		postmedicationDS.setDrugRegimen(regimen);
+		postmedicationDS.addParameter(new Parameter("drugRegimen", "drugRegimen", String.class));
 		
-		Map<String, Object> mappings = new HashMap<String, Object>();
+		Map<String, Object> mappings = ParameterizableUtil.createParameterMappings("drugRegimen=${regimenId}");
+		Map<String, Object> mappings2 = ParameterizableUtil.createParameterMappings("regimen=${regimenId}");
 		
-		reportDefinition.addDataSetDefinition("demoDataSet", dataSetDefinition, mappings);
+		reportDefinition.addDataSetDefinition("demoDataSet", dataSetDefinition, mappings2);
 		reportDefinition.addDataSetDefinition("premedication", premedicationDS, mappings);
 		reportDefinition.addDataSetDefinition("chemotherapy", chemotherapyDS, mappings);
 		reportDefinition.addDataSetDefinition("postmedication", postmedicationDS, mappings);
