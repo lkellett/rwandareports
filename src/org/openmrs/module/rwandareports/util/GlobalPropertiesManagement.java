@@ -374,25 +374,7 @@ public class GlobalPropertiesManagement {
 	     List<Drug> drugs = Context.getConceptService().getDrugsByConcept(concept);                 
 	     return drugs;
 	 }
-	public ReportDefinition createReportDefinition(SetupQuarterlyViralLoadReport setupQuarterlyViralLoadReport) {
-    	// PIH Quarterly Cross Site Indicator Report
-    	ReportDefinition rd = new ReportDefinition();
-    	rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    	rd.addParameter(new Parameter("endDate", "End Date", Date.class));
-    	
-    	Properties properties = new Properties();
-    	properties.setProperty("hierarchyFields", "countyDistrict:District");
-    	rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
-    	
-    	rd.setName("PIH Quarterly Cross Site Indicator");
-    	
-    	rd.addDataSetDefinition(setupQuarterlyViralLoadReport.createDataSet(),
-    	    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
-    	
-    	setupQuarterlyViralLoadReport.h.saveReportDefinition(rd);
-    	
-    	return rd;
-    }
+	
 	
 	public List<Concept> getConceptsByConceptSet(String globalPropertyName)
 	{
