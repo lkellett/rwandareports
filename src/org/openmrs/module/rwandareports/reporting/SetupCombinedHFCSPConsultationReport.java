@@ -151,7 +151,7 @@ public class SetupCombinedHFCSPConsultationReport {
 		
 		DateOfNextTestDueFromBirth secondSero = new DateOfNextTestDueFromBirth();
 		secondSero.setTimeUnit(Calendar.MONTH);
-		secondSero.setTimeIncrement(9);
+		secondSero.setTimeIncrement(18);
 		secondSero.setName("secondSeroDue");
 		secondSero.setDateFormat("ddMMMyy");
 		dataSetDefinition.addColumn(secondSero, new HashMap<String, Object>());
