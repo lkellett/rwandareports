@@ -15,6 +15,8 @@ package org.openmrs.module.rwandareports.dataset.evaluator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -104,6 +106,12 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 			DataSetColumn instructions = new DataSetColumn("instructions", "instructions", String.class); 
 			dataSet.getMetaData().addColumn(instructions);
 			
+			Collections.sort(orders, new Comparator<ExtendedDrugOrder>() {
+               
+                public int compare(ExtendedDrugOrder left, ExtendedDrugOrder right) {
+                    return left.getStartDate().compareTo(right.getStartDate());
+                }
+            });
 			for (ExtendedDrugOrder edo : orders) {
 				
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -154,6 +162,21 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 				if(edo.getFrequency() != null)
 				{
 					freqDisplay = edo.getFrequency();
+					
+					int length = 0;
+					if(edo.getDiscontinuedDate() != null) {
+						length = calculateDaysDifference(edo.getDiscontinuedDate(), edo.getStartDate());
+						
+					}
+					if(edo.getAutoExpireDate() != null) {
+						length =  calculateDaysDifference(edo.getAutoExpireDate(), edo.getStartDate());
+						
+					}
+					
+					if(length > 1)
+					{
+						freqDisplay = edo.getFrequency() + " for " + Integer.toString(length) + " days";
+					}
 				}
 				dataSet.addColumnValue(edo.getId(), freq, freqDisplay);
 				
@@ -166,5 +189,18 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 			}
 		}
 		return dataSet;
+	}
+	
+	private int calculateDaysDifference(Date observation, Date startingDate)
+	{
+		long milis1 = observation.getTime();
+		long milis2 = startingDate.getTime();
+		
+		long diff = milis1 - milis2;
+		
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+		
+	
+		return (int)diffDays + 1;
 	}
 }

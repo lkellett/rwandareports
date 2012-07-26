@@ -121,7 +121,7 @@ public class ARTStartDate implements CustomEvaluator {
 		}
 		else if(latest != null && !latest.getPatientProgram().getProgram().getProgramId().equals(pmtct.getProgramId()))
 		{
-			result.setValue(earliest.getStartDate());
+			result.setValue(latest.getStartDate());
 		}
 		
 		return result;
