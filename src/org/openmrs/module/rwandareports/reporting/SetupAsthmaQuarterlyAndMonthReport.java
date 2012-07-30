@@ -4,27 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import org.openmrs.Concept;
-import org.openmrs.ConceptSet;
-import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Program;
-import org.openmrs.ProgramWorkflowState;
-import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
-import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -100,7 +88,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		// Quarterly Report Definition: Start
 		
-		/*ReportDefinition quarterlyRd = new ReportDefinition();
+		ReportDefinition quarterlyRd = new ReportDefinition();
 		quarterlyRd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		quarterlyRd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -111,20 +99,21 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		quarterlyRd.addDataSetDefinition(createQuarterlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
-		*/
+		
 		// Quarterly Report Definition: End
 		
+		ProgramEnrollmentCohortDefinition patientEnrolledInAsthmaProgram = new ProgramEnrollmentCohortDefinition();
+		patientEnrolledInAsthmaProgram.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+		patientEnrolledInAsthmaProgram.setPrograms(asthmaPrograms);
 		
-		InProgramCohortDefinition patientInAsthmaProgram=Cohorts.createInProgramParameterizableByDate("Pateints in Asthma program", asthmaPrograms,onOrAfterOnOrBefore);
+		monthlyRd.setBaseCohortDefinition(patientEnrolledInAsthmaProgram,
+		    ParameterizableUtil.createParameterMappings("enrolledOnOrBefore=${endDate}"));
 		
-		monthlyRd.setBaseCohortDefinition(patientInAsthmaProgram,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${startDate},onOrBefore=${endDate}"));
+		quarterlyRd.setBaseCohortDefinition(patientEnrolledInAsthmaProgram,
+			    ParameterizableUtil.createParameterMappings("enrolledOnOrBefore=${endDate}"));
 		
-		/*quarterlyRd.setBaseCohortDefinition(patientInAsthmaProgram,
-		    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrAfter=${endDate}"));
-		*/
 		h.saveReportDefinition(monthlyRd);
-		//h.saveReportDefinition(quarterlyRd);
+		h.saveReportDefinition(quarterlyRd);
 		
 		ReportDesign monthlyDesign = h.createRowPerPatientXlsOverviewReportDesign(monthlyRd,
 		    "Asthma_Indicator_Monthly_Report.xls", "Asthma Indicator Monthly Report (Excel)", null);
@@ -134,13 +123,13 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		monthlyDesign.setProperties(monthlyProps);
 		h.saveReportDesign(monthlyDesign);
 		
-		/*ReportDesign quarterlyDesign = h.createRowPerPatientXlsOverviewReportDesign(quarterlyRd,
-		    "Asthma_Indicator_Quarterly_Report.xls", "Asthma Indicator Quarterly Report (Excel)", null);*/
+		ReportDesign quarterlyDesign = h.createRowPerPatientXlsOverviewReportDesign(quarterlyRd,
+		    "Asthma_Indicator_Quarterly_Report.xls", "Asthma Indicator Quarterly Report (Excel)", null);
 		Properties quarterlyProps = new Properties();
 		quarterlyProps.put("repeatingSections", "sheet:1,dataset:Encounter Quarterly Data Set");
 		
-		//quarterlyDesign.setProperties(quarterlyProps);
-		//h.saveReportDesign(quarterlyDesign);
+		quarterlyDesign.setProperties(quarterlyProps);
+		h.saveReportDesign(quarterlyDesign);
 		
 	}
 	
@@ -251,7 +240,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		patientVisitsToAsthmaClinic.addParameter(new Parameter("endDate", "endDate", Date.class));
 		
 		EncounterIndicator patientVisitsToAsthmaClinicMonthIndicator = new EncounterIndicator();
-		patientVisitsToAsthmaClinicMonthIndicator.setName("patientVisitsToAsthmaClinicMonthIndicator");
+		patientVisitsToAsthmaClinicMonthIndicator.setName("patientVisitsToAsthmaClinicQuarterlyIndicator");
 		patientVisitsToAsthmaClinicMonthIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientVisitsToAsthmaClinic,
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		
@@ -334,8 +323,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		dsd.addColumn("A2QM2", "Total # of patients seen in the last month two", new Mapped(patientsSeenMonthTwoIndicator,
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("A2QM3", "Total # of patients seen in the last month three", new Mapped(
-		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-	*/	
+		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");*/
+		
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
