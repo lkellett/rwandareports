@@ -312,6 +312,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		CohortIndicator patientsSeenMonthThreeIndicator = Indicators.newCountIndicator("patientsSeenMonthThreeIndicator",
 		    patientsSeenComposition,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate-2m+1d}"));
+
 		
 		//=================================================
 		//     Adding columns to data set definition     //
@@ -325,6 +326,41 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("A2QM3", "Total # of patients seen in the last month three", new Mapped(
 		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		
+		//=======================================================================
+		// A3: Total # of new patients enrolled in the last month/quarter
+		//==================================================================
+		
+		CompositionCohortDefinition patientEnrolledInCRDP = Cohorts.createEnrolledInProgramDuringPeriod("Enrolled In CRDP",
+				asthmaProgram);
+		
+		CohortIndicator patientEnrolledInCRDPQuarterIndicator = Indicators.newCountIndicator(
+		    "patientEnrolledInCRDPQuarterIndicator", patientEnrolledInCRDP,
+		    ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate}"));
+		CohortIndicator patientEnrolledInCRDPMonthOneIndicator = Indicators.newCountIndicator(
+		    "patientEnrolledInCRDPQuarterIndicator", patientEnrolledInCRDP,
+		    ParameterizableUtil.createParameterMappings("startDate=${endDate-1m+1d},endDate=${endDate}"));
+		CohortIndicator patientEnrolledInCRDPMonthTwooIndicator = Indicators.newCountIndicator(
+		    "patientEnrolledInCRDPQuarterIndicator", patientEnrolledInCRDP,
+		    ParameterizableUtil.createParameterMappings("startDate=${endDate-2m+1d},endDate=${endDate-1m+1d}"));
+		CohortIndicator patientEnrolledInCRDPMonthThreeIndicator = Indicators.newCountIndicator(
+		    "patientEnrolledInCRDPQuarterIndicator", patientEnrolledInCRDP,
+		    ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate-2m+1d}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn("A3Q", "Total # of new patients enrolled in the last quarter", new Mapped(
+				patientEnrolledInCRDPQuarterIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		dsd.addColumn("A3QM1", "Total # of new patients enrolled in the month one", new Mapped(
+				patientEnrolledInCRDPMonthOneIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		dsd.addColumn("A3QM2", "Total # of new patients enrolled in the month two", new Mapped(
+				patientEnrolledInCRDPMonthTwooIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
+		    "");
+		dsd.addColumn("A3QM3", "Total # of new patients enrolled in the month three", new Mapped(
+				patientEnrolledInCRDPMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
+		    "");
 		
 	}
 	
