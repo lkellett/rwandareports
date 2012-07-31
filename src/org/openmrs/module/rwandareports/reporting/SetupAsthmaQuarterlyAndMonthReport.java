@@ -10,7 +10,9 @@ import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
@@ -46,6 +48,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	private EncounterType asthmaEncounterType;
 	
 	private Form DDBform;
+	
+	private List<EncounterType> patientsSeenEncounterTypes = new ArrayList<EncounterType>();
 	
 	private Form rendevousForm;
 	
@@ -239,12 +243,12 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		patientVisitsToAsthmaClinic.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientVisitsToAsthmaClinic.addParameter(new Parameter("endDate", "endDate", Date.class));
 		
-		EncounterIndicator patientVisitsToAsthmaClinicMonthIndicator = new EncounterIndicator();
-		patientVisitsToAsthmaClinicMonthIndicator.setName("patientVisitsToAsthmaClinicQuarterlyIndicator");
-		patientVisitsToAsthmaClinicMonthIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientVisitsToAsthmaClinic,
+		EncounterIndicator patientVisitsToAsthmaClinicQuarterlyIndicator = new EncounterIndicator();
+		patientVisitsToAsthmaClinicQuarterlyIndicator.setName("patientVisitsToAsthmaClinicQuarterlyIndicator");
+		patientVisitsToAsthmaClinicQuarterlyIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientVisitsToAsthmaClinic,
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		
-		dsd.addColumn(patientVisitsToAsthmaClinicMonthIndicator);
+		dsd.addColumn(patientVisitsToAsthmaClinicQuarterlyIndicator);
 		
 	}
 	
@@ -272,7 +276,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private void createQuarterlyIndicators(CohortIndicatorDataSetDefinition dsd) {
 		
-		/*//=======================================================================
+		//=======================================================================
 		//  A2: Total # of patients seen in the last month/quarter
 		//==================================================================
 		
@@ -309,9 +313,6 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    patientsSeenComposition,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate-2m+1d}"));
 		
-		
-		
-		
 		//=================================================
 		//     Adding columns to data set definition     //
 		//=================================================
@@ -323,7 +324,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		dsd.addColumn("A2QM2", "Total # of patients seen in the last month two", new Mapped(patientsSeenMonthTwoIndicator,
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("A2QM3", "Total # of patients seen in the last month three", new Mapped(
-		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");*/
+		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		
 	}
 	
@@ -439,7 +440,10 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		rendevousForm=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM);
 		
 		DDBforms.add(DDBform);
-
+		DDBforms.add(rendevousForm);
+		
+		
+		patientsSeenEncounterTypes.add(asthmaEncounterType);
 		
 		onOrAfterOnOrBefore.add("onOrAfter");
 		onOrAfterOnOrBefore.add("onOrBefore");
