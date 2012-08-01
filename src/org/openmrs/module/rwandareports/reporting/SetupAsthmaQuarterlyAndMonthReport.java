@@ -13,6 +13,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
@@ -422,6 +423,38 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 			    "Pediatric: Of the new patients enrolled in the last quarter, number ≤15 years old at intake",
 			    new Mapped(patientsUnderFifteenCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 			    "");
+		
+		//=======================================================================
+		//B2: Gender: Of the new patients enrolled in the last quarter, % male
+		//==================================================================
+		
+		GenderCohortDefinition malePatients = Cohorts.createMaleCohortDefinition("Male patients");
+		
+		CompositionCohortDefinition malePatientsEnrolledInCRDP = new CompositionCohortDefinition();
+		malePatientsEnrolledInCRDP.setName("malePatientsEnrolledIn");
+		malePatientsEnrolledInCRDP.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+		malePatientsEnrolledInCRDP.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+		malePatientsEnrolledInCRDP.addParameter(new Parameter("startDate", "startDate", Date.class));
+		malePatientsEnrolledInCRDP.addParameter(new Parameter("endDate", "endDate", Date.class));
+		malePatientsEnrolledInCRDP.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientEnrolledInCRDP, ParameterizableUtil
+		            .createParameterMappings("startDate=${enrolledOnOrAfter},endDate=${enrolledOnOrBefore}")));
+		malePatientsEnrolledInCRDP.getSearches().put("2", new Mapped<CohortDefinition>(malePatients, null));
+		malePatientsEnrolledInCRDP.setCompositionString("1 AND 2");
+		
+		CohortIndicator malePatientsEnrolledInCRDPCountIndicator = Indicators.newCountIndicator(
+		    "malePatientsEnrolledInDMCountIndicator", malePatientsEnrolledInCRDP,
+		    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m+1d},enrolledOnOrBefore=${endDate}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn("B2N", "Gender: Of the new patients enrolled in the last quarter, number male", new Mapped(
+				malePatientsEnrolledInCRDPCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
+		    "");
+		
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
