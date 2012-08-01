@@ -44,7 +44,7 @@ public class SetupAsthmaLateVisit {
     private Concept nextVisitConcept;
     private int asthmaDDBFormId;
     private EncounterType asthmaflowsheet;
-    
+    private int asthmaRDVFormId;
 	public void setup() throws Exception {
 		
 		setupProperties();
@@ -98,13 +98,17 @@ public class SetupAsthmaLateVisit {
 				SqlCohortDefinition patientsNotVoided = Cohorts.createPatientsNotVoided();
 				dataSetDefinition1.addFilter(patientsNotVoided, new HashMap<String, Object>());
 				
-				dataSetDefinition1.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${now}"));
+				dataSetDefinition1.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		        
-		  SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from " +
+		  /*SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from " +
 		  		"(select * from encounter where encounter_type="+asthmaflowsheet.getEncounterTypeId()+" or form_id="+asthmaDDBFormId+" and voided=0 order by encounter_datetime desc) " +
-		  		"as e group by patient_id) as last_encounters where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 " +
+		  		"as e group by e.patient_id) as last_encounters where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 " +
 		  		"and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 ");
-	      latevisit.addParameter(new Parameter("endDate","endDate",Date.class));
+	      latevisit.addParameter(new Parameter("endDate","endDate",Date.class));*/
+				
+				
+			SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from (select * from encounter where form_id in ("+asthmaDDBFormId+","+asthmaRDVFormId+") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, (select * from (select * from encounter where encounter_type="+asthmaflowsheet.getEncounterTypeId()+" and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) and last_asthmaVisit.patient_id=o.person_id ");
+		      latevisit.addParameter(new Parameter("endDate","endDate",Date.class));
 	                
 	      dataSetDefinition1.addFilter(latevisit, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 	  
@@ -169,6 +173,8 @@ public class SetupAsthmaLateVisit {
         asthmaDDBFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB).getFormId();
         
         nextVisitConcept=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+        
+        asthmaRDVFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM).getFormId();
  }
 	
 	
