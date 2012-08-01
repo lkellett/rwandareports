@@ -389,6 +389,39 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		dsd.addColumn("A4QM3", "Total # of new patients with RDV in the month three", new Mapped(
 		        patientRDVMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		
+		//=======================================================================
+		//B1: Pediatric:  Of the new patients enrolled in the last quarter, % ≤15 years old at intake
+		//==================================================================
+		
+		SqlCohortDefinition patientsUnderFifteenAtEnrollementDate = Cohorts.createUnder15AtEnrollmentCohort(
+		    "patientsUnder15AtEnrollment", asthmaProgram);
+		
+		CompositionCohortDefinition patientsUnderFifteenComposition = new CompositionCohortDefinition();
+		patientsUnderFifteenComposition.setName("patientsUnderFifteenComposition");
+		patientsUnderFifteenComposition.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+		patientsUnderFifteenComposition.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+		patientsUnderFifteenComposition.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientEnrolledInCRDP, ParameterizableUtil
+		            .createParameterMappings("startDate=${enrolledOnOrAfter},endDate=${enrolledOnOrBefore}")));
+		patientsUnderFifteenComposition.getSearches().put("2",
+		    new Mapped<CohortDefinition>(patientsUnderFifteenAtEnrollementDate, null));
+		patientsUnderFifteenComposition.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsUnderFifteenCountIndicator = Indicators.newCountIndicator(
+		    "patientsUnderFifteenCountIndicator", patientsUnderFifteenComposition,
+		    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m+1d},enrolledOnOrBefore=${endDate}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn(
+			    "B1N",
+			    "Pediatric: Of the new patients enrolled in the last quarter, number ≤15 years old at intake",
+			    new Mapped(patientsUnderFifteenCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
+			    "");
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
