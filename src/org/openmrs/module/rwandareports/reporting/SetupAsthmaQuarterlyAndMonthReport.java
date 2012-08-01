@@ -362,6 +362,33 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 				patientEnrolledInCRDPMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 		    "");
 		
+		//=======================================================================
+		// A4: Total # of new patients with RDV in the last month/quarter
+		//==================================================================
+		
+		CohortIndicator patientRDVQuarterIndicator = Indicators.newCountIndicator("patientRDVQuarterIndicator", patientSeen,
+		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+		CohortIndicator patientRDVMonthOneIndicator = Indicators.newCountIndicator("patientRDVMonthOneIndicator",
+		    patientSeen, ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m+1d},onOrBefore=${endDate}"));
+		CohortIndicator patientRDVMonthTwooIndicator = Indicators.newCountIndicator("patientRDVMonthTwooIndicator",
+		    patientSeen,
+		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-2m+1d},onOrBefore=${endDate-1m+1d}"));
+		CohortIndicator patientRDVMonthThreeIndicator = Indicators.newCountIndicator("patientRDVMonthThreeIndicator",
+		    patientSeen,
+		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate-2m+1d}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn("A4Q", "Total # of new patients with RDV in the last quarter", new Mapped(patientRDVQuarterIndicator,
+		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		dsd.addColumn("A4QM1", "Total # of new patients with RDV in the month one", new Mapped(patientRDVMonthOneIndicator,
+		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		dsd.addColumn("A4QM2", "Total # of new patients with RDV in the month two", new Mapped(patientRDVMonthTwooIndicator,
+		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		dsd.addColumn("A4QM3", "Total # of new patients with RDV in the month three", new Mapped(
+		        patientRDVMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
