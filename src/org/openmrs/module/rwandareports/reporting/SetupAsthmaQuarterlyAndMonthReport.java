@@ -424,9 +424,9 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 			    new Mapped(patientsUnderFifteenCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 			    "");
 		
-		//=======================================================================
+		//====================================================================
 		//B2: Gender: Of the new patients enrolled in the last quarter, % male
-		//==================================================================
+		//====================================================================
 		
 		GenderCohortDefinition malePatients = Cohorts.createMaleCohortDefinition("Male patients");
 		
@@ -454,6 +454,34 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		dsd.addColumn("B2N", "Gender: Of the new patients enrolled in the last quarter, number male", new Mapped(
 				malePatientsEnrolledInCRDPCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 		    "");
+		
+		//=======================================================
+		// B3: Of the new patients enrolled in the last month, % with documented peak flow taken both before and after salbutamol at intake
+		//=======================================================
+		
+		ProgramEnrollmentCohortDefinition enrolledInAsthmaProgram=Cohorts.createProgramEnrollmentParameterizedByStartEndDate("enrolledInAthmaProgram", asthmaProgram);
+		
+		SqlCohortDefinition patientsWithBothPeakFlowInSameDDBForm=Cohorts.getPatientsWithTwoObservationsBothInFormBetweenStartAndEndDate("patientsWithBothPeakFlowInSameDDBForm", DDBform, peakFlowAfterSalbutamol,peakFlowBeforeSalbutamol);
+		
+		CohortIndicator enrolledInAsthmaProgramIndicator = Indicators.newCountIndicator("enrolledInAthmaProgramIndicator",
+			enrolledInAsthmaProgram,
+		    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrBefore=${endDate}"));
+		
+		CohortIndicator patientsWithBothPeakFlowInSameDDBFormIndicator = Indicators.newCountIndicator("patientsWithBothPeakFlowInSameDDBFormIndicator",
+			patientsWithBothPeakFlowInSameDDBForm,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn("B3N", "patients with documented peak flow taken both before and after salbutamol at intake", new Mapped(patientsWithBothPeakFlowInSameDDBFormIndicator,
+		        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+			
+			dsd.addColumn("B3D", "new patients enrolled in report period", new Mapped(enrolledInAsthmaProgramIndicator,
+		        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
+		
 		
 	}
 	
