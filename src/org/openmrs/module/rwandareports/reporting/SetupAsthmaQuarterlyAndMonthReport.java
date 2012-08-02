@@ -475,11 +475,28 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		//     Adding columns to data set definition     //
 		//=================================================
 		
-		dsd.addColumn("B3N", "patients with documented peak flow taken both before and after salbutamol at intake", new Mapped(patientsWithBothPeakFlowInSameDDBFormIndicator,
+		    dsd.addColumn("B3N", "patients with documented peak flow taken both before and after salbutamol at intake", new Mapped(patientsWithBothPeakFlowInSameDDBFormIndicator,
 		        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
 			dsd.addColumn("B3D", "new patients enrolled in report period", new Mapped(enrolledInAsthmaProgramIndicator,
 		        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+			
+			//===============================================================================================
+			// B4: Of the new patients enrolled in the last month, % with smoking status documented at intake
+			//===============================================================================================
+			
+			SqlCohortDefinition patientsWithSmokingHistory=Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate("patientsWithSmokingHistory",DDBform,smokingHistory);
+			
+			CohortIndicator patientsWithSmokingHistoryIndicator = Indicators.newCountIndicator("patientsWithSmokingHistoryIndicator",
+				patientsWithSmokingHistory,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+			
+			//=================================================
+			//     Adding columns to data set definition     //
+			//=================================================
+			
+			dsd.addColumn("B4N", "patients with smoking status documented at intake", new Mapped(patientsWithSmokingHistoryIndicator,
+			        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
 		
 		
