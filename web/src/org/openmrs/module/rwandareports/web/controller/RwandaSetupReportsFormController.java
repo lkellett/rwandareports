@@ -7,6 +7,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAsthmaLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupChemotherapyExpectedPatientList;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
+import org.openmrs.module.rwandareports.reporting.SetupDataEntryDelayReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
@@ -466,6 +467,19 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_chemotherapyPatientList")
 	public ModelAndView removeChemotherapyPatientList() throws Exception {
 		new SetupChemotherapyExpectedPatientList().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//Data Delay
+	@RequestMapping("/module/rwandareports/register_dataDelay")
+	public ModelAndView registerDataDelay() throws Exception {
+		new SetupDataEntryDelayReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_dataDelay")
+	public ModelAndView removeDataDelay() throws Exception {
+		new SetupDataEntryDelayReport().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }

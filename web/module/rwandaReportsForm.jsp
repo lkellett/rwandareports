@@ -22,23 +22,23 @@ border-collapse: collapse;
 border: 1px solid blue;
 width: 100%;
 } 
-td{
+.reports td{
 border-collapse: collapse;
 border: 1px solid blue;
 }
-.tableheaders{
+.reports .tableheaders{
 font-weight: bold;
 background-color: #B0C4DE;
 }
-.tabletd{
+.reports .tabletd{
 font-weight: bold;
 background-color: #EEE;
 }
 
-.alt { background-color: #B0C4DE; }
-.altodd { background-color: #EEE; }
-.hover { background-color: #DED; }
-.althover { background-color: #EFE; }        
+.reports .alt { background-color: #B0C4DE; }
+.reports .altodd { background-color: #EEE; }
+.reports .hover { background-color: #DED; }
+.reports .althover { background-color: #EFE; }        
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -202,7 +202,7 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_heartFailureReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="2" class="tabletd">Data Quality</td>
+<td rowspan="3" class="tabletd">Data Quality</td>
 <td>Missing CD4 Report by site</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_missingCD4Report.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -213,6 +213,12 @@ $(document).ready(function(){
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataQualityReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataQualityReport.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>Data Delay Report</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_dataDelay.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_dataDelay.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Research</td>

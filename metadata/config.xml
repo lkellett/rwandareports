@@ -33,6 +33,17 @@
 	<mappingFiles>
 	</mappingFiles>
 	
+	<globalProperty>
+		<property>reports.dataEntryDelay</property>
+		<defaultValue>21</defaultValue> 
+		<description>The number of days the delay should be before turning up in the outlier list</description> 		
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.dataEntryDelayAccepted</property>
+		<defaultValue>7</defaultValue> 
+		<description>The number of days in which an encounter should be entered</description> 		
+	</globalProperty>
 	
 	
 	<globalProperty>
@@ -1795,6 +1806,36 @@
 		<defaultValue>365</defaultValue> 
 		<description>a year time period in days. </description> 		
 		</globalProperty> 
+		
+		<globalProperty>
+		<property>reports.HeartFailureEncounterType</property>
+		<defaultValue>Heart Failure Flowsheet</defaultValue> 
+		<description>Heart Failure encounter type id </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.HypertensionEncounterType</property>
+		<defaultValue>HYPERTENSION VISIT</defaultValue> 
+		<description>Hypertension encounter type id </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.EpilepsyEncounterType</property>
+		<defaultValue>EPILEPSY VISIT</defaultValue> 
+		<description>Epilepsy encounter type id </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.InpatientOncologyEncounterType</property>
+		<defaultValue>Inpatient Oncology</defaultValue> 
+		<description>Inpatient oncology encounter type id </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.OutpatientOncologyEncounterType</property>
+		<defaultValue>Outpatient Oncology</defaultValue> 
+		<description>Outpatient oncology encounter type id </description> 		
+		</globalProperty>
 		
 		<!-- start Asthma consult sheet  & asthma monthly quaterly indicator report -->
 		<globalProperty>

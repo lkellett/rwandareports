@@ -268,6 +268,13 @@ public class GlobalPropertiesManagement {
 		return rt;
 	}
 	
+	public Integer getGlobalPropertyAsInt(String globalPropertyName)
+	{
+		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
+		
+		return Integer.parseInt(globalProperty);
+	}
+	
 	public OrderType getOrderType(String globalPropertyName)
 	{
 		String globalProperty = Context.getAdministrationService().getGlobalProperty(globalPropertyName);
@@ -687,6 +694,16 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ADULT_FLOWSHEET_VISIT = "adultflowsheet.Form_ddbId";
 	
+	public final static String OUTPATIENT_ONCOLOGY_ENCOUNTER = "reports.OutpatientOncologyEncounterType";
+	
+	public final static String EPILEPSY_VISIT = "reports.EpilepsyEncounterType";
+	
+	public final static String INPATIENT_ONCOLOGY_ENCOUNTER = "reports.InpatientOncologyEncounterType";
+	
+	public final static String HYPERTENSION_ENCOUNTER = "reports.HypertensionEncounterType";
+	
+	public final static String HEART_FAILURE_ENCOUNTER = "reports.HeartFailureEncounterType";
+	
 	
 	//RelationshipTypes
 	public final static String ACCOMPAGNATUER_RELATIONSHIP = "reports.accompagnatuerRelationship";
@@ -866,7 +883,7 @@ public class GlobalPropertiesManagement {
 	public final static int ON_ART_TREATMENT_STATUS_ID = 1577;
 	public final static int TREATMENT_STATUS_ID = 1484;
 	
+	public final static String DATA_ENTRY_DELAY = "reports.dataEntryDelay";
 	
-
-	
+	public final static String DATA_ENTRY_DELAY_ACCEPTABLE = "reports.dataEntryDelayAccepted";
 }
