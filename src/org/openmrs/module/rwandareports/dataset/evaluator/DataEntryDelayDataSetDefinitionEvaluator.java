@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,12 +67,12 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 		if (location != null) {
 			if (!location.isAllSites() && location.getHierarchy().equals(AllLocation.LOCATION)) {
 				addIteration(ret, getEncounters(location.getValue(), LOCATION, location.getValue()), location.getValue(),
-				    context, dataSetDefinition);
+				    context, lhdsd);
 			} else if (!location.isAllSites()) {
 				List<Location> allLocations = Context.getLocationService().getAllLocations(false);
 				
 				addIteration(ret, getEncounters(location.getValue(), HIERARCHY, location.getHierarchy()),
-				    location.getValue() + " " + location.getHierarchy(), context, dataSetDefinition);
+				    location.getValue() + " " + location.getDisplayHierarchy(), context, lhdsd);
 				
 				for (Location l : allLocations) {
 					String hierarchyValue = (String) ReflectionUtil.getPropertyValue(l, location.getHierarchy());
@@ -84,12 +83,12 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 					
 					if (location.getValue() != null && location.getValue().toUpperCase().equals(hierarchyValue)) {
 						addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName()), l.getName(), context,
-						    dataSetDefinition);
+							lhdsd);
 					}
 				}
 			} else {
 				addIteration(ret, getEncounters("All Sites", ALL_SITES, "All Sites"), "All Sites", context,
-				    dataSetDefinition);
+					lhdsd);
 				
 				List<Location> allLocations = Context.getLocationService().getAllLocations(false);
 				
@@ -119,13 +118,13 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 					
 					for (String hLoc : allLoc) {
 						addIteration(ret, getEncounters(hLoc, HIERARCHY, hVal), hLoc + " " + hDisplay, context,
-						    dataSetDefinition);
+							lhdsd);
 					}
 				}
 				
 				for (Location l : allLocations) {
 					addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName()), l.getName(), context,
-					    dataSetDefinition);
+						lhdsd);
 				}
 			}
 		}
@@ -173,7 +172,7 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 	}
 	
 	private void addIteration(SimpleDataSet resultsSet, SqlEncounterQuery cohort, String locationDisplay,
-	                          EvaluationContext context, DataSetDefinition dataSetDefinition) throws EvaluationException {
+	                          EvaluationContext context, DataEntryDelayDataSetDefinition dataSetDefinition) throws EvaluationException {
 		
 		if (cohort != null) {
 			try {
@@ -191,7 +190,7 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 				
 				addResults(row, summary, "summary");
 				
-				Set<EncounterType> encTypes = getDistinctEncounterTypes(encs);
+				List<EncounterType> encTypes = dataSetDefinition.getEncounterTypes();
 				
 				for (EncounterType et : encTypes) {
 					SimpleDataSet encType = getEncounterSummaryDataSetForLocation(et, encs, dataSetDefinition, context);
@@ -523,21 +522,5 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 		
 		return encs;
 	}
-	
-	private Set<EncounterType> getDistinctEncounterTypes(List<Encounter> encounter) {
-		Set<EncounterType> types = new HashSet<EncounterType>();
-		
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.PEDI_FLOWSHEET_ENCOUNTER));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.DIABETES_VISIT));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.HEART_FAILURE_ENCOUNTER));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.HYPERTENSION_ENCOUNTER));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.INPATIENT_ONCOLOGY_ENCOUNTER));
-		types.add(gp.getEncounterType(GlobalPropertiesManagement.OUTPATIENT_ONCOLOGY_ENCOUNTER));
-		
-		return types;
-	}
-	
+
 }

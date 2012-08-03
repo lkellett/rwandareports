@@ -68,7 +68,7 @@ public class LocationHierachyIndicatorDataSetEvaluator implements DataSetEvaluat
 				List<Location> allLocations = Context.getLocationService().getAllLocations(false);
 				
 				addIteration(ret, getBaseCohort(location.getValue(), HIERARCHY, location.getHierarchy()),
-				    location.getValue() + " " + location.getHierarchy(), context, lhdsd.getBaseDefinition());
+				    location.getValue() + " " + location.getDisplayHierarchy(), context, lhdsd.getBaseDefinition());
 				
 				for (Location l : allLocations) {
 					String hierarchyValue = (String) ReflectionUtil.getPropertyValue(l, location.getHierarchy());

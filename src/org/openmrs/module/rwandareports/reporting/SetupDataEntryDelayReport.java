@@ -64,6 +64,8 @@ public class SetupDataEntryDelayReport {
 	
 	protected final static Log log = LogFactory.getLog(SetupDataEntryDelayReport.class);
 	
+	private GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
+	
 	Helper h = new Helper();
 	
 	public void setup() throws Exception {
@@ -117,6 +119,16 @@ public class SetupDataEntryDelayReport {
 		dataEntryDelay.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		dataEntryDelay.addParameter(new Parameter("endDate", "End Date", Date.class));
 		dataEntryDelay.addParameter(new Parameter("location", "District", LocationHierarchy.class));
+		
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.ADULT_FLOWSHEET_ENCOUNTER));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.PEDI_FLOWSHEET_ENCOUNTER));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.DIABETES_VISIT));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.HEART_FAILURE_ENCOUNTER));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.HYPERTENSION_ENCOUNTER));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.INPATIENT_ONCOLOGY_ENCOUNTER));
+		dataEntryDelay.addEncounterType(gp.getEncounterType(GlobalPropertiesManagement.OUTPATIENT_ONCOLOGY_ENCOUNTER));
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");

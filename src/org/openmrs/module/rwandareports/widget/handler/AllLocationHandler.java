@@ -75,7 +75,7 @@ public void populateOptions(WidgetConfig config, CodedWidget widget) {
 					String hierarchyValue = (String)ReflectionUtil.getPropertyValue(l, hVal);
 					if(hierarchyValue != null && hierarchyValue.trim().length() > 0 && !usedLocations.contains(hVal + "&&&" + hierarchyValue))
 					{
-						widget.addOption(new Option(hVal + "&&&" + hierarchyValue, hDisplay + " - " + hierarchyValue, hDisplay + " - " + hierarchyValue, hDisplay + " - " + hierarchyValue), config);
+						widget.addOption(new Option(hDisplay + "***" + hVal + "&&&" + hierarchyValue, hDisplay + " - " + hierarchyValue, hDisplay + " - " + hierarchyValue, hDisplay + " - " + hierarchyValue), config);
 						usedLocations.add(hVal + "&&&" + hierarchyValue);
 					}
 				}	
@@ -118,7 +118,8 @@ public void populateOptions(WidgetConfig config, CodedWidget widget) {
 			}
 			else if(input.indexOf("&&&") > -1)
 			{
-				location.setHierarchy(input.substring(0,input.indexOf("&&&")));
+				location.setHierarchy(input.substring(input.indexOf("***") + 3,input.indexOf("&&&")));
+				location.setDisplayHierarchy(input.substring(0,input.indexOf("***")));
 				String value = input.substring(input.indexOf("&&&") + 3);
 				location.setValue(value);
 			}

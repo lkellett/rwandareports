@@ -7,6 +7,7 @@ public class AllLocation {
 
 	String hierarchy;
 	String value;
+	String displayHierarchy;
 	
 	boolean allSites = false;
 	
@@ -39,4 +40,13 @@ public class AllLocation {
 	public void setAllSites(boolean allSites) {
 		this.allSites = allSites;
 	}
+
+    public String getDisplayHierarchy() {
+    	return displayHierarchy;
+    }
+
+    public void setDisplayHierarchy(String displayHierarchy) {
+    	this.displayHierarchy = displayHierarchy;
+    }
+	
 }
