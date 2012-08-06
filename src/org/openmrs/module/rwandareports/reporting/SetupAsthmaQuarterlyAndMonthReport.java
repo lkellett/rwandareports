@@ -79,6 +79,9 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private Concept smokingHistory;
 	
+	private Concept basicInhalerTrainingProvided;
+	private Concept properInhalerTechnique;
+	
 	private List<Form> DDBforms = new ArrayList<Form>();
 	
 	private List<Concept> asthmasMedications = new ArrayList<Concept>();
@@ -523,6 +526,43 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    new Mapped(patientsWithSmokingHistoryIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
+		//==============================================================
+		// C1: Of total patients with a visit in the last quarter, % who had inhaler teaching in the last 6 months
+		//==============================================================
+		
+		SqlCohortDefinition patientsWithBasicInhalerTrainingProvidedObsAnswer = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
+		    "patientsWithBasicInhalerTrainingProvidedObsAnswer", DDBforms, properInhalerTechnique, basicInhalerTrainingProvided);
+		
+		CompositionCohortDefinition patientsSeenWithBasicInhalerTrainingProvidedObsAnswer = new CompositionCohortDefinition();
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.setName("patientsSeenAndWithBasicInhalerTrainingProvidedObsAnswer");
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsWithBasicInhalerTrainingProvidedObsAnswer, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator = Indicators.newCountIndicator(
+		    "patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator", patientsSeenWithBasicInhalerTrainingProvidedObsAnswer,
+		    ParameterizableUtil.createParameterMappings("endDate=${endDate},startDate=${startDate-3m+1d},onOrBefore=${endDate},onOrAfter=${startDate}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn(
+		    "C1",
+		    "Patients With Basic Inhaler Training Provided",
+		    new Mapped(patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
@@ -642,6 +682,9 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		peakFlowBeforeSalbutamol = gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_BEFORE_SALBUTAMOL);
 		
 		smokingHistory = gp.getConcept(GlobalPropertiesManagement.SMOKING_HISTORY);
+		
+		basicInhalerTrainingProvided = gp.getConcept(GlobalPropertiesManagement.BASIC_INHALER_TRAINING_PROVIDED);
+		properInhalerTechnique = gp.getConcept(GlobalPropertiesManagement.PROPER_INHALER_TECHNIQUE);
 		
 		asthmasMedications = gp
 		        .getConceptsByConceptSet(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS);

@@ -633,7 +633,11 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ASTHMA_CLASSIFICATION_ORDER="reports.asthmaclassificationorder";
 	
-	public final static String SMOKING_HISTORY="reports.smokingHistory"; 
+	public final static String SMOKING_HISTORY = "reports.smokingHistory"; 
+	
+	public final static String BASIC_INHALER_TRAINING_PROVIDED="reports.basicInhalerTrainingProvided"; 
+	
+	public final static String PROPER_INHALER_TECHNIQUE="reports.properInhalerTechnique"; 
 	
 	public final static String PREMEDICATION = "reports.premedication";
 	

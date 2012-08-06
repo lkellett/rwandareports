@@ -1907,6 +1907,18 @@
 		</globalProperty>
 		
 		<globalProperty>
+		<property>reports.basicInhalerTrainingProvided</property>
+		<defaultValue>7065</defaultValue> 
+		<description>concept id for Basic inhaler training provided concept </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.properInhalerTechnique</property>
+		<defaultValue>7077</defaultValue> 
+		<description>concept id for Proper inhaler technique concept </description> 		
+		</globalProperty>
+		
+		<globalProperty>
 		<property>reports.AsthmaRendevousVisitForm</property>
 		<defaultValue>1ba547f7-e955-4e90-869e-ae4a72430e57</defaultValue> 
 		<description>Astma visit, Rendevous form id or uuid or name </description> 		
