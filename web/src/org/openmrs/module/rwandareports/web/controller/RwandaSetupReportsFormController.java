@@ -9,16 +9,18 @@ import org.openmrs.module.rwandareports.reporting.SetupChemotherapyExpectedPatie
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataEntryDelayReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
+import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
-import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
-import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupOncologyTreatmentAdministrationPlan;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTCombinedClinicMotherMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
@@ -416,6 +418,31 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_asthmaLateVisitReport")
 	public ModelAndView removeregisterAsthmaLateVisit() throws Exception {
 		new SetupAsthmaLateVisit().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//Hypertension Reports
+	@RequestMapping("/module/rwandareports/register_hypertensionConsultationSheet")
+	public ModelAndView registerHypertensionConsultationSheet() throws Exception {
+		new SetupHypertensionConsultationSheet().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_hypertensionConsultationSheet")
+	public ModelAndView removeHypertensionConsultationSheet() throws Exception {
+		new SetupHypertensionConsultationSheet().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_hypertensionLateVisit")
+	public ModelAndView registerHypertensionLateVisit() throws Exception {
+		new SetupHypertensionLateVisit().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_hypertensionLateVisit")
+	public ModelAndView removeHypertensionLateVisit() throws Exception {
+		new SetupHypertensionLateVisit().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

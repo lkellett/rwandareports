@@ -1858,6 +1858,15 @@
 			The concept id of all the Asthma Treatment drug concept set 
 		</description>
 	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.hypertensionTreatmentConceptSet</property>
+		<defaultValue>3cd50188-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<description>
+			The concept id of all the Hypertension Treatment drug concept set 
+		</description>
+	    </globalProperty>
+	    
 		
 		<globalProperty>
 		<property>reports.peakFlowAfterSalbutamolConcept</property>
@@ -1926,6 +1935,18 @@
 		<property>reports.BactrimDrug</property>
 		<defaultValue>130</defaultValue>
 		<description>The drug id of NVP Susp</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertensionDDBformId</property>
+		<defaultValue>57b07582-2b35-4656-8cb2-939bb09cc02c</defaultValue>
+		<description>The id of the form for the hypertension ddb</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.hypertensionFlowVisit</property>
+		<defaultValue>c6276c2d-b17e-45e3-87ff-2efd341b1e20</defaultValue>
+		<description>The id of the form for visit form of the hypertension flow sheet</description>
 	</globalProperty>
 		
 </module>

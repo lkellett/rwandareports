@@ -735,6 +735,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ASTHMA_DDB = "reports.asthmaDDBformId";
 	
+	public final static String HYPERTENSION_DDB = "reports.hypertensionDDBformId";
+	
+	public final static String HYPERTENSION_FLOW_VISIT = "reports.hypertensionFlowVisit";
+	
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";
@@ -787,6 +791,8 @@ public class GlobalPropertiesManagement {
 	public final static String METFORMIN_DRUG="reports.metforminConcept";
 	
 	public final static String CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS="reports.asthmaTreatmentConceptSet";
+	
+	public final static String HYPERTENSION_TREATMENT_DRUGS="reports.hypertensionTreatmentConceptSet";
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";

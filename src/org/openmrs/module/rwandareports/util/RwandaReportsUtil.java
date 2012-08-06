@@ -3,8 +3,12 @@ package org.openmrs.module.rwandareports.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
+import org.openmrs.Form;
+import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 
 public class RwandaReportsUtil {
@@ -49,6 +53,23 @@ public class RwandaReportsUtil {
 		else
 			throw new IllegalArgumentException("Unable to find concept for uuid " + uuid
 			        + ".  Take a look at PrimaryCareReportConstants in RwandaReports module to see what's missing or wrong.");
+	}
+	
+	public static boolean patientHasForm(Patient patient, Form form)
+	{
+		int formId = form.getFormId();
+		
+		List<Encounter> patientEncounters = Context.getEncounterService().getEncountersByPatient(patient);
+		
+		for (Encounter encounter : patientEncounters) {
+			if (encounter != null && encounter.getForm() != null) {
+				if (encounter.getForm().getFormId() == formId) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 }

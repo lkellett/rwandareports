@@ -241,7 +241,7 @@ $(document).ready(function(){
 <td><!--  <a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a>--></td>	
 </tr>
 <tr>
-<td rowspan="7" class="tabletd">NCD Reports</td>
+<td rowspan="9" class="tabletd">NCD Reports</td>
 <td>Diabetes Quarterly and Monthly Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_DiabetesQuarterlyAndMonthReport.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -282,6 +282,18 @@ $(document).ready(function(){
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_asthmaLateVisitReport.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_asthmaLateVisitReport.form" onclick=msgrem(this)>Remove</a></td>	
+</tr>
+<tr>
+<td>Hypertension consultation sheet</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_hypertensionConsultationSheet.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_hypertensionConsultationSheet.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>Hypertension Late Visit</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_hypertensionLateVisit.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_hypertensionLateVisit.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 <tr>
 <td rowspan="2" class="tabletd">Oncology</td>

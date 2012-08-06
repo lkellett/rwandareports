@@ -360,6 +360,14 @@ public class RowPerPatientColumns {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.PEAK_FLOW_AFTER_SALBUTAMOL), dateFormat);
 	}
 	
+	public static MostRecentObservation getMostRecentSystolicPB(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE), dateFormat);
+	}
+	
+	public static MostRecentObservation getMostRecentDiastolicPB(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.DIASTOLIC_BLOOD_PRESSURE), dateFormat);
+	}
+	
 	public static AllObservationValues getAllWeightValues(String name, String dateFormat, ResultFilter resultFilter,
 	                                                      ResultFilter outputFilter) {
 		return getAllObservationValues(name, gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT), dateFormat,
@@ -427,6 +435,12 @@ public class RowPerPatientColumns {
 	                                                                         ResultFilter drugFilter) {
 		return getCurrentOrdersRestrictedByConceptSet(name,
 		    gp.getConcept(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS), dateFormat, drugFilter);
+	}
+	
+	public static CurrentOrdersRestrictedByConceptSet getCurrentHypertensionOrders(String name, String dateFormat,
+	                                                                         ResultFilter drugFilter) {
+		return getCurrentOrdersRestrictedByConceptSet(name,
+		    gp.getConcept(GlobalPropertiesManagement.HYPERTENSION_TREATMENT_DRUGS), dateFormat, drugFilter);
 	}
 	
 	public static MostRecentObservation getMostRecent(String name, Concept concept, String dateFormat) {
