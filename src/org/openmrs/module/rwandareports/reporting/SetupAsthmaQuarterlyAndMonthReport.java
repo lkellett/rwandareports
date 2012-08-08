@@ -662,7 +662,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    "patientsWithAnyOtherCurrentAsthmaDrugOrder", asthmasMedicationsWithoutSalbutamol);
 		
 		CompositionCohortDefinition patientsOnSalbutamolAlone = new CompositionCohortDefinition();
-		patientsOnSalbutamolAlone.setName("patientsWithAsthmaVisitAndEverNotOnRegimen");
+		patientsOnSalbutamolAlone.setName("patientsOnSalbutamolAlone");
 		patientsOnSalbutamolAlone.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientsOnSalbutamolAlone.addParameter(new Parameter("endDate", "endDate", Date.class));
 		patientsOnSalbutamolAlone.addSearch("1", patientsWithAsthmaVisit,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
@@ -681,6 +681,33 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    "D2N",
 		    "patients with a visit in the last quarter, % on Salbutamol alone at last visit",
 		    new Mapped(patientsOnSalbutamolAloneIndicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
+		//=======================================================
+		// D3: Of total patients with a visit in the last quarter on Salbutamol, % also on Beclomethasone
+		//=======================================================
+		SqlCohortDefinition patientsWithCurrentBeclomethasoneDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
+		    "patientsWithCurrentBeclomethasoneDrugOrder", beclomethasone);
+		
+		CompositionCohortDefinition patientsOnSalbutamolAndBeclomethasone = new CompositionCohortDefinition();
+		patientsOnSalbutamolAndBeclomethasone.setName("patientsOnSalbutamolAndBeclomethasone");
+		patientsOnSalbutamolAndBeclomethasone.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsOnSalbutamolAndBeclomethasone.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsOnSalbutamolAndBeclomethasone.addSearch("1", patientsWithAsthmaVisit,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsOnSalbutamolAndBeclomethasone.addSearch("2", patientsWithCurrentSalbutamolDrugOrder, null);
+		patientsOnSalbutamolAndBeclomethasone.addSearch("3", patientsWithCurrentBeclomethasoneDrugOrder, null);
+		patientsOnSalbutamolAndBeclomethasone.setCompositionString("1 AND 2 AND 3");
+		
+		CohortIndicator patientsOnSalbutamolAndBeclomethasoneIndicator = Indicators.newCountIndicator(
+		    "patientsOnSalbutamolAndBeclomethasoneIndicator", patientsOnSalbutamolAndBeclomethasone,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "D3N",
+		    "patients with a visit in the last quarter on Salbutamol, % also on Beclomethasone",
+		    new Mapped(patientsOnSalbutamolAndBeclomethasoneIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
 	}
