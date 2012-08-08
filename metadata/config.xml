@@ -18,7 +18,7 @@
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
 	    <require_module>org.openmrs.module.heightweighttracker</require_module>
-	    <require_module>org.openmrs.module.orderextension</require_module>  
+	    <require_module>org.openmrs.module.orderextension</require_module>
 	</require_modules>
 
 	<extension>
@@ -1860,13 +1860,36 @@
 	    </globalProperty>
 	    
 	    <globalProperty>
+		<property>reports.salbutamolConcept</property>
+		<defaultValue>798</defaultValue>
+		<description>
+			The concept id of salbutamol drug concept
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
+		<property>reports.beclomethasoneConcept</property>
+		<defaultValue>1240</defaultValue>
+		<description>
+			The concept id of beclomethasone drug concept
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
+		<property>reports.prednisoloneConcept</property>
+		<defaultValue>765</defaultValue>
+		<description>
+			The concept id of prednisolone drug concept
+		</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
 		<property>reports.hypertensionTreatmentConceptSet</property>
 		<defaultValue>3cd50188-26fe-102b-80cb-0017a47871b2</defaultValue>
 		<description>
 			The concept id of all the Hypertension Treatment drug concept set 
 		</description>
-	    </globalProperty>
-	    
+	    </globalProperty>	    
 		
 		<globalProperty>
 		<property>reports.peakFlowAfterSalbutamolConcept</property>

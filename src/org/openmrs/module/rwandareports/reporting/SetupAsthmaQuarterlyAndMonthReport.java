@@ -82,12 +82,20 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private Concept smokingHistory;
 	
+	private Concept salbutamol;
+	
+	private Concept beclomethasone;
+	
+	private Concept prednisolone;
+	
 	private Concept basicInhalerTrainingProvided;
 	private Concept properInhalerTechnique;
 	
 	private List<Form> DDBforms = new ArrayList<Form>();
 	
 	private List<Concept> asthmasMedications = new ArrayList<Concept>();
+	
+	private List<Concept> asthmasMedicationsWithoutSalbutamol = new ArrayList<Concept>();
 	
 	public void setup() throws Exception {
 		
@@ -644,6 +652,37 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		dsd.addColumn("D1D", "Of total patients seen in report period", new Mapped(patientsWithAsthmaVisitIndicator,
 	        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");		
 		
+		//=======================================================
+		// D2: Of total patients with a visit in the last quarter, % on Salbutamol alone at last visit
+		//=======================================================
+		SqlCohortDefinition patientsWithCurrentSalbutamolDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
+		    "patientsWithCurrentSalbutamolDrugOrder", salbutamol);
+		
+		SqlCohortDefinition patientsWithAnyOtherCurrentAsthmaDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
+		    "patientsWithAnyOtherCurrentAsthmaDrugOrder", asthmasMedicationsWithoutSalbutamol);
+		
+		CompositionCohortDefinition patientsOnSalbutamolAlone = new CompositionCohortDefinition();
+		patientsOnSalbutamolAlone.setName("patientsWithAsthmaVisitAndEverNotOnRegimen");
+		patientsOnSalbutamolAlone.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsOnSalbutamolAlone.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsOnSalbutamolAlone.addSearch("1", patientsWithAsthmaVisit,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsOnSalbutamolAlone.addSearch("2", patientsWithCurrentSalbutamolDrugOrder, null);
+		patientsOnSalbutamolAlone.addSearch("3", patientsWithAnyOtherCurrentAsthmaDrugOrder, null);
+		patientsOnSalbutamolAlone.setCompositionString("1 AND 2 AND (NOT 3)");
+		
+		CohortIndicator patientsOnSalbutamolAloneIndicator = Indicators.newCountIndicator(
+		    "patientsOnSalbutamolAloneIndicator", patientsOnSalbutamolAlone,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "D2N",
+		    "patients with a visit in the last quarter, % on Salbutamol alone at last visit",
+		    new Mapped(patientsOnSalbutamolAloneIndicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
@@ -764,11 +803,19 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		smokingHistory = gp.getConcept(GlobalPropertiesManagement.SMOKING_HISTORY);
 		
+		salbutamol = gp.getConcept(GlobalPropertiesManagement.SALBUTAMOL_DRUG);
+		
+		beclomethasone = gp.getConcept(GlobalPropertiesManagement.BECLOMETHASONE_DRUG);
+		
+		prednisolone = gp.getConcept(GlobalPropertiesManagement.PREDNISOLONE_DRUG);
+		
 		basicInhalerTrainingProvided = gp.getConcept(GlobalPropertiesManagement.BASIC_INHALER_TRAINING_PROVIDED);
 		properInhalerTechnique = gp.getConcept(GlobalPropertiesManagement.PROPER_INHALER_TECHNIQUE);
 		
 		asthmasMedications = gp
 		        .getConceptsByConceptSet(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS);
+		
+		asthmasMedicationsWithoutSalbutamol = gp.removeConceptFromConceptSet(asthmasMedications, salbutamol);
 		
 	}
 }

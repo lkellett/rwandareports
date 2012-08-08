@@ -382,6 +382,11 @@ public class GlobalPropertiesManagement {
 	     return drugs;
 	 }
 	
+	public List<Concept> removeConceptFromConceptSet(List<Concept> conceptSet, Concept concept)
+	{
+		conceptSet.remove(concept);
+		return conceptSet;	
+	}
 	
 	public List<Concept> getConceptsByConceptSet(String globalPropertyName)
 	{
@@ -776,6 +781,12 @@ public class GlobalPropertiesManagement {
 	public final static String COTRIMOXAZOLE_DRUG="reports.ctxTreatmentConcept";
 	
 	public final static String NEVIRAPINE_DRUG="reports.glibenclamideConcept";
+	
+	public final static String SALBUTAMOL_DRUG="reports.salbutamolConcept";
+	
+	public final static String PREDNISOLONE_DRUG="reports.prednisoloneConcept";
+	
+	public final static String BECLOMETHASONE_DRUG="reports.beclomethasoneConcept";
 	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
