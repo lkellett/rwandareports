@@ -22,13 +22,16 @@ import org.openmrs.Concept;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Program;
+import org.openmrs.api.PatientSetService.TimeModifier;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -562,6 +565,84 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    "Patients With Basic Inhaler Training Provided",
 		    new Mapped(patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
+		//==============================================================
+		// C2: Of total patients with a visit in the last quarter, % who had peak flow checked in the last 6 months
+		//==============================================================
+				
+		NumericObsCohortDefinition patientsWithPeakFlowAfterSalbutamol = Cohorts.createNumericObsCohortDefinition(
+		    "patientsWithPeakFlowAfterSalbutamol", onOrAfterOnOrBefore, peakFlowAfterSalbutamol, 0, null, TimeModifier.ANY);
+		
+		CompositionCohortDefinition patientsSeenWithPeakFlowAfterSalbutamol = new CompositionCohortDefinition();
+		patientsSeenWithPeakFlowAfterSalbutamol.setName("patientsSeenWithPeakFlowAfterSalbutamol");
+		patientsSeenWithPeakFlowAfterSalbutamol.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		patientsSeenWithPeakFlowAfterSalbutamol.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		patientsSeenWithPeakFlowAfterSalbutamol.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsWithPeakFlowAfterSalbutamol, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter-3m}")));
+		patientsSeenWithPeakFlowAfterSalbutamol.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		patientsSeenWithPeakFlowAfterSalbutamol.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsSeenWithPeakFlowAfterSalbutamolIndicator = Indicators.newCountIndicator(
+		    "patientsSeenWithPeakFlowAfterSalbutamolIndicator", patientsSeenWithPeakFlowAfterSalbutamol,
+		    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
+		
+		//=================================================
+		//     Adding columns to data set definition     //
+		//=================================================
+		
+		dsd.addColumn(
+		    "C2",
+		    "Patients With peak flow checked in the last 6 months",
+		    new Mapped(patientsSeenWithPeakFlowAfterSalbutamolIndicator, ParameterizableUtil
+		    	.createParameterMappings("endDate=${endDate}")), "");
+		
+		//=======================================================
+		// D1: Of total patients seen in the last month, % with no asthma/COPD-related regimen documented ever (asthma meds: salbutamol, beclomethasone, prednisolone, aminophyilline)
+		//=======================================================
+		
+		SqlCohortDefinition patientsWithAsthmaVisit = new SqlCohortDefinition();
+		patientsWithAsthmaVisit.setQuery("select distinct patient_id from encounter where encounter_type="
+		        + asthmaEncounterType.getId()
+		        + " and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
+		patientsWithAsthmaVisit.setName("patientsWithAsthmaVisit");
+		patientsWithAsthmaVisit.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsWithAsthmaVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		SqlCohortDefinition patientsHaveDrugOrdersInAsthmaMedication = Cohorts.getPatientsEverNotOnRegimen(
+		    "patientsHaveDrugOrdersInAsthmaMedication", asthmasMedications);
+		
+		CompositionCohortDefinition patientsWithAsthmaVisitAndEverNotOnRegimen = new CompositionCohortDefinition();
+		patientsWithAsthmaVisitAndEverNotOnRegimen.setName("patientsWithAsthmaVisitAndEverNotOnRegimen");
+		patientsWithAsthmaVisitAndEverNotOnRegimen.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsWithAsthmaVisitAndEverNotOnRegimen.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsWithAsthmaVisitAndEverNotOnRegimen.addSearch("1", patientsWithAsthmaVisit,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsWithAsthmaVisitAndEverNotOnRegimen.addSearch("2", patientsHaveDrugOrdersInAsthmaMedication, null);
+		patientsWithAsthmaVisitAndEverNotOnRegimen.setCompositionString("1 AND (NOT 2)");
+		
+		CohortIndicator patientsWithAsthmaVisitIndicator = Indicators.newCountIndicator("patientsWithAsthmaVisitIndicator",
+		    patientsWithAsthmaVisit,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		CohortIndicator patientsWithAsthmaVisitAndEverNotOnRegimenIndicator = Indicators.newCountIndicator(
+		    "patientsEverNotOnRegimenIndicator", patientsWithAsthmaVisitAndEverNotOnRegimen,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "D1N",
+		    "patients with no asthma/COPD-related regimen documented ever (asthma meds: salbutamol, beclomethasone, prednisolone, aminophyilline)",
+		    new Mapped(patientsWithAsthmaVisitAndEverNotOnRegimenIndicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		dsd.addColumn("D1D", "Of total patients seen in report period", new Mapped(patientsWithAsthmaVisitIndicator,
+	        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");		
 		
 	}
 	
