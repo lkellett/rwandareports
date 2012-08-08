@@ -709,6 +709,31 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    "patients with a visit in the last quarter on Salbutamol, % also on Beclomethasone",
 		    new Mapped(patientsOnSalbutamolAndBeclomethasoneIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		//=======================================================
+		// D4: Of total patients with a visit in the last quarter, % prescribed oral Prednisolone in the last quarter
+		//=======================================================
+		SqlCohortDefinition patientsPrescribedOralPrednisoloneInTheLastQuarter = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
+		    "patientsPrescribedOralPrednisoloner", prednisolone);
+		
+		CompositionCohortDefinition patientsPrescribedOralPrednisolone = new CompositionCohortDefinition();
+		patientsPrescribedOralPrednisolone.setName("patientsOnSalbutamolAndBeclomethasone");
+		patientsPrescribedOralPrednisolone.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsPrescribedOralPrednisolone.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientsPrescribedOralPrednisolone.addSearch("1", patientsWithAsthmaVisit,ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsPrescribedOralPrednisolone.addSearch("2", patientsPrescribedOralPrednisoloneInTheLastQuarter, null);
+		patientsPrescribedOralPrednisolone.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsPrescribedOralPrednisoloneIndicator = Indicators.newCountIndicator(
+		    "patientsPrescribedOralPrednisoloneIndicator", patientsPrescribedOralPrednisolone,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "D4N",
+		    "patients with a visit in the last quarter, % prescribed oral Prednisolone in the last quarter",
+		    new Mapped(patientsPrescribedOralPrednisoloneIndicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
 	}
 	
