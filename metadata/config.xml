@@ -1916,6 +1916,22 @@
 	    </globalProperty>
 	    
 	     <globalProperty>
+		<property>reports.severePersistentAsthma</property>
+		<defaultValue>7072</defaultValue>
+		<description>
+			The concept id of Severe Persistent Asthma
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
+		<property>reports.severeUncontrolledAsthma</property>
+		<defaultValue>7069</defaultValue>
+		<description>
+			The concept id of Severe uncontrolled asthma
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
 		<property>reports.asthmaclassificationorder</property>
 		<defaultValue>intermittent asthma:1,Mild persistent asthma:2,Moderate Persistent Asthma:3,Severe Persistent Asthma:4,Severe uncontrolled asthma:5</defaultValue>
 		<description>

@@ -636,6 +636,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ASTHMA_CLASSIFICATION="reports.asthmaclassificationConcept";
 	
+	public final static String SEVERE_PERSISTENT_ASTHMA="reports.severePersistentAsthma";
+	
+	public final static String SEVERE_UNCONTROLLED_ASTHMA="reports.severeUncontrolledAsthma";
+	
 	public final static String ASTHMA_CLASSIFICATION_ORDER="reports.asthmaclassificationorder";
 	
 	public final static String SMOKING_HISTORY = "reports.smokingHistory"; 
