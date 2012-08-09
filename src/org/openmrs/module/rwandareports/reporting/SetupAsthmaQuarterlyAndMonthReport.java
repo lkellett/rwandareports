@@ -845,8 +845,6 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		AgeCohortDefinition over15Cohort = Cohorts.createOver15AgeCohort("ageQD: Over 15");
 		
-		//GenderCohortDefinition femalesDefinition = Cohorts.createFemaleCohortDefinition("femalesDefinition");
-		
 		GenderCohortDefinition malesDefinition = Cohorts.createMaleCohortDefinition("malesDefinition");
 		
 		NumericObsCohortDefinition patientsTestedForpeakFlow = Cohorts.createNumericObsCohortDefinition(
@@ -905,6 +903,66 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    "E4N",
 		    "Of adult male patients (age ≥15 years old) who had peak flow Greater Than 580 tested in the last quarter",
 		    new Mapped(adultMalePatientsTestedForpeakFlowGreaterThan580Indicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
+		
+		//=======================================================
+		// E5: Of adult female patients (age ≥15 years old) who had peak flow tested in the last quarter, % with last peak flow >400
+		//=======================================================
+		
+		GenderCohortDefinition femalesDefinition = Cohorts.createFemaleCohortDefinition("femalesDefinition");
+		
+		CompositionCohortDefinition adultFemalePatientsTestedForpeakFlow = new CompositionCohortDefinition();
+		adultFemalePatientsTestedForpeakFlow.setName("adultFemalePatientsTestedForpeakFlow");
+		adultFemalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		adultFemalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		
+		adultFemalePatientsTestedForpeakFlow.getSearches().put("1",new Mapped<CohortDefinition>(patientsTestedForpeakFlow, ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		
+		adultFemalePatientsTestedForpeakFlow.getSearches().put("2", new Mapped<CohortDefinition>(femalesDefinition, null));
+		
+		adultFemalePatientsTestedForpeakFlow.getSearches().put("3",new Mapped(over15Cohort, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
+		
+		adultFemalePatientsTestedForpeakFlow.setCompositionString("1 AND 2 AND 3");
+		
+		CohortIndicator adultFemalePatientsTestedForpeakFlowIndicator = Indicators
+		        .newCountIndicator("adultFemalePatientsTestedForpeakFlowIndicator",
+		        	adultFemalePatientsTestedForpeakFlow,
+		            ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
+		
+		
+		NumericObsCohortDefinition patientsWithLastPeakflowGreaterThan400 = Cohorts.createNumericObsCohortDefinition(
+		    "patientsWithLastPeakflowGreaterThan400", peakFlowAfterSalbutamol, 400, RangeComparator.GREATER_THAN,
+		    TimeModifier.LAST);
+		
+		CompositionCohortDefinition adultFemalePatientsTestedForpeakFlowGreaterThan400 = new CompositionCohortDefinition();
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.setName("adultFemalePatientsTestedForpeakFlowGreaterThan400");
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.getSearches().put("1",new Mapped<CohortDefinition>(adultFemalePatientsTestedForpeakFlow, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.getSearches().put("2",
+		    new Mapped<CohortDefinition>(patientsWithLastPeakflowGreaterThan400, null));
+		adultFemalePatientsTestedForpeakFlowGreaterThan400.setCompositionString("1 AND 2");
+		
+		CohortIndicator adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator = Indicators
+        .newCountIndicator("adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator",
+        	adultFemalePatientsTestedForpeakFlowGreaterThan400,
+            ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "E5D",
+		    "Of adult female patients (age ≥15 years old) who had peak flow tested in the last quarter",
+		    new Mapped(adultFemalePatientsTestedForpeakFlowIndicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
+		
+		dsd.addColumn(
+		    "E5N",
+		    "Of adult female patients (age ≥15 years old) who had peak flow Greater Than 400 tested in the last quarter",
+		    new Mapped(adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator, ParameterizableUtil
 		            .createParameterMappings("endDate=${endDate}")), "");
 		
 	}
