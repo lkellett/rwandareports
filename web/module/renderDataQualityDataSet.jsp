@@ -71,7 +71,6 @@ $(document).ready(function() {
 $(function() {
 
         $('#cohort-breakdown-table').dataTable( {
-        	  //  "iDisplayLength": 5,
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": false,
@@ -190,7 +189,7 @@ $(function() {
 		</div><!-- portal -->
 		
 		
-		<!-- ENCOUNTER DATA PROBLEM 
+		<!-- ENCOUNTER DATA PROBLEM -->
 		<div id="portal">
 		<c:forEach var="cohort" items="${dQRListenc}" varStatus="cohortNum">
 		<c:set var="patientsNumInOneDataSetenc" value="${fn:length(cohort.encounters)}" />
@@ -223,7 +222,10 @@ $(function() {
 							<tr>
 	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.encounterId}</a></c:if></td>
 	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.encounterDatetime}</a></c:if></td>
-	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patientId}</a></c:if></td>
+	<td><c:if test="${encdsd.patient.patientIdentifier.identifierType.name=='IMB ID'}"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.patientIdentifier}</a></c:if>
+	<c:if test="${encdsd.patient.patientIdentifier.identifierType.name=='IMB Primary Care Registration ID'}"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.patientIdentifier}</a></c:if>
+	</td>
+	
 	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.givenName}</a></c:if></td>
 	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.familyName}</a></c:if></td>
 	<td><c:if test="${!empty encdsd.encounterId }"><a href="${pageContext.request.contextPath}/admin/encounters/encounter.form?encounterId=${encdsd.encounterId}" target="_blank">${encdsd.patient.age}</a></c:if></td>
@@ -247,7 +249,7 @@ $(function() {
 		</div>
 		<br/>
 	</div>
-</div>-->
+</div>
 
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

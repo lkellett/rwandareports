@@ -18,6 +18,7 @@ import java.util.*;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.Patient;
@@ -53,7 +54,7 @@ public class RenderDataQualityReportController {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "deprecation" })
 	@RequestMapping("/module/rwandareports/renderDataQualityDataSet")
 	public String showReport(@RequestParam(required=false, value="savedDataSetKey") String savedDataSetKey,
 			@RequestParam(required=false, value="savedDataSetEncKey") String savedDataSetEncKey,                   
@@ -97,92 +98,78 @@ public class RenderDataQualityReportController {
                   savedColumnKeys.add("20");
                   savedColumnKeys.add("21");
                     
-                 List<DQReportModel> dQRList=new ArrayList<DQReportModel>();
-                  for (String savedColumnKey : savedColumnKeys) {
-      				DQReportModel  dQRObject=new DQReportModel();
+             List<DQReportModel> dQRList=new ArrayList<DQReportModel>();
+             for (String savedColumnKey : savedColumnKeys) {
+      		 DQReportModel dQRObject=new DQReportModel();
                   
-                 for (Map.Entry<String, DataSet> e : data.getDataSets().entrySet()) {
-                          if (e.getKey().equals(savedDataSetKey)) { 
-                                  MapDataSet mapDataSet = (MapDataSet) e.getValue();
-                                  DataSetColumn dataSetColumn = mapDataSet.getMetaData().getColumn(savedColumnKey);
-                                  dQRObject.setSelectedColumn(dataSetColumn);
+             for (Map.Entry<String, DataSet> e : data.getDataSets().entrySet()) {
+                if (e.getKey().equals(savedDataSetKey)) { 
+                 MapDataSet mapDataSet = (MapDataSet) e.getValue();
+                 DataSetColumn dataSetColumn = mapDataSet.getMetaData().getColumn(savedColumnKey);
+                 dQRObject.setSelectedColumn(dataSetColumn);
                                   
-                                  Object result = mapDataSet.getData(dataSetColumn);
-                                  Cohort selectedCohort = null;
-                                  if (result instanceof CohortIndicatorAndDimensionResult) {
-                                          CohortIndicatorAndDimensionResult cidr = (CohortIndicatorAndDimensionResult) mapDataSet.getData(dataSetColumn);
-                                          selectedCohort = cidr.getCohortIndicatorAndDimensionCohort();
+                 Object result = mapDataSet.getData(dataSetColumn);
+                 Cohort selectedCohort = null;
+                 if (result instanceof CohortIndicatorAndDimensionResult) {
+                 CohortIndicatorAndDimensionResult cidr = (CohortIndicatorAndDimensionResult) mapDataSet.getData(dataSetColumn);
+                 selectedCohort = cidr.getCohortIndicatorAndDimensionCohort();
                                         
                                   }
-                                  // Evaluate the default patient dataset definition
-                                  DataSetDefinition dsd = null;
-                               if (dsd == null) {
-                                          SimplePatientDataSetDefinition d = new SimplePatientDataSetDefinition();
-                                          d.addPatientProperty("patientId");
-                                          List<PatientIdentifierType> types = ReportingConstants.GLOBAL_PROPERTY_PREFERRED_IDENTIFIER_TYPES();
-                                          if (!types.isEmpty()) {
-                                                  d.setIdentifierTypes(types);
-                                          }
-                                          
-                                          GlobalPropertiesManagement gp=new GlobalPropertiesManagement();
-                                          Program pediHIV=gp.getProgram(GlobalPropertiesManagement.PEDI_HIV_PROGRAM);	
-                                  	      Program adultHIV=gp.getProgram(GlobalPropertiesManagement.ADULT_HIV_PROGRAM);	
-                                  	      Program tb=gp.getProgram(GlobalPropertiesManagement.TB_PROGRAM);	
-                                          
-                                          List<Program> programsGroup=new ArrayList<Program>();
-                                          programsGroup.add(pediHIV);
-                                          programsGroup.add(adultHIV);
-                                          programsGroup.add(tb);
-                                         /*
-                                          List<ProgramWorkflow> programWorkFlows=new ArrayList<ProgramWorkflow>();
+                 // Evaluate the default patient dataset definition
+                 DataSetDefinition dsd = null;
+                 if (dsd == null) {
+                    SimplePatientDataSetDefinition d = new SimplePatientDataSetDefinition();
+                    d.addPatientProperty("patientId");
+                    List<PatientIdentifierType> types = ReportingConstants.GLOBAL_PROPERTY_PREFERRED_IDENTIFIER_TYPES();
+                    if (!types.isEmpty()) {
+                       d.setIdentifierTypes(types);
+                    }
                                          
-                                          for (Program program : programsGroup){
-                                        	  log.info("=======program======"+program);
-                                          	if(program.getWorkflowByName("TUBERCULOSIS TREATMENT GROUP")!=null)
-                                          	programWorkFlows.add(program.getWorkflowByName("TUBERCULOSIS TREATMENT GROUP"));
-                                         
-                                          	for (ProgramWorkflow programWorkflow : program.getAllWorkflows()) {
-                                          		log.info("WorkFlow Name: "+programWorkflow);
-                                          		if(programWorkflow!=null){
-                                          		programWorkFlows.add(programWorkflow);
-                                          		}
-                                          		
-      										}
-      									
-                                     }    
-                                          if(programWorkFlows!=null && programWorkFlows.size()>0){
-                                            d.setProgramWorkflows(programWorkFlows);
-                                          }*/
-                                          d.addPatientProperty("givenName");
-                                          d.addPatientProperty("familyName");
-                                          d.addPatientProperty("age");
-                                          d.addPatientProperty("gender");
-                                          
-                                          dsd = d;
-                                  }
-                                  EvaluationContext evalContext = new EvaluationContext();
+                    List<ProgramWorkflow> programWorkFlows=new ArrayList<ProgramWorkflow>(); 
+                  
+                    ProgramWorkflow hivWorkflow=Context.getProgramWorkflowService().getProgram(3).getWorkflowByName("TREATMENT GROUP");
+                    ProgramWorkflow tbWorkflow=Context.getProgramWorkflowService().getProgram(4).getWorkflowByName("TUBERCULOSIS TREATMENT GROUP");
+                   
+                    programWorkFlows.add(hivWorkflow);
+                    programWorkFlows.add(tbWorkflow);
+                    log.info("==========workflow result========="+programWorkFlows);
+                    
+                    if((programWorkFlows!=null && programWorkFlows.size()>0)) {
+                       
+                    d.setProgramWorkflows(programWorkFlows);
+                     
+                    d.addPatientProperty("givenName");
+                    d.addPatientProperty("familyName");
+                    d.addPatientProperty("age");
+                    d.addPatientProperty("gender");
+                      
+                    dsd = d;
+                       }
+                    
+                     }
+                    EvaluationContext evalContext = new EvaluationContext();
+                    evalContext.setBaseCohort(selectedCohort);
                                   
-                                  evalContext.setBaseCohort(selectedCohort);
-                                  
-                                  DataSet patientDataSet;
-                                  try {
-                                      patientDataSet = Context.getService(DataSetDefinitionService.class).evaluate(dsd, evalContext);
-                                      dQRObject.setDataSet(patientDataSet);   
-                                      dQRObject.setDataSetDefinition(dsd);
-                                  } catch (EvaluationException e1) {
-                                          // TODO Auto-generated catch block
-                                          e1.printStackTrace();
-                                  }
-                          }
+                    DataSet patientDataSet;
+                    try {
+                      patientDataSet = Context.getService(DataSetDefinitionService.class).evaluate(dsd, evalContext);
+                      dQRObject.setDataSet(patientDataSet);   
+                      dQRObject.setDataSetDefinition(dsd);
+                        } catch (EvaluationException e1) {
+                   // TODO Auto-generated catch block
+                         e1.printStackTrace();
+                              }
+                       }
                   }
               // Add all dataset definition to the request (allow user to choose)
               dQRObject.setDataSetDefinitions(Context.getService(DataSetDefinitionService.class).getAllDefinitions(false));		
               dQRList.add(dQRObject);
                   }
                   
-                  model.addAttribute("dQRList",dQRList);
+              model.addAttribute("dQRList",dQRList);
             }
 	 
+          
          // evaluate encounter dataset
             if(savedDataSetEncKey.equals("encFuture")){
             List<String> savedColumnKeys=new ArrayList<String>();
@@ -191,8 +178,11 @@ public class RenderDataQualityReportController {
            for (String savedColumnKey : savedColumnKeys) {
 			for (Map.Entry<String, DataSet> e : data.getDataSets().entrySet()) {
                     if (e.getKey().equals(savedDataSetEncKey)) {
+                    	
                  List<DataSetRow> mapDataSet=((SimpleDataSet) e.getValue()).getRows();
+                 log.info("==========mapDataSet========="+mapDataSet);
                             DataSetColumn dataSetColumn = e.getValue().getMetaData().getColumn(savedColumnKey);
+                            log.info("==========datasetColumn========="+dataSetColumn);
                             List<DataSetColumn> dsdlist=new ArrayList<DataSetColumn>();
                             dsdlist.add(dataSetColumn);
                            
@@ -203,6 +193,7 @@ public class RenderDataQualityReportController {
                 			  for (DataSetColumn column : dsdlist) {
                 			colValue = row.getColumnValue(column.getName());
                 			 result =colValue;
+                			 log.info("==========result========="+result);
                 			 if (result instanceof EncounterIndicatorResult) {
                             	EncounterIndicatorResult cidr = (EncounterIndicatorResult)result;
                                 selectedEncounter =cidr.getMemberIds();
@@ -216,8 +207,15 @@ public class RenderDataQualityReportController {
                            DQReportModel dQRObjectenc=new DQReportModel();
 
                            for (Integer encId : selectedEncounter) {
+                        	   //here i will add the encounter_Datetime sorting.
                         	   encounters.add(Context.getEncounterService().getEncounter(encId)); 
-                        	   patients.add(Context.getEncounterService().getEncounter(encId).getPatient());
+                        	   
+                        	 List<Date>encounterDatetime=new ArrayList<Date> ();
+                        	 encounterDatetime.add(Context.getEncounterService().getEncounter(encId).getEncounterDatetime());
+                        	  
+                        	   log.info("=====the encounters====="+encounterDatetime);
+                        	                          	
+                               patients.add(Context.getEncounterService().getEncounter(encId).getPatient());
                         	  log.info("=====this is it====="+patients);
                               }
                 			  
@@ -231,7 +229,7 @@ public class RenderDataQualityReportController {
             model.addAttribute("dQRListenc",dQRListenc);
             
 		} //end of if 
-            
+           
        }
 		catch (ClassCastException ex) {
 			// pass

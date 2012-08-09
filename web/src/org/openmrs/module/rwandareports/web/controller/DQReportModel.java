@@ -7,6 +7,8 @@ import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Patient;
+import org.openmrs.ProgramWorkflow;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetColumn;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -25,6 +27,7 @@ public class DQReportModel {
 	private DataSet dataSet;
 	private DataSetDefinition dataSetDefinition;
 	private List<DataSetDefinition> dataSetDefinitions;
+	private List<ProgramWorkflow> pediWorkflow=new ArrayList<ProgramWorkflow>();
 	
 	public DataSetColumn getSelectedColumn() {
 		return selectedColumn;
@@ -78,6 +81,15 @@ public class DQReportModel {
 	}
 	public void setDataSetDefinitions(List<DataSetDefinition> dataSetDefinitions) {
 		this.dataSetDefinitions = dataSetDefinitions;
+	}
+	/**
+	 * @param pediWorkflow the pediWorkflow to set
+	 */
+	public ProgramWorkflow getPediWorkflow() {
+		pediWorkflow.add(Context.getProgramWorkflowService().getWorkflow(20));
+		return (ProgramWorkflow) pediWorkflow;
+		
+		
 	}
 	
 }
