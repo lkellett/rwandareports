@@ -145,7 +145,7 @@ public class SetupDataQualityIndicatorReport {
 		h.saveReportDefinition(rd);
 		createCustomWebRenderer(rd, "DataQualityWebRenderer");
 		
-	  //  rd.addDataSetDefinition(createObsDataSet(),null);
+	 //   rd.addDataSetDefinition(createObsDataSet(),ParameterizableUtil.createParameterMappings("location=${location}"));
 	    h.saveReportDefinition(rd);
 		return rd;
 	}
@@ -198,7 +198,7 @@ public class SetupDataQualityIndicatorReport {
 				CohortIndicator patientsInHIVOnARTWithoutAccompIndicator = Indicators.newCountIndicator(
 					    "hivOnARTWithoutAccompDQ: Number of patients in HIV program on ART and without Accompagnateur", patientsInHIVAndOnARTWithoutAccomp,
 					    null);
-			
+				
 				//======================================================================================
 				// 2. Patients enrolled in PMTCT Pregnancy for more than 8 months
 				//======================================================================================
@@ -209,7 +209,7 @@ public class SetupDataQualityIndicatorReport {
 				CohortIndicator patientsInPMTCTTooLongIndicator = Indicators.newCountIndicator(
 					    "PMTCTDQ: Number of patients in PMTCT program", patientsInPMTCTTooLong,       
 					    null);
-						                                                                                                             		            
+					                                                                                                             		            
 				//======================================================================================     
 				// 3. Patients enrolled in Combined Clinic Mother for more than 19 months
 				//======================================================================================
@@ -217,11 +217,10 @@ public class SetupDataQualityIndicatorReport {
 				
 				SqlCohortDefinition patientsInPMTCTCCMTooLong=new SqlCohortDefinition("select distinct patient_id from patient_program pp,program p where pp.program_id=p.program_id and p.name='"+pmtctCombinedClinicMother.getName()+"' and DATEDIFF(CURDATE(),pp.date_enrolled) > "+gp.NINETEEN_MONTHS+" and pp.voided=false and pp.date_completed is null");
 				CohortIndicator patientsInPMTCTCCMTooLongIndicator = Indicators.newCountIndicator(
-					    "PMTCTCCMDQ: Number of patients in Combined Clinic Mother program", patientsInPMTCTCCMTooLong,
-					    null);		
+					   "PMTCTCCMDQ: Number of patients in Combined Clinic Mother program", patientsInPMTCTCCMTooLong,
+					    null);	
 				
-				
-
+			
 				//======================================================================================
 				// 4. Patients enrolled in Combined Clinic Infant for more than 19 months
 				//======================================================================================
@@ -383,6 +382,7 @@ public class SetupDataQualityIndicatorReport {
 				patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen.setCompositionString(" 1 AND 2 AND (NOT 3) ");
 				
 				CohortIndicator patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimenIndicator = Indicators.newCountIndicator("PMTCTDQ: Number patients In TB Program Too long on First Line Regimen and Not on Second Line regimen", patientsInTBTooLongOnFirstLineRegimenNotSecondLineRegimen,null);
+				
 				//======================================================================================
 				//  12. Patients over 100 years old
 				//======================================================================================
@@ -391,7 +391,7 @@ public class SetupDataQualityIndicatorReport {
 				
 				CohortIndicator patientsOver100YearsoldIndicator = Indicators.newCountIndicator("PMTCTDQ: Number patients Over 100 years old", patientsOver100Yearsold,null);
 
-				
+			
 				//======================================================================================
 				// 13. Patients with a visit in last 12 months who do not have a correctly structured address
 				//======================================================================================
@@ -449,6 +449,7 @@ public class SetupDataQualityIndicatorReport {
 				patientExitedfromcareinPrograms.setCompositionString("1 AND 2");		
 				CohortIndicator patientExitedfromcareinProgramsIndicator = Indicators.newCountIndicator("Number of patients With status decease but still enrolled in their programs", patientExitedfromcareinPrograms,null);		
 				
+				
 				//======================================================================================
 				// 15. Patients who status is transferred out but is currently enrolled in program
 				//======================================================================================
@@ -501,7 +502,7 @@ public class SetupDataQualityIndicatorReport {
 				patientsWithNoEncounterInProgram.setCompositionString("2 AND (NOT 1)");
 				
 				CohortIndicator patientsWithNoEncounterInProgramIndicator = Indicators.newCountIndicator("Number with no encounter", patientsWithNoEncounterInProgram,null);		
-
+               
 				//======================================================================================
 				// 18. Patients with a BMI <12  or  >35
 				//======================================================================================
@@ -597,7 +598,7 @@ public class SetupDataQualityIndicatorReport {
 				 patientsWithinvaliddatesandmissingforms.setCompositionString("(1 OR 2) AND (NOT 3)");
 					
 				CohortIndicator patientsOnArtbeforeHivEnrollmentIndicator = Indicators.newCountIndicator("Number of invalid dates and forms", patientsWithinvaliddatesandmissingforms,null);	
-			
+				
 				//======================================================================================
 				// 20. Missing program enrollment start date
 				//======================================================================================
@@ -650,7 +651,7 @@ public class SetupDataQualityIndicatorReport {
 				reportDefinition.addIndicator("3", "Patients enrolled in Combined Clinic Mother for more than 19 months", patientsInPMTCTCCMTooLongIndicator);
 				reportDefinition.addIndicator("4", "Patients enrolled in Combined Clinic Infant for more than 19 months", patientsInPMTCTCCITooLongIndicator);
 				reportDefinition.addIndicator("5", "Patients in PMTCT-pregnancy or PMTCT Combine Clinic - mother while a 'male' patient", malesInPMTCTAndPMTCTCCMIndicator);
-				reportDefinition.addIndicator("6","Patients with current ARV regimen with incorrect treatment status(not 'On ART')",patientsOnARTRegimenNotOnARTStatus);
+	    		reportDefinition.addIndicator("6","Patients with current ARV regimen with incorrect treatment status(not 'On ART')",patientsOnARTRegimenNotOnARTStatus);
                 reportDefinition.addIndicator("7","Patients with treatment status 'On Antiretrovirals' without an ARV regimen",patientsOnARTStatusNotOnARTRegimen);
 				reportDefinition.addIndicator("8","Patients with current TB regimen not currently in TB program (excluding patients in HF program)",patientsOnTBRegimenNotInTBProgramHFExcluded);
 				reportDefinition.addIndicator("9","Patients with invalid IMB ID",patientsWithInvalidIdInd);
@@ -665,23 +666,27 @@ public class SetupDataQualityIndicatorReport {
 		    	reportDefinition.addIndicator("18","Patients With BMI <12 or >35",patientsWithBMIMoreThan35);
 				reportDefinition.addIndicator("19","Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer inform",patientsOnArtbeforeHivEnrollmentIndicator);
 				reportDefinition.addIndicator("20","Patients With Missing program enrollment start date",patientsMissingprogramsEnrolStartDateindicator);
-			    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic � Infant program who don�t have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
-		
+			    reportDefinition.addIndicator("21","Patients currently enrolled in the PMTCT Combined Clinic Infant program who don't have a non-voided Mother/Child relationship",infantsWithNoMotherAccIndicator);
+	
 	} 
 		
 		public EncounterIndicatorDataSetDefinition createObsDataSet() {
 			EncounterIndicatorDataSetDefinition dsd = new EncounterIndicatorDataSetDefinition();
 			dsd.setName("encFuture");
+			dsd.addParameter(new Parameter("location", "location", Location.class));
 			
 			SqlEncounterQuery patientsWithObsInTheFuture = new SqlEncounterQuery();
 			patientsWithObsInTheFuture.setName("patientsWithObsInTheFuture");
 			//patientsWithObsInTheFuture.setQuery("select enc.encounter_id from encounter enc, obs o where enc.encounter_id=o.encounter_id and o.person_id=enc.patient_id and o.obs_datetime > enc.encounter_datetime and o.voided=0 and o.voided=0 order by enc.encounter_datetime desc");
-		    patientsWithObsInTheFuture.setQuery(" select distinct encounter_id from encounter where patient_id=63510 and voided=0 ");
-			
+			patientsWithObsInTheFuture.setQuery("select distinct encounter_id from encounter where encounter_id in (select distinct e.encounter_id from encounter e, obs o where e.encounter_id=o.encounter_id and o.obs_datetime > e.encounter_datetime and o.voided=0 order by e.encounter_datetime desc) and voided=0 ");
+		     patientsWithObsInTheFuture.addParameter(new Parameter("location", "location", Location.class));
+		    log.info("========encbefire========"+patientsWithObsInTheFuture);
+		    
 			EncounterIndicator patientsWithObsInTheFutureIndicator = new EncounterIndicator();
 			patientsWithObsInTheFutureIndicator.setName("Observations in the future (except return visit date)");
-			patientsWithObsInTheFutureIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientsWithObsInTheFuture,null));
-	
+			patientsWithObsInTheFutureIndicator.setEncounterQuery(new Mapped<EncounterQuery>(patientsWithObsInTheFuture, ParameterizableUtil.createParameterMappings("location=${location}")));
+			 log.info("========indicatorbefore========"+patientsWithObsInTheFutureIndicator);
+			
 			dsd.addColumn(patientsWithObsInTheFutureIndicator);
 			
            
