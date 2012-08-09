@@ -88,7 +88,10 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private Concept prednisolone;
 	
+	private Concept locOfHosp;
+	
 	private Concept basicInhalerTrainingProvided;
+	
 	private Concept properInhalerTechnique;
 	
 	private List<Form> DDBforms = new ArrayList<Form>();
@@ -735,6 +738,52 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		    new Mapped(patientsPrescribedOralPrednisoloneIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
+		//=======================================================================
+		//E2: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
+		//==================================================================
+		
+		SqlCohortDefinition patientHospitalized = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
+		    "patientHospitalized", asthmaEncounterType, locOfHosp);
+		
+		CompositionCohortDefinition activeAndHospitalizedPatients = new CompositionCohortDefinition();
+		activeAndHospitalizedPatients.setName("activeAndHospitalizedPatients");
+		activeAndHospitalizedPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		activeAndHospitalizedPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		activeAndHospitalizedPatients.addParameter(new Parameter("endDate", "endDate", Date.class));
+		activeAndHospitalizedPatients.addParameter(new Parameter("startDate", "startDate", Date.class));
+		activeAndHospitalizedPatients.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		activeAndHospitalizedPatients.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(patientHospitalized, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate}")));
+		activeAndHospitalizedPatients.setCompositionString("1 AND 2");
+		
+		CohortIndicator activeAndHospitalizedPatientsCountQuarterIndicator = Indicators
+		        .newCountIndicator(
+		            "activeAndHospitalizedPatientsCountQuarterIndicator",
+		            activeAndHospitalizedPatients,
+		            ParameterizableUtil
+		                    .createParameterMappings("endDate=${endDate},startDate=${endDate-3m+1d},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		CohortIndicator patientsSeenInOneYearCountIndicator = Indicators.newCountIndicator(
+		    "patientsSeenInOneYearCountIndicator", patientsSeenComposition,
+		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		
+		dsd.addColumn(
+		    "E2N",
+		    "Total active patients, number with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)",
+		    new Mapped(activeAndHospitalizedPatientsCountQuarterIndicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
+		
+		dsd.addColumn("E2D", "total patients seen in the last year", new Mapped(patientsSeenInOneYearCountIndicator,
+	        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		
 	}
 	
 	private void createMonthlyIndicators(CohortIndicatorDataSetDefinition dsd) {
@@ -868,6 +917,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		        .getConceptsByConceptSet(GlobalPropertiesManagement.CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS);
 		
 		asthmasMedicationsWithoutSalbutamol = gp.removeConceptFromConceptSet(asthmasMedications, salbutamol);
+		locOfHosp = gp.getConcept(GlobalPropertiesManagement.LOCATION_OF_HOSPITALIZATION);
 		
 	}
 }
