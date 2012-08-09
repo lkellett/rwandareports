@@ -739,7 +739,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
 		//=======================================================================
-		//E2: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
+		//E1: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
 		//==================================================================
 		
 		SqlCohortDefinition patientHospitalized = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
@@ -776,13 +776,50 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		//========================================================
 		
 		dsd.addColumn(
-		    "E2N",
+		    "E1N",
 		    "Total active patients, number with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)",
 		    new Mapped(activeAndHospitalizedPatientsCountQuarterIndicator, ParameterizableUtil
 		            .createParameterMappings("endDate=${endDate}")), "");
 		
-		dsd.addColumn("E2D", "total patients seen in the last year", new Mapped(patientsSeenInOneYearCountIndicator,
+		dsd.addColumn("E1D", "total patients seen in the last year", new Mapped(patientsSeenInOneYearCountIndicator,
 	        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+		
+		//=======================================================================
+		//E2: Of total patients with a visit in the last 12 months, % with no visit  in 28  or more weeks
+		//==================================================================		
+		
+		EncounterCohortDefinition withAsthmaVisit = Cohorts.createEncounterParameterizedByDate("withAsthmaVisit",
+		    onOrAfterOnOrBefore, asthmaEncounterType);
+		
+		CompositionCohortDefinition activeAndNotwithAsthmaVisitIn28WeeksPatients = new CompositionCohortDefinition();
+		activeAndNotwithAsthmaVisitIn28WeeksPatients.setName("activeAndNotwithAsthmaVisitIn28WeeksPatients");
+		activeAndNotwithAsthmaVisitIn28WeeksPatients
+		        .addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		activeAndNotwithAsthmaVisitIn28WeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore",
+		        Date.class));
+		activeAndNotwithAsthmaVisitIn28WeeksPatients.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		activeAndNotwithAsthmaVisitIn28WeeksPatients.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(withAsthmaVisit, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-28w}")));
+		activeAndNotwithAsthmaVisitIn28WeeksPatients.setCompositionString("1 AND (NOT 2)");
+		
+		CohortIndicator activeAndNotwithAsthmaVisitIn28WeeksPatientsCountQuarterIndicator = Indicators
+		        .newCountIndicator("activeAndNotwithAsthmaVisitIn28WeeksPatientsNumeratorCountQuarterIndicator",
+		        	activeAndNotwithAsthmaVisitIn28WeeksPatients,
+		            ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================
+		dsd.addColumn(
+		    "E2N",
+		    "Total active patients, number with no visit in 28 weeks or more past last visit date",
+		    new Mapped(activeAndNotwithAsthmaVisitIn28WeeksPatientsCountQuarterIndicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
 		
 	}
 	
