@@ -119,12 +119,9 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstRecordedObservationWithCodedConceptAnswer("hivDiagnosis",
 		    hivTest, hivPositiveAnswer, "dd-MMM-yyyy"), new HashMap<String, Object>());
 		
-		DateFormatFilter dateFilter = new DateFormatFilter();
-		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
+		MostRecentObservation ddr = RowPerPatientColumns.getMostRecent("ddr", ddrConcept, "dd-MMM-yyyy", null);
 		
-		MostRecentObservation ddr = RowPerPatientColumns.getMostRecent("ddr", ddrConcept, null, dateFilter);
-		
-		MostRecentObservation dpa = RowPerPatientColumns.getMostRecent("dpa", dpaConcept, null, dateFilter);
+		MostRecentObservation dpa = RowPerPatientColumns.getMostRecent("dpa", dpaConcept, "dd-MMM-yyyy", null);
 		
 		MostRecentObservation cd4Test = RowPerPatientColumns.getMostRecentCD4("CD4Test", "dd-MMM-yyyy",
 		    new RemoveDecimalFilter());
@@ -148,7 +145,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		    new DrugNameFilter());
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MMM-yyyy", null),
 		    new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions gestationalAge = new CustomCalculationBasedOnMultiplePatientDataDefinitions();

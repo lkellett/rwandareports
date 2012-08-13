@@ -34,7 +34,7 @@ public class GestationalAge implements CustomCalculation{
 			{
 				ObservationResult ddr = (ObservationResult)result;
 				
-				SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+				SimpleDateFormat sdf = new SimpleDateFormat(ddr.getDateFormat());
 				
 				if(ddr.getValue() != null && ddr.getValue().trim().length() > 0)
 				{
