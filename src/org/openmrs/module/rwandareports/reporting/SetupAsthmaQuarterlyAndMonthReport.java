@@ -95,6 +95,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private Concept severeUncontrolledAsthma;
 	
+	private Concept asthmaclassification;
+	
 	private Concept basicInhalerTrainingProvided;
 	
 	private Concept properInhalerTechnique;
@@ -102,6 +104,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	private List<Form> DDBforms = new ArrayList<Form>();
 	
 	private List<Concept> asthmasMedications = new ArrayList<Concept>();
+	
+	private List<Concept> asthmasClassificationAnswers = new ArrayList<Concept>();
 	
 	private List<Concept> asthmasMedicationsWithoutSalbutamol = new ArrayList<Concept>();
 	
@@ -836,8 +840,78 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		            .createParameterMappings("endDate=${endDate}")), "");
 		
 		//=======================================================================
-		//E3: Of total active patients with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit, % with next scheduled RDV visit 14 weeks or more past last visit date 
-		//==================================================================		
+		//E3: Of total active patients with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit, % with next scheduled RDV visit 28 weeks or more past last visit date 
+		//=======================================================================		
+		SqlCohortDefinition patientsWithAsthmaClassificationObsAnswer = Cohorts
+        .getPatientsWithObservationInFormBetweenStartAndEndDate("patientsWithAsthmaClassificationObsAnswer",
+            DDBforms, asthmaclassification, asthmasClassificationAnswers);
+		
+		//=============
+		CompositionCohortDefinition activeAndWithAsthmaClassificationObsAnswer = new CompositionCohortDefinition();
+		activeAndWithAsthmaClassificationObsAnswer.setName("activeAndWithAsthmaClassificationObsAnswer");
+		activeAndWithAsthmaClassificationObsAnswer.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		activeAndWithAsthmaClassificationObsAnswer.addParameter(new Parameter("onOrBefore", "onOrBefore",Date.class));
+		activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+		
+		activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		activeAndWithAsthmaClassificationObsAnswer.setCompositionString("1 AND 2");
+		
+		CohortIndicator activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator = Indicators
+        .newCountIndicator("activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator",
+        	activeAndWithAsthmaClassificationObsAnswer,
+            ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================	
+		dsd.addColumn(
+		    "E3D",
+		    "Total active patients, number with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit",
+		    new Mapped(activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
+		
+		//===============
+		
+		CompositionCohortDefinition activeAndNotwithAsthmaVisit14WeeksPatients = new CompositionCohortDefinition();
+		activeAndNotwithAsthmaVisit14WeeksPatients.setName("activeAndNotwithAsthmaVisit14WeeksPatients");
+		activeAndNotwithAsthmaVisit14WeeksPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		activeAndNotwithAsthmaVisit14WeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore",Date.class));
+		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
+		    "1",
+		    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+		
+		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
+		    "2",
+		    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		
+		
+		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
+		    "3",
+		    new Mapped<CohortDefinition>(withAsthmaVisit, ParameterizableUtil
+		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-14w}")));
+		activeAndNotwithAsthmaVisit14WeeksPatients.setCompositionString("1 AND 2 AND (NOT 3)");
+		
+		CohortIndicator activeAndNotwithAsthmaVisit14WeeksPatientsIndicator = Indicators
+		        .newCountIndicator("activeAndNotwithAsthmaVisit14WeeksPatients",
+		        	activeAndNotwithAsthmaVisit14WeeksPatients,
+		            ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		//========================================================
+		//        Adding columns to data set definition         //
+		//========================================================	
+		dsd.addColumn(
+		    "E3N",
+		    "Total active patients, number with no visit 14 weeks or more past last visit date",
+		    new Mapped(activeAndNotwithAsthmaVisit14WeeksPatientsIndicator, ParameterizableUtil
+		            .createParameterMappings("endDate=${endDate}")), "");
 		
 		//=======================================================
 		// E4: Of adult male patients (age ≥15 years old) who had peak flow tested in the last quarter, % with last peak flow >580
@@ -1103,6 +1177,13 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		severePersistentAsthma = gp.getConcept(GlobalPropertiesManagement.SEVERE_PERSISTENT_ASTHMA);
 		
 		severeUncontrolledAsthma = gp.getConcept(GlobalPropertiesManagement.SEVERE_UNCONTROLLED_ASTHMA);
+		
+		asthmaclassification = gp.getConcept(GlobalPropertiesManagement.ASTHMA_CLASSIFICATION);
+		
+		asthmasClassificationAnswers.add(severePersistentAsthma);
+		
+		asthmasClassificationAnswers.add(severeUncontrolledAsthma);
+		
 		
 	}
 }

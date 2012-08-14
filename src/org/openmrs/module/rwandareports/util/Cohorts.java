@@ -714,6 +714,44 @@ public class Cohorts {
 	}
 	
 	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name, List<Form> forms,
+	                                                                                         Concept concept, List<Concept> obsAnswers) {
+		SqlCohortDefinition query = new SqlCohortDefinition();
+		StringBuilder queryStr = new StringBuilder();
+		queryStr.append("select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id in(");
+		
+		int i = 0;
+		for (Form f : forms) {
+			if (i > 0) {
+				queryStr.append(",");
+			}
+			queryStr.append(f.getId());
+			
+			i++;
+		}
+		
+		queryStr.append(") and o.concept_id=");
+		queryStr.append(concept.getId());
+		queryStr.append(" and o.value_coded in (");
+		
+		int y = 0;
+		for (Concept c : obsAnswers) {
+			if (y > 0) {
+				queryStr.append(",");
+			}
+			queryStr.append(c.getId());
+			
+			y++;
+		}
+		
+		queryStr.append(") and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		query.setQuery(queryStr.toString());
+		query.setName(name);
+		query.addParameter(new Parameter("startDate", "startDate", Date.class));
+		query.addParameter(new Parameter("endDate", "endDate", Date.class));
+		return query;
+	}
+	
+	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name, List<Form> forms,
 	                                                                                         List<Concept> concepts) {
 		SqlCohortDefinition query = new SqlCohortDefinition();
 		StringBuilder queryStr = new StringBuilder();
