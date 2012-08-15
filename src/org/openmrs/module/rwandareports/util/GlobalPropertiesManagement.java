@@ -1,11 +1,13 @@
 package org.openmrs.module.rwandareports.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
@@ -381,6 +383,16 @@ public class GlobalPropertiesManagement {
 	     List<Drug> drugs = Context.getConceptService().getDrugsByConcept(concept);                 
 	     return drugs;
 	 }
+	
+	public List<Concept> getConceptAnswersAsConcepts(Concept concept) {
+		List<Concept> concepts = new ArrayList<Concept>();
+		Collection<ConceptAnswer> conceptAnswers = concept.getAnswers();
+		for (ConceptAnswer conceptAnswer : conceptAnswers) {
+			concepts.add(conceptAnswer.getConcept());
+		}
+		
+		return concepts;
+	}
 	
 	public List<Concept> removeConceptFromConceptSet(List<Concept> conceptSet, Concept concept)
 	{
@@ -812,6 +824,8 @@ public class GlobalPropertiesManagement {
 	public final static String CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS="reports.asthmaTreatmentConceptSet";
 	
 	public final static String HYPERTENSION_TREATMENT_DRUGS="reports.hypertensionTreatmentConceptSet";
+	
+	public final static String HYPERTENSION_MEDICATIONS ="reports.hypertensionMedications";
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";

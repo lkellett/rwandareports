@@ -17,6 +17,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionShee
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionQuarterlyAndMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
 import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
@@ -443,6 +444,18 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_hypertensionLateVisit")
 	public ModelAndView removeHypertensionLateVisit() throws Exception {
 		new SetupHypertensionLateVisit().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/register_hypertensionQuarterlyAndMonthlyReport")
+	public ModelAndView registerHypertensionQuarterlyAndMonthlyReport() throws Exception {
+		new SetupHypertensionQuarterlyAndMonthlyReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_hypertensionQuarterlyAndMonthlyReport")
+	public ModelAndView removeHypertensionQuarterlyAndMonthlyReport() throws Exception {
+		new SetupHypertensionQuarterlyAndMonthlyReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	

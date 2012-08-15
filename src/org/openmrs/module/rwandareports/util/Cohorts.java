@@ -659,6 +659,22 @@ public class Cohorts {
 		return query;
 	}
 	
+	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(String name, Form form,
+	                                                                                         Concept concept,int obsValue ) {
+		SqlCohortDefinition query = new SqlCohortDefinition(
+		        "select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and e.form_id="
+		                + form.getId()
+		                + " and o.concept_id="
+		                + concept.getId()
+		                 + " and o.value_numeric >="
+		                + obsValue
+		                + " and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
+		query.setName(name);
+		query.addParameter(new Parameter("startDate", "startDate", Date.class));
+		query.addParameter(new Parameter("endDate", "endDate", Date.class));
+		return query;
+	}
+	
 	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name, List<Form> forms,
 	                                                                                         Concept concept) {
 		SqlCohortDefinition query = new SqlCohortDefinition();
@@ -859,6 +875,28 @@ public class Cohorts {
 		}
 		
 		query.append(") and voided=0 and start_date <= :endDate and (discontinued=0 or discontinued_date > :endDate)");
+		patientOnRegimen.setQuery(query.toString());
+		patientOnRegimen.addParameter(new Parameter("endDate", "endDate", Date.class));
+		patientOnRegimen.setName(name);
+		
+		return patientOnRegimen;
+	}
+	
+	public static SqlCohortDefinition getPatientsOnNOrMoreCurrentRegimenBasedOnEndDate(String name, List<Concept> conceptSet, int number) {
+		SqlCohortDefinition patientOnRegimen = new SqlCohortDefinition();
+		
+		StringBuilder query = new StringBuilder("select patient_id from (select distinct patient_id, count(*) as total_orders from orders where concept_id in (");
+		
+		int i = 0;
+		for (Concept c : conceptSet) {
+			if (i > 0) {
+				query.append(",");
+			}
+			query.append(c.getId());
+			i++;
+		}
+		
+		query.append(") and voided=0 and start_date <= :endDate and (discontinued=0 or discontinued_date > :endDate) group by patient_id) as b where b.total_orders >="+ number+"");
 		patientOnRegimen.setQuery(query.toString());
 		patientOnRegimen.addParameter(new Parameter("endDate", "endDate", Date.class));
 		patientOnRegimen.setName(name);
