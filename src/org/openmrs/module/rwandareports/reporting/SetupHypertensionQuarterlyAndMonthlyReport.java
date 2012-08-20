@@ -27,6 +27,7 @@ import org.openmrs.module.reporting.cohort.definition.AgeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
@@ -561,27 +562,27 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			    ">= 76 At the end date",
 			    new Mapped(patientsOver76CountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 			    "");
-			/*//====================================================================
+			//====================================================================
 			//B2: Gender: Of the new patients enrolled in the last quarter, % male
 			//====================================================================
 			
 			GenderCohortDefinition malePatients = Cohorts.createMaleCohortDefinition("Male patients");
 			
-			CompositionCohortDefinition malePatientsEnrolledInCRDP = new CompositionCohortDefinition();
-			malePatientsEnrolledInCRDP.setName("malePatientsEnrolledIn");
-			malePatientsEnrolledInCRDP.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
-			malePatientsEnrolledInCRDP.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
-			malePatientsEnrolledInCRDP.addParameter(new Parameter("startDate", "startDate", Date.class));
-			malePatientsEnrolledInCRDP.addParameter(new Parameter("endDate", "endDate", Date.class));
-			malePatientsEnrolledInCRDP.getSearches().put(
+			CompositionCohortDefinition malePatientsEnrolledInHypertensionProgram = new CompositionCohortDefinition();
+			malePatientsEnrolledInHypertensionProgram.setName("malePatientsEnrolledIn");
+			malePatientsEnrolledInHypertensionProgram.addParameter(new Parameter("enrolledOnOrAfter", "enrolledOnOrAfter", Date.class));
+			malePatientsEnrolledInHypertensionProgram.addParameter(new Parameter("enrolledOnOrBefore", "enrolledOnOrBefore", Date.class));
+			malePatientsEnrolledInHypertensionProgram.addParameter(new Parameter("startDate", "startDate", Date.class));
+			malePatientsEnrolledInHypertensionProgram.addParameter(new Parameter("endDate", "endDate", Date.class));
+			malePatientsEnrolledInHypertensionProgram.getSearches().put(
 			    "1",
-			    new Mapped<CohortDefinition>(patientEnrolledInCRDP, ParameterizableUtil
+			    new Mapped<CohortDefinition>(patientEnrolledInHypertensionProgram, ParameterizableUtil
 			            .createParameterMappings("startDate=${enrolledOnOrAfter},endDate=${enrolledOnOrBefore}")));
-			malePatientsEnrolledInCRDP.getSearches().put("2", new Mapped<CohortDefinition>(malePatients, null));
-			malePatientsEnrolledInCRDP.setCompositionString("1 AND 2");
+			malePatientsEnrolledInHypertensionProgram.getSearches().put("2", new Mapped<CohortDefinition>(malePatients, null));
+			malePatientsEnrolledInHypertensionProgram.setCompositionString("1 AND 2");
 			
-			CohortIndicator malePatientsEnrolledInCRDPCountIndicator = Indicators.newCountIndicator(
-			    "malePatientsEnrolledInDMCountIndicator", malePatientsEnrolledInCRDP,
+			CohortIndicator malePatientsEnrolledInHypertensionProgramCountIndicator = Indicators.newCountIndicator(
+			    "malePatientsEnrolledInHypertensionProgram", malePatientsEnrolledInHypertensionProgram,
 			    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${endDate-3m+1d},enrolledOnOrBefore=${endDate}"));
 			
 			//=================================================
@@ -591,63 +592,115 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			dsd.addColumn(
 			    "B2N",
 			    "Gender: Of the new patients enrolled in the last quarter, number male",
-			    new Mapped(malePatientsEnrolledInCRDPCountIndicator, ParameterizableUtil
+			    new Mapped(malePatientsEnrolledInHypertensionProgramCountIndicator, ParameterizableUtil
 			            .createParameterMappings("endDate=${endDate}")), "");
 			
 			//=======================================================
-			// B3: Of the new patients enrolled in the last month, % with documented peak flow taken both before and after salbutamol at intake
+			// B3: Of the new patients enrolled in the last quarter, % with Stage I HTN at intake (systolic BP 140-159)
 			//=======================================================
 			
-			ProgramEnrollmentCohortDefinition enrolledInAsthmaProgram = Cohorts
-			        .createProgramEnrollmentParameterizedByStartEndDate("enrolledInAthmaProgram", asthmaProgram);
+			SqlCohortDefinition patientsWithSystolicBPGreaterThanOrEqualTo140 = Cohorts
+		        .getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+		            "patientsWithSystolicBPGreaterThanOrEqualTo140", DDBform, systolicBP, 140);
 			
-			SqlCohortDefinition patientsWithBothPeakFlowInSameDDBForm = Cohorts
-			        .getPatientsWithTwoObservationsBothInFormBetweenStartAndEndDate("patientsWithBothPeakFlowInSameDDBForm",
-			            DDBform, peakFlowAfterSalbutamol, peakFlowBeforeSalbutamol);
+			SqlCohortDefinition patientsWithSystolicBPGreaterThanOrEqualTo160 = Cohorts
+	        .getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+	            "patientsWithSystolicBPGreaterThanOrEqualTo160", DDBform, systolicBP, 160);   //we use 160 because the comparator in the query uses >= 
+		
+		CompositionCohortDefinition patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159 = new CompositionCohortDefinition();
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159
+		        .setName("patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159");
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addParameter(new Parameter("startDate",
+		        "startDate", Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addParameter(new Parameter("endDate", "endDate",
+		        Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addSearch("1",
+		    patientsWithSystolicBPGreaterThanOrEqualTo140,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addSearch("2", patientEnrolledInHypertensionProgram,
+		    null);
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addSearch("3",
+			patientsWithSystolicBPGreaterThanOrEqualTo160,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.setCompositionString("1 AND 2 AND (NOT 3)");
+		
+		CohortIndicator patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159Indicator = Indicators.newCountIndicator(
+		    "patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159Indicator",
+		    patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159,
+		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		dsd.addColumn(
+		    "B3N",
+		    "Of the new patients enrolled in the last quarter, % with Stage I HTN at intake (systolic BP 140-159)",
+		    new Mapped(patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159Indicator, ParameterizableUtil
+		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
-			CohortIndicator enrolledInAsthmaProgramIndicator = Indicators.newCountIndicator("enrolledInAthmaProgramIndicator",
-			    enrolledInAsthmaProgram,
-			    ParameterizableUtil.createParameterMappings("enrolledOnOrAfter=${startDate},enrolledOnOrBefore=${endDate}"));
+		    //===============================================================================================
+		   // B4: Of the new patients enrolled in the last quarter, % with Stage II HTN at intake (systolic BP 160-179) 
+		  //===============================================================================================
+		SqlCohortDefinition patientsWithSystolicBPGreaterThanOrEqualTo180 = Cohorts
+        .getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+            "patientsWithSystolicBPGreaterThanOrEqualTo180", DDBform, systolicBP, 180);
+		
+		CompositionCohortDefinition patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179 = new CompositionCohortDefinition();
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179
+		.setName("patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179");
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addParameter(new Parameter("startDate",
+			"startDate", Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addParameter(new Parameter("endDate", "endDate",
+			Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addSearch("1",
+			patientsWithSystolicBPGreaterThanOrEqualTo160,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addSearch("2", patientEnrolledInHypertensionProgram,
+			null);
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addSearch("3",
+			patientsWithSystolicBPGreaterThanOrEqualTo180,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.setCompositionString("1 AND 2 AND (NOT 3)");
+		
+		CohortIndicator patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179Indicator = Indicators.newCountIndicator(
+			"patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179Indicator",
+			patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		dsd.addColumn(
+			"B4N",
+			"Of the new patients enrolled in the last quarter, % with Stage I HTN at intake (systolic BP 160-179)",
+			new Mapped(patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179Indicator, ParameterizableUtil
+				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
+		//=======================================================
+		// B5: Of the new patients enrolled in the last month, % with Stage III HTN at intake (systolic BP ≥180) 
+		//=======================================================
+		
+		CompositionCohortDefinition patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180 = new CompositionCohortDefinition();
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180
+		.setName("patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180");
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("startDate",
+			"startDate", Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("endDate", "endDate",
+			Date.class));
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.addSearch("1",
+			patientsWithSystolicBPGreaterThanOrEqualTo180,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.addSearch("2", patientEnrolledInHypertensionProgram,
+			null);
+		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsWithSystolicBPGreaterThanOrEqualTo180Indicator = Indicators.newCountIndicator(
+			"patientsWithSystolicBPGreaterThanOrEqualTo180Indicator",
+			patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		dsd.addColumn(
+			"B5N",
+			"Total # of new patients enrolled in the last month with Stage III HTN at intake (systolic BP ≥180) ",
+			new Mapped(patientsWithSystolicBPGreaterThanOrEqualTo180Indicator, ParameterizableUtil
+				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
 			
-			CohortIndicator patientsWithBothPeakFlowInSameDDBFormIndicator = Indicators.newCountIndicator(
-			    "patientsWithBothPeakFlowInSameDDBFormIndicator", patientsWithBothPeakFlowInSameDDBForm,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			
-			//=================================================
-			//     Adding columns to data set definition     //
-			//=================================================
-			
-			dsd.addColumn(
-			    "B3N",
-			    "patients with documented peak flow taken both before and after salbutamol at intake",
-			    new Mapped(patientsWithBothPeakFlowInSameDDBFormIndicator, ParameterizableUtil
-			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			
-			dsd.addColumn("B3D", "new patients enrolled in report period", new Mapped(enrolledInAsthmaProgramIndicator,
-			        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			
-			//===============================================================================================
-			// B4: Of the new patients enrolled in the last month, % with smoking status documented at intake
-			//===============================================================================================
-			
-			SqlCohortDefinition patientsWithSmokingHistory = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
-			    "patientsWithSmokingHistory", DDBform, smokingHistory);
-			
-			CohortIndicator patientsWithSmokingHistoryIndicator = Indicators.newCountIndicator(
-			    "patientsWithSmokingHistoryIndicator", patientsWithSmokingHistory,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			
-			//=================================================
-			//     Adding columns to data set definition     //
-			//=================================================
-			
-			dsd.addColumn(
-			    "B4N",
-			    "patients with smoking status documented at intake",
-			    new Mapped(patientsWithSmokingHistoryIndicator, ParameterizableUtil
-			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			
-			//==============================================================
+			/*//==============================================================
 			// C1: Of total patients with a visit in the last quarter, % who had inhaler teaching in the last 6 months
 			//==============================================================
 			
