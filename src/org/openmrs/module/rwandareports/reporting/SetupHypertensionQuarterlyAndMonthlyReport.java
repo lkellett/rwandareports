@@ -30,6 +30,7 @@ import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinitio
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
@@ -863,52 +864,47 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    new Mapped(patientsEnrolledWithSmokingHistoryIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
-		/*//==============================================================
-			// C1: Of total patients with a visit in the last quarter, % who had inhaler teaching in the last 6 months
+		    //==============================================================
+			// C1: Of active patients, % who had Cr checked at a visit within the past 12 months from end of reporting period
 			//==============================================================
+		
+		CompositionCohortDefinition activePatientsWhoHadCrChecked = new CompositionCohortDefinition();
+		activePatientsWhoHadCrChecked.setName("activePatientsWhoHadCrChecked");
+		activePatientsWhoHadCrChecked.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+		activePatientsWhoHadCrChecked.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+		activePatientsWhoHadCrChecked.getSearches().put(
+			"1",
+			new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+					.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		
+		activePatientsWhoHadCrChecked.getSearches().put(
+			"2",
+			new Mapped<CohortDefinition>(testedForCreatinine, ParameterizableUtil
+					.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+		
+		activePatientsWhoHadCrChecked.setCompositionString("1 AND 2");
+		
+		CohortIndicator activePatientsWhoHadCrCheckedIndicator = Indicators.newCountIndicator(
+			"activePatientsWhoHadCrCheckedIndicator", activePatientsWhoHadCrChecked,
+			ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		CohortIndicator activePatientsIndicator = Indicators.newCountIndicator(
+			"activePatientsIndicator", patientsSeenComposition,
+			ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+		
+		dsd.addColumn(
+			"C1D",
+			"Active patients",
+			new Mapped(activePatientsIndicator, ParameterizableUtil
+				.createParameterMappings("endDate=${endDate}")), "");
+		
+		dsd.addColumn(
+			"C1N",
+			"Of active patients, % who had Cr checked at a visit within the past 12 months from end of reporting period",
+			new Mapped(activePatientsWhoHadCrCheckedIndicator, ParameterizableUtil
+				.createParameterMappings("endDate=${endDate}")), "");
 			
-			SqlCohortDefinition patientsWithBasicInhalerTrainingProvidedObsAnswer = Cohorts
-			        .getPatientsWithObservationInFormBetweenStartAndEndDate("patientsWithBasicInhalerTrainingProvidedObsAnswer",
-			            DDBforms, properInhalerTechnique, basicInhalerTrainingProvided);
-			
-			CompositionCohortDefinition patientsSeenWithBasicInhalerTrainingProvidedObsAnswer = new CompositionCohortDefinition();
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer
-			        .setName("patientsSeenAndWithBasicInhalerTrainingProvidedObsAnswer");
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("onOrAfter", "onOrAfter",
-			        Date.class));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("onOrBefore", "onOrBefore",
-			        Date.class));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("endDate", "endDate", Date.class));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.addParameter(new Parameter("startDate", "startDate",
-			        Date.class));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsWithBasicInhalerTrainingProvidedObsAnswer, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			patientsSeenWithBasicInhalerTrainingProvidedObsAnswer.setCompositionString("1 AND 2");
-			
-			CohortIndicator patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator = Indicators
-			        .newCountIndicator(
-			            "patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator",
-			            patientsSeenWithBasicInhalerTrainingProvidedObsAnswer,
-			            ParameterizableUtil
-			                    .createParameterMappings("endDate=${endDate},startDate=${startDate-3m+1d},onOrBefore=${endDate},onOrAfter=${startDate}"));
-			
-			//=================================================
-			//     Adding columns to data set definition     //
-			//=================================================
-			
-			dsd.addColumn(
-			    "C1",
-			    "Patients With Basic Inhaler Training Provided",
-			    new Mapped(patientsWithBasicInhalerTrainingProvidedObsAnswerIndicator, ParameterizableUtil
-			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			
-			//==============================================================
+			/*//==============================================================
 			// C2: Of total patients with a visit in the last quarter, % who had peak flow checked in the last 6 months
 			//==============================================================
 			
