@@ -68,6 +68,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 	
 	private Form rendevousForm;
 	
+	private Concept smokingHistory;
+	
 	private List<String> onOrAfterOnOrBefore = new ArrayList<String>();
 	
 	private List<String> enrolledOnOrAfterOnOrBefore = new ArrayList<String>();
@@ -699,6 +701,44 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			new Mapped(patientsWithSystolicBPGreaterThanOrEqualTo180Indicator, ParameterizableUtil
 				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
+		//=======================================================
+		// B6: Of the new patients enrolled in the last quarter with Stage III HTN, % with Creatinine test ordered at intake 
+		//=======================================================
+		
+		//=======================================================
+		// B7: Of the new patients enrolled in the last quarter who also had Cr checked at intake, % with Cr result >200 
+		//=======================================================
+		
+		//=======================================================
+		// B8: Of the new patients enrolled in the last quarter, % with smoking status documented 
+		//=======================================================
+		SqlCohortDefinition patientsWithSmokingHistory = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
+		    "patientsWithSmokingHistory", DDBform, smokingHistory);
+		
+		CompositionCohortDefinition patientsEnrolledWithSmokingHistory = new CompositionCohortDefinition();
+		patientsEnrolledWithSmokingHistory
+		.setName("patientsEnrolledWithSmokingHistory");
+		patientsEnrolledWithSmokingHistory.addParameter(new Parameter("startDate",
+			"startDate", Date.class));
+		patientsEnrolledWithSmokingHistory.addParameter(new Parameter("endDate", "endDate",
+			Date.class));
+		patientsEnrolledWithSmokingHistory.addSearch("1",
+			patientsWithSmokingHistory,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		patientsEnrolledWithSmokingHistory.addSearch("2", patientEnrolledInHypertensionProgram,
+			null);
+		patientsEnrolledWithSmokingHistory.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsEnrolledWithSmokingHistoryIndicator = Indicators.newCountIndicator(
+			"patientsEnrolledWithSmokingHistoryIndicator",
+			patientsEnrolledWithSmokingHistory,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		dsd.addColumn(
+			"B8N",
+			"Of the new patients enrolled in the last quarter, % with smoking status documented ",
+			new Mapped(patientsEnrolledWithSmokingHistoryIndicator, ParameterizableUtil
+				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
 			/*//==============================================================
 			// C1: Of total patients with a visit in the last quarter, % who had inhaler teaching in the last 6 months
@@ -1451,6 +1491,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		systolicBP = gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE);
 		
 		hypertensionMedications = gp.getConceptAnswersAsConcepts(gp.getConcept(GlobalPropertiesManagement.HYPERTENSION_MEDICATIONS));
+		
+		smokingHistory = gp.getConcept(GlobalPropertiesManagement.SMOKING_HISTORY);
 		
 	}
 }
