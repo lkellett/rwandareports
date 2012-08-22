@@ -927,50 +927,77 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			new Mapped(activePatientsWhoHadCrCheckedIndicator, ParameterizableUtil
 				.createParameterMappings("endDate=${endDate}")), "");
 			
+			//=======================================================
+			// D1: Of total patients seen in the last quarter with Stage II-III HTN, % with no HTN-related regimen documented ever
+			//=======================================================
+		
+		SqlCohortDefinition patientsWithHypertensionVisit = new SqlCohortDefinition();
+		patientsWithHypertensionVisit.setQuery("select distinct patient_id from encounter where encounter_type="
+		        + hypertensionEncounterType.getId()
+		        + " and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
+		patientsWithHypertensionVisit.setName("patientsWithHypertensionVisit");
+		patientsWithHypertensionVisit.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientsWithHypertensionVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		CompositionCohortDefinition patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160 = new CompositionCohortDefinition();
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160
+		.setName("patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo160");
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160.addParameter(new Parameter("startDate",
+			"startDate", Date.class));
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160.addParameter(new Parameter("endDate", "endDate",
+			Date.class));
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160.addSearch("1", patientsWithHypertensionVisit,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160.addSearch("2",
+			patientsWithSystolicBPGreaterThanOrEqualTo160,
+			ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+		
+		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160.setCompositionString("1 AND 2");
+		
+		CohortIndicator patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160Indicator = Indicators
+		.newCountIndicator("patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160Indicator",
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160,
+			ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate}"));
+		
+		dsd.addColumn(
+			"D1D",
+			"Total patients seen in the last month with Stage II-III HTN",
+			new Mapped(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160Indicator, ParameterizableUtil
+				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+		
+		SqlCohortDefinition patientOnRegimen = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("patientsOnRegime",
+			hypertensionMedications);
+		
+		CompositionCohortDefinition patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen = new CompositionCohortDefinition();
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen
+		.setName("patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen");
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.addParameter(new Parameter("onOrAfter", "onOrAfter",
+			Date.class));
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.addParameter(new Parameter("onOrBefore", "onOrBefore",
+			Date.class));
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.getSearches().put(
+			"1",
+			new Mapped<CohortDefinition>(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160,
+					ParameterizableUtil.createParameterMappings("endDate=${onOrBefore},startDate=${onOrAfter}")));
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.getSearches().put(
+			"2",
+			new Mapped<CohortDefinition>(patientOnRegimen, ParameterizableUtil
+					.createParameterMappings("endDate=${onOrBefore}")));
+		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.setCompositionString("1 AND (NOT 2)");
+		
+		CohortIndicator patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator = Indicators.newCountIndicator(
+			"patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator",
+			patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen,
+			ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+		
+		dsd.addColumn(
+			"D1N",
+			"Total patients seen in the last month with Stage II-III HTN with no HTN-related regimen documented ever",
+			new Mapped(patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator, ParameterizableUtil
+				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+			
 			/*//=======================================================
-			// D1: Of total patients seen in the last month, % with no asthma/COPD-related regimen documented ever (asthma meds: salbutamol, beclomethasone, prednisolone, aminophyilline)
-			//=======================================================
-			
-			SqlCohortDefinition patientsWithAsthmaVisit = new SqlCohortDefinition();
-			patientsWithAsthmaVisit.setQuery("select distinct patient_id from encounter where encounter_type="
-			        + asthmaEncounterType.getId()
-			        + " and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
-			patientsWithAsthmaVisit.setName("patientsWithAsthmaVisit");
-			patientsWithAsthmaVisit.addParameter(new Parameter("startDate", "startDate", Date.class));
-			patientsWithAsthmaVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
-			
-			SqlCohortDefinition patientsHaveDrugOrdersInAsthmaMedication = Cohorts.getPatientsEverNotOnRegimen(
-			    "patientsHaveDrugOrdersInAsthmaMedication", asthmasMedications);
-			
-			CompositionCohortDefinition patientsWithAsthmaVisitAndEverNotOnRegimen = new CompositionCohortDefinition();
-			patientsWithAsthmaVisitAndEverNotOnRegimen.setName("patientsWithAsthmaVisitAndEverNotOnRegimen");
-			patientsWithAsthmaVisitAndEverNotOnRegimen.addParameter(new Parameter("startDate", "startDate", Date.class));
-			patientsWithAsthmaVisitAndEverNotOnRegimen.addParameter(new Parameter("endDate", "endDate", Date.class));
-			patientsWithAsthmaVisitAndEverNotOnRegimen.addSearch("1", patientsWithAsthmaVisit,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			patientsWithAsthmaVisitAndEverNotOnRegimen.addSearch("2", patientsHaveDrugOrdersInAsthmaMedication, null);
-			patientsWithAsthmaVisitAndEverNotOnRegimen.setCompositionString("1 AND (NOT 2)");
-			
-			CohortIndicator patientsWithAsthmaVisitIndicator = Indicators.newCountIndicator("patientsWithAsthmaVisitIndicator",
-			    patientsWithAsthmaVisit,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			
-			CohortIndicator patientsWithAsthmaVisitAndEverNotOnRegimenIndicator = Indicators.newCountIndicator(
-			    "patientsEverNotOnRegimenIndicator", patientsWithAsthmaVisitAndEverNotOnRegimen,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
-			dsd.addColumn(
-			    "D1N",
-			    "patients with no asthma/COPD-related regimen documented ever (asthma meds: salbutamol, beclomethasone, prednisolone, aminophyilline)",
-			    new Mapped(patientsWithAsthmaVisitAndEverNotOnRegimenIndicator, ParameterizableUtil
-			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			dsd.addColumn("D1D", "Of total patients seen in report period", new Mapped(patientsWithAsthmaVisitIndicator,
-			        ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			
-			//=======================================================
 			// D2: Of total patients with a visit in the last quarter, % on Salbutamol alone at last visit
 			//=======================================================
 			SqlCohortDefinition patientsWithCurrentSalbutamolDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
