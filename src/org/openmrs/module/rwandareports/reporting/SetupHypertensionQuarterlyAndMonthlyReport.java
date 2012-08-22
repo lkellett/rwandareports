@@ -88,6 +88,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 	
 	private List<Concept> hypertensionMedications = new ArrayList<Concept>();
 	
+	private List<Concept> captoprilAndLisinopril = new ArrayList<Concept>();
+	
 	public void setup() throws Exception {
 		
 		setUpProperties();
@@ -1086,34 +1088,84 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			    "Of total patients seen in the last quarter with Stage III HTN, % on 2 or more antihypertensives",
 			    new Mapped(patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimenIndicator, ParameterizableUtil
 			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			/*//=======================================================
-			// D4: Of total patients with a visit in the last quarter, % prescribed oral Prednisolone in the last quarter
 			//=======================================================
-			SqlCohortDefinition patientsPrescribedOralPrednisoloneInTheLastQuarter = Cohorts
-			        .getPatientsOnCurrentRegimenBasedOnEndDate("patientsPrescribedOralPrednisoloner", prednisolone);
+			// D4: Of total patients seen in the last quarter with proteinuria or 100<Cr<200 at last visit, % on ACEI (Captopril or Lisinopril)
+			//=======================================================
+			NumericObsCohortDefinition testedForCreatinineAndResultGreaterTo100 = Cohorts.createNumericObsCohortDefinition(
+			    "testedForCreatinineAndResultGreaterTo100", onOrAfterOnOrBefore, creatinine, 100, RangeComparator.GREATER_THAN,
+			    TimeModifier.LAST);
 			
-			CompositionCohortDefinition patientsPrescribedOralPrednisolone = new CompositionCohortDefinition();
-			patientsPrescribedOralPrednisolone.setName("patientsOnSalbutamolAndBeclomethasone");
-			patientsPrescribedOralPrednisolone.addParameter(new Parameter("startDate", "startDate", Date.class));
-			patientsPrescribedOralPrednisolone.addParameter(new Parameter("endDate", "endDate", Date.class));
-			patientsPrescribedOralPrednisolone.addSearch("1", patientsWithAsthmaVisit,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			patientsPrescribedOralPrednisolone.addSearch("2", patientsPrescribedOralPrednisoloneInTheLastQuarter, null);
-			patientsPrescribedOralPrednisolone.setCompositionString("1 AND 2");
+			CompositionCohortDefinition patientsSeenAndTestedForCreatinineAndResultBetween100And200 = new CompositionCohortDefinition();
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200
+			        .setName("patientsSeenAndTestedForCreatinineAndResultBetween100And200");
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200
+			        .addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200
+			        .addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200.getSearches().put(
+			    "1",
+			    new Mapped<CohortDefinition>( patientSeen,
+						ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200.getSearches().put(
+			    "2",
+			    new Mapped<CohortDefinition>(testedForCreatinineAndResultGreaterTo100, ParameterizableUtil
+			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
 			
-			CohortIndicator patientsPrescribedOralPrednisoloneIndicator = Indicators.newCountIndicator(
-			    "patientsPrescribedOralPrednisoloneIndicator", patientsPrescribedOralPrednisolone,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200.getSearches().put(
+			    "3",
+			    new Mapped<CohortDefinition>(testedForCreatinineAndResultGreaterTo200, ParameterizableUtil
+			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+			
+			
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200
+			        .setCompositionString("1 AND 2 AND (NOT 3)");
+			
+			CohortIndicator patientsSeenAndTestedForCreatinineAndResultBetween100And200Indicator = Indicators
+			        .newCountIndicator(
+			            "patientsSeenAndTestedForCreatinineAndResultBetween100And200Indicator",
+			            patientsSeenAndTestedForCreatinineAndResultBetween100And200,
+			            ParameterizableUtil
+			                    .createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+			
 			dsd.addColumn(
-			    "D4N",
-			    "patients with a visit in the last quarter, % prescribed oral Prednisolone in the last quarter",
-			    new Mapped(patientsPrescribedOralPrednisoloneIndicator, ParameterizableUtil
-			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
+			    "D4D",
+			    "Of total patients seen in the last quarter with proteinuria or 100<Cr<200) ",
+			    new Mapped(
+			    	patientsSeenAndTestedForCreatinineAndResultBetween100And200Indicator,
+			            ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 			
-			//=======================================================================
+			SqlCohortDefinition patientOnCaptoprilOrLisinopril = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("patientOnCaptoprilOrLisinopril",
+				captoprilAndLisinopril);
+			
+			CompositionCohortDefinition patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril = new CompositionCohortDefinition();
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril
+			.setName("patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril");
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril.addParameter(new Parameter("onOrAfter", "onOrAfter",
+				Date.class));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril.addParameter(new Parameter("onOrBefore", "onOrBefore",
+				Date.class));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril.getSearches().put(
+				"1",
+				new Mapped<CohortDefinition>(patientsSeenAndTestedForCreatinineAndResultBetween100And200,
+						ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril.getSearches().put(
+				"2",
+				new Mapped<CohortDefinition>(patientOnCaptoprilOrLisinopril, ParameterizableUtil
+						.createParameterMappings("endDate=${onOrBefore}")));
+			patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril.setCompositionString("1 AND 2");
+			
+			CohortIndicator patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinoprilIndicator = Indicators.newCountIndicator(
+				"patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinoprilIndicator",
+				patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinopril,
+				ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+			
+			dsd.addColumn(
+				"D4N",
+				"Of total patients seen in the last quarter with proteinuria or 100<Cr<200 at last visit, % on ACEI (Captopril or Lisinopril)",
+				new Mapped(patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinoprilIndicator, ParameterizableUtil
+					.createParameterMappings("endDate=${endDate}")), "");
+			
+			/*//=======================================================================
 			//E1: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
 			//==================================================================
 			
@@ -1663,6 +1715,11 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		creatinine = gp.getConcept(GlobalPropertiesManagement.SERUM_CREATININE);
 		
 		hydrochlorothiazide = gp.getConcept(GlobalPropertiesManagement.HYDROCHLOROTHIAZIDE_DRUG);
+		
+		captoprilAndLisinopril.add(gp.getConcept(GlobalPropertiesManagement.LISINOPRIL));
+		
+		captoprilAndLisinopril.add(gp.getConcept(GlobalPropertiesManagement.CAPTOPRIL));
+		
 		
 	}
 }
