@@ -804,6 +804,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String BECLOMETHASONE_DRUG="reports.beclomethasoneConcept";
 	
+	public final static String HYDROCHLOROTHIAZIDE_DRUG="reports.hydrochlorothiazide";
+	
 	//Drug set concepts
 	public final static String ART_DRUGS_SET = "reports.allArtDrugsConceptSet";
 	

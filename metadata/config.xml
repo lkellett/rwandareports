@@ -1876,6 +1876,14 @@
 	    </globalProperty>
 	    
 	     <globalProperty>
+		<property>reports.hydrochlorothiazide</property>
+		<defaultValue>1243</defaultValue>
+		<description>
+			The concept id of hydrochlorothiazide drug concept
+		</description>
+	    </globalProperty>
+	    
+	     <globalProperty>
 		<property>reports.prednisoloneConcept</property>
 		<defaultValue>765</defaultValue>
 		<description>

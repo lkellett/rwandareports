@@ -82,6 +82,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 	
 	private Concept creatinine;
 	
+	private Concept hydrochlorothiazide;
+	
 	private List<Form> DDBAndRendezvousForms = new ArrayList<Form>();
 	
 	private List<Concept> hypertensionMedications = new ArrayList<Concept>();
@@ -997,66 +999,94 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			new Mapped(patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator, ParameterizableUtil
 				.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
-			/*//=======================================================
-			// D2: Of total patients with a visit in the last quarter, % on Salbutamol alone at last visit
 			//=======================================================
-			SqlCohortDefinition patientsWithCurrentSalbutamolDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
-			    "patientsWithCurrentSalbutamolDrugOrder", salbutamol);
+			// D2: Of total patients seen in the last quarter, % on Hydrochlorthiazide
+			//=======================================================
+			SqlCohortDefinition patientsWithCurrentHydrochlorothiazideDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
+			    "patientsWithCurrentHydrochlorothiazideDrugOrder", hydrochlorothiazide);
 			
-			SqlCohortDefinition patientsWithAnyOtherCurrentAsthmaDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
-			    "patientsWithAnyOtherCurrentAsthmaDrugOrder", asthmasMedicationsWithoutSalbutamol);
+			CompositionCohortDefinition patientsOnHydrochlorothiazide = new CompositionCohortDefinition();
+			patientsOnHydrochlorothiazide.setName("patientsOnHydrochlorothiazide");
+			patientsOnHydrochlorothiazide.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+			patientsOnHydrochlorothiazide.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+			patientsOnHydrochlorothiazide.addSearch("1", patientSeen,
+				ParameterizableUtil.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}"));
+			patientsOnHydrochlorothiazide.addSearch("2", patientsWithCurrentHydrochlorothiazideDrugOrder, null);
+			patientsOnHydrochlorothiazide.setCompositionString("1 AND 2");
 			
-			CompositionCohortDefinition patientsOnSalbutamolAlone = new CompositionCohortDefinition();
-			patientsOnSalbutamolAlone.setName("patientsOnSalbutamolAlone");
-			patientsOnSalbutamolAlone.addParameter(new Parameter("startDate", "startDate", Date.class));
-			patientsOnSalbutamolAlone.addParameter(new Parameter("endDate", "endDate", Date.class));
-			patientsOnSalbutamolAlone.addSearch("1", patientsWithAsthmaVisit,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			patientsOnSalbutamolAlone.addSearch("2", patientsWithCurrentSalbutamolDrugOrder, null);
-			patientsOnSalbutamolAlone.addSearch("3", patientsWithAnyOtherCurrentAsthmaDrugOrder, null);
-			patientsOnSalbutamolAlone.setCompositionString("1 AND 2 AND (NOT 3)");
-			
-			CohortIndicator patientsOnSalbutamolAloneIndicator = Indicators.newCountIndicator(
-			    "patientsOnSalbutamolAloneIndicator", patientsOnSalbutamolAlone,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+			CohortIndicator patientsOnHydrochlorothiazideIndicator = Indicators.newCountIndicator(
+			    "patientsOnHydrochlorothiazideIndicator", patientsOnHydrochlorothiazide,
+			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
 			
 			//========================================================
 			//        Adding columns to data set definition         //
 			//========================================================
 			dsd.addColumn(
 			    "D2N",
-			    "patients with a visit in the last quarter, % on Salbutamol alone at last visit",
-			    new Mapped(patientsOnSalbutamolAloneIndicator, ParameterizableUtil
+			    "Of total patients seen in the last quarter, % on Hydrochlorthiazide",
+			    new Mapped(patientsOnHydrochlorothiazideIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+			
+			//=======================================================
+			// D3: Of total patients seen in the last quarter with Stage III HTN, % on 2 or more antihypertensives
+			//=======================================================
+			CompositionCohortDefinition patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180 = new CompositionCohortDefinition();
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180
+			        .setName("patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180");
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("startDate",
+			        "startDate", Date.class));
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("endDate", "endDate",
+			        Date.class));
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.addSearch("1", patientsWithHypertensionVisit,
+			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+			
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.addSearch("2",
+			    patientsWithSystolicBPGreaterThanOrEqualTo180,
+			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
+			
+			patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.setCompositionString("1 AND 2");
+			
+			CohortIndicator patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180Indicator = Indicators
+			        .newCountIndicator("patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180",
+			            patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180,
+			            ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate}"));
+			
+			dsd.addColumn(
+			    "D3D",
+			    "Total patients seen in the last quarter with Stage III HTN",
+			    new Mapped(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180Indicator, ParameterizableUtil
 			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
-			//=======================================================
-			// D3: Of total patients with a visit in the last quarter on Salbutamol, % also on Beclomethasone
-			//=======================================================
-			SqlCohortDefinition patientsWithCurrentBeclomethasoneDrugOrder = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate(
-			    "patientsWithCurrentBeclomethasoneDrugOrder", beclomethasone);
+			SqlCohortDefinition patientOn2OrMoreAntihypertensives = Cohorts.getPatientsOnNOrMoreCurrentRegimenBasedOnEndDate(
+			    "patientsOnRegime", hypertensionMedications, 2);
 			
-			CompositionCohortDefinition patientsOnSalbutamolAndBeclomethasone = new CompositionCohortDefinition();
-			patientsOnSalbutamolAndBeclomethasone.setName("patientsOnSalbutamolAndBeclomethasone");
-			patientsOnSalbutamolAndBeclomethasone.addParameter(new Parameter("startDate", "startDate", Date.class));
-			patientsOnSalbutamolAndBeclomethasone.addParameter(new Parameter("endDate", "endDate", Date.class));
-			patientsOnSalbutamolAndBeclomethasone.addSearch("1", patientsWithAsthmaVisit,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			patientsOnSalbutamolAndBeclomethasone.addSearch("2", patientsWithCurrentSalbutamolDrugOrder, null);
-			patientsOnSalbutamolAndBeclomethasone.addSearch("3", patientsWithCurrentBeclomethasoneDrugOrder, null);
-			patientsOnSalbutamolAndBeclomethasone.setCompositionString("1 AND 2 AND 3");
+			CompositionCohortDefinition patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen = new CompositionCohortDefinition();
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen
+			        .setName("patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen");
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.addParameter(new Parameter("onOrAfter", "onOrAfter",
+			        Date.class));
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.addParameter(new Parameter("onOrBefore",
+			        "onOrBefore", Date.class));
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.getSearches().put(
+			    "1",
+			    new Mapped<CohortDefinition>(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180,
+			            ParameterizableUtil.createParameterMappings("startDate=${onOrBefore},endDate=${onOrAfter}")));
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.getSearches().put(
+			    "2",
+			    new Mapped<CohortDefinition>(patientOn2OrMoreAntihypertensives, ParameterizableUtil
+			            .createParameterMappings("endDate=${onOrBefore}")));
+			patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.setCompositionString("1 AND 2");
 			
-			CohortIndicator patientsOnSalbutamolAndBeclomethasoneIndicator = Indicators.newCountIndicator(
-			    "patientsOnSalbutamolAndBeclomethasoneIndicator", patientsOnSalbutamolAndBeclomethasone,
-			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
+			CohortIndicator patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimenIndicator = Indicators
+			        .newCountIndicator("patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator",
+			            patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen,
+			            ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
+			
 			dsd.addColumn(
 			    "D3N",
-			    "patients with a visit in the last quarter on Salbutamol, % also on Beclomethasone",
-			    new Mapped(patientsOnSalbutamolAndBeclomethasoneIndicator, ParameterizableUtil
+			    "Of total patients seen in the last quarter with Stage III HTN, % on 2 or more antihypertensives",
+			    new Mapped(patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimenIndicator, ParameterizableUtil
 			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-			//=======================================================
+			/*//=======================================================
 			// D4: Of total patients with a visit in the last quarter, % prescribed oral Prednisolone in the last quarter
 			//=======================================================
 			SqlCohortDefinition patientsPrescribedOralPrednisoloneInTheLastQuarter = Cohorts
@@ -1631,6 +1661,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		smokingHistory = gp.getConcept(GlobalPropertiesManagement.SMOKING_HISTORY);
 		
 		creatinine = gp.getConcept(GlobalPropertiesManagement.SERUM_CREATININE);
+		
+		hydrochlorothiazide = gp.getConcept(GlobalPropertiesManagement.HYDROCHLOROTHIAZIDE_DRUG);
 		
 	}
 }
