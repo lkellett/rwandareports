@@ -266,6 +266,29 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		
 		dsd.addColumn(patientVisitsToHypertensionClinicQuarterlyIndicator);
 		
+		//==============================================================
+		// C2: % of Patient visits in the last month with documented BP
+		//==============================================================
+		SqlEncounterQuery patientVisitsWithDocumentedBP = new SqlEncounterQuery();
+		
+		patientVisitsWithDocumentedBP
+		.setQuery("select e.encounter_id from encounter e,obs o where (e.form_id="
+			+ rendevousForm.getFormId()
+			+ " or e.form_id="
+			+ DDBform.getFormId()
+			+ ") and o.encounter_id=e.encounter_id and o.concept_id="+systolicBP.getConceptId()+" and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.voided=0 group by e.encounter_datetime, e.patient_id");
+		patientVisitsWithDocumentedBP.setName("patientVisitsToHypertensionClinic");
+		patientVisitsWithDocumentedBP.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientVisitsWithDocumentedBP.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		EncounterIndicator patientVisitsWithDocumentedBPIndicator = new EncounterIndicator();
+		patientVisitsWithDocumentedBPIndicator.setName("patientVisitsWithDocumentedBPIndicator");
+		patientVisitsWithDocumentedBPIndicator.setEncounterQuery(new Mapped<EncounterQuery>(
+				patientVisitsWithDocumentedBP, ParameterizableUtil
+				.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
+		
+		dsd.addColumn(patientVisitsWithDocumentedBPIndicator);
+		
 	}
 	
 	// create monthly cohort Data set
@@ -904,42 +927,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			new Mapped(activePatientsWhoHadCrCheckedIndicator, ParameterizableUtil
 				.createParameterMappings("endDate=${endDate}")), "");
 			
-			/*//==============================================================
-			// C2: Of total patients with a visit in the last quarter, % who had peak flow checked in the last 6 months
-			//==============================================================
-			
-			NumericObsCohortDefinition patientsWithPeakFlowAfterSalbutamol = Cohorts.createNumericObsCohortDefinition(
-			    "patientsWithPeakFlowAfterSalbutamol", onOrAfterOnOrBefore, peakFlowAfterSalbutamol, 0, null, TimeModifier.ANY);
-			
-			CompositionCohortDefinition patientsSeenWithPeakFlowAfterSalbutamol = new CompositionCohortDefinition();
-			patientsSeenWithPeakFlowAfterSalbutamol.setName("patientsSeenWithPeakFlowAfterSalbutamol");
-			patientsSeenWithPeakFlowAfterSalbutamol.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			patientsSeenWithPeakFlowAfterSalbutamol.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			patientsSeenWithPeakFlowAfterSalbutamol.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsWithPeakFlowAfterSalbutamol, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter-3m}")));
-			patientsSeenWithPeakFlowAfterSalbutamol.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			patientsSeenWithPeakFlowAfterSalbutamol.setCompositionString("1 AND 2");
-			
-			CohortIndicator patientsSeenWithPeakFlowAfterSalbutamolIndicator = Indicators.newCountIndicator(
-			    "patientsSeenWithPeakFlowAfterSalbutamolIndicator", patientsSeenWithPeakFlowAfterSalbutamol,
-			    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
-			
-			//=================================================
-			//     Adding columns to data set definition     //
-			//=================================================
-			
-			dsd.addColumn(
-			    "C2",
-			    "Patients With peak flow checked in the last 6 months",
-			    new Mapped(patientsSeenWithPeakFlowAfterSalbutamolIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			//=======================================================
+			/*//=======================================================
 			// D1: Of total patients seen in the last month, % with no asthma/COPD-related regimen documented ever (asthma meds: salbutamol, beclomethasone, prednisolone, aminophyilline)
 			//=======================================================
 			
