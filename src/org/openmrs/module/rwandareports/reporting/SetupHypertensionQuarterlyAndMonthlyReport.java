@@ -1165,6 +1165,39 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 				new Mapped(patientsSeenAndTestedForCreatinineAndResultBetween100And200AndOnCaptoprilOrLisinoprilIndicator, ParameterizableUtil
 					.createParameterMappings("endDate=${endDate}")), "");
 			
+			
+			//=======================================================================
+			//E1: Of total active patients, % with no visit 28 weeks or more past last visit date
+			//==================================================================		
+			
+			CompositionCohortDefinition activeAndNotwithHypertensionVisitIn28WeeksPatients = new CompositionCohortDefinition();
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.setName("activeAndNotwithHypertensionVisitIn28WeeksPatients");
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.getSearches().put(
+				"1",
+				new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+						.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.getSearches().put(
+				"2",
+				new Mapped<CohortDefinition>(patientsWithHypertensionVisit, ParameterizableUtil
+						.createParameterMappings("endDate=${onOrBefore},startDate=${onOrAfter+12m-28w}")));
+			activeAndNotwithHypertensionVisitIn28WeeksPatients.setCompositionString("1 AND (NOT 2)");
+			
+			CohortIndicator activeAndNotwithHypertensionVisitIn28WeeksPatientsIndicator = Indicators.newCountIndicator(
+				"activeAndNotwithHypertensionVisitIn28WeeksPatientsIndicator",
+				activeAndNotwithHypertensionVisitIn28WeeksPatients,
+				ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+			
+			//========================================================
+			//        Adding columns to data set definition         //
+			//========================================================
+			dsd.addColumn(
+				"E1N",
+				"Of total active patients, % with no visit 28 weeks or more past last visit date",
+				new Mapped(activeAndNotwithHypertensionVisitIn28WeeksPatientsIndicator, ParameterizableUtil
+					.createParameterMappings("endDate=${endDate}")), "");
+			
 			/*//=======================================================================
 			//E1: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
 			//==================================================================
