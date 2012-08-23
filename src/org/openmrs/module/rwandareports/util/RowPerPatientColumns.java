@@ -368,6 +368,10 @@ public class RowPerPatientColumns {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.DIASTOLIC_BLOOD_PRESSURE), dateFormat);
 	}
 	
+	public static MostRecentObservation getMostRecentSeizure(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.SEIZURE_CONCEPT), dateFormat);
+	}
+	
 	public static AllObservationValues getAllWeightValues(String name, String dateFormat, ResultFilter resultFilter,
 	                                                      ResultFilter outputFilter) {
 		return getAllObservationValues(name, gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT), dateFormat,
@@ -397,6 +401,12 @@ public class RowPerPatientColumns {
 		return getObservationInMostRecentEncounterOfType(name,
 		    gp.getConcept(GlobalPropertiesManagement.SIDE_EFFECT_CONCEPT), encounterType);
 	}
+	
+	public static ObservationInMostRecentEncounterOfType getSeizureInMostRecentEncounterOfType(String name,
+            EncounterType encounterType, ObservationInMostRecentEncounterOfType observationInMostRecentEncounterOfType) {
+       return getObservationInMostRecentEncounterOfType(name,
+            gp.getConcept(GlobalPropertiesManagement.SEIZURE_CONCEPT), encounterType);
+     }
 	
 	public static PatientRelationship getAccompRelationship(String name) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
@@ -442,6 +452,13 @@ public class RowPerPatientColumns {
 		return getCurrentOrdersRestrictedByConceptSet(name,
 		    gp.getConcept(GlobalPropertiesManagement.HYPERTENSION_TREATMENT_DRUGS), dateFormat, drugFilter);
 	}
+	
+	
+	public static CurrentOrdersRestrictedByConceptSet getCurrentEpilepsyOrders(String name, String dateFormat,
+                                                                               ResultFilter drugFilter) {
+       return getCurrentOrdersRestrictedByConceptSet(name,
+            gp.getConcept(GlobalPropertiesManagement.EPILEPSY_TREATMENT_DRUGS), dateFormat, drugFilter);
+       }
 	
 	public static MostRecentObservation getMostRecent(String name, Concept concept, String dateFormat) {
 		MostRecentObservation mostRecent = new MostRecentObservation();

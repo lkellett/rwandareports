@@ -666,6 +666,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String POSTMEDICATION = "reports.postmedication";
 	
+	public final static String SEIZURE_CONCEPT = "reports.seizureConcept";
+	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							
@@ -764,6 +766,10 @@ public class GlobalPropertiesManagement {
 	
 	public final static String HYPERTENSION_FLOW_VISIT = "reports.hypertensionFlowVisit";
 	
+	public final static String EPILEPSY_DDB = "reports.epilepsyDDBformId";
+	
+	public final static String EPILEPSY_RENDEVOUS_VISIT_FORM="reports.epilepsyRendevousVisitForm";
+	
 	
 	//Drug concepts
 	public final static String FUROSEMIDE= "reports.furosemide";
@@ -828,6 +834,8 @@ public class GlobalPropertiesManagement {
 	public final static String HYPERTENSION_TREATMENT_DRUGS="reports.hypertensionTreatmentConceptSet";
 	
 	public final static String HYPERTENSION_MEDICATIONS ="reports.hypertensionMedications";
+	
+	public final static String EPILEPSY_TREATMENT_DRUGS="reports.epilepsyTreatmentConceptSet";
 	
 	//Test concepts
 	public final static String TB_TEST_CONCEPT = "reports.tbTestConcept";
