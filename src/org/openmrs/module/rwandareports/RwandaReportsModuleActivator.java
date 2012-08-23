@@ -43,7 +43,7 @@ public class RwandaReportsModuleActivator implements Activator {
 		CleanReportingTablesAndRegisterAllReports.registerReports();
 	} catch (Exception ex){
         log.error("One of reports has an error which blocks it and other reports to be registered");
-        throw new ModuleException(ex.getMessage());
+       // throw new ModuleException(ex.getMessage());
     }		
 		
 	}
