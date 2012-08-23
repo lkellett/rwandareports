@@ -13,10 +13,17 @@
  */
 package org.openmrs.module.rwandareports;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
+import org.openmrs.module.ModuleException;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
+import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
+import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
+import org.openmrs.module.rwandareports.util.CleanReportingTablesAndRegisterAllReports;
 
 /**
  * This class contains the logic that is run every time this module
@@ -30,14 +37,22 @@ public class RwandaReportsModuleActivator implements Activator {
 	 * @see org.openmrs.module.Activator#startup()
 	 */
 	public void startup() {
-		log.info("Starting HIV ART register Module");
+		log.info("Starting Rwanda Report Module");
+		try{
+		CleanReportingTablesAndRegisterAllReports.cleanTables();	
+		CleanReportingTablesAndRegisterAllReports.registerReports();
+	} catch (Exception ex){
+        log.error("One of reports has an error which blocks it and other reports to be registered");
+        throw new ModuleException(ex.getMessage());
+    }		
+		
 	}
 	
 	/**
 	 *  @see org.openmrs.module.Activator#shutdown()
 	 */
 	public void shutdown() {
-		log.info("Stopping HIV ART register Module");
+		log.info("Stopping Rwanda Report Module");
 	}
 	
 }

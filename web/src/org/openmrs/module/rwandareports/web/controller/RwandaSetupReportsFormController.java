@@ -7,6 +7,7 @@ import org.openmrs.module.rwandareports.reporting.SetupAsthmaLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupAsthmaQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupChemotherapyExpectedPatientList;
 import org.openmrs.module.rwandareports.reporting.SetupCombinedHFCSPConsultationReport;
+import org.openmrs.module.rwandareports.reporting.SetupDataEntryDelayReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupEpilepsyConsultationSheet;
@@ -14,6 +15,10 @@ import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthl
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
+import org.openmrs.module.rwandareports.reporting.SetupHypertensionQuarterlyAndMonthlyReport;
+import org.openmrs.module.rwandareports.reporting.SetupIDProgramQuarterlyIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
@@ -528,7 +533,20 @@ public class RwandaSetupReportsFormController {
 	
 	@RequestMapping("/module/rwandareports/remove_dataDelay")
 	public ModelAndView removeDataDelay() throws Exception {
-		new SetupDataEntryDelayReport().setup();
+		new SetupDataEntryDelayReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	//ID Program Quarterly Indicators 
+	@RequestMapping("/module/rwandareports/register_IDProgramQuarterlyIndicators")
+	public ModelAndView registerIDProgramQuarterlyIndicators () throws Exception {
+		new SetupIDProgramQuarterlyIndicatorReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_IDProgramQuarterlyIndicators")
+	public ModelAndView removeIDProgramQuarterlyIndicators() throws Exception {
+		new SetupIDProgramQuarterlyIndicatorReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 }

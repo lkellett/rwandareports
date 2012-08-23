@@ -14,6 +14,8 @@ import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.cohort.definition.InProgramCohortDefinition;
+import org.openmrs.module.reporting.common.SortCriteria;
+import org.openmrs.module.reporting.common.SortCriteria.SortDirection;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -95,6 +97,11 @@ public class SetupCombinedHFCSPConsultationReport {
 		RowPerPatientDataSetDefinition dataSetDefinition = new RowPerPatientDataSetDefinition();
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		
+		SortCriteria sortCriteria = new SortCriteria();
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
+		dataSetDefinition.setSortCriteria(sortCriteria);
+		
+		
 		InProgramCohortDefinition inPMTCTProgram = Cohorts.createInProgramParameterizableByDate(
 		    "pmtct: Combined Clinic In Program", pmtctCombined);
 		dataSetDefinition.addFilter(inPMTCTProgram, ParameterizableUtil.createParameterMappings("onDate=${now}"));
@@ -167,7 +174,10 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getObsValueAfterDateOfOtherDefinition("secondSeroTest",
 		    seroConcept, childSerologyConcept, firstSeroDate, "ddMMMyy"), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "ddMMMyy"),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd"),
+		    new HashMap<String, Object>());
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy"),
 		    new HashMap<String, Object>());
 		
 		MostRecentObservation cd4Test = RowPerPatientColumns.getMostRecentCD4("CD4Test", "ddMMMyy");

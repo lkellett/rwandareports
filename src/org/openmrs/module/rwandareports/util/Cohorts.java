@@ -268,13 +268,13 @@ public class Cohorts {
 		return overXCohort;
 	}
 	
-	public static AgeCohortDefinition createUnder18MontshAgeCohort(String name) {
-		AgeCohortDefinition under18monthsCohort = new AgeCohortDefinition();
-		under18monthsCohort.setName(name);
-		under18monthsCohort.setMaxAge(new Integer(18));
-		under18monthsCohort.setMaxAgeUnit(DurationUnit.MONTHS);
-		under18monthsCohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
-		return under18monthsCohort;
+	public static AgeCohortDefinition createUnder5YearsAgeCohort(String name) {
+		AgeCohortDefinition under5YearsCohort = new AgeCohortDefinition();
+		under5YearsCohort.setName(name);
+		under5YearsCohort.setMaxAge(new Integer(5));
+		under5YearsCohort.setMaxAgeUnit(DurationUnit.YEARS);
+		under5YearsCohort.addParameter(new Parameter("effectiveDate", "endDate", Date.class));
+		return under5YearsCohort;
 	}
 	
 	public static SqlCohortDefinition createUnder15AtEnrollmentCohort(String name, Program program) {
@@ -1075,6 +1075,18 @@ public class Cohorts {
 		return onARTDrugs;
 	}
 	
+	public static SqlCohortDefinition getPatientActiveOnArtDrugsByEndDate(String name) {
+		Concept artDrugsconceptSet=gp.getConcept(GlobalPropertiesManagement.ART_DRUGS_SET);		
+		SqlCohortDefinition onARTDrugs = new SqlCohortDefinition();
+		onARTDrugs
+		        .setQuery("select distinct patient_id from orders where concept_id in (select concept_id from concept_set where concept_set="+artDrugsconceptSet.getConceptId()+") and start_date<= :endDate and (discontinued_date>= :endDate or discontinued_date is null) and voided=0");
+		onARTDrugs.setName(name);
+		onARTDrugs.addParameter(new Parameter("endDate","endDate",Date.class));
+		
+		return onARTDrugs;
+	}
+	
+	
 	public static SqlCohortDefinition getTbDrugs(String name) {
 		List<Concept> tbDrugsconcepts;
 		tbDrugsconcepts = gp.getConceptsByConceptSet(GlobalPropertiesManagement.TB_TREATMENT_DRUGS);
@@ -1186,5 +1198,14 @@ public class Cohorts {
 		
 		return lateVisit;
 	}
+
+public static SqlCohortDefinition getPatientsWithNTimesOrMoreEncountersByStartAndEndDate(String name,EncounterType encType,int times){
+	SqlCohortDefinition nTimesEncounter=new SqlCohortDefinition();
+	nTimesEncounter.setName(name);
+	nTimesEncounter.setQuery("select patient_id from (select patient_id,count(patient_id) as times from encounter where encounter_type="+encType.getEncounterTypeId()+" and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0 group by patient_id) as moreenc where times>="+times+"");
+	nTimesEncounter.addParameter(new Parameter("startDate","startDate",Date.class));
+	nTimesEncounter.addParameter(new Parameter("endDate","endDate",Date.class));
+	return nTimesEncounter;
+}
 	
 }

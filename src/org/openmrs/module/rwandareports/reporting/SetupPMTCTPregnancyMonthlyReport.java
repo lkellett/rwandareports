@@ -73,7 +73,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,row:9,dataset:PatientsMissedRdv|sheet:2,row:9,dataset:PatientsWithLastCd4|sheet:3,row:9,dataset:PmtctWithlowBMI|sheet:4,row:9,dataset:ViralLoadAbov20");
+		    "sheet:1,row:9,dataset:PatientsMissedRdv|sheet:2,row:9,dataset:PatientsWithLastCd4|sheet:3,row:9,dataset:PmtctWithlowBMI|sheet:4,row:9,dataset:ViralLoadAbov1000");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -111,9 +111,9 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		RowPerPatientDataSetDefinition dataSetDefinition2 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition2.setName("Patients in PMTCT With CD4 dataSetDefinition");
 		RowPerPatientDataSetDefinition dataSetDefinition3 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition3.setName("Patients in PMTCT With BMI below 18.5 dataSetDefinition");
+		dataSetDefinition3.setName("Patients in PMTCT With BMI below 16.0 dataSetDefinition");
 		RowPerPatientDataSetDefinition dataSetDefinition4 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition4.setName("Patients in PMTCT With Viral load > 20 in the last 3 months dataSetDefinition");
+		dataSetDefinition4.setName("Patients in PMTCT With Viral load > 1000 in the last 6 months dataSetDefinition");
 		
 
 		InProgramCohortDefinition patientsInpmtctProgram = Cohorts.createInProgramParameterizableByDate(
@@ -161,7 +161,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 			dataSetDefinition2.addFilter(patientsWithouthCD4RecordComposition,
 			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-6m}"));
 		//==================================================================
-		//   3. Patients with BMI less than 18.5
+		//   3. Patients with BMI less than 16.0
 		//==================================================================
 				
 				SqlCohortDefinition patientWithLowBMI = new SqlCohortDefinition();
@@ -171,23 +171,19 @@ public class SetupPMTCTPregnancyMonthlyReport {
 				                + height.getUuid()
 				                + "' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"
 				                + weight.getUuid()
-				                + "' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
+				                + "' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<16.0");
 				patientWithLowBMI.addParameter(new Parameter("location", "location", Location.class));
 				dataSetDefinition3.addFilter(patientWithLowBMI, new HashMap<String, Object>());
 				
 	  //==================================================================
-	  //   4 . Patients with Viral Load >20 in the last three months
-	 //==================================================================
-				
-				SqlCohortDefinition viralLoadGreaterThan20InLast3Months = new SqlCohortDefinition(
-				        "select person_id from (select o.person_id,o.obs_datetime,o.value_numeric from obs o,concept c where o.concept_id= c.concept_id and c.uuid='"
-				                + viralLoad.getUuid()
-				                + "' and o.value_numeric>20 and o.voided=0 and o.obs_datetime> :beforeDate and o.obs_datetime<= :onDate order by o.obs_datetime desc) as vload group by person_id");
-				viralLoadGreaterThan20InLast3Months.setName("viralLoadGreaterThan20InLast3Months");
-				viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
-				viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("onDate", "onDate", Date.class));
-				viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("location", "location", Location.class));
-				dataSetDefinition4.addFilter(viralLoadGreaterThan20InLast3Months,ParameterizableUtil.createParameterMappings("beforeDate=${endDate-3m},onDate=${endDate}"));
+	  //   4 . Patients with Viral Load >1000 in the last 6 months
+	//==================================================================
+				SqlCohortDefinition viralLoadGreaterThan1000InLast6Months = new SqlCohortDefinition("select vload.person_id from (select * from obs where concept_id="+viralLoad.getConceptId()+" and value_numeric>1000 and obs_datetime> :beforeDate and obs_datetime<= :onDate order by obs_datetime desc) as vload group by vload.person_id");
+				viralLoadGreaterThan1000InLast6Months.setName("viralLoadGreaterThan1000InLast6Months");
+				viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
+				viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("onDate", "onDate", Date.class));
+				viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("location", "location", Location.class));
+				dataSetDefinition4.addFilter(viralLoadGreaterThan1000InLast6Months,ParameterizableUtil.createParameterMappings("beforeDate=${endDate-6m},onDate=${endDate}"));
 				
 	
 		//==================================================================
@@ -295,7 +291,7 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		reportDefinition.addDataSetDefinition("PatientsMissedRdv", dataSetDefinition1,mappings);
 		reportDefinition.addDataSetDefinition("PatientsWithLastCd4", dataSetDefinition2, mappings);
 		reportDefinition.addDataSetDefinition("PmtctWithlowBMI", dataSetDefinition3, mappings);
-		reportDefinition.addDataSetDefinition("ViralLoadAbov20", dataSetDefinition4, mappings);
+		reportDefinition.addDataSetDefinition("ViralLoadAbov1000", dataSetDefinition4, mappings);
 		
 	}
 	

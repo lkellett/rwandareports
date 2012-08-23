@@ -18,7 +18,7 @@
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
 	    <require_module>org.openmrs.module.heightweighttracker</require_module>
-	    <require_module>org.openmrs.module.orderextension</require_module> 
+	    <require_module>org.openmrs.module.orderextension</require_module>  
 	</require_modules>
 
 	<extension>
@@ -604,7 +604,7 @@
 	
 	<globalProperty>
 		<property>reports.viralLoadConcept</property>
-		<defaultValue>859</defaultValue>
+		<defaultValue>856</defaultValue>
 		<description>
 			The Viral Load Concept
 		</description>
@@ -820,7 +820,25 @@
 		<property>reports.pmtctFeedingStatusWorkflowName</property>
 		<defaultValue>Feeding status</defaultValue>
 		<description>The name of the workflow for the feeding status</description>
+	</globalProperty>	
+	
+	<globalProperty>
+		<property>reports.pmtctArtificialfeeding(9to18months)StateName</property>
+		<defaultValue>Artificial feeding (9-18 months)</defaultValue>
+		<description>The name of the Artificial feeding (9-18 months) state for the feeding status</description>
+	</globalProperty>	
+	
+	<globalProperty>
+		<property>reports.pmtctArtificialfeeding(6to9months)StateName</property>
+		<defaultValue>Artificial feeding (6-9 months)</defaultValue>
+		<description>The name of the Artificial feeding (6-9 months) state for the feeding status</description>
 	</globalProperty>
+	
+	<globalProperty>
+		<property>reports.pmtctArtificialfeeding(0to6months)StateName</property>
+		<defaultValue>Artificial feeding (0-6 months)</defaultValue>
+		<description>The name of the Artificial feeding (0-6 months) state for the feeding status</description>
+	</globalProperty>	
 	
 	<globalProperty>
 		<property>reports.preArtStatusConcept</property>
@@ -1474,7 +1492,7 @@
 		<globalProperty>
 		<property>report.nevirapine</property>
 		<defaultValue>631</defaultValue> 
-		<description>patient on nevirapine</description> 		
+		<description>nevirapine drug concept</description> 		
 		</globalProperty>
 		
 		<globalProperty>
@@ -1784,6 +1802,12 @@
 		</globalProperty> 
 		
 		<globalProperty>
+		<property>report.naturalfamilyplanning</property>
+		<defaultValue>5277</defaultValue> 
+		<description>Natural Family Planning concept id. </description> 		
+		</globalProperty> 
+		
+		<globalProperty>
 		<property>report.injectable</property>
 		<defaultValue>5279</defaultValue> 
 		<description>using injectables concept id. </description> 		
@@ -2002,6 +2026,11 @@
 		<property>reports.BactrimDrug</property>
 		<defaultValue>130</defaultValue>
 		<description>The drug id of NVP Susp</description>
+	</globalProperty>
+	<globalProperty>
+		<property>reports.classifications</property>
+		<defaultValue>HIV,NCD,CENTRAL,SITE,ONCOLOGY,CHW</defaultValue>
+		<description>Rwanda Report Classifications</description>
 	</globalProperty>
 	
 	<globalProperty>

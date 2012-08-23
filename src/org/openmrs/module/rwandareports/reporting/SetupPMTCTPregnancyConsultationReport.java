@@ -197,11 +197,11 @@ public class SetupPMTCTPregnancyConsultationReport {
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(cd4Test, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(gestationalAge, new HashMap<String, Object>());
+		/*alert.addPatientDataToBeEvaluated(gestationalAge, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(weight, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(sideEffect, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(io, new HashMap<String, Object>());
-		alert.setCalculator(new Alerts());
+		*/alert.setCalculator(new Alerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();

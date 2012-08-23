@@ -170,7 +170,7 @@ $(document).ready(function(){
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_pmtctPregMonthlyReport.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
-<td rowspan="3" class="tabletd">Patient Follow-up</td>
+<td rowspan="4" class="tabletd">Patient Follow-up</td>
 <td>Adult Late Visit And CD4</td>
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_adultLatevisitAndCD4.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -186,6 +186,12 @@ $(document).ready(function(){
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_monthlyCD4Decline.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_monthlyCD4Decline.form" onclick=msgrem(this)>Remove</a></td>	
+</tr>
+<tr>
+<td>ID Program Quarterly Indicators</td>
+<td>Central</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_IDProgramQuarterlyIndicators.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_IDProgramQuarterlyIndicators.form" onclick=msgrem(this)>Remove</a></td>	
 </tr>
 <tr>
 <td class="tabletd">Primary Care</td>

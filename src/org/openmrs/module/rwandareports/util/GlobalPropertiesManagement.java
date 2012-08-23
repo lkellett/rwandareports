@@ -524,6 +524,12 @@ public class GlobalPropertiesManagement {
 	
 	public final static String PATIENT_DIED_STATE="report.died";
 	
+	public final static String ARTIFICIAL_FEEDING_9_18_MONTHS_STATE="reports.pmtctArtificialfeeding(9to18months)StateName";
+	
+	public final static String ARTIFICIAL_FEEDING_6_9_MONTHS_STATE="reports.pmtctArtificialfeeding(6to9months)StateName";
+	
+	public final static String ARTIFICIAL_FEEDING_0_6_MONTHS_STATE="reports.pmtctArtificialfeeding(0to6months)StateName";
+	
 	
 	//Identifiers
 	public final static String IMB_IDENTIFIER = "reports.imbIdIdentifier"; 
@@ -721,6 +727,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String ADULT_FLOWSHEET_VISIT = "adultflowsheet.Form_ddbId";
 	
+	public final static String LAB_ENCOUNTER_TYPE="reports.labEncounterType";
 	public final static String OUTPATIENT_ONCOLOGY_ENCOUNTER = "reports.OutpatientOncologyEncounterType";
 	
 	public final static String EPILEPSY_VISIT = "reports.EpilepsyEncounterType";
@@ -802,7 +809,7 @@ public class GlobalPropertiesManagement {
 	
 	public final static String COTRIMOXAZOLE_DRUG="reports.ctxTreatmentConcept";
 	
-	public final static String NEVIRAPINE_DRUG="reports.glibenclamideConcept";
+	public final static String NEVIRAPINE_DRUG="report.nevirapine";
 	
 	public final static String SALBUTAMOL_DRUG="reports.salbutamolConcept";
 	
@@ -926,6 +933,8 @@ public class GlobalPropertiesManagement {
 	public final static String USINF_INJECTABLE="report.injectable";
 	public final static String USING_ORALCONTRAC="report.orals";
 	public final static String REFERED_FOR_FP="report.referedforfp";
+	
+	public final static String NATURAL_FAMILY_PLANNING="report.naturalfamilyplanning";
 
 	public final int EIGHTANDHALF_MONTHS = 255; 
 	public final int NINETEEN_MONTHS = 570; 
@@ -933,6 +942,6 @@ public class GlobalPropertiesManagement {
 	public final static int TREATMENT_STATUS_ID = 1484;
 	
 	public final static String DATA_ENTRY_DELAY = "reports.dataEntryDelay";
-	
+	public final static String REPORT_CLASSIFICATION="reports.classifications";
 	public final static String DATA_ENTRY_DELAY_ACCEPTABLE = "reports.dataEntryDelayAccepted";
 }

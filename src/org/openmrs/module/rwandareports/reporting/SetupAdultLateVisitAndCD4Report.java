@@ -82,6 +82,8 @@ public class SetupAdultLateVisitAndCD4Report {
 	
 	private List<EncounterType> clinicalEncoutersExcLab;
 	
+	private EncounterType labTestEncounterType;
+	
 	private Concept cd4;
 	
 	private Concept height;
@@ -115,7 +117,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultHIVLateCD4Count|sheet:3,row:8,dataset:HIVLostToFollowup|sheet:4,row:8,dataset:HIVLowBMI|sheet:6,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months");
+		    "sheet:1,row:8,dataset:AdultARTLateVisit|sheet:2,row:8,dataset:AdultHIVLateCD4Count|sheet:3,row:8,dataset:HIVLostToFollowup|sheet:4,row:8,dataset:HIVLowBMI|sheet:5,row:8,dataset:ViralLoadGreaterThan20InTheLast3Months");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);
@@ -216,11 +218,11 @@ public class SetupAdultLateVisitAndCD4Report {
 		RowPerPatientDataSetDefinition dataSetDefinition5 = new RowPerPatientDataSetDefinition();
 		dataSetDefinition5.setName("Adult Pre-ART patients with CD4 below 350 dataSetDefinition");
 		
-		//Patients with BMI below 18.5 dataset definition
+		//Patients with BMI below 16 dataset definition
 		RowPerPatientDataSetDefinition dataSetDefinition6 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition6.setName("Patients with BMI below 18.5 dataSetDefinition");
+		dataSetDefinition6.setName("Patients with BMI below 16 dataSetDefinition");
 		RowPerPatientDataSetDefinition dataSetDefinition6_1 = new RowPerPatientDataSetDefinition();
-		dataSetDefinition6_1.setName("Patients with BMI below 18.5 Pre art dataSetDefinition");
+		dataSetDefinition6_1.setName("Patients with BMI below 16 Pre art dataSetDefinition");
 		
 		//Patients whose cd4 has declined more than 50 in the last month for ART patients
 		RowPerPatientDataSetDefinition dataSetDefinition7 = new RowPerPatientDataSetDefinition();
@@ -267,8 +269,22 @@ public class SetupAdultLateVisitAndCD4Report {
 		dataSetDefinition9.addFilter(onARTStatusCohort, ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		
 		//Patients with any Clinical Encounter(Lab Test included) in last year
-		EncounterCohortDefinition patientsWithClinicalEncounters = Cohorts.createEncounterParameterizedByDate(
-		    "patientsWithClinicalEncounters", "onOrAfter", clinicalEnountersIncLab);
+		
+		SqlCohortDefinition patientWithViralLoadAndCD4Tested=new SqlCohortDefinition("SELECT distinct e.patient_id FROM encounter e , obs o where o.encounter_id=e.encounter_id and e.encounter_type="+labTestEncounterType.getEncounterTypeId()+" and o.concept_id in ("+viralLoad.getConceptId()+","+cd4.getConceptId()+") and e.encounter_datetime>= :onOrAfter and e.voided=0 and o.voided=0 and value_numeric is not null;");
+		patientWithViralLoadAndCD4Tested.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		
+		
+		EncounterCohortDefinition patientsWithClinicalEncountersWithoutLabTest = Cohorts.createEncounterParameterizedByDate(
+		    "patientsWithClinicalEncounters", "onOrAfter", clinicalEncoutersExcLab);
+		
+		CompositionCohortDefinition patientsWithClinicalEncounters=new CompositionCohortDefinition();
+		patientsWithClinicalEncounters.addParameter(new Parameter("onOrAfter","onOrAfter",Date.class));
+		patientsWithClinicalEncounters.getSearches().put("1",new Mapped<CohortDefinition>(patientWithViralLoadAndCD4Tested, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
+		patientsWithClinicalEncounters.getSearches().put("2",new Mapped<CohortDefinition>(patientsWithClinicalEncountersWithoutLabTest, ParameterizableUtil.createParameterMappings("onOrAfter=${onOrAfter}")));
+		patientsWithClinicalEncounters.setCompositionString("1 OR 2");
+		
+		/*EncounterCohortDefinition patientsWithClinicalEncounters = Cohorts.createEncounterParameterizedByDate(
+		    "patientsWithClinicalEncounters", "onOrAfter", clinicalEnountersIncLab);*/
 		dataSetDefinition1.addFilter(patientsWithClinicalEncounters,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
 		dataSetDefinition2.addFilter(patientsWithClinicalEncounters,
@@ -291,8 +307,6 @@ public class SetupAdultLateVisitAndCD4Report {
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m}"));
 		
 		// Patients without Any clinical Encounter(Test lab excluded) in last three months.
-		EncounterCohortDefinition patientsWithClinicalEncountersWithoutLabTest = Cohorts.createEncounterParameterizedByDate(
-		    "patientsWithClinicalEncounters", "onOrAfter", clinicalEncoutersExcLab);
 		
 		CompositionCohortDefinition patientsWithoutClinicalEncounters = new CompositionCohortDefinition();
 		patientsWithoutClinicalEncounters.setName("patientsWithoutClinicalEncounters");
@@ -378,10 +392,10 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		
 		//==================================================================
-		//                 6. Patients with BMI less than 18.5
+		//                 6. Patients with BMI less than 16
 		//==================================================================
 		
-		//Patients with BMI less than 18.5
+		//Patients with BMI less than 16
 		SqlCohortDefinition patientWithLowBMI = new SqlCohortDefinition();
 		patientWithLowBMI.setName("patientWithLowBMI");
 		patientWithLowBMI
@@ -389,7 +403,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		                + height.getId()
 		                + "' order by o.obs_datetime desc) as lastheight group by lastheight.person_id) h,(select * from (select o.person_id,o.value_numeric from obs o,concept c where o.voided=0 and o.value_numeric is not null and o.concept_id= c.concept_id and c.uuid='"
 		                + weight.getUuid()
-		                + "' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<18.5");
+		                + "' order by o.obs_datetime desc) as lastweight group by lastweight.person_id) w,(select p.patient_id from patient p, person_attribute pa, person_attribute_type pat where p.patient_id = pa.person_id and pat.name ='Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location) loc where loc.patient_id=w.person_id and w.person_id=h.person_id and ROUND(((w.value_numeric*10000)/(h.value_numeric*h.value_numeric)),2)<16.0");
 		patientWithLowBMI.addParameter(new Parameter("location", "location", Location.class));
 		dataSetDefinition6.addFilter(patientWithLowBMI, new HashMap<String, Object>());
 		dataSetDefinition6_1.addFilter(patientWithLowBMI, new HashMap<String, Object>());
@@ -404,18 +418,14 @@ public class SetupAdultLateVisitAndCD4Report {
 		    ParameterizableUtil.createParameterMappings("beforeDate=${endDate}"));
 		
 		//==================================================================
-		//                8 . Patients with Viral Load >20 in the last three months
+		//                8 . Patients with Viral Load >1000 in the last 6 months
 		//==================================================================
-		SqlCohortDefinition viralLoadGreaterThan20InLast3Months = new SqlCohortDefinition(
-		        "select person_id from (select o.person_id,o.obs_datetime,o.value_numeric from obs o,concept c, person_attribute pa, person_attribute_type pat where o.person_id = pa.person_id and pat.name = 'Health Center' and pat.person_attribute_type_id = pa.person_attribute_type_id and pa.voided = 0 and pa.value = :location and o.concept_id= c.concept_id and c.uuid='"
-		                + viralLoad.getUuid()
-		                + "' and o.value_numeric>20 and o.voided=0 and o.obs_datetime> :beforeDate and o.obs_datetime<= :onDate order by o.obs_datetime desc) as vload group by person_id");
-		viralLoadGreaterThan20InLast3Months.setName("viralLoadGreaterThan20InLast3Months");
-		viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
-		viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("onDate", "onDate", Date.class));
-		viralLoadGreaterThan20InLast3Months.addParameter(new Parameter("location", "location", Location.class));
-		dataSetDefinition8.addFilter(viralLoadGreaterThan20InLast3Months,
-		    ParameterizableUtil.createParameterMappings("beforeDate=${endDate-3m},onDate=${endDate}"));
+		SqlCohortDefinition viralLoadGreaterThan1000InLast6Months = new SqlCohortDefinition("select vload.person_id from (select * from obs where concept_id="+viralLoad.getConceptId()+" and value_numeric>1000 and obs_datetime> :beforeDate and obs_datetime<= :onDate order by obs_datetime desc) as vload group by vload.person_id");
+		viralLoadGreaterThan1000InLast6Months.setName("viralLoadGreaterThan1000InLast6Months");
+		viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("beforeDate", "beforeDate", Date.class));
+		viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("onDate", "onDate", Date.class));
+		viralLoadGreaterThan1000InLast6Months.addParameter(new Parameter("location", "location", Location.class));
+		dataSetDefinition8.addFilter(viralLoadGreaterThan1000InLast6Months,ParameterizableUtil.createParameterMappings("beforeDate=${endDate-6m},onDate=${endDate}"));
 		
 		//==================================================================
 		//                9 . Patients with 50% decline from highest CD4 count from baseline CD4 after ART initiation 
@@ -514,17 +524,17 @@ public class SetupAdultLateVisitAndCD4Report {
 		
 		StateOfPatient stOfPatient = RowPerPatientColumns.getStateOfPatient("Treatment", hivProgram, treatmentStatus,
 		    new TreatmentStateFilter());
-		dataSetDefinition1.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition2.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition3.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition3_1.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition4.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition4_1.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition5.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition6.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition6_1.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition1.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition2.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition3.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition3_1.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition4.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition4_1.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition5.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition6.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition6_1.addColumn(stOfPatient, new HashMap<String, Object>());
 		dataSetDefinition7.addColumn(stOfPatient, new HashMap<String, Object>());
-		dataSetDefinition8.addColumn(stOfPatient, new HashMap<String, Object>());
+		//dataSetDefinition8.addColumn(stOfPatient, new HashMap<String, Object>());
 		dataSetDefinition9.addColumn(stOfPatient, new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",
@@ -748,5 +758,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		weight = gp.getConcept(GlobalPropertiesManagement.WEIGHT_CONCEPT);
 		
 		viralLoad = gp.getConcept(GlobalPropertiesManagement.VIRAL_LOAD_TEST);
+		
+		labTestEncounterType=gp.getEncounterType(GlobalPropertiesManagement.LAB_ENCOUNTER_TYPE);
 	}
 }

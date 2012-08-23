@@ -108,7 +108,7 @@ public class SetupAsthmaConsultationSheet {
 		dataSetDefinition.setName("Asthma Consultation Data Set");
 		
 		SortCriteria sortCriteria = new SortCriteria();
-		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
 		dataSetDefinition.setSortCriteria(sortCriteria);
 		
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
@@ -123,13 +123,15 @@ public class SetupAsthmaConsultationSheet {
 		
 		
 		DateFormatFilter dateFilter = new DateFormatFilter();
-		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
+		dateFilter.setFinalDateFormat("dd-MMM-yyyy");		
+		
 		
 		//Add Columns
 		
 		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		
@@ -164,7 +166,7 @@ public class SetupAsthmaConsultationSheet {
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
 		mappings.put("endDate", "${endDate}");
-		//mappings.put("endDate", new Date());
+		
 		
 		reportDefinition.addDataSetDefinition("dataSet", dataSetDefinition, mappings);
 	}
