@@ -18,7 +18,7 @@
 		<require_module>org.openmrs.module.rowperpatientreports</require_module>
 		<require_module>org.openmrs.module.reportingobjectgroup</require_module>
 	    <require_module>org.openmrs.module.heightweighttracker</require_module>
-	    <require_module>org.openmrs.module.orderextension</require_module>
+	    <require_module>org.openmrs.module.orderextension</require_module> 
 	</require_modules>
 
 	<extension>
@@ -2015,5 +2015,36 @@
 		<defaultValue>c6276c2d-b17e-45e3-87ff-2efd341b1e20</defaultValue>
 		<description>The id of the form for visit form of the hypertension flow sheet</description>
 	</globalProperty>
+	
+	<!-- start Epilepsy Consultation Sheet Report -->
+		
+		<globalProperty>
+		<property>reports.epilepsyDDBformId</property>
+		<defaultValue>86</defaultValue> 
+		<description>Epilepsy DDB form id </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.epilepsyRendevousVisitForm</property>
+		<defaultValue>b3a48ee2-7500-4427-8f5d-2d54d13256a0</defaultValue> 
+		<description>Epilepsy visit, Rendevous form id or uuid or name </description> 		
+		</globalProperty>
+		
+		<globalProperty>
+		<property>reports.epilepsyTreatmentConceptSet</property>
+		<defaultValue>9d0d0a7c-da7d-41bd-b637-2606b2bcbd14</defaultValue>
+		<description>The concept id of all the Epilepsy Treatment drug concept set (6867)</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.seizureConcept</property>
+		<defaultValue>ba2e9e43-5a9d-423f-a33e-c34765785397</defaultValue>
+		<description>The concept id of all the Epilepsy Treatment drug concept set (6797)</description>
+	    </globalProperty>
+	    
+	    
+	<!-- end Epilepsy Consultation Sheet Report -->
+		
+	
 		
 </module>
