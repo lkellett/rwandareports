@@ -30,7 +30,6 @@ import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinitio
 import org.openmrs.module.reporting.cohort.definition.EncounterCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.GenderCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.NumericObsCohortDefinition;
-import org.openmrs.module.reporting.cohort.definition.PatientStateCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.ProgramEnrollmentCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
@@ -79,6 +78,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 	private List<String> enrolledOnOrAfterOnOrBefore = new ArrayList<String>();
 	
 	private Concept systolicBP;
+	
+	private Concept diastolicBP;
 	
 	private Concept creatinine;
 	
@@ -1168,7 +1169,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 			
 			//=======================================================================
 			//E1: Of total active patients, % with no visit 28 weeks or more past last visit date
-			//==================================================================		
+			//=======================================================================		
 			
 			CompositionCohortDefinition activeAndNotwithHypertensionVisitIn28WeeksPatients = new CompositionCohortDefinition();
 			activeAndNotwithHypertensionVisitIn28WeeksPatients.setName("activeAndNotwithHypertensionVisitIn28WeeksPatients");
@@ -1198,289 +1199,76 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 				new Mapped(activeAndNotwithHypertensionVisitIn28WeeksPatientsIndicator, ParameterizableUtil
 					.createParameterMappings("endDate=${endDate}")), "");
 			
-			/*//=======================================================================
-			//E1: Of total active patients, % with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)
+			//=======================================================================
+			//E2: Of total active patients with Stage III HTN at last visit, % with next scheduled RDV visit 6 weeks or more past last visit date 
 			//==================================================================
 			
-			SqlCohortDefinition patientHospitalized = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
-			    "patientHospitalized", asthmaEncounterType, locOfHosp);
+			CompositionCohortDefinition activeAndSystolicBPGreaterThanOrEqualTo180 = new CompositionCohortDefinition();
+			activeAndSystolicBPGreaterThanOrEqualTo180
+			        .setName("activeAndSystolicBPGreaterThanOrEqualTo180");
+			activeAndSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("startDate",
+			        "startDate", Date.class));
+			activeAndSystolicBPGreaterThanOrEqualTo180.addParameter(new Parameter("endDate", "endDate",
+			        Date.class));
+			activeAndSystolicBPGreaterThanOrEqualTo180.addSearch("1", patientsSeenComposition, ParameterizableUtil
+				.createParameterMappings("onOrBefore=${startDate},onOrAfter=${endDate}"));
 			
-			CompositionCohortDefinition activeAndHospitalizedPatients = new CompositionCohortDefinition();
-			activeAndHospitalizedPatients.setName("activeAndHospitalizedPatients");
-			activeAndHospitalizedPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			activeAndHospitalizedPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			activeAndHospitalizedPatients.addParameter(new Parameter("endDate", "endDate", Date.class));
-			activeAndHospitalizedPatients.addParameter(new Parameter("startDate", "startDate", Date.class));
-			activeAndHospitalizedPatients.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			activeAndHospitalizedPatients.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(patientHospitalized, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate},startDate=${startDate}")));
-			activeAndHospitalizedPatients.setCompositionString("1 AND 2");
+			activeAndSystolicBPGreaterThanOrEqualTo180.addSearch("2",
+			    patientsWithSystolicBPGreaterThanOrEqualTo180,
+			    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 			
-			CohortIndicator activeAndHospitalizedPatientsCountQuarterIndicator = Indicators
-			        .newCountIndicator(
-			            "activeAndHospitalizedPatientsCountQuarterIndicator",
-			            activeAndHospitalizedPatients,
-			            ParameterizableUtil
-			                    .createParameterMappings("endDate=${endDate},startDate=${endDate-3m+1d},onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
+			activeAndSystolicBPGreaterThanOrEqualTo180.setCompositionString("1 AND 2");
 			
-			CohortIndicator patientsSeenInOneYearCountIndicator = Indicators.newCountIndicator(
-			    "patientsSeenInOneYearCountIndicator", patientsSeenComposition,
-			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
+			CohortIndicator activeAndSystolicBPGreaterThanOrEqualTo180Indicator = Indicators
+			        .newCountIndicator("activeAndSystolicBPGreaterThanOrEqualTo180Indicator",
+			        	activeAndSystolicBPGreaterThanOrEqualTo180,
+			            ParameterizableUtil.createParameterMappings("startDate=${endDate-12m+1d},endDate=${endDate}"));
 			
 			dsd.addColumn(
-			    "E1N",
-			    "Total active patients, number with documented hospitalization (in flowsheet) in the last quarter (exclude hospitalization on DDB)",
-			    new Mapped(activeAndHospitalizedPatientsCountQuarterIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			dsd.addColumn("E1D", "total patients seen in the last year", new Mapped(patientsSeenInOneYearCountIndicator,
-			        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
+			    "E2D",
+			    "Total active patients with Stage III HTN at last visit",
+			    new Mapped(activeAndSystolicBPGreaterThanOrEqualTo180Indicator, ParameterizableUtil
+			            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 			
 			//=======================================================================
-			//E2: Of total patients with a visit in the last 12 months, % with no visit  in 28  or more weeks
-			//==================================================================		
-			
-			EncounterCohortDefinition withAsthmaVisit = Cohorts.createEncounterParameterizedByDate("withAsthmaVisit",
-			    onOrAfterOnOrBefore, asthmaEncounterType);
-			
-			CompositionCohortDefinition activeAndNotwithAsthmaVisitIn28WeeksPatients = new CompositionCohortDefinition();
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.setName("activeAndNotwithAsthmaVisitIn28WeeksPatients");
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(withAsthmaVisit, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-28w}")));
-			activeAndNotwithAsthmaVisitIn28WeeksPatients.setCompositionString("1 AND (NOT 2)");
-			
-			CohortIndicator activeAndNotwithAsthmaVisitIn28WeeksPatientsCountQuarterIndicator = Indicators.newCountIndicator(
-			    "activeAndNotwithAsthmaVisitIn28WeeksPatientsNumeratorCountQuarterIndicator",
-			    activeAndNotwithAsthmaVisitIn28WeeksPatients,
-			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
-			
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
-			dsd.addColumn(
-			    "E2N",
-			    "Total active patients, number with no visit in 28 weeks or more past last visit date",
-			    new Mapped(activeAndNotwithAsthmaVisitIn28WeeksPatientsCountQuarterIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			//=======================================================================
-			//E3: Of total active patients with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit, % with next scheduled RDV visit 28 weeks or more past last visit date 
+			//E5: Of total active patients, % with last recorded BP <140/90
 			//=======================================================================		
-			SqlCohortDefinition patientsWithAsthmaClassificationObsAnswer = Cohorts
-			        .getPatientsWithObservationInFormBetweenStartAndEndDate("patientsWithAsthmaClassificationObsAnswer",
-			            DDBforms, asthmaclassification, asthmasClassificationAnswers);
+			SqlCohortDefinition patientsWithDiastolicBPGreaterThanOrEqualTo90 = Cohorts
+	        .getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+	            "patientsWithDiastolicBPGreaterThanOrEqualTo90", DDBform, diastolicBP, 90);
 			
-			//=============
-			CompositionCohortDefinition activeAndWithAsthmaClassificationObsAnswer = new CompositionCohortDefinition();
-			activeAndWithAsthmaClassificationObsAnswer.setName("activeAndWithAsthmaClassificationObsAnswer");
-			activeAndWithAsthmaClassificationObsAnswer.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			activeAndWithAsthmaClassificationObsAnswer.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+			CompositionCohortDefinition activewithBPLessThan140To90 = new CompositionCohortDefinition();
+			activewithBPLessThan140To90.setName("activewithBPLessThan140To90");
+			activewithBPLessThan140To90.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
+			activewithBPLessThan140To90.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
+			activewithBPLessThan140To90.getSearches().put(
+				"1",
+				new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
+						.createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
+			activewithBPLessThan140To90.getSearches().put(
+				"2",
+				new Mapped<CohortDefinition>(patientsWithSystolicBPGreaterThanOrEqualTo140,
+					    ParameterizableUtil.createParameterMappings("startDate=${onOrAfter},endDate=${onOrBefore}")));
+			activewithBPLessThan140To90.getSearches().put(
+				"3",
+				new Mapped<CohortDefinition>(patientsWithDiastolicBPGreaterThanOrEqualTo90,
+					    ParameterizableUtil.createParameterMappings("startDate=${onOrAfter},endDate=${onOrBefore}")));
 			
-			activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			activeAndWithAsthmaClassificationObsAnswer.setCompositionString("1 AND 2");
+			activewithBPLessThan140To90.setCompositionString("1 AND (NOT (2 AND 3))");
 			
-			CohortIndicator activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator = Indicators.newCountIndicator(
-			    "activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator", activeAndWithAsthmaClassificationObsAnswer,
-			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
-			
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================	
-			dsd.addColumn(
-			    "E3D",
-			    "Total active patients, number with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit",
-			    new Mapped(activeAndactiveAndWithAsthmaClassificationObsAnswerIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			//===============
-			
-			CompositionCohortDefinition activeAndNotwithAsthmaVisit14WeeksPatients = new CompositionCohortDefinition();
-			activeAndNotwithAsthmaVisit14WeeksPatients.setName("activeAndNotwithAsthmaVisit14WeeksPatients");
-			activeAndNotwithAsthmaVisit14WeeksPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			activeAndNotwithAsthmaVisit14WeeksPatients.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
-			
-			activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
-			    "2",
-			    new Mapped<CohortDefinition>(patientsSeenComposition, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			
-			activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
-			    "3",
-			    new Mapped<CohortDefinition>(withAsthmaVisit, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-14w}")));
-			activeAndNotwithAsthmaVisit14WeeksPatients.setCompositionString("1 AND 2 AND (NOT 3)");
-			
-			CohortIndicator activeAndNotwithAsthmaVisit14WeeksPatientsIndicator = Indicators.newCountIndicator(
-			    "activeAndNotwithAsthmaVisit14WeeksPatients", activeAndNotwithAsthmaVisit14WeeksPatients,
-			    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
-			
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================	
-			dsd.addColumn(
-			    "E3N",
-			    "Total active patients, number with no visit 14 weeks or more past last visit date",
-			    new Mapped(activeAndNotwithAsthmaVisit14WeeksPatientsIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			//=======================================================
-			// E4: Of adult male patients (age ≥15 years old) who had peak flow tested in the last quarter, % with last peak flow >580
-			//=======================================================
-			
-			AgeCohortDefinition over15Cohort = Cohorts.createOver15AgeCohort("ageQD: Over 15");
-			
-			GenderCohortDefinition malesDefinition = Cohorts.createMaleCohortDefinition("malesDefinition");
-			
-			NumericObsCohortDefinition patientsTestedForpeakFlow = Cohorts.createNumericObsCohortDefinition(
-			    "patientsTestedForpeakFlow", onOrAfterOnOrBefore, peakFlowAfterSalbutamol, 0, null, TimeModifier.LAST);
-			
-			CompositionCohortDefinition adultMalePatientsTestedForpeakFlow = new CompositionCohortDefinition();
-			adultMalePatientsTestedForpeakFlow.setName("adultMalePatientsTestedForForpeakFlow");
-			adultMalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			adultMalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			
-			adultMalePatientsTestedForpeakFlow.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsTestedForpeakFlow, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			
-			adultMalePatientsTestedForpeakFlow.getSearches().put("2", new Mapped<CohortDefinition>(malesDefinition, null));
-			
-			adultMalePatientsTestedForpeakFlow.getSearches().put("3",
-			    new Mapped(over15Cohort, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
-			
-			adultMalePatientsTestedForpeakFlow.setCompositionString("1 AND 2 AND 3");
-			
-			CohortIndicator adultMalePatientsTestedForpeakFlowIndicator = Indicators.newCountIndicator(
-			    "adultMalePatientsTestedForpeakFlowIndicator", adultMalePatientsTestedForpeakFlow,
-			    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
-			
-			NumericObsCohortDefinition patientsWithLastPeakflowGreaterThan580 = Cohorts.createNumericObsCohortDefinition(
-			    "patientsWithLastPeakflowGreaterThan580", peakFlowAfterSalbutamol, 580, RangeComparator.GREATER_THAN,
-			    TimeModifier.LAST);
-			
-			CompositionCohortDefinition adultMalePatientsTestedForpeakFlowGreaterThan580 = new CompositionCohortDefinition();
-			adultMalePatientsTestedForpeakFlowGreaterThan580.setName("adultMalePatientsTestedForpeakFlowGreaterThan580");
-			adultMalePatientsTestedForpeakFlowGreaterThan580.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			adultMalePatientsTestedForpeakFlowGreaterThan580.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			adultMalePatientsTestedForpeakFlowGreaterThan580.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(adultMalePatientsTestedForpeakFlow, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			adultMalePatientsTestedForpeakFlowGreaterThan580.getSearches().put("2",
-			    new Mapped<CohortDefinition>(patientsWithLastPeakflowGreaterThan580, null));
-			adultMalePatientsTestedForpeakFlowGreaterThan580.setCompositionString("1 AND 2");
-			
-			CohortIndicator adultMalePatientsTestedForpeakFlowGreaterThan580Indicator = Indicators.newCountIndicator(
-			    "adultMalePatientsTestedForpeakFlowGreaterThan580Indicator", adultMalePatientsTestedForpeakFlowGreaterThan580,
-			    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
+			CohortIndicator activewithBPLessThan140To90Indicator = Indicators.newCountIndicator(
+				"activewithBPLessThan140To90Indicator",
+				activewithBPLessThan140To90,
+				ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-12m+1d},onOrBefore=${endDate}"));
 			
 			//========================================================
 			//        Adding columns to data set definition         //
 			//========================================================
 			dsd.addColumn(
-			    "E4D",
-			    "Of adult male patients (age ≥15 years old) who had peak flow tested in the last quarter",
-			    new Mapped(adultMalePatientsTestedForpeakFlowIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			dsd.addColumn(
-			    "E4N",
-			    "Of adult male patients (age ≥15 years old) who had peak flow Greater Than 580 tested in the last quarter",
-			    new Mapped(adultMalePatientsTestedForpeakFlowGreaterThan580Indicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			//=======================================================
-			// E5: Of adult female patients (age ≥15 years old) who had peak flow tested in the last quarter, % with last peak flow >400
-			//=======================================================
-			
-			GenderCohortDefinition femalesDefinition = Cohorts.createFemaleCohortDefinition("femalesDefinition");
-			
-			CompositionCohortDefinition adultFemalePatientsTestedForpeakFlow = new CompositionCohortDefinition();
-			adultFemalePatientsTestedForpeakFlow.setName("adultFemalePatientsTestedForpeakFlow");
-			adultFemalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			adultFemalePatientsTestedForpeakFlow.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			
-			adultFemalePatientsTestedForpeakFlow.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(patientsTestedForpeakFlow, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			
-			adultFemalePatientsTestedForpeakFlow.getSearches().put("2", new Mapped<CohortDefinition>(femalesDefinition, null));
-			
-			adultFemalePatientsTestedForpeakFlow.getSearches().put("3",
-			    new Mapped(over15Cohort, ParameterizableUtil.createParameterMappings("effectiveDate=${endDate}")));
-			
-			adultFemalePatientsTestedForpeakFlow.setCompositionString("1 AND 2 AND 3");
-			
-			CohortIndicator adultFemalePatientsTestedForpeakFlowIndicator = Indicators.newCountIndicator(
-			    "adultFemalePatientsTestedForpeakFlowIndicator", adultFemalePatientsTestedForpeakFlow,
-			    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
-			
-			NumericObsCohortDefinition patientsWithLastPeakflowGreaterThan400 = Cohorts.createNumericObsCohortDefinition(
-			    "patientsWithLastPeakflowGreaterThan400", peakFlowAfterSalbutamol, 400, RangeComparator.GREATER_THAN,
-			    TimeModifier.LAST);
-			
-			CompositionCohortDefinition adultFemalePatientsTestedForpeakFlowGreaterThan400 = new CompositionCohortDefinition();
-			adultFemalePatientsTestedForpeakFlowGreaterThan400.setName("adultFemalePatientsTestedForpeakFlowGreaterThan400");
-			adultFemalePatientsTestedForpeakFlowGreaterThan400
-			        .addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
-			adultFemalePatientsTestedForpeakFlowGreaterThan400.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
-			adultFemalePatientsTestedForpeakFlowGreaterThan400.getSearches().put(
-			    "1",
-			    new Mapped<CohortDefinition>(adultFemalePatientsTestedForpeakFlow, ParameterizableUtil
-			            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter}")));
-			
-			adultFemalePatientsTestedForpeakFlowGreaterThan400.getSearches().put("2",
-			    new Mapped<CohortDefinition>(patientsWithLastPeakflowGreaterThan400, null));
-			adultFemalePatientsTestedForpeakFlowGreaterThan400.setCompositionString("1 AND 2");
-			
-			CohortIndicator adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator = Indicators.newCountIndicator(
-			    "adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator",
-			    adultFemalePatientsTestedForpeakFlowGreaterThan400,
-			    ParameterizableUtil.createParameterMappings("onOrBefore=${endDate},onOrAfter=${endDate-3m+1d}"));
-			
-			//========================================================
-			//        Adding columns to data set definition         //
-			//========================================================
-			dsd.addColumn(
-			    "E5D",
-			    "Of adult female patients (age ≥15 years old) who had peak flow tested in the last quarter",
-			    new Mapped(adultFemalePatientsTestedForpeakFlowIndicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");
-			
-			dsd.addColumn(
-			    "E5N",
-			    "Of adult female patients (age ≥15 years old) who had peak flow Greater Than 400 tested in the last quarter",
-			    new Mapped(adultFemalePatientsTestedForpeakFlowGreaterThan400Indicator, ParameterizableUtil
-			            .createParameterMappings("endDate=${endDate}")), "");*/
+				"E3N",
+				"Of total active patients, % with last recorded BP <140/90",
+				new Mapped(activewithBPLessThan140To90Indicator, ParameterizableUtil
+					.createParameterMappings("endDate=${endDate}")), "");
 
 	}
 	
@@ -1739,6 +1527,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		enrolledOnOrAfterOnOrBefore.add("enrolledOnOrBefore");
 		
 		systolicBP = gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE);
+		
+		diastolicBP = gp.getConcept(GlobalPropertiesManagement.DIASTOLIC_BLOOD_PRESSURE);
 		
 		hypertensionMedications = gp.getConceptAnswersAsConcepts(gp
 		        .getConcept(GlobalPropertiesManagement.HYPERTENSION_MEDICATIONS));
