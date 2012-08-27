@@ -674,6 +674,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String SEIZURE_CONCEPT = "reports.seizureConcept";
 	
+	public final static String IV_CONCEPT = "reports.ivConcept";
+	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	
 	public static final String VCT_PROGRAM = "reports.vctProgram";							

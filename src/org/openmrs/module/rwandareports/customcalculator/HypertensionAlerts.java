@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Form;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
+import org.openmrs.module.rowperpatientreports.patientdata.result.AllObservationValuesResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.ObservationResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientAttributeResult;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
@@ -62,7 +64,42 @@ public class HypertensionAlerts implements CustomCalculation {
 					}
 				}
 			}
-			//TODO: finish off alerts
+			
+			if(result.getName().equals("systolicLastTwo"))
+			{
+				AllObservationValuesResult systolicLastTwo = (AllObservationValuesResult)result;
+				
+				if(systolicLastTwo.getValue() != null && systolicLastTwo.getValue().size() > 1)
+				{
+					int increase = increaseBetweenTwoObs(systolicLastTwo.getValue());
+					if(increase >= 5)
+					{
+						if(alerts.length() > 0)
+						{
+							alerts.append(", ");
+						}
+						alerts.append("Last last 2 recorded systolic BP showed an increase of " + increase);
+					}
+				}
+			}
+			
+			if(result.getName().equals("diastolicLastTwo"))
+			{
+				AllObservationValuesResult diastolicLastTwo = (AllObservationValuesResult)result;
+				
+				if(diastolicLastTwo.getValue() != null && diastolicLastTwo.getValue().size() > 1)
+				{
+					int increase = increaseBetweenTwoObs(diastolicLastTwo.getValue());
+					if(increase >= 5)
+					{
+						if(alerts.length() > 0)
+						{
+							alerts.append(", ");
+						}
+						alerts.append("Last last 2 recorded diastolic BP showed an increase of " + increase);
+					}
+				}
+			}
 		}
 		
 		alert.setValue(alerts.toString().trim());
@@ -74,6 +111,24 @@ public class HypertensionAlerts implements CustomCalculation {
 		Form form = gp.getForm(GlobalPropertiesManagement.HYPERTENSION_DDB);
 		Patient p = result.getPatientData().getPatient();
 		return RwandaReportsUtil.patientHasForm(p, form);
+	}
+	
+	private int increaseBetweenTwoObs(List<Obs> obs)
+	{
+		Obs one = obs.get(0);
+		Obs two = obs.get(1);
+		
+		if(one.getValueNumeric() != null && two.getValueNumeric() != null)
+		{
+			if(one.getObsDatetime().after(two.getObsDatetime()))
+			{
+				return one.getValueNumeric().intValue() - two.getValueNumeric().intValue();
+			}
+			
+			return two.getValueNumeric().intValue() - one.getValueNumeric().intValue();
+		}
+		
+		return 0;
 	}
 	
 }

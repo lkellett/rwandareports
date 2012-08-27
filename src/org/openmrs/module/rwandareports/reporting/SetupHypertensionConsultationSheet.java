@@ -44,6 +44,7 @@ public class SetupHypertensionConsultationSheet {
 	private Form hypertensionDDBForm;
 	
 	private Concept systolicBP;
+	private Concept diastolicBP;
 	
 	private List<Form> DDBAndRendezvousForms=new ArrayList<Form>();
 	
@@ -136,11 +137,15 @@ public class SetupHypertensionConsultationSheet {
 		AllObservationValues allSystolicBP = RowPerPatientColumns.getAllObservationValues("systolicLastTwo", systolicBP, null, new LastTwoObsFilter(),
 		    null);
 		
+		AllObservationValues allDiastolicBP = RowPerPatientColumns.getAllObservationValues("diastolicLastTwo", diastolicBP, null, new LastTwoObsFilter(),
+		    null);
+		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(systolic, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(diastolic, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(allSystolicBP, new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(allDiastolicBP, new HashMap<String, Object>());
 		alert.setCalculator(new HypertensionAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());	
 		
@@ -160,6 +165,7 @@ public class SetupHypertensionConsultationSheet {
 		hypertensionDDBForm=gp.getForm(GlobalPropertiesManagement.HYPERTENSION_DDB);
 		
 		systolicBP = gp.getConcept(GlobalPropertiesManagement.SYSTOLIC_BLOOD_PRESSURE);
+		diastolicBP = gp.getConcept(GlobalPropertiesManagement.DIASTOLIC_BLOOD_PRESSURE);
 		
 		DDBAndRendezvousForms.add(rendevousForm);
 		DDBAndRendezvousForms.add(hypertensionDDBForm);

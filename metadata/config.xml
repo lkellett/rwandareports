@@ -529,15 +529,19 @@
 		</description>
 	</globalProperty>
 	
-	
-	
-	
+	<globalProperty>
+		<property>reports.hypertensionprogram</property>
+		<defaultValue>Hypertension program</defaultValue>
+		<description>
+			The program name for the Hypertension program 
+		</description>
+	</globalProperty>
 	
 	<globalProperty>
-		<property>reports.pedihivprogramname</property>
-		<defaultValue>PEDIATRIC HIV PROGRAM</defaultValue>
+		<property>reports.ivConcept</property>
+		<defaultValue>304da4df-f376-4a3f-ba70-c9fbc8fe8fa6</defaultValue>
 		<description>
-			The program name for the pediatric hiv program
+			The concept id of the IV route concept
 		</description>
 	</globalProperty>
 	

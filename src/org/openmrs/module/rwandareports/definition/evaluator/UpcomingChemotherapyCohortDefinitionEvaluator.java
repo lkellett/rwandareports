@@ -25,12 +25,15 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.evaluator.CohortDefinitionEvaluator;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rwandareports.definition.UpcomingChemotherapyCohortDefinition;
+import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 
 /**
  * 
  */
 @Handler(supports={UpcomingChemotherapyCohortDefinition.class})
 public class UpcomingChemotherapyCohortDefinitionEvaluator implements CohortDefinitionEvaluator {
+	
+	GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 
 	/**
 	 * Default Constructor
@@ -48,7 +51,10 @@ public class UpcomingChemotherapyCohortDefinitionEvaluator implements CohortDefi
     	
     	for(ExtendedDrugOrder order: orders)
     	{
-    		cohort.addMember(order.getPatient().getId());
+    		if(order.getRoute() != null && order.getRoute().equals(gp.getConcept(GlobalPropertiesManagement.IV_CONCEPT)))
+    		{
+    			cohort.addMember(order.getPatient().getId());
+    		}
     	}
     	return new EvaluatedCohort(cohort, cohortDefinition, context);
     }
