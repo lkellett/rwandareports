@@ -11,6 +11,7 @@ import org.openmrs.module.rwandareports.reporting.SetupDataEntryDelayReport;
 import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupEpilepsyConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupEpilepsyLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
@@ -18,7 +19,6 @@ import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionQuarterlyAndMonthlyReport;
-import org.openmrs.module.rwandareports.reporting.SetupIDProgramQuarterlyIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
@@ -512,6 +512,19 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+	//Data Delay
+	@RequestMapping("/module/rwandareports/register_dataDelay")
+	public ModelAndView registerDataDelay() throws Exception {
+		new SetupDataEntryDelayReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_dataDelay")
+	public ModelAndView removeDataDelay() throws Exception {
+		new SetupDataEntryDelayReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	//Epilepsy Consult
 	@RequestMapping("/module/rwandareports/register_epilepsyConsultSheet")
 	public ModelAndView registerEpilepsyConsultSheet() throws Exception {
 		new SetupEpilepsyConsultationSheet().setup();
@@ -523,14 +536,16 @@ public class RwandaSetupReportsFormController {
 		new SetupEpilepsyConsultationSheet().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
-	
-	//Data Delay
-	@RequestMapping("/module/rwandareports/register_dataDelay")
-	public ModelAndView registerDataDelay() throws Exception {
-		new SetupDataEntryDelayReport().setup();
+	//Epilepsy Late Visit
+	@RequestMapping("/module/rwandareports/register_epilepsyLateVisit")
+	public ModelAndView registerEpilepsyLateVisit() throws Exception {
+		new SetupEpilepsyLateVisit().setup();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
+	@RequestMapping("/module/rwandareports/remove_epilepsyLateVisit")
+	public ModelAndView removeEpilepsyLateVisit() throws Exception {
+		new SetupEpilepsyLateVisit().delete();
 	@RequestMapping("/module/rwandareports/remove_dataDelay")
 	public ModelAndView removeDataDelay() throws Exception {
 		new SetupDataEntryDelayReport().delete();
@@ -549,4 +564,6 @@ public class RwandaSetupReportsFormController {
 		new SetupIDProgramQuarterlyIndicatorReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
+	
+
 }

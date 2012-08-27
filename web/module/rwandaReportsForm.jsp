@@ -247,7 +247,7 @@ $(document).ready(function(){
 <td><!--  <a href="${pageContext.request.contextPath}/module/rwandareports/remove_tracNetReport.form" onclick=msgrem(this)>Remove</a>--></td>	
 </tr>
 <tr>
-<td rowspan="11" class="tabletd">NCD Reports</td>
+<td rowspan="12" class="tabletd">NCD Reports</td>
 <td>Diabetes Quarterly and Monthly Report</td>
 <td>Central</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_DiabetesQuarterlyAndMonthReport.form" onclick=msgreg(this)>(Re) register</a></td>
@@ -312,6 +312,12 @@ $(document).ready(function(){
 <td>At site</td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/register_epilepsyConsultSheet.form" onclick=msgreg(this)>(Re) register</a></td>
 <td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_epilepsyConsultSheet.form" onclick=msgrem(this)>Remove</a></td>
+</tr>
+<tr>
+<td>Epilepsy Late Visit</td>
+<td>At site</td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/register_epilepsyLateVisit.form" onclick=msgreg(this)>(Re) register</a></td>
+<td><a href="${pageContext.request.contextPath}/module/rwandareports/remove_epilepsyLateVisit.form" onclick=msgrem(this)>Remove</a></td>
 </tr>
 
 <tr>
