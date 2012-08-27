@@ -34,7 +34,7 @@ protected Log log = LogFactory.getLog(DaysLate.class);
 				{
 	
 					long diff=0;
-					DateFormat dateformat = new SimpleDateFormat("yyy/MM/dd");
+					DateFormat dateformat = new SimpleDateFormat("dd/MM/yy");
 					
 					//try to get the return visit date
 					Date returnVisitDate = null;
