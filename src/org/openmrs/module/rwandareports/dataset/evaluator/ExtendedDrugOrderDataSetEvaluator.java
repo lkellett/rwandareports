@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.rwandareports.dataset.evaluator;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.Obs;
+import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.orderextension.DrugRegimen;
@@ -37,6 +41,7 @@ import org.openmrs.module.reporting.dataset.definition.evaluator.DataSetEvaluato
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.rwandareports.dataset.ExtendedDrugOrderDataSetDefinition;
+import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 
 /**
  * The logic that evaluates a {@link EncounterDataSetDefinition} and produces an {@link DataSet}
@@ -45,6 +50,8 @@ import org.openmrs.module.rwandareports.dataset.ExtendedDrugOrderDataSetDefiniti
 public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 
 	protected Log log = LogFactory.getLog(this.getClass());
+	
+	GlobalPropertiesManagement gp = new GlobalPropertiesManagement();
 
 	/**
 	 * Public constructor
@@ -56,6 +63,8 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 	 */
 	@SuppressWarnings("unchecked")
 	public DataSet evaluate(DataSetDefinition dataSetDefinition, EvaluationContext context) throws EvaluationException {
+		
+		Concept bsa = gp.getConcept(GlobalPropertiesManagement.BSA_CONCEPT);
 		
 		ExtendedDrugOrderDataSetDefinition dsd = (ExtendedDrugOrderDataSetDefinition) dataSetDefinition;
 		context = ObjectUtil.nvl(context, new EvaluationContext());
@@ -106,6 +115,9 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 			DataSetColumn instructions = new DataSetColumn("instructions", "instructions", String.class); 
 			dataSet.getMetaData().addColumn(instructions);
 			
+			DataSetColumn indication = new DataSetColumn("indication", "indication", String.class); 
+			dataSet.getMetaData().addColumn(indication);
+			
 			Collections.sort(orders, new Comparator<ExtendedDrugOrder>() {
                
                 public int compare(ExtendedDrugOrder left, ExtendedDrugOrder right) {
@@ -130,15 +142,44 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 				
 				String doseDisplay = "";
 				String actualDoseDisplay = "";
+				DecimalFormat f = new DecimalFormat("0.#");
 				if(edo.getDose() != null && edo.getUnits() != null)
 				{
 					if(edo.getUnits().equals("mg/m2"))
 					{
-						doseDisplay = edo.getDose().toString();
+						doseDisplay = f.format(edo.getDose());
 					}
 					else
 					{
-						actualDoseDisplay = edo.getDose().toString();
+						doseDisplay = f.format(edo.getDose()) + " (" + edo.getUnits() + ")";
+					}	
+					
+					if(edo.getUnits().equals("mg/m2"))
+					{
+						if(regimen.getCycleNumber() > 1)
+						{
+							Patient patient = edo.getPatient();
+							List<Obs> bsaValues = Context.getObsService().getObservationsByPersonAndConcept(patient, bsa);
+							
+							if(bsaValues != null && bsaValues.size() > 0)
+							{
+								Obs recent = null;
+								for(Obs o: bsaValues)
+								{
+									if(recent == null || recent.getObsDatetime().before(o.getObsDatetime()))
+									{
+										recent = o;
+									}
+								}
+								
+								double calcDose = edo.getDose()*recent.getValueNumeric();
+								if(edo.getDrug() != null && edo.getDrug().getMaximumDailyDose() != null && calcDose > edo.getDrug().getMaximumDailyDose())
+								{
+									calcDose = edo.getDrug().getMaximumDailyDose();
+								}
+								actualDoseDisplay = f.format(calcDose);
+							}
+						}
 					}
 				}
 				dataSet.addColumnValue(edo.getId(), dose, doseDisplay);

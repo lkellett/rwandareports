@@ -548,6 +548,8 @@ public class GlobalPropertiesManagement {
 	
 	public final static String HEIGHT_CONCEPT = "reports.heightConcept";
 	
+	public final static String BSA_CONCEPT = "reports.bsa";
+	
 	public final static String IO_CONCEPT = "reports.ioConcept";
 	
 	public final static String SIDE_EFFECT_CONCEPT = "reports.sideEffectConcept";
@@ -675,6 +677,12 @@ public class GlobalPropertiesManagement {
 	public final static String SEIZURE_CONCEPT = "reports.seizureConcept";
 	
 	public final static String IV_CONCEPT = "reports.ivConcept";
+	
+	public final static String ONC_ADMINISTRATION_INSTRUCTIONS = "reports.oncAdminInstructions";
+	
+	public final static String DOXORUBICIN_GIVEN = "reports.doxorubicinGiven";
+	
+	public final static String DAUNORUBICIN_GIVEN = "reports.daunorubicinGiven";
 	
 	//Primary Care Service concepts
 	public static final String PRIMARY_CARE_SERVICE_REQUESTED = "reports.primaryCareServiceRequested";	

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.openmrs.Concept;
-import org.openmrs.Patient;
 import org.openmrs.Program;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
@@ -15,9 +14,11 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.openmrs.module.rowperpatientreports.dataset.definition.RowPerPatientDataSetDefinition;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.AllObservationValues;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculationBasedOnMultiplePatientDataDefinitions;
+import org.openmrs.module.rwandareports.customcalculator.TotalToDate;
 import org.openmrs.module.rwandareports.dataset.ExtendedDrugOrderDataSetDefinition;
 import org.openmrs.module.rwandareports.definition.DrugRegimenInformation;
-import org.openmrs.module.rwandareports.definition.FirstDrugRegimenCycle;
 import org.openmrs.module.rwandareports.util.Cohorts;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
 import org.openmrs.module.rwandareports.util.RowPerPatientColumns;
@@ -38,6 +39,12 @@ public class SetupOncologyTreatmentAdministrationPlan {
 	
 	Concept postmedication;
 	
+	Concept adminInstructions;
+	
+	Concept doxorubicinGiven;
+	
+	Concept daunorubicinGiven;
+	
 	public void setup() throws Exception {
 		
 		setupProperties();
@@ -48,7 +55,7 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		    "TreatmentAdministrationPlan.xls_", null);
 		
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:19,dataset:premedication|sheet:1,row:21,dataset:chemotherapy|sheet:1,row:23,dataset:postmedication");
+		props.put("repeatingSections", "sheet:1,row:21,dataset:premedication|sheet:1,row:23,dataset:chemotherapy|sheet:1,row:25,dataset:postmedication");
 		design.setProperties(props);
 		
 		h.saveReportDesign(design);
@@ -97,13 +104,27 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		    new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentHeight("RecentHeight", "dd/MM/yy"),new HashMap<String, Object>());
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentBSA("RecentBSA", "dd/MM/yy"),new HashMap<String, Object>());
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecent("adminInstructions", adminInstructions, "dd/MM/yy"),new HashMap<String, Object>());
 		    
 		dataSetDefinition.addColumn(RowPerPatientColumns.getStateOfPatient("intent", oncologyProgram, treatmentIntent, null), new HashMap<String, Object>());
 		
-		FirstDrugRegimenCycle fdc = new FirstDrugRegimenCycle();
-		fdc.setName("firstCycle");
-		fdc.addParameter(new Parameter("regimen", "regimen", String.class));
-		dataSetDefinition.addColumn(fdc, ParameterizableUtil.createParameterMappings("regimen=${regimen}"));
+		AllObservationValues doxoAll = RowPerPatientColumns.getAllObservationValues("allDoxo", doxorubicinGiven, "dd/MMM/yy", null, null);
+		AllObservationValues daunoAll = RowPerPatientColumns.getAllObservationValues("allDauno", daunorubicinGiven, "dd/MMM/yy", null, null);
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions totalDoxo = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		totalDoxo.setName("totalDoxo");
+		totalDoxo.addPatientDataToBeEvaluated(doxoAll, new HashMap<String, Object>());
+		totalDoxo.setCalculator(new TotalToDate());
+		dataSetDefinition.addColumn(totalDoxo, new HashMap<String, Object>());
+		
+		CustomCalculationBasedOnMultiplePatientDataDefinitions totalDauno = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
+		totalDauno.setName("totalDauno");
+		totalDauno.addPatientDataToBeEvaluated(daunoAll, new HashMap<String, Object>());
+		totalDauno.setCalculator(new TotalToDate());
+		dataSetDefinition.addColumn(totalDauno, new HashMap<String, Object>());
 		
 		DrugRegimenInformation info = RowPerPatientColumns.getDrugRegimenInformation("regimenInfo");
 		info.addParameter(new Parameter("regimen", "regimen", String.class));
@@ -142,5 +163,11 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		premedication = gp.getConcept(GlobalPropertiesManagement.PREMEDICATION);
 		chemotherapy = gp.getConcept(GlobalPropertiesManagement.CHEMOTHERAPY);
 		postmedication = gp.getConcept(GlobalPropertiesManagement.POSTMEDICATION);
+		
+		adminInstructions = gp.getConcept(GlobalPropertiesManagement.ONC_ADMINISTRATION_INSTRUCTIONS);
+		
+		doxorubicinGiven = gp.getConcept(GlobalPropertiesManagement.DOXORUBICIN_GIVEN);
+		
+		daunorubicinGiven = gp.getConcept(GlobalPropertiesManagement.DAUNORUBICIN_GIVEN);
 	}
 }

@@ -25,6 +25,12 @@
 		<point>org.openmrs.admin.list</point>
 		<class>@MODULE_PACKAGE@.extension.html.ManageAdminListExt</class>
 	</extension>
+	
+	<extension>
+   		<point>org.openmrs.module.orderextension.header</point>
+  		<class>@MODULE_PACKAGE@.extension.html.TreatmentAdminPlanExt</class>
+	</extension>
+	
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>
@@ -2074,6 +2080,34 @@
 		<defaultValue>ba2e9e43-5a9d-423f-a33e-c34765785397</defaultValue>
 		<description>The concept id of all the Epilepsy Treatment drug concept set (6797)</description>
 	    </globalProperty>
+	    
+	<!-- end Epilepsy Consultation Sheet Report -->
+	    
+	    <globalProperty>
+		<property>reports.bsa</property>
+		<defaultValue>ee61975b-310a-4ca2-a21b-1f5b0167d03e</defaultValue>
+		<description>The concept id for calculated body surface area</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.oncAdminInstructions</property>
+		<defaultValue>2592</defaultValue>
+		<description>The concept id for recording the administration instuctions for the next oncology administration</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.doxorubicinGiven</property>
+		<defaultValue>5090</defaultValue>
+		<description>The concept id for recording the administration dose of doxorubicin given</description>
+	    </globalProperty>
+	    
+	    <globalProperty>
+		<property>reports.daunorubicinGiven</property>
+		<defaultValue>5089</defaultValue>
+		<description>The concept id for recording the administration dose of daunorubicin given</description>
+	    </globalProperty>
+	    
+	    
 	    
 	    
 	<!-- end Epilepsy Consultation Sheet Report -->

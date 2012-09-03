@@ -19,6 +19,7 @@
     	<property name="mappings">
             <props>
 	           <prop key="module/rwandareports/rwandareports.form">rwandaReportsFormController</prop>
+	           <prop key="**/regimenHeader.portlet">RegimenHeaderPortletController</prop>
 	    	</props>
 		</property>
     </bean>
@@ -28,6 +29,6 @@
 		<property name="formView"><value>/module/rwandareports/rwandaReportsForm</value></property>
 		<property name="successView"><value>rwandareports.form</value></property>
     </bean>
-	
-   
+    
+    <bean id="RegimenHeaderPortletController" class="org.openmrs.module.rwandareports.web.controller.RegimenHeaderPortletController"/>
 </beans>

@@ -321,6 +321,10 @@ public class RowPerPatientColumns {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HEIGHT_CONCEPT), dateFormat);
 	}
 	
+	public static MostRecentObservation getMostRecentBSA(String name, String dateFormat) {
+		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.BSA_CONCEPT), dateFormat);
+	}
+	
 	public static MostRecentObservation getMostRecentHeight(String name, String dateFormat, ResultFilter resultFilter) {
 		return getMostRecent(name, gp.getConcept(GlobalPropertiesManagement.HEIGHT_CONCEPT), dateFormat, resultFilter);
 	}

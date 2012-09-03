@@ -77,7 +77,7 @@ public class SetupChemotherapyExpectedPatientList {
 		baseCohort.addParameter(new Parameter("untilDate", "untilDate", Date.class));
 		
 		reportDefinition.setBaseCohortDefinition(baseCohort,ParameterizableUtil.createParameterMappings("asOfDate=${endDate},untilDate=${endDate+6d}"));
-		reportDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
+		reportDefinition.addParameter(new Parameter("endDate", "Week of (select Monday)", Date.class));
 		createDataSetDefinition(reportDefinition);
 		
 		h.saveReportDefinition(reportDefinition);
