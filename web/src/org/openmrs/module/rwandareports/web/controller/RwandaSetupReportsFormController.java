@@ -19,6 +19,7 @@ import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionQuarterlyAndMonthlyReport;
+import org.openmrs.module.rwandareports.reporting.SetupIDProgramQuarterlyIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
@@ -546,9 +547,6 @@ public class RwandaSetupReportsFormController {
 	@RequestMapping("/module/rwandareports/remove_epilepsyLateVisit")
 	public ModelAndView removeEpilepsyLateVisit() throws Exception {
 		new SetupEpilepsyLateVisit().delete();
-	@RequestMapping("/module/rwandareports/remove_dataDelay")
-	public ModelAndView removeDataDelay() throws Exception {
-		new SetupDataEntryDelayReport().delete();
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 	
