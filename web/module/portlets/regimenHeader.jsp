@@ -12,7 +12,7 @@
 			position: 'middle',
 			autoOpen: false,
 			modal: true,
-			title: '<spring:message code="pihrwanda.printTreatmentAdminPlan" javaScriptEscape="true"/>',
+			title: '<spring:message code="rwandareports.printTreatmentAdminPlan" javaScriptEscape="true"/>',
 			width: '50%',
 			zIndex: 100,
 			buttons: { 'Print': function() { printTreatmentPlan(); },
@@ -30,7 +30,7 @@
 	
 <div id="availableCycles">
 	<c:if test="${!empty model.regimens}">
-		<input type="button" id="printPlan"  value="Print Treatment Administration Plan"/> 
+		<input type="button" id="printPlan"  value="<spring:message code="rwandareports.printTreatmentAdminPlan" />"/> 
 	</c:if>	
 </div>
 					
