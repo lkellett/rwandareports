@@ -82,5 +82,6 @@
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/xerces/xml-apis.jar"/>
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/antlr/antlr_2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/orderextension-api-1.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="src" path="/RowPerPatientReports"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
