@@ -1,21 +1,13 @@
 package org.openmrs.module.rwandareports.web.controller;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
 import org.openmrs.Patient;
-import org.openmrs.ProgramWorkflow;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetColumn;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
-import org.openmrs.module.reporting.query.encounter.EncounterQueryResult;
-import org.openmrs.module.reporting.query.encounter.definition.EncounterQuery;
-import org.openmrs.module.rwandareports.indicator.EncounterIndicator;
-import org.openmrs.module.rwandareports.indicator.EncounterIndicatorResult;
 
 public class DQReportModel {
 
@@ -24,10 +16,10 @@ public class DQReportModel {
 	private String selectedEncounter;
 	private List<Patient> patients;
 	private List<Encounter>  encounters;
+	private List<Date>  encounterDatetime;
 	private DataSet dataSet;
 	private DataSetDefinition dataSetDefinition;
 	private List<DataSetDefinition> dataSetDefinitions;
-	private List<ProgramWorkflow> pediWorkflow=new ArrayList<ProgramWorkflow>();
 	
 	public DataSetColumn getSelectedColumn() {
 		return selectedColumn;
@@ -64,6 +56,14 @@ public class DQReportModel {
 		    this.encounters = encounter;
 	    }
 	
+	public List<Date> getEncounterDatetime() {
+	    return encounterDatetime;
+    }
+	
+public void setEncounterDatetime(List<Date> encounterDatetime) {
+	    this.encounterDatetime = encounterDatetime;
+    }
+	
 	public DataSet getDataSet() {
 		return dataSet;
 	}
@@ -81,15 +81,6 @@ public class DQReportModel {
 	}
 	public void setDataSetDefinitions(List<DataSetDefinition> dataSetDefinitions) {
 		this.dataSetDefinitions = dataSetDefinitions;
-	}
-	/**
-	 * @param pediWorkflow the pediWorkflow to set
-	 */
-	public ProgramWorkflow getPediWorkflow() {
-		pediWorkflow.add(Context.getProgramWorkflowService().getWorkflow(20));
-		return (ProgramWorkflow) pediWorkflow;
-		
-		
 	}
 	
 }
