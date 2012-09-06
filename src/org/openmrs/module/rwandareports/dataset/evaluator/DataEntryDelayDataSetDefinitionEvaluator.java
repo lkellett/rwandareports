@@ -66,12 +66,12 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 		AllLocation location = lhdsd.getLocation();
 		if (location != null) {
 			if (!location.isAllSites() && location.getHierarchy().equals(AllLocation.LOCATION)) {
-				addIteration(ret, getEncounters(location.getValue(), LOCATION, location.getValue()), location.getValue(),
+				addIteration(ret, getEncounters(location.getValue(), LOCATION, location.getValue(), lhdsd.getEncounterTypes()), location.getValue(),
 				    context, lhdsd);
 			} else if (!location.isAllSites()) {
 				List<Location> allLocations = Context.getLocationService().getAllLocations(false);
 				
-				addIteration(ret, getEncounters(location.getValue(), HIERARCHY, location.getHierarchy()),
+				addIteration(ret, getEncounters(location.getValue(), HIERARCHY, location.getHierarchy(), lhdsd.getEncounterTypes()),
 				    location.getValue() + " " + location.getDisplayHierarchy(), context, lhdsd);
 				
 				for (Location l : allLocations) {
@@ -82,12 +82,12 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 					}
 					
 					if (location.getValue() != null && location.getValue().toUpperCase().equals(hierarchyValue)) {
-						addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName()), l.getName(), context,
+						addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName(), lhdsd.getEncounterTypes()), l.getName(), context,
 							lhdsd);
 					}
 				}
 			} else {
-				addIteration(ret, getEncounters("All Sites", ALL_SITES, "All Sites"), "All Sites", context,
+				addIteration(ret, getEncounters("All Sites", ALL_SITES, "All Sites", lhdsd.getEncounterTypes()), "All Sites", context,
 					lhdsd);
 				
 				List<Location> allLocations = Context.getLocationService().getAllLocations(false);
@@ -117,13 +117,13 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 					}
 					
 					for (String hLoc : allLoc) {
-						addIteration(ret, getEncounters(hLoc, HIERARCHY, hVal), hLoc + " " + hDisplay, context,
+						addIteration(ret, getEncounters(hLoc, HIERARCHY, hVal, lhdsd.getEncounterTypes()), hLoc + " " + hDisplay, context,
 							lhdsd);
 					}
 				}
 				
 				for (Location l : allLocations) {
-					addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName()), l.getName(), context,
+					addIteration(ret, getEncounters(l.getName(), LOCATION, l.getName(), lhdsd.getEncounterTypes()), l.getName(), context,
 						lhdsd);
 				}
 			}
@@ -132,15 +132,19 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 		return ret;
 	}
 	
-	private SqlEncounterQuery getEncounters(String location, String hierarchy, String hierarchyValue) {
+	private SqlEncounterQuery getEncounters(String location, String hierarchy, String hierarchyValue, List<EncounterType> encounterTypes) {
 		
 		if (hierarchy.equals(LOCATION)) {
 			Location loc = Context.getLocationService().getLocation(location);
 			
 			SqlEncounterQuery locationCohort = new SqlEncounterQuery();
+			String sql = "select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0 and location_id =" + loc.getLocationId();
+			if(encounterTypes != null && encounterTypes.size() > 0)
+			{
+				sql = sql + " and encounter_type in (" + getCommaSeparatedEncounterTypes(encounterTypes) + ")";
+			}
 			locationCohort
-			        .setQuery("select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0 and location_id ="
-			                + loc.getLocationId());
+			        .setQuery(sql);
 			locationCohort.addParameter(new Parameter("startDate", "startDate", Date.class));
 			locationCohort.addParameter(new Parameter("endDate", "endDate", Date.class));
 			
@@ -150,20 +154,28 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 			String hVal = resolveDatabaseColumnName(hierarchyValue);
 			
 			SqlEncounterQuery locationCohort = new SqlEncounterQuery();
+			String sql = "select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0 and location_id in (select location_id from location where retired = 0 and "
+			                + hVal + " = '" + location + "')";
+			if(encounterTypes != null && encounterTypes.size() > 0)
+			{
+				sql = sql + " and encounter_type in (" + getCommaSeparatedEncounterTypes(encounterTypes) + ")";
+			}
 			locationCohort
-			        .setQuery("select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0 and location_id in (select location_id from location where retired = 0 and "
-			                + hVal + " = '" + location + "')");
+			        .setQuery(sql);
 			locationCohort.addParameter(new Parameter("startDate", "startDate", Date.class));
 			locationCohort.addParameter(new Parameter("endDate", "endDate", Date.class));
 			
 			return locationCohort;
 		} else {
 			
-			String hVal = resolveDatabaseColumnName(hierarchyValue);
-			
 			SqlEncounterQuery locationCohort = new SqlEncounterQuery();
+			String sql = "select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0";
+			if(encounterTypes != null && encounterTypes.size() > 0)
+			{
+				sql = sql + " and encounter_type in (" + getCommaSeparatedEncounterTypes(encounterTypes) + ")";
+			}
 			locationCohort
-			        .setQuery("select encounter_id from encounter where form_id is not null and date_created >= :startDate and date_created <= :endDate and voided=0");
+			        .setQuery(sql);
 			locationCohort.addParameter(new Parameter("startDate", "startDate", Date.class));
 			locationCohort.addParameter(new Parameter("endDate", "endDate", Date.class));
 			
@@ -522,5 +534,18 @@ public class DataEntryDelayDataSetDefinitionEvaluator implements DataSetEvaluato
 		
 		return encs;
 	}
-
+	
+	private String getCommaSeparatedEncounterTypes(List<EncounterType> encounterTypes)
+	{
+		StringBuilder result = new StringBuilder();
+		for(EncounterType et: encounterTypes)
+		{
+			if(result.length() > 0)
+			{
+				result.append(",");
+			}
+			result.append(et.getId());
+		}
+		return result.toString();
+	}
 }

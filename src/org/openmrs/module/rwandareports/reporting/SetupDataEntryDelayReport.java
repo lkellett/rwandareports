@@ -132,7 +132,8 @@ public class SetupDataEntryDelayReport {
 		
 		Map<String, Object> mappings = new HashMap<String, Object>();
 		mappings.put("location", "${location}");
-		mappings.put("endDate", "${endDate}");
+		mappings.put("endDate", "${endDate+1d}");
+		mappings.put("startDate", "${startDate}");
 		
 		rd.addDataSetDefinition("dataSet", dataEntryDelay, mappings);
 	}
