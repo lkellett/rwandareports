@@ -1,12 +1,8 @@
 package org.openmrs.module.rwandareports.reporting;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -31,8 +27,6 @@ import org.openmrs.module.reporting.cohort.definition.InverseCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.PersonAttributeCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.SetComparator;
-import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
-import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
@@ -121,8 +115,6 @@ public class SetupDataQualityIndicatorReport {
 		h.purgeReportDefinition("Data Quality Report By Site");
 		h.purgeReportDefinition("Data Quality Report For All Sites");
 	}
-
-	// DQ Report by Site
 
 	// DQ Report by Site
 	public ReportDefinition createReportDefinitionBySite() throws IOException {
@@ -1125,6 +1117,7 @@ public class SetupDataQualityIndicatorReport {
 				.getOrderType(GlobalPropertiesManagement.DRUG_ORDER_TYPE);
 		transfeInEncounterType = gp
 				.getEncounterType(GlobalPropertiesManagement.TRANSFER_IN_ENCOUNTER_TYPE);
+
 	}
 
 	private ReportDesign createCustomWebRenderer(ReportDefinition rd,

@@ -50,6 +50,7 @@ public class RenderDataQualityReportController {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
+	
 	@RequestMapping("/module/rwandareports/renderDataQualityDataSet")
 	public String showReport(
 			@RequestParam(required = false, value = "savedDataSetKey") String savedDataSetKey,
@@ -70,121 +71,94 @@ public class RenderDataQualityReportController {
 			savedDataSetEncKey = "encFuture";
 
 			// evaluate indicator report
-
-			if (savedDataSetKey.equals("defaultDataSet")) {
-				List<String> savedColumnKeys = new ArrayList<String>();
-				savedColumnKeys.add("1");
-				savedColumnKeys.add("2");
-				savedColumnKeys.add("3");
-				savedColumnKeys.add("4");
-				savedColumnKeys.add("5");
-				savedColumnKeys.add("6");
-				savedColumnKeys.add("7");
-				savedColumnKeys.add("8");
-				savedColumnKeys.add("9");
-				savedColumnKeys.add("10");
-				savedColumnKeys.add("11");
-				savedColumnKeys.add("12");
-				savedColumnKeys.add("13");
-				savedColumnKeys.add("14");
-				savedColumnKeys.add("15");
-				savedColumnKeys.add("16");
-				savedColumnKeys.add("17");
-				savedColumnKeys.add("18");
-				savedColumnKeys.add("19");
-				savedColumnKeys.add("20");
-				savedColumnKeys.add("21");
-
-				List<DQReportModel> dQRList = new ArrayList<DQReportModel>();
-				for (String savedColumnKey : savedColumnKeys) {
-					DQReportModel dQRObject = new DQReportModel();
-
-					for (Map.Entry<String, DataSet> e : data.getDataSets()
-							.entrySet()) {
-						if (e.getKey().equals(savedDataSetKey)) {
-							MapDataSet mapDataSet = (MapDataSet) e.getValue();
-							DataSetColumn dataSetColumn = mapDataSet
-									.getMetaData().getColumn(savedColumnKey);
-							dQRObject.setSelectedColumn(dataSetColumn);
-
-							Object result = mapDataSet.getData(dataSetColumn);
-							Cohort selectedCohort = null;
-							if (result instanceof CohortIndicatorAndDimensionResult) {
-								CohortIndicatorAndDimensionResult cidr = (CohortIndicatorAndDimensionResult) mapDataSet
-										.getData(dataSetColumn);
-								selectedCohort = cidr
-										.getCohortIndicatorAndDimensionCohort();
-
-							}
-							// Evaluate the default patient dataset definition
-							DataSetDefinition dsd = null;
-							if (dsd == null) {
-								SimplePatientDataSetDefinition d = new SimplePatientDataSetDefinition();
-								d.addPatientProperty("patientId");
-								List<PatientIdentifierType> types = ReportingConstants
-										.GLOBAL_PROPERTY_PREFERRED_IDENTIFIER_TYPES();
-								if (!types.isEmpty()) {
-									d.setIdentifierTypes(types);
-								}
-
-								List<ProgramWorkflow> programWorkFlows = new ArrayList<ProgramWorkflow>();
-
-								ProgramWorkflow hivWorkflow = Context
-										.getProgramWorkflowService()
-										.getProgram(3)
-										.getWorkflowByName("TREATMENT GROUP");
-								ProgramWorkflow tbWorkflow = Context
-										.getProgramWorkflowService()
-										.getProgram(4)
-										.getWorkflowByName(
-												"TUBERCULOSIS TREATMENT GROUP");
-
-								programWorkFlows.add(hivWorkflow);
-								programWorkFlows.add(tbWorkflow);
-
-								if ((programWorkFlows != null && programWorkFlows
-										.size() > 0)) {
-
-									d.setProgramWorkflows(programWorkFlows);
-
-									d.addPatientProperty("givenName");
-									d.addPatientProperty("familyName");
-									d.addPatientProperty("age");
-									d.addPatientProperty("gender");
-
-									dsd = d;
-								}
-
-							}
-							EvaluationContext evalContext = new EvaluationContext();
-							evalContext.setBaseCohort(selectedCohort);
-
-							DataSet patientDataSet;
-							try {
-								patientDataSet = Context.getService(
-										DataSetDefinitionService.class)
-										.evaluate(dsd, evalContext);
-								dQRObject.setDataSet(patientDataSet);
-								dQRObject.setDataSetDefinition(dsd);
-							} catch (EvaluationException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}
-					}
-
-					// Add all dataset definition to the request (allow user to
-					// choose)
-					dQRObject.setDataSetDefinitions(Context.getService(
-							DataSetDefinitionService.class).getAllDefinitions(
-							false));
-					dQRList.add(dQRObject);
-				}
-
-				model.addAttribute("dQRList", dQRList);
-			}
-			// }
-
+			
+			  if (savedDataSetKey.equals("defaultDataSet")) { 
+			  List<String> savedColumnKeys = new ArrayList<String>();
+			  getSavedKeys(savedColumnKeys);
+			  List<DQReportModel> dQRList = new ArrayList<DQReportModel>();
+			   
+			  for(String savedColumnKey : savedColumnKeys) { 
+			DQReportModel dQRObject = new DQReportModel();
+			
+			
+			  for (Map.Entry<String, DataSet> e : data.getDataSets().entrySet()) { 
+			  if (e.getKey().equals(savedDataSetKey)) {
+			  MapDataSet mapDataSet = (MapDataSet) e.getValue(); DataSetColumn
+			  dataSetColumn = mapDataSet
+			  .getMetaData().getColumn(savedColumnKey);
+			  dQRObject.setSelectedColumn(dataSetColumn);
+			  
+			  Object result = mapDataSet.getData(dataSetColumn); Cohort
+			  selectedCohort = null; if (result instanceof
+			  CohortIndicatorAndDimensionResult) {
+			  CohortIndicatorAndDimensionResult cidr =
+			  (CohortIndicatorAndDimensionResult) mapDataSet
+			  .getData(dataSetColumn); selectedCohort = cidr
+			  .getCohortIndicatorAndDimensionCohort();
+			  
+			  } // Evaluate the default patient dataset definition
+			  DataSetDefinition dsd = null; if (dsd == null) {
+			  SimplePatientDataSetDefinition d = new
+			  SimplePatientDataSetDefinition();
+			  d.addPatientProperty("patientId"); List<PatientIdentifierType>
+			  types = ReportingConstants
+			  .GLOBAL_PROPERTY_PREFERRED_IDENTIFIER_TYPES(); if
+			  (!types.isEmpty()) { d.setIdentifierTypes(types); }
+			  
+			  List<ProgramWorkflow> programWorkFlows = new
+			  ArrayList<ProgramWorkflow>();
+			  
+			  ProgramWorkflow hivWorkflow = Context
+			  .getProgramWorkflowService() .getProgram(3)
+			  .getWorkflowByName("TREATMENT GROUP"); ProgramWorkflow tbWorkflow
+			  = Context .getProgramWorkflowService() .getProgram(4)
+			  .getWorkflowByName( "TUBERCULOSIS TREATMENT GROUP");
+			  
+			  programWorkFlows.add(hivWorkflow);
+			  programWorkFlows.add(tbWorkflow);
+			  
+			  if ((programWorkFlows != null && programWorkFlows .size() > 0)) {
+			  
+			  d.setProgramWorkflows(programWorkFlows);
+			  
+			  d.addPatientProperty("givenName");
+			  d.addPatientProperty("familyName"); d.addPatientProperty("age");
+			  d.addPatientProperty("gender");
+			  
+			  dsd = d; 
+			    }
+			  
+			  } 
+			  
+			  EvaluationContext evalContext = new EvaluationContext();
+			  evalContext.setBaseCohort(selectedCohort);
+			  
+			  DataSet patientDataSet; 
+			  try { 
+				patientDataSet =
+			  Context.getService( DataSetDefinitionService.class)
+			  .evaluate(dsd, evalContext);
+			  dQRObject.setDataSet(patientDataSet);
+			  dQRObject.setDataSetDefinition(dsd); 
+			  } 
+			  catch (EvaluationException e1) { 
+				  // TODO Auto-generated catch block 
+				  e1.printStackTrace(); 
+				   }
+			    } 
+			  
+			  }
+			  
+			  // Add all dataset definition to the request (allow user to choose) 
+			  dQRObject.setDataSetDefinitions(Context.getService(
+			  DataSetDefinitionService.class).getAllDefinitions( false));
+			  dQRList.add(dQRObject); 
+			  }
+			  
+				model.addAttribute("dQRList", dQRList); 
+			 }
+			 // end of if 
+			  
 			// evaluate encounter dataset
 			if (savedDataSetEncKey.equals("encFuture")) {
 				List<String> savedColumnKeys = new ArrayList<String>();
@@ -227,8 +201,6 @@ public class RenderDataQualityReportController {
 
 							List<Encounter> encounters = new ArrayList<Encounter>();
 							List<Patient> patients = new ArrayList<Patient>();
-							// List<Encounter> sortedEncounters = new
-							// ArrayList<Encounter>();
 							DQReportModel dQRObjectenc = new DQReportModel();
 
 							for (Integer encId : selectedEncounter) {
@@ -240,10 +212,10 @@ public class RenderDataQualityReportController {
 										.getEncounter(encId).getPatient());
 
 							}
-							// sortedEncounters =
-							// getSortedEncounterByDatetime(encounters);
-							// log.info("=====sorted encounters here====="+
-							// sortedEncounters.size());
+
+							// Sorting Encounters:
+
+							Collections.sort(encounters, COMPARATOR);
 
 							dQRObjectenc.setEncounters(encounters);
 							dQRObjectenc.setPatients(patients);
@@ -269,36 +241,45 @@ public class RenderDataQualityReportController {
 		return null;
 	}
 
-	public List<Encounter> getSortedEncounterByDatetime(
-			List<Encounter> encountersdates) {
-		List<Encounter> sortedEncounters = new ArrayList<Encounter>();
-		int lenD = encountersdates.size();
-		int j = 0;
-
-		Encounter temp = new Encounter();
-		for (int i = 0; i < lenD; i++) {
-			// log.info("________1________" + sortedEncounters.size());
-			j = i;
-
-			for (int k = i; k < lenD; k++) {
-				// log.info("________2________" + sortedEncounters.size());
-				Date firstDate = encountersdates.get(j).getEncounterDatetime();
-				Date secondDate = encountersdates.get(k).getEncounterDatetime();
-				if (firstDate.compareTo(secondDate) < 0) {
-					j = k;
-				}
-
-				log.info(">>>>>>>>>>>>>> j : " + j + " >> k : " + k);
-			}
-			// log.info("________3________" + sortedEncounters.size());
-
-			temp = encountersdates.get(i);
-			log.info("________temp________" + temp);
-			sortedEncounters.add(i, encountersdates.get(j));
-		}
-		log.info("____Total Encounter__" + sortedEncounters);
-		log.info(">>>>><<<<<<<<<<<" + sortedEncounters.size());
-		return sortedEncounters;
+	/**
+	 * Auto generated method comment
+	 * 
+	 * @param savedColumnKeys
+	 */
+	private void getSavedKeys(List<String> savedColumnKeys) {
+		savedColumnKeys.add("1");
+		savedColumnKeys.add("2");
+		savedColumnKeys.add("3");
+		savedColumnKeys.add("4");
+		savedColumnKeys.add("5");
+		savedColumnKeys.add("6");
+		savedColumnKeys.add("7");
+		savedColumnKeys.add("8");
+		savedColumnKeys.add("9");
+		savedColumnKeys.add("10");
+		savedColumnKeys.add("11");
+		savedColumnKeys.add("12");
+		savedColumnKeys.add("13");
+		savedColumnKeys.add("14");
+		savedColumnKeys.add("15");
+		savedColumnKeys.add("16");
+		savedColumnKeys.add("17");
+		savedColumnKeys.add("18");
+		savedColumnKeys.add("19");
+		savedColumnKeys.add("20");
+		savedColumnKeys.add("21");
 	}
+
+	private static Comparator<Encounter> COMPARATOR = new Comparator<Encounter>() {
+
+		public int compare(Encounter enc1, Encounter enc2) {
+
+			return enc2.getEncounterDatetime().compareTo(
+					enc1.getEncounterDatetime());
+		}
+
+	};
+
+
 
 }
