@@ -1376,8 +1376,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		//=======================================================
 		
 		SqlCohortDefinition patientsWithSystolicBPGreaterThanOrEqualTo160 = Cohorts
-		        .getPatientsWithObservationInFormBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
-		            "patientsWithSystolicBPGreaterThanOrEqualTo160", DDBform, systolicBP, 160);
+		        .getPatientsWithObservationBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+		            "patientsWithSystolicBPGreaterThanOrEqualTo160", systolicBP, 160);
 		
 		CompositionCohortDefinition patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160 = new CompositionCohortDefinition();
 		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160
