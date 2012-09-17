@@ -1441,6 +1441,10 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		// D2: Of total patients seen in the last month with Stage III HTN, % on 2 or more antihypertensives
 		//=======================================================
 		
+		SqlCohortDefinition patientsWithStageIIIHTN = Cohorts
+        .getPatientsWithObservationBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(
+            "patientsWithSystolicBPGreaterThanOrEqualTo160", systolicBP, 180);
+		
 		CompositionCohortDefinition patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180 = new CompositionCohortDefinition();
 		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180
 		        .setName("patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180");
@@ -1452,7 +1456,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		
 		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.addSearch("2",
-		    patientsWithSystolicBPGreaterThanOrEqualTo180,
+				patientsWithStageIIIHTN,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		
 		patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180.setCompositionString("1 AND 2");
