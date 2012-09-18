@@ -34,6 +34,7 @@ import org.openmrs.module.rwandareports.reporting.SetupDataQualityIndicatorRepor
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesConsultAndLTFU;
 import org.openmrs.module.rwandareports.reporting.SetupDiabetesQuarterlyAndMonthReport;
 import org.openmrs.module.rwandareports.reporting.SetupEpilepsyConsultationSheet;
+import org.openmrs.module.rwandareports.reporting.SetupEpilepsyLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
@@ -145,6 +146,7 @@ public class CleanReportingTablesAndRegisterAllReports {
 			new SetupAsthmaLateVisit().setup();  
 			
 			new SetupEpilepsyConsultationSheet().setup();
+			new SetupEpilepsyLateVisit().setup();
 			new SetupHypertensionConsultationSheet().setup();
 			new SetupHypertensionLateVisit().setup();
 			new SetupHypertensionQuarterlyAndMonthlyReport().setup();
