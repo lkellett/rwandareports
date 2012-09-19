@@ -1485,7 +1485,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo180,
-		            ParameterizableUtil.createParameterMappings("startDate=${onOrBefore},endDate=${onOrAfter}")));
+		            ParameterizableUtil.createParameterMappings("startDate=${onOrAfter},endDate=${onOrBefore}")));
 		patientsWithHypertensionVisitAndOnMoreThan2HypertensionRegimen.getSearches().put(
 		    "2",
 		    new Mapped<CohortDefinition>(patientOn2OrMoreAntihypertensives, ParameterizableUtil
