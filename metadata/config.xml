@@ -158,7 +158,7 @@
 	
 	<globalProperty>
 		<property>reports.diagnosisWorkflow</property>
-		<defaultValue>TREATMENT GROUP</defaultValue>
+		<defaultValue>DIAGNOSIS</defaultValue>
 		<description>
 			The workflow status that is used to determine the diagnosis of oncology patients
 		</description>
@@ -180,19 +180,19 @@
 	
 	<globalProperty>
 		<property>reports.premedication</property>
-		<defaultValue>7084</defaultValue>
+		<defaultValue>b8cc3063-a791-4ca1-9b08-023a91898cc5</defaultValue>
 		<description>The concept that denotes an oncology drug as a premedication </description>
 	</globalProperty>
 	
 	<globalProperty>
 		<property>reports.chemotherapy</property>
-		<defaultValue>7085</defaultValue>
+		<defaultValue>f08a431e-222e-479d-832a-43b345314080</defaultValue>
 		<description>The concept that denotes an oncology drug as chemotherapy </description>
 	</globalProperty>
 	
 	<globalProperty>
 		<property>reports.postmedication</property>
-		<defaultValue>7087</defaultValue>
+		<defaultValue>1f3bfe16-fe8e-45a0-b7ad-68528a125a0a</defaultValue>
 		<description>The concept that denotes an oncology drug as a postmedication </description>
 	</globalProperty>
 	
