@@ -347,29 +347,13 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		CohortIndicator patientsSeenQuarterIndicator = Indicators.newCountIndicator("patientsSeenMonthThreeIndicator",
 		    patientsSeenComposition,
 		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate}"));
-		CohortIndicator patientsSeenMonthOneIndicator = Indicators.newCountIndicator("patientsSeenMonthOneIndicator",
-		    patientsSeenComposition,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-1m+1d},onOrBefore=${endDate}"));
-		CohortIndicator patientsSeenMonthTwoIndicator = Indicators.newCountIndicator("patientsSeenMonthTwoIndicator",
-		    patientsSeenComposition,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-2m+1d},onOrBefore=${endDate-1m+1d}"));
-		CohortIndicator patientsSeenMonthThreeIndicator = Indicators.newCountIndicator("patientsSeenMonthThreeIndicator",
-		    patientsSeenComposition,
-		    ParameterizableUtil.createParameterMappings("onOrAfter=${endDate-3m+1d},onOrBefore=${endDate-2m+1d}"));
 		
 		//=================================================
 		//     Adding columns to data set definition     //
 		//=================================================
 		
 		dsd.addColumn("A2Q", "Total # of patients seen in the last quarter", new Mapped(patientsSeenQuarterIndicator,
-		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("A2QM1", "Total # of patients seen in the last month one", new Mapped(patientsSeenMonthOneIndicator,
-		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("A2QM2", "Total # of patients seen in the last month two", new Mapped(patientsSeenMonthTwoIndicator,
-		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn("A2QM3", "Total # of patients seen in the last month three", new Mapped(
-		        patientsSeenMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
-		
+		        ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");		
 		//=======================================================================
 		// A3: Total # of new patients enrolled in the last month/quarter
 		//==================================================================
@@ -379,17 +363,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		
 		CohortIndicator patientEnrolledInHypertensionProgramQuarterIndicator = Indicators.newCountIndicator(
 		    "patientEnrolledInHypertensionProgramQuarterIndicator", patientEnrolledInHypertensionProgram,
-		    ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate}"));
-		CohortIndicator patientEnrolledInHypertensionProgramMonthOneIndicator = Indicators.newCountIndicator(
-		    "patientEnrolledInHypertensionProgramMonthOneIndicator", patientEnrolledInHypertensionProgram,
-		    ParameterizableUtil.createParameterMappings("startDate=${endDate-1m+1d},endDate=${endDate}"));
-		CohortIndicator patientEnrolledInHypertensionProgramMonthTwoIndicator = Indicators.newCountIndicator(
-		    "patientEnrolledInHypertensionProgramMonthTwoIndicator", patientEnrolledInHypertensionProgram,
-		    ParameterizableUtil.createParameterMappings("startDate=${endDate-2m+1d},endDate=${endDate-1m+1d}"));
-		CohortIndicator patientEnrolledInHypertensionProgramMonthThreeIndicator = Indicators.newCountIndicator(
-		    "patientEnrolledInHypertensionProgramMonthThreeIndicator", patientEnrolledInHypertensionProgram,
-		    ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate-2m+1d}"));
-		
+		    ParameterizableUtil.createParameterMappings("startDate=${endDate-3m+1d},endDate=${endDate}"));		
 		//=================================================
 		//     Adding columns to data set definition     //
 		//=================================================
@@ -398,21 +372,6 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    "A3Q",
 		    "Total # of new patients enrolled in the last quarter",
 		    new Mapped(patientEnrolledInHypertensionProgramQuarterIndicator, ParameterizableUtil
-		            .createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn(
-		    "A3QM1",
-		    "Total # of new patients enrolled in the month one",
-		    new Mapped(patientEnrolledInHypertensionProgramMonthOneIndicator, ParameterizableUtil
-		            .createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn(
-		    "A3QM2",
-		    "Total # of new patients enrolled in the month two",
-		    new Mapped(patientEnrolledInHypertensionProgramMonthTwoIndicator, ParameterizableUtil
-		            .createParameterMappings("endDate=${endDate}")), "");
-		dsd.addColumn(
-		    "A3QM3",
-		    "Total # of new patients enrolled in the month three",
-		    new Mapped(patientEnrolledInHypertensionProgramMonthThreeIndicator, ParameterizableUtil
 		            .createParameterMappings("endDate=${endDate}")), "");
 		
 		//================================================================
