@@ -388,7 +388,7 @@ public class GlobalPropertiesManagement {
 		List<Concept> concepts = new ArrayList<Concept>();
 		Collection<ConceptAnswer> conceptAnswers = concept.getAnswers();
 		for (ConceptAnswer conceptAnswer : conceptAnswers) {
-			concepts.add(conceptAnswer.getConcept());
+			concepts.add(conceptAnswer.getAnswerConcept());
 		}
 		
 		return concepts;
