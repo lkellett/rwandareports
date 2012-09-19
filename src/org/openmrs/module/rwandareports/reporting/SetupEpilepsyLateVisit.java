@@ -47,10 +47,7 @@ public class SetupEpilepsyLateVisit {
 	// Properties retrieved from global variables
 	private Program epilepsyProgram;
 	private EncounterType epilepsyVisit;
-	private Form epilepsyRDVForm;
-	private Form epilepsyDDBForm;
-	private List<Form> epilepsyForms = new ArrayList<Form>();
-
+	
 	public void setup() throws Exception {
 
 		setupProperties();
@@ -115,10 +112,11 @@ public class SetupEpilepsyLateVisit {
 						+ epilepsyProgram.getName(), epilepsyProgram),
 				ParameterizableUtil
 						.createParameterMappings("onDate=${endDate}"));
-
-		dataSetDefinition.addFilter(Cohorts.createPatientsLateForVisit(
-				epilepsyForms, epilepsyVisit), ParameterizableUtil
-				.createParameterMappings("endDate=${endDate}"));
+		
+		SqlCohortDefinition latevisit = Cohorts.getPatientsWithLateVisit("Patient with Late Visit");
+		latevisit.addParameter(new Parameter("endDate","endDate",Date.class));
+	     dataSetDefinition.addFilter(latevisit, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		  
 
 		// ==================================================================
 		// Columns of report settings
@@ -192,15 +190,18 @@ public class SetupEpilepsyLateVisit {
 
 	private void setupProperties() {
 
-		epilepsyProgram = gp
-				.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM);
-		epilepsyVisit = gp
-				.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT);
-		epilepsyRDVForm = gp
-				.getForm(GlobalPropertiesManagement.EPILEPSY_RENDEVOUS_VISIT_FORM);
-		epilepsyDDBForm = gp.getForm(GlobalPropertiesManagement.EPILEPSY_DDB);
-		epilepsyForms.add(epilepsyRDVForm);
-		epilepsyForms.add(epilepsyDDBForm);
+		epilepsyProgram = gp.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM);
+		epilepsyVisit = gp.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT);
+		
+		/*
+		SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from (select * from encounter where form_id in" +
+				" ("+epilepsyDDBForm+","+epilepsyRDVForm+") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, " +
+				"(select * from (select * from encounter where encounter_type in ("+epilepsyVisit.getEncounterTypeId()+","+adultinitialVisit.getEncounterTypeId()+") and voided=0 order by encounter_datetime desc) " +
+			    "as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime " +
+			    "and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) " +
+			    "and last_asthmaVisit.patient_id=o.person_id ");
+	     latevisit.addParameter(new Parameter("endDate","endDate",Date.class));
+	     */
 
 	}
 
