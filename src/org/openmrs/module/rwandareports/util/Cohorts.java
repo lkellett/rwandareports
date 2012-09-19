@@ -692,20 +692,6 @@ public class Cohorts {
 		return query;
 	}
 	
-	public static SqlCohortDefinition getPatientsWithObservationBetweenStartAndEndDateAndObsValueGreaterThanOrEqualTo(String name,
-			Concept concept,int obsValue ) {
-		SqlCohortDefinition query = new SqlCohortDefinition(
-				"select distinct o.person_id from encounter e, obs o where e.encounter_id=o.encounter_id and o.concept_id="
-				+ concept.getId()
-				+ " and o.value_numeric >="
-				+ obsValue
-				+ " and o.voided=0 and e.voided=0 and o.obs_datetime>= :startDate and o.obs_datetime<= :endDate and (o.value_numeric is NOT NULL or o.value_coded is NOT NULL or o.value_datetime is NOT NULL or o.value_boolean is NOT NULL)");
-		query.setName(name);
-		query.addParameter(new Parameter("startDate", "startDate", Date.class));
-		query.addParameter(new Parameter("endDate", "endDate", Date.class));
-		return query;
-	}
-	
 	public static SqlCohortDefinition getPatientsWithObservationInFormBetweenStartAndEndDate(String name, List<Form> forms,
 	                                                                                         Concept concept) {
 		SqlCohortDefinition query = new SqlCohortDefinition();
@@ -1212,6 +1198,7 @@ public class Cohorts {
 		
 		return lateVisit;
 	}
+	
 
 public static SqlCohortDefinition getPatientsWithNTimesOrMoreEncountersByStartAndEndDate(String name,EncounterType encType,int times){
 	SqlCohortDefinition nTimesEncounter=new SqlCohortDefinition();
@@ -1220,6 +1207,26 @@ public static SqlCohortDefinition getPatientsWithNTimesOrMoreEncountersByStartAn
 	nTimesEncounter.addParameter(new Parameter("startDate","startDate",Date.class));
 	nTimesEncounter.addParameter(new Parameter("endDate","endDate",Date.class));
 	return nTimesEncounter;
+}
+
+public static SqlCohortDefinition getPatientsWithLateVisit(String name){
+	EncounterType epilepsyVisit = gp.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT);
+	EncounterType adultinitialVisit=gp.getEncounterType(GlobalPropertiesManagement.ADULT_INITIAL_VISIT);
+	Concept nextVisitConcept=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
+	int epilepsyRDVForm = gp.getForm(GlobalPropertiesManagement.EPILEPSY_RENDEVOUS_VISIT_FORM).getFormId();
+	int epilepsyDDBForm = gp.getForm(GlobalPropertiesManagement.EPILEPSY_DDB).getFormId();
+	
+	SqlCohortDefinition lateVisit=new SqlCohortDefinition();
+	lateVisit.setName(name);
+	lateVisit.setQuery("select o.person_id from obs o, (select * from (select * from encounter where form_id in" +
+			" ("+epilepsyDDBForm+","+epilepsyRDVForm+") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, " +
+			"(select * from (select * from encounter where encounter_type in ("+epilepsyVisit.getEncounterTypeId()+","+adultinitialVisit.getEncounterTypeId()+") and voided=0 order by encounter_datetime desc) " +
+		    "as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime " +
+		    "and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) " +
+		    "and last_asthmaVisit.patient_id=o.person_id ");
+	lateVisit.addParameter(new Parameter("endDate","endDate",Date.class));
+     
+	return lateVisit;
 }
 	
 }
