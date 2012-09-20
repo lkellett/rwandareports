@@ -61,7 +61,7 @@ public class SetupAsthmaLateVisit {
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,row:9,dataset:asthmaLateVisit");
+		    "sheet:1,row:8,dataset:asthmaLateVisit");
 		
 		design.setProperties(props);
 		h.saveReportDesign(design);

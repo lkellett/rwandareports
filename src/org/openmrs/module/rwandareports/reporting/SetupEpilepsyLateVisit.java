@@ -60,7 +60,7 @@ public class SetupEpilepsyLateVisit {
 				"EpilepsyLateVisit.xls", "EpilepsyLateVisit.xls_", null);
 
 		Properties props = new Properties();
-		props.put("repeatingSections", "sheet:1,row:9,dataset:dataSet");
+		props.put("repeatingSections", "sheet:1,row:8,dataset:dataSet");
 
 		design.setProperties(props);
 		h.saveReportDesign(design);
