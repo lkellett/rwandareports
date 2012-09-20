@@ -1,13 +1,16 @@
 package org.openmrs.module.rwandareports.reporting;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
@@ -22,6 +25,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalc
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
@@ -42,9 +46,10 @@ public class SetupAsthmaLateVisit {
 	//Properties retrieved from global variables
 	private Program asthmaProgram;
     private Concept nextVisitConcept;
-    private int asthmaDDBFormId;
     private EncounterType asthmaflowsheet;
-    private int asthmaRDVFormId;
+    private Form asthmaRDVForm;
+    private Form asthmaDDBForm;
+	private List<Form> asthmaForms = new ArrayList<Form>();
 	public void setup() throws Exception {
 		
 		setupProperties();
@@ -100,18 +105,9 @@ public class SetupAsthmaLateVisit {
 				
 				dataSetDefinition1.addFilter(Cohorts.createInProgramParameterizableByDate("Patients in "+asthmaProgram.getName(), asthmaProgram), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		        
-		  /*SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from " +
-		  		"(select * from encounter where encounter_type="+asthmaflowsheet.getEncounterTypeId()+" or form_id="+asthmaDDBFormId+" and voided=0 order by encounter_datetime desc) " +
-		  		"as e group by e.patient_id) as last_encounters where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 " +
-		  		"and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 ");
-	      latevisit.addParameter(new Parameter("endDate","endDate",Date.class));*/
-				
-				
-		SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from (select * from encounter where form_id in ("+asthmaDDBFormId+","+asthmaRDVFormId+") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, (select * from (select * from encounter where encounter_type="+asthmaflowsheet.getEncounterTypeId()+" and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) and last_asthmaVisit.patient_id=o.person_id ");
-		      latevisit.addParameter(new Parameter("endDate","endDate",Date.class));
-	                
-	      dataSetDefinition1.addFilter(latevisit, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
-	  
+		     
+		        dataSetDefinition1.addFilter(Cohorts.createPatientsLateForVisit(asthmaForms, asthmaflowsheet), ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+				 
 	     //==================================================================
         //                 Columns of report settings
         //==================================================================
@@ -134,12 +130,13 @@ public class SetupAsthmaLateVisit {
         DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", null, null);
         dataSetDefinition1.addColumn(birthdate, new HashMap<String, Object>());
         
-		dataSetDefinition1.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),
-		    new HashMap<String, Object>());
+        dataSetDefinition1.addColumn(RowPerPatientColumns.getNextVisitInMostRecentEncounterOfTypes("nextVisit",asthmaflowsheet,
+				new ObservationInMostRecentEncounterOfType(),null),new HashMap<String, Object>());
+
 		
         CustomCalculationBasedOnMultiplePatientDataDefinitions numberofdaysLate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-        numberofdaysLate.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter),
-		    new HashMap<String, Object>());
+        numberofdaysLate.addPatientDataToBeEvaluated(RowPerPatientColumns.getNextVisitInMostRecentEncounterOfTypes("nextVisit",asthmaflowsheet,
+				new ObservationInMostRecentEncounterOfType(),dateFilter),new HashMap<String, Object>());
         numberofdaysLate.setName("numberofdaysLate");
         numberofdaysLate.setCalculator(new DaysLate());
 		dataSetDefinition1.addColumn(numberofdaysLate, new HashMap<String, Object>());
@@ -170,11 +167,19 @@ public class SetupAsthmaLateVisit {
         
 		asthmaflowsheet = gp.getEncounterType(GlobalPropertiesManagement.ASTHMA_VISIT);
         
-        asthmaDDBFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB).getFormId();
-        
         nextVisitConcept=gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
         
-        asthmaRDVFormId=gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM).getFormId();
+        asthmaRDVForm= gp.getForm(GlobalPropertiesManagement.ASTHMA_RENDEVOUS_VISIT_FORM);
+
+        asthmaDDBForm= gp.getForm(GlobalPropertiesManagement.ASTHMA_DDB);
+        
+        asthmaForms.add(asthmaRDVForm);
+        asthmaForms.add(asthmaDDBForm);
+        
+        /* 	
+		SqlCohortDefinition latevisit=new SqlCohortDefinition("select o.person_id from obs o, (select * from (select * from encounter where form_id in ("+asthmaDDBFormId+","+asthmaRDVFormId+") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, (select * from (select * from encounter where encounter_type="+asthmaflowsheet.getEncounterTypeId()+" and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+" and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) and last_asthmaVisit.patient_id=o.person_id ");
+		      latevisit.addParameter(new Parameter("endDate","endDate",Date.class)); 
+         */
  }
 	
 	
