@@ -25,6 +25,7 @@ import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalc
 import org.openmrs.module.rowperpatientreports.patientdata.definition.DateOfBirthShowingEstimation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MostRecentObservation;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.MultiplePatientDataDefinitions;
+import org.openmrs.module.rowperpatientreports.patientdata.definition.ObservationInMostRecentEncounterOfType;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientAddress;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientProperty;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.PatientRelationship;
@@ -129,12 +130,12 @@ public class SetupHypertensionLateVisit {
         DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", null, null);
         dataSetDefinition1.addColumn(birthdate, new HashMap<String, Object>());
         
-		dataSetDefinition1.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, null),
-		    new HashMap<String, Object>());
+        dataSetDefinition1.addColumn(RowPerPatientColumns.getNextVisitInMostRecentEncounterOfTypes("nextVisit",hypertensionflowsheet,
+						new ObservationInMostRecentEncounterOfType(),null),new HashMap<String, Object>());
 		
         CustomCalculationBasedOnMultiplePatientDataDefinitions numberofdaysLate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
-        numberofdaysLate.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter),
-		    new HashMap<String, Object>());
+        numberofdaysLate.addPatientDataToBeEvaluated(RowPerPatientColumns.getNextVisitInMostRecentEncounterOfTypes("nextVisit",hypertensionflowsheet,
+				new ObservationInMostRecentEncounterOfType(),dateFilter),new HashMap<String, Object>());
         numberofdaysLate.setName("numberofdaysLate");
         numberofdaysLate.setCalculator(new DaysLate());
 		dataSetDefinition1.addColumn(numberofdaysLate, new HashMap<String, Object>());
