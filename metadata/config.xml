@@ -150,7 +150,7 @@
 	
 	<globalProperty>
 		<property>reports.treatmentIntentWorkflow</property>
-		<defaultValue>TREATMENT GROUP</defaultValue>
+		<defaultValue>Treatment Intent</defaultValue>
 		<description>
 			The workflow status that is used to determine the treatment intent of oncology patients
 		</description>
@@ -787,7 +787,7 @@
 	
 	<globalProperty>
 		<property>reports.oncologyprogram</property>
-		<defaultValue>3</defaultValue>
+		<defaultValue>18</defaultValue>
 		<description>Id for Oncology program</description>
 	</globalProperty>
 	
@@ -2097,13 +2097,13 @@
 	    
 	    <globalProperty>
 		<property>reports.doxorubicinGiven</property>
-		<defaultValue>5090</defaultValue>
+		<defaultValue>98709f1c-a667-4436-b6b1-29873d7115e7</defaultValue>
 		<description>The concept id for recording the administration dose of doxorubicin given</description>
 	    </globalProperty>
 	    
 	    <globalProperty>
 		<property>reports.daunorubicinGiven</property>
-		<defaultValue>5089</defaultValue>
+		<defaultValue>a8d06e6d-9b0d-411c-aabe-8628d67f0edd</defaultValue>
 		<description>The concept id for recording the administration dose of daunorubicin given</description>
 	    </globalProperty>
 	    
