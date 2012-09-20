@@ -47,6 +47,9 @@ public class SetupEpilepsyLateVisit {
 	// Properties retrieved from global variables
 	private Program epilepsyProgram;
 	private EncounterType epilepsyVisit;
+    private Form epilepsyRDVForm;
+    private Form epilepsyDDBForm;
+	private List<Form> epilepsyForms = new ArrayList<Form>();
 
 	public void setup() throws Exception {
 
@@ -113,11 +116,8 @@ public class SetupEpilepsyLateVisit {
 				ParameterizableUtil
 						.createParameterMappings("onDate=${endDate}"));
 
-		SqlCohortDefinition latevisit = Cohorts
-				.getPatientsWithLateVisit("Patient with Late Visit");
-		latevisit.addParameter(new Parameter("endDate", "endDate", Date.class));
-		dataSetDefinition.addFilter(latevisit, ParameterizableUtil
-				.createParameterMappings("endDate=${endDate}"));
+		 dataSetDefinition.addFilter(Cohorts.createPatientsLateForVisit(epilepsyForms, epilepsyVisit), ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
+		  
 
 		// ==================================================================
 		// Columns of report settings
@@ -148,23 +148,20 @@ public class SetupEpilepsyLateVisit {
 		dataSetDefinition.addColumn(birthdate, new HashMap<String, Object>());
 
 		dataSetDefinition.addColumn(RowPerPatientColumns
-				.getMostRecentReturnVisitDate("nextVisit", null, null),
+				.getNextVisitInMostRecentEncounterOfTypes("nextVisit",epilepsyVisit,new ObservationInMostRecentEncounterOfType(), null),
 				new HashMap<String, Object>());
 
 		CustomCalculationBasedOnMultiplePatientDataDefinitions numberofdaysLate = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		numberofdaysLate.addPatientDataToBeEvaluated(RowPerPatientColumns
-				.getMostRecentReturnVisitDate("nextVisit", null, dateFilter),
+				.getNextVisitInMostRecentEncounterOfTypes("nextVisit",epilepsyVisit,new ObservationInMostRecentEncounterOfType(),dateFilter),
 				new HashMap<String, Object>());
 		numberofdaysLate.setName("numberofdaysLate");
 		numberofdaysLate.setCalculator(new DaysLate());
-		dataSetDefinition.addColumn(numberofdaysLate,
-				new HashMap<String, Object>());
+		dataSetDefinition.addColumn(numberofdaysLate,new HashMap<String, Object>());
 
 		dataSetDefinition.addColumn(RowPerPatientColumns
-				.getSeizureInMostRecentEncounterOfType("seizure",
-						epilepsyVisit,
-						new ObservationInMostRecentEncounterOfType()),
-				new HashMap<String, Object>());
+				.getSeizureInMostRecentEncounterOfType("seizure",epilepsyVisit,
+				new ObservationInMostRecentEncounterOfType()),new HashMap<String, Object>());
 
 		PatientAddress address = RowPerPatientColumns.getPatientAddress(
 				"Address", true, true, true, true);
@@ -195,25 +192,13 @@ public class SetupEpilepsyLateVisit {
 				.getProgram(GlobalPropertiesManagement.EPILEPSY_PROGRAM);
 		epilepsyVisit = gp
 				.getEncounterType(GlobalPropertiesManagement.EPILEPSY_VISIT);
+   
+        epilepsyRDVForm = gp.getForm(GlobalPropertiesManagement.EPILEPSY_RENDEVOUS_VISIT_FORM);
 
-		/*
-		 * SqlCohortDefinition latevisit=new SqlCohortDefinition(
-		 * "select o.person_id from obs o, (select * from (select * from encounter where form_id in"
-		 * + " ("+epilepsyDDBForm+","+epilepsyRDVForm+
-		 * ") and voided=0 order by encounter_datetime desc) as e group by e.patient_id) as last_encounters, "
-		 * +
-		 * "(select * from (select * from encounter where encounter_type in ("+
-		 * epilepsyVisit
-		 * .getEncounterTypeId()+","+adultinitialVisit.getEncounterTypeId
-		 * ()+") and voided=0 order by encounter_datetime desc) " +
-		 * "as e group by e.patient_id) as last_asthmaVisit where last_encounters.encounter_id=o.encounter_id and last_encounters.encounter_datetime<o.value_datetime "
-		 * + "and o.voided=0 and o.concept_id="+nextVisitConcept.getConceptId()+
-		 * " and DATEDIFF(:endDate,o.value_datetime)>7 and (not last_asthmaVisit.encounter_datetime > o.value_datetime) "
-		 * + "and last_asthmaVisit.patient_id=o.person_id ");
-		 * latevisit.addParameter(new
-		 * Parameter("endDate","endDate",Date.class));
-		 */
-
+        epilepsyDDBForm = gp.getForm(GlobalPropertiesManagement.EPILEPSY_DDB);
+        
+        epilepsyForms.add(epilepsyRDVForm);
+        epilepsyForms.add(epilepsyDDBForm);
 	}
 
 }
