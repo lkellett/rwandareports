@@ -133,7 +133,7 @@ public class SetupAdultLateVisitAndCD4Report {
 		Properties propsa = new Properties();
 		propsa.put(
 		    "repeatingSections",
-		    "sheet:1,dataset:dataSet|sheet:1,row:9,dataset:decline50Perc|sheet:2,dataset:dataSet|sheet:2,row:9,dataset:decline50");
+		    "sheet:1,dataset:dataSet|sheet:1,row:7,dataset:decline50Perc|sheet:2,dataset:dataSet|sheet:2,row:7,dataset:decline50");
 		
 		designa.setProperties(propsa);
 		h.saveReportDesign(designa);
