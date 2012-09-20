@@ -617,7 +617,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    patientsWithSystolicBPGreaterThanOrEqualTo140,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addSearch("2", patientEnrolledInHypertensionProgram,
-		    null);
+				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPBetween140And159.addSearch("3",
 		    patientsWithSystolicBPGreaterThanOrEqualTo160,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
@@ -652,7 +652,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    patientsWithSystolicBPGreaterThanOrEqualTo160,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addSearch("2", patientEnrolledInHypertensionProgram,
-		    null);
+				ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPBetween160And179.addSearch("3",
 		    patientsWithSystolicBPGreaterThanOrEqualTo180,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
@@ -684,7 +684,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    patientsWithSystolicBPGreaterThanOrEqualTo180,
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.addSearch("2",
-		    patientEnrolledInHypertensionProgram, null);
+		    patientEnrolledInHypertensionProgram, ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
 		patientsEnrolledInTheLastMonthWithSystolicBPGreaterThanOrEqualTo180.setCompositionString("1 AND 2");
 		
 		CohortIndicator patientsWithSystolicBPGreaterThanOrEqualTo180Indicator = Indicators.newCountIndicator(
