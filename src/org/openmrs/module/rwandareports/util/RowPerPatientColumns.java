@@ -53,6 +53,7 @@ import org.openmrs.module.rwandareports.definition.CurrentPatientProgram;
 import org.openmrs.module.rwandareports.definition.DrugRegimenInformation;
 import org.openmrs.module.rwandareports.definition.LastWeekMostRecentObservation;
 import org.openmrs.module.rwandareports.definition.RegimenDateInformation;
+import org.openmrs.module.rwandareports.filter.DateFormatFilter;
 
 public class RowPerPatientColumns {
 	
@@ -412,6 +413,14 @@ public class RowPerPatientColumns {
             gp.getConcept(GlobalPropertiesManagement.SEIZURE_CONCEPT), encounterType);
      }
 	
+	
+	public static ObservationInMostRecentEncounterOfType getNextVisitInMostRecentEncounterOfTypes(String name,
+            EncounterType encounterType, ObservationInMostRecentEncounterOfType observationInMostRecentEncounterOfType,
+            ResultFilter resultFilter) {
+       return getObservationInMostRecentEncounterOfType(name,
+            gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE), encounterType, resultFilter);
+     }
+	
 	public static PatientRelationship getAccompRelationship(String name) {
 		return getPatientRelationship(name, gp.getRelationshipType(GlobalPropertiesManagement.ACCOMPAGNATUER_RELATIONSHIP)
 		        .getRelationshipTypeId(), "A", null);
@@ -521,7 +530,8 @@ public class RowPerPatientColumns {
 	
 	public static ObservationInMostRecentEncounterOfType getObservationInMostRecentEncounterOfType(String name,
 	                                                                                               Concept concept,
-	                                                                                               EncounterType encounterType) {
+	                                                                                               EncounterType encounterType, ResultFilter resultFilter ) {
+		
 		ObservationInMostRecentEncounterOfType oe = new ObservationInMostRecentEncounterOfType();
 		oe.setName(name);
 		oe.setObservationConcept(concept);
@@ -529,8 +539,27 @@ public class RowPerPatientColumns {
 		encounterTypes.add(encounterType);
 		oe.setEncounterTypes(encounterTypes);
 		
+		if (resultFilter != null) {
+			
+			oe.setFilter(resultFilter);
+			}
 		return oe;
 	}
+	
+	public static ObservationInMostRecentEncounterOfType getObservationInMostRecentEncounterOfType(String name,
+            Concept concept, EncounterType encounterType) {
+
+
+        ObservationInMostRecentEncounterOfType oe = new ObservationInMostRecentEncounterOfType();
+        oe.setName(name);
+        oe.setObservationConcept(concept);
+       // oe.setFilter(dateFilter);
+        List<EncounterType> encounterTypes = new ArrayList<EncounterType>();
+        encounterTypes.add(encounterType);
+        oe.setEncounterTypes(encounterTypes);
+
+return oe;
+}
 	
 	public static PatientRelationship getPatientRelationship(String name, int relationshipTypeId, String side,
 	                                                         ResultFilter accompagnateurFilter) {
