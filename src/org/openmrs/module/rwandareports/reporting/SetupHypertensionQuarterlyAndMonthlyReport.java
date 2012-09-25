@@ -1518,8 +1518,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		
 		diastolicBP = gp.getConcept(GlobalPropertiesManagement.DIASTOLIC_BLOOD_PRESSURE);
 		
-		hypertensionMedications = gp.getConceptAnswersAsConcepts(gp
-		        .getConcept(GlobalPropertiesManagement.HYPERTENSION_MEDICATIONS));
+		hypertensionMedications = gp
+        .getConceptsByConceptSet(GlobalPropertiesManagement.HYPERTENSION_TREATMENT_DRUGS);
 		
 		smokingHistory = gp.getConcept(GlobalPropertiesManagement.SMOKING_HISTORY);
 		
