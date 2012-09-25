@@ -1927,7 +1927,7 @@
 	    
 	    <globalProperty>
 		<property>reports.hypertensionTreatmentConceptSet</property>
-		<defaultValue>3cd50188-26fe-102b-80cb-0017a47871b2</defaultValue>
+		<defaultValue>f0339d98-3b36-45be-a45c-d447550aff96</defaultValue>
 		<description>
 			The concept id of all the Hypertension Treatment drug concept set 
 		</description>
