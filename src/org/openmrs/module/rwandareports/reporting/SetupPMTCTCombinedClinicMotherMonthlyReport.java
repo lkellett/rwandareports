@@ -108,12 +108,12 @@ public class SetupPMTCTCombinedClinicMotherMonthlyReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Combined Clinic Mother Monthly Report");
+		h.purgeReportDefinition("HIV-PMTCT Combined Clinic Mother Report-Monthly");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Combined Clinic Mother Monthly Report");
+		reportDefinition.setName("HIV-PMTCT Combined Clinic Mother Report-Monthly");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		

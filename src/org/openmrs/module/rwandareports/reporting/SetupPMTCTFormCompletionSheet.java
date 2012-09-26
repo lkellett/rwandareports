@@ -107,7 +107,7 @@ public class SetupPMTCTFormCompletionSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Form Completion");
+		h.purgeReportDefinition("DQ-HIV PMTCT Form Completion");
 	}
 	
 	private ReportDefinition createCrossSiteReportDefinition() {
@@ -120,7 +120,7 @@ public class SetupPMTCTFormCompletionSheet {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		rd.setName("PMTCT Form Completion");
+		rd.setName("DQ-HIV PMTCT Form Completion");
 		
 		rd.addDataSetDefinition(createDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));

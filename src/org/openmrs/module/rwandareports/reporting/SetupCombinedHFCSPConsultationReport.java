@@ -73,12 +73,12 @@ public class SetupCombinedHFCSPConsultationReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Combined Clinic Consultation sheet");
+		h.purgeReportDefinition("HIV-PMTCT Combined Clinic Consultation sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Combined Clinic Consultation sheet");
+		reportDefinition.setName("HIV-PMTCT Combined Clinic Consultation sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		
@@ -177,15 +177,15 @@ public class SetupCombinedHFCSPConsultationReport {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd"),
 		    new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy"),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MMM-yyyy"),
 		    new HashMap<String, Object>());
 		
-		MostRecentObservation cd4Test = RowPerPatientColumns.getMostRecentCD4("CD4Test", "ddMMMyy");
+		MostRecentObservation cd4Test = RowPerPatientColumns.getMostRecentCD4("CD4Test", "dd-MMM-yy");
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getDefinitionForOtherPerson("motherCD4", mother, cd4Test),
 		    new HashMap<String, Object>());
 		
-		CurrentOrdersRestrictedByConceptSet artDrugs = RowPerPatientColumns.getCurrentARTOrders("Regimen", "ddMMMyy", null);
+		CurrentOrdersRestrictedByConceptSet artDrugs = RowPerPatientColumns.getCurrentARTOrders("Regimen", "dd-MMM-yy", null);
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getDefinitionForOtherPerson("motherART", mother, artDrugs),
 		    new HashMap<String, Object>());

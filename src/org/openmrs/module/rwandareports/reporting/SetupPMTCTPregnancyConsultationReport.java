@@ -80,12 +80,12 @@ public class SetupPMTCTPregnancyConsultationReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Pregnancy consultation");
+		h.purgeReportDefinition("HIV-PMTCT Pregnancy consultation sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Pregnancy consultation");
+		reportDefinition.setName("HIV-PMTCT Pregnancy consultation sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
@@ -104,7 +104,7 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.setName(reportDefinition.getName() + " Data Set");
 		
 		SortCriteria sortCriteria = new SortCriteria();
-		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
 		dataSetDefinition.setSortCriteria(sortCriteria);
 		
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate("pmtct: In Program", pmtct),
@@ -146,6 +146,9 @@ public class SetupPMTCTPregnancyConsultationReport {
 		dataSetDefinition.addColumn(artDrugs, new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MMM-yyyy", null),
+		    new HashMap<String, Object>());
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null),
 		    new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions gestationalAge = new CustomCalculationBasedOnMultiplePatientDataDefinitions();

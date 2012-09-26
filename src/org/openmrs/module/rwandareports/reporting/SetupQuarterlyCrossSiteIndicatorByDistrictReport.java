@@ -99,7 +99,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PIH Quarterly Cross Site Indicator");
+		h.purgeReportDefinition("PIH-Boston Indicators-Quarterly");
 		//h.purgeReportDefinition("PIH_Quarterly_Individual_District_Indicator_Graph");
 	}
 	
@@ -113,7 +113,7 @@ public class SetupQuarterlyCrossSiteIndicatorByDistrictReport {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		rd.setName("PIH Quarterly Cross Site Indicator");
+		rd.setName("PIH-Boston Indicators-Quarterly");
 		
 		rd.addDataSetDefinition(createDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));

@@ -68,13 +68,13 @@ public class SetupOncologyTreatmentAdministrationPlan {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Chemotherapy Treatment Administration Plan");
+		h.purgeReportDefinition("ONC-Chemotherapy Treatment Administration Plan");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Chemotherapy Treatment Administration Plan");
+		reportDefinition.setName("ONC-Chemotherapy Treatment Administration Plan");
 		
 		reportDefinition.addParameter(new Parameter("patientId", "patientId", String.class));
 		reportDefinition.addParameter(new Parameter("regimenId", "regimenId", String.class));
@@ -100,14 +100,14 @@ public class SetupOncologyTreatmentAdministrationPlan {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getIMBId("Id"), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentWeight("RecentWeight", "dd/MM/yy"),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentWeight("RecentWeight", "dd/MMM/yy"),
 		    new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentHeight("RecentHeight", "dd/MM/yy"),new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentHeight("RecentHeight", "dd/MMM/yy"),new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentBSA("RecentBSA", "dd/MM/yy"),new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentBSA("RecentBSA", "dd/MMM/yy"),new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecent("adminInstructions", adminInstructions, "dd/MM/yy"),new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecent("adminInstructions", adminInstructions, "dd/MMM/yy"),new HashMap<String, Object>());
 		    
 		dataSetDefinition.addColumn(RowPerPatientColumns.getStateOfPatient("intent", oncologyProgram, treatmentIntent, null), new HashMap<String, Object>());
 		

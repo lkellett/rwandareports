@@ -111,7 +111,7 @@ public class SetupRwandaPrimaryCareReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Rwanda Primary Care Report");
+		h.purgeReportDefinition("PC-Rwanda Report");
 	}
 	
 	private ReportDefinition createReportDefinition(EncounterType reg, EncounterType vitals) {
@@ -125,7 +125,7 @@ public class SetupRwandaPrimaryCareReport {
 		rd.addParameter(new Parameter("startDate", "Start Date", Date.class));
 		rd.addParameter(new Parameter("endDate", "End Date", Date.class));
 		rd.setRollingBaseReportQueryType(RollingDailyPeriodIndicatorReportDefinition.RollingBaseReportQueryType.ENCOUNTER);
-		rd.setName("Rwanda Primary Care Report");
+		rd.setName("PC-Rwanda Report");
 		
 		// Creation of Vitals and Registration Encounter types during report
 		// period

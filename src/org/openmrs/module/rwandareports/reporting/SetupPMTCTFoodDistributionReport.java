@@ -59,12 +59,12 @@ public class SetupPMTCTFoodDistributionReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Food Package Distribution");
+		h.purgeReportDefinition("HIV-PMTCT Food Package Distribution");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Food Package Distribution");
+		reportDefinition.setName("HIV-PMTCT Food Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		

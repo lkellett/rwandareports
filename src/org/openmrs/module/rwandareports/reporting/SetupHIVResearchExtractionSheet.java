@@ -74,13 +74,13 @@ public class SetupHIVResearchExtractionSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("HIV Research Extraction");
+		h.purgeReportDefinition("Research-Extraction Data for HIV Research");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("HIV Research Extraction");
+		reportDefinition.setName("Research-Extraction Data for HIV Research");
 		
 		createDataSetDefinition(reportDefinition);
 		

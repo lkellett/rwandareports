@@ -105,14 +105,14 @@ public class SetupAdultLateVisitAndCD4Report {
 		    "XlsAdultLateVisitAndCD4PreARTTemplate", null);
 		
 		ReportDefinition artDecline = createReportDefinitionArtDecline();
-		ReportDesign designa = h.createRowPerPatientXlsOverviewReportDesign(artDecline, "AdultLateVisitAndCD4DeclineTemplate.xls",
-		    "XlsAdultLateVisitAndCD4DeclineTemplate", null);
-		
-		createDataSetDefinition(rd, rdp, artDecline);
+//		ReportDesign designa = h.createRowPerPatientXlsOverviewReportDesign(artDecline, "AdultLateVisitAndCD4DeclineTemplate.xls",
+//		    "XlsAdultLateVisitAndCD4DeclineTemplate", null);
+//		
+//		createDataSetDefinition(rd, rdp, artDecline);
 		
 		h.saveReportDefinition(rd);
 		h.saveReportDefinition(rdp);
-		h.saveReportDefinition(artDecline);
+		//h.saveReportDefinition(artDecline);
 		
 		Properties props = new Properties();
 		props.put(
@@ -130,13 +130,13 @@ public class SetupAdultLateVisitAndCD4Report {
 		designp.setProperties(propsp);
 		h.saveReportDesign(designp);
 		
-		Properties propsa = new Properties();
-		propsa.put(
-		    "repeatingSections",
-		    "sheet:1,dataset:dataSet|sheet:1,row:7,dataset:decline50Perc|sheet:2,dataset:dataSet|sheet:2,row:7,dataset:decline50");
-		
-		designa.setProperties(propsa);
-		h.saveReportDesign(designa);
+//		Properties propsa = new Properties();
+//		propsa.put(
+//		    "repeatingSections",
+//		    "sheet:1,dataset:dataSet|sheet:1,row:7,dataset:decline50Perc|sheet:2,dataset:dataSet|sheet:2,row:7,dataset:decline50");
+//		
+//		designa.setProperties(propsa);
+//		h.saveReportDesign(designa);
 		
 		
 	}
@@ -144,18 +144,18 @@ public class SetupAdultLateVisitAndCD4Report {
 	public void delete() {
 		ReportService rs = Context.getService(ReportService.class);
 		for (ReportDesign rd : rs.getAllReportDesigns(false)) {
-			if ("XlsAdultLateVisitAndCD4Template".equals(rd.getName()) || "XlsAdultLateVisitAndCD4PreARTTemplate".equals(rd.getName()) || "XlsAdultLateVisitAndCD4DeclineTemplate".equals(rd.getName())) {
+			if ("XlsAdultLateVisitAndCD4Template".equals(rd.getName()) || "XlsAdultLateVisitAndCD4PreARTTemplate".equals(rd.getName())) {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Adult ART HIV Monthly Report");
-		h.purgeReportDefinition("Adult Pre ART HIV Monthly Report");
-		h.purgeReportDefinition("Monthly Adult Art Decline");
+		h.purgeReportDefinition("HIV-Adult ART Report-Monthly");
+		h.purgeReportDefinition("HIV-Adult Pre ART Report-Monthly");
+		//h.purgeReportDefinition("Monthly Adult Art Decline");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult ART HIV Monthly Report");
+		reportDefinition.setName("HIV-Adult ART Report-Monthly");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -167,7 +167,7 @@ public class SetupAdultLateVisitAndCD4Report {
 	
 	private ReportDefinition createReportDefinitionPreArt() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult Pre ART HIV Monthly Report");
+		reportDefinition.setName("HIV-Adult Pre ART Report-Monthly");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		

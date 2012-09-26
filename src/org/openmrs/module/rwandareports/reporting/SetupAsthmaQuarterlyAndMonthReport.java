@@ -122,7 +122,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		monthlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		monthlyRd.setName("Asthma Monthly Indicator Report");
+		monthlyRd.setName("NCD-Asthma Indicator Report-Monthly");
 		
 		monthlyRd.addDataSetDefinition(createMonthlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
@@ -135,7 +135,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		quarterlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		quarterlyRd.setName("Asthma Quarterly Indicator Report");
+		quarterlyRd.setName("NCD-Asthma Indicator Report-Quarterly");
 		
 		quarterlyRd.addDataSetDefinition(createQuarterlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
@@ -181,8 +181,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Asthma Quarterly Indicator Report");
-		h.purgeReportDefinition("Asthma Monthly Indicator Report");
+		h.purgeReportDefinition("NCD-Asthma Indicator Report-Quarterly");
+		h.purgeReportDefinition("NCD-Asthma Indicator Report-Monthly");
 		
 	}
 	

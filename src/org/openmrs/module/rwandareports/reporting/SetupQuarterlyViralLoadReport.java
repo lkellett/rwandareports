@@ -74,7 +74,7 @@ public class SetupQuarterlyViralLoadReport {
     	properties.setProperty("hierarchyFields", "countyDistrict:District");
     	rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
     	
-    	rd.setName("PIH Quarterly Viral Load");
+    	rd.setName("PIH-Boston Viral Load Indicators-Quarterly");
     	
     	rd.addDataSetDefinition(createDataSet(),
     	    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
@@ -96,7 +96,7 @@ public class SetupQuarterlyViralLoadReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PIH Quarterly Viral Load");
+		h.purgeReportDefinition("PIH-Boston Viral Load Indicators-Quarterly");
 		
 	}
 	

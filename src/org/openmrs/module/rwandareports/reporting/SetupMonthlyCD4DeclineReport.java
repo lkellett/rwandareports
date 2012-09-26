@@ -86,15 +86,15 @@ public class SetupMonthlyCD4DeclineReport {
 		
 		setupProperties();
 		
-		ReportDefinition rd = createReportDefinitionDecline("Monthly Pedi Art Decline");
+		ReportDefinition rd = createReportDefinitionDecline("HIV-Pedi ART CD4 Decline-Monthly");
 		ReportDesign design = h.createRowPerPatientXlsOverviewReportDesign(rd, "PediCD4DeclineTemplate.xls",
 		    "XlsPediLateVisitAndCD4DeclineTemplate", null);
 		
-		ReportDefinition rdp = createReportDefinitionDecline("Monthly PMTCT CC Mother Art Decline");
+		ReportDefinition rdp = createReportDefinitionDecline("HIV-PMTCT Combined Clinic Mother ART CD4 Decline-Monthly");
 		ReportDesign designp = h.createRowPerPatientXlsOverviewReportDesign(rdp, "CCMotherCD4DeclineTemplate.xls",
 		    "XlsCCMotherLateVisitAndCD4DeclineTemplate", null);
 		
-		ReportDefinition artDecline = createReportDefinitionDecline("Monthly Adult Art Decline");
+		ReportDefinition artDecline = createReportDefinitionDecline("HIV-Adult ART CD4 Decline-Monthly");
 		ReportDesign designa = h.createRowPerPatientXlsOverviewReportDesign(artDecline, "AdultLateVisitAndCD4DeclineTemplate.xls",
 		    "XlsAdultLateVisitAndCD4DeclineTemplate", null);
 		
@@ -138,9 +138,9 @@ public class SetupMonthlyCD4DeclineReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Monthly Pedi Art Decline");
-		h.purgeReportDefinition("Monthly PMTCT CC Mother Art Decline");
-		h.purgeReportDefinition("Monthly Adult Art Decline");
+		h.purgeReportDefinition("HIV-Pedi ART CD4 Decline-Monthly");
+		h.purgeReportDefinition("HIV-PMTCT Combined Clinic Mother ART CD4 Decline-Monthly");
+		h.purgeReportDefinition("HIV-Adult ART CD4 Decline-Monthly");
 	}
 	
 	private ReportDefinition createReportDefinitionDecline(String name) {

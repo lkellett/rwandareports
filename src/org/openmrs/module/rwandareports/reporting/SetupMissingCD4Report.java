@@ -76,12 +76,12 @@ public class SetupMissingCD4Report {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Missing CD4 Report");
+		h.purgeReportDefinition("DQ-HIV CD4 Labs with Missing Data");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Missing CD4 Report");
+		reportDefinition.setName("DQ-HIV CD4 Labs with Missing Data");
 		Properties properties = new Properties();
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		reportDefinition.addParameter(new Parameter("location", "Location", AllLocation.class, properties));

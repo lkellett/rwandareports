@@ -45,7 +45,6 @@ public class SetupHypertensionLateVisit {
 	
 	//Properties retrieved from global variables
 	private Program hypertensionProgram;
-    private Concept nextVisitConcept;
    
     private EncounterType hypertensionflowsheet;
     private Form hypertensionRDVForm;
@@ -77,13 +76,13 @@ public class SetupHypertensionLateVisit {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Hypertension Late Visit");
+		h.purgeReportDefinition("NCD-Hypertension Late Visit");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Hypertension Late Visit");
+		reportDefinition.setName("NCD-Hypertension Late Visit");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -164,8 +163,6 @@ public class SetupHypertensionLateVisit {
 	}
 	
 	private void setupProperties() {
-		
-		nextVisitConcept = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
 		
 		hypertensionProgram = gp.getProgram(GlobalPropertiesManagement.HYPERTENSION_PROGRAM);
         

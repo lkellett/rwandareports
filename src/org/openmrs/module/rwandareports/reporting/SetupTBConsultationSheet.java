@@ -60,12 +60,12 @@ public class SetupTBConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("TB Consultation Sheet");
+		h.purgeReportDefinition("TB-Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("TB Consultation Sheet");
+		reportDefinition.setName("TB-Consultation Sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
 		

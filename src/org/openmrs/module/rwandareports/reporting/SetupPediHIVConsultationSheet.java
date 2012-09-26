@@ -93,12 +93,12 @@ public class SetupPediHIVConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Pedi HIV Consultation Sheet");
+		h.purgeReportDefinition("HIV-Pedi Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Pedi HIV Consultation Sheet");
+		reportDefinition.setName("HIV-Pedi Consultation Sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
 		

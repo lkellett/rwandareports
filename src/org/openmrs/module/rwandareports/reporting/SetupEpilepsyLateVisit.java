@@ -73,12 +73,12 @@ public class SetupEpilepsyLateVisit {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Epilepsy Late Visit");
+		h.purgeReportDefinition("NCD-Epilepsy Late Visit");
 	}
 
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Epilepsy Late Visit");
+		reportDefinition.setName("NCD-Epilepsy Late Visit");
 		reportDefinition.addParameter(new Parameter("location", "Location",
 				Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date",

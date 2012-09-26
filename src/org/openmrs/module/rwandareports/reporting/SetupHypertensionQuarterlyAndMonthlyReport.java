@@ -106,7 +106,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		monthlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		monthlyRd.setName("Hypertension Monthly Indicator Report");
+		monthlyRd.setName("NCD-Hypertension Indicator Report-Monthly");
 		
 		monthlyRd.addDataSetDefinition(createMonthlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
@@ -119,7 +119,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		
 		quarterlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		quarterlyRd.setName("Hypertension Quarterly Indicator Report");
+		quarterlyRd.setName("NCD-Hypertension Indicator Report-Quarterly");
 		
 		quarterlyRd.addDataSetDefinition(createQuarterlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));
@@ -166,8 +166,8 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Hypertension Quarterly Indicator Report");
-		h.purgeReportDefinition("Hypertension Monthly Indicator Report");
+		h.purgeReportDefinition("NCD-Hypertension Indicator Report-Quarterly");
+		h.purgeReportDefinition("NCD-Hypertension Indicator Report-Monthly");
 		
 	}
 	

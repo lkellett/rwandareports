@@ -64,13 +64,13 @@ public class SetupAdultHIVConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Adult HIV Consultation Sheet");
+		h.purgeReportDefinition("HIV-Adult Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Adult HIV Consultation Sheet");
+		reportDefinition.setName("HIV-Adult Consultation Sheet");
 		
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));
 		

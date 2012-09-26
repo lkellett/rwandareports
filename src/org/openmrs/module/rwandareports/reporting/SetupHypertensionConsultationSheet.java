@@ -71,13 +71,13 @@ public class SetupHypertensionConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Hypertension Consultation Sheet");
+		h.purgeReportDefinition("NCD-Hypertension Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Hypertension Consultation Sheet");
+		reportDefinition.setName("NCD-Hypertension Consultation Sheet");
 				
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),ParameterizableUtil.createParameterMappings("location=${location}"));
@@ -95,7 +95,7 @@ public class SetupHypertensionConsultationSheet {
 		dataSetDefinition.setName("Hypertension Consultation Data Set");
 		
 		SortCriteria sortCriteria = new SortCriteria();
-		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
 		dataSetDefinition.setSortCriteria(sortCriteria);
 		
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
@@ -110,6 +110,8 @@ public class SetupHypertensionConsultationSheet {
 		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
 		
 		//Add Columns
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null), new HashMap<String, Object>());
+		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());

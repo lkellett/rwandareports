@@ -97,12 +97,12 @@ public class SetupDataEntryDelayReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Data Entry Delay Report");
+		h.purgeReportDefinition("DQ-Data Entry Delay Report");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Data Entry Delay Report");
+		reportDefinition.setName("DQ-Data Entry Delay Report");
 		
 		Properties properties = new Properties();
 		properties.setProperty("hierarchyFields", "countyDistrict:District");

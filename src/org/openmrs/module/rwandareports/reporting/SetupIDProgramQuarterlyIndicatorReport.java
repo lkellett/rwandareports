@@ -117,7 +117,7 @@ public class SetupIDProgramQuarterlyIndicatorReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("ID Program Quarterly Indicators");
+		h.purgeReportDefinition("HIV-Indicator Report-Quarterly");
 		
 	}
 	
@@ -131,7 +131,7 @@ public class SetupIDProgramQuarterlyIndicatorReport {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		rd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		rd.setName("ID Program Quarterly Indicators");
+		rd.setName("HIV-Indicator Report-Quarterly");
 		
 		rd.addDataSetDefinition(createDataSet(),
 		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate},location=${location}"));

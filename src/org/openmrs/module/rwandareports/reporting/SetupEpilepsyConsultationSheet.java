@@ -70,13 +70,13 @@ public class SetupEpilepsyConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Epilepsy Consultation Sheet");
+		h.purgeReportDefinition("NCD-Epilepsy Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Epilepsy Consultation Sheet");
+		reportDefinition.setName("NCD-Epilepsy Consultation Sheet");
 				
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),ParameterizableUtil.createParameterMappings("location=${location}"));
@@ -95,7 +95,7 @@ public class SetupEpilepsyConsultationSheet {
 		dataSetDefinition.setName("Epilepsy Consultation Data Set");
 		
 		SortCriteria sortCriteria = new SortCriteria();
-		sortCriteria.addSortElement("nextVisit", SortDirection.ASC);
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
 		dataSetDefinition.setSortCriteria(sortCriteria);
 		
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
@@ -110,6 +110,9 @@ public class SetupEpilepsyConsultationSheet {
 		dateFilter.setFinalDateFormat("dd-MMM-yyyy");
 		
 		//Add Columns
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null), new HashMap<String, Object>());
+		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", null, dateFilter), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
@@ -122,7 +125,7 @@ public class SetupEpilepsyConsultationSheet {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("Sex"), new HashMap<String, Object>());		
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentEpilepsyOrders("Regimen", "@ddMMMyy", new DrugDosageFrequencyFilter()),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentEpilepsyOrders("Regimen", "dd-MMM-yy", new DrugDosageFrequencyFilter()),
 		    new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("Accompagnateur"), new HashMap<String, Object>());
@@ -133,7 +136,7 @@ public class SetupEpilepsyConsultationSheet {
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
-		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentSeizure("RecentSeizure", "@ddMMMyy"), new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentSeizure("RecentSeizure", "dd-MMM-yy"), new HashMap<String, Object>());
 		alert.setCalculator(new EpilepsyAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 		

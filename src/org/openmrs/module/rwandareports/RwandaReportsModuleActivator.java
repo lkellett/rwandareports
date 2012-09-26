@@ -26,30 +26,30 @@ import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet
 import org.openmrs.module.rwandareports.util.CleanReportingTablesAndRegisterAllReports;
 
 /**
- * This class contains the logic that is run every time this module
- * is either started or shutdown
+ * This class contains the logic that is run every time this module is either started or shutdown
  */
 public class RwandaReportsModuleActivator implements Activator {
-
+	
 	private static Log log = LogFactory.getLog(RwandaReportsModuleActivator.class);
-
+	
 	/**
 	 * @see org.openmrs.module.Activator#startup()
 	 */
 	public void startup() {
 		log.info("Starting Rwanda Report Module");
-		try{
-		CleanReportingTablesAndRegisterAllReports.cleanTables();	
-		CleanReportingTablesAndRegisterAllReports.registerReports();
-	} catch (Exception ex){
-        log.error("One of reports has an error which blocks it and other reports to be registered");
-       // throw new ModuleException(ex.getMessage());
-    }		
+		try {
+			CleanReportingTablesAndRegisterAllReports.cleanTables();
+			CleanReportingTablesAndRegisterAllReports.registerReports();
+		}
+		catch (Exception ex) {
+			log.error("One of reports has an error which blocks it and other reports to be registered");
+			ex.printStackTrace();
+		}
 		
 	}
 	
 	/**
-	 *  @see org.openmrs.module.Activator#shutdown()
+	 * @see org.openmrs.module.Activator#shutdown()
 	 */
 	public void shutdown() {
 		log.info("Stopping Rwanda Report Module");

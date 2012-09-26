@@ -14,6 +14,8 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Program;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.reporting.common.SortCriteria;
+import org.openmrs.module.reporting.common.SortCriteria.SortDirection;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -73,15 +75,15 @@ public class SetupDiabetesConsultAndLTFU {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Diabetes Consult");
-		h.purgeReportDefinition("Diabetes Late Visit");
+		h.purgeReportDefinition("NCD-Diabetes Consultation Sheet");
+		h.purgeReportDefinition("NCD-Diabetes Late Visit");
 		
 	}
 	
 	private ReportDefinition createConsultReportDefinition() {
 
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Diabetes Consult");	
+		reportDefinition.setName("NCD-Diabetes Consultation Sheet");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "Monday", Date.class));
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),
@@ -96,7 +98,7 @@ public class SetupDiabetesConsultAndLTFU {
 	private ReportDefinition createLTFUReportDefinition() {
 
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Diabetes Late Visit");	
+		reportDefinition.setName("NCD-Diabetes Late Visit");	
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.addParameter(new Parameter("endDate", "Date", Date.class));
 		createLTFUDataSetDefinition(reportDefinition,diabetesProgram);	
@@ -123,16 +125,16 @@ public class SetupDiabetesConsultAndLTFU {
         addCommonColumns(dataSetDefinition);
         
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAge("age"), new HashMap<String, Object>());
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentDiabetesOrders("Regimen", "@ddMMMyy", new DrugDosageFrequencyFilter()), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentDiabetesOrders("Regimen", "dd-MMM-yy", new DrugDosageFrequencyFilter()), new HashMap<String, Object>());
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("Has accompagnateur", new AccompagnateurStatusFilter()), new HashMap<String, Object>());
 		
 		//Calculation definitions
 				
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
-		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentHbA1c("RecentHbA1c", "@ddMMMyy"), new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentHbA1c("RecentHbA1c", "dd-MMM-yy"), new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentCreatinine("RecentCreatinine", "@ddMMMyy"), new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentSBP("RecentSBP", "@ddMMMyy"), new HashMap<String, Object>());
+		alert.addPatientDataToBeEvaluated(RowPerPatientColumns.getMostRecentSBP("RecentSBP", "dd-MMM-yy"), new HashMap<String, Object>());
 		alert.setCalculator(new DiabetesAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());
 				
@@ -158,6 +160,10 @@ public class SetupDiabetesConsultAndLTFU {
 		dataSetDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		dataSetDefinition.addParameter(new Parameter("endDate", "enDate", Date.class));
 		
+		SortCriteria sortCriteria = new SortCriteria();
+		sortCriteria.addSortElement("nextRDV", SortDirection.ASC);
+		dataSetDefinition.setSortCriteria(sortCriteria);
+		
 		//Add filters (patients enrolled in the diabetes program)
 		dataSetDefinition.addFilter(Cohorts.createInProgramParameterizableByDate(program.getName()+"Cohort", program), ParameterizableUtil.createParameterMappings("onDate=${endDate}"));
 		//patients with late visits
@@ -165,6 +171,10 @@ public class SetupDiabetesConsultAndLTFU {
 		
 		//Add Columns
 		addCommonColumns(dataSetDefinition);
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null), new HashMap<String, Object>());
+		
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MMM-yyyy", null), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("Sex"), new HashMap<String, Object>());
 		

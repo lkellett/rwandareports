@@ -79,13 +79,13 @@ public class SetupHIVResearchDataQualitySheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("HIV Research Data Quality");
+		h.purgeReportDefinition("DQ-HIV Research Data Quality");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("HIV Research Data Quality");
+		reportDefinition.setName("DQ-HIV Research Data Quality");
 		
 		createDataSetDefinition(reportDefinition);
 		

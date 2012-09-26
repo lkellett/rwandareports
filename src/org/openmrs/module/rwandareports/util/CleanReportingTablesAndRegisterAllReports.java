@@ -85,9 +85,9 @@ public class CleanReportingTablesAndRegisterAllReports {
 		List<ReportDefinition> rDefs=rds.getAllDefinitions(true);		
 		for (ReportDefinition reportDefinition : rDefs) {		
 			rds.purgeDefinition(reportDefinition);
-        }		
+        }
 		
-		
+			
     }
 	
 	public static void registerReports() throws Exception{
@@ -112,35 +112,28 @@ public class CleanReportingTablesAndRegisterAllReports {
 	public static void registerHIVReports() throws Exception {
 			////new SetupHivArtRegisterReport(false).setup();
 			////new SetupHivArtRegisterReport(true).setup();
-			new SetupQuarterlyCrossSiteIndicatorByDistrictReport().setup();	
+			
 			new SetupCombinedHFCSPConsultationReport().setup();
 			new SetupPMTCTFoodDistributionReport().setup();
 			new SetupPMTCTFormulaDistributionReport().setup();
 			new SetupPMTCTPregnancyConsultationReport().setup(); 
-			new SetupPMTCTFormCompletionSheet().setup();
+			
 			new SetupPediHIVConsultationSheet().setup();
 			new SetupAdultHIVConsultationSheet().setup();
 			new SetupTBConsultationSheet().setup();
 			new SetupAdultLateVisitAndCD4Report().setup();
 			new SetupPediatricLateVisitAndCD4Report().setup();
-			new SetupRwandaPrimaryCareReport().setup();
-			new SetupMonthlyCD4DeclineReport().setup();
-			new SetupQuarterlyViralLoadReport().setup();
+			
+			
 			////new SetupTracNetRwandaReportBySite().setup();
 			new SetupPMTCTCombinedClinicMotherMonthlyReport().setup();
 			new SetupPMTCTPregnancyMonthlyReport().setup();
 			new SetupExposedClinicInfantMonthly().setup();
-			
-			new SetupIDProgramQuarterlyIndicatorReport().setup(); 
-			new SetupDataEntryDelayReport().setup();
-			
     }
 	public static void registerNCDReports() throws Exception {
 			new SetupAsthmaConsultationSheet().setup();  
-			new SetupHeartFailurereport().setup();
+			//new SetupHeartFailurereport().setup();
 			new SetupDiabetesConsultAndLTFU().setup();
-			new SetupNCDLateVisitandLTFUReport().setup();
-			new SetupNCDConsultationSheet().setup(); 
 			new SetupDiabetesQuarterlyAndMonthReport().setup();
 			new SetupAsthmaQuarterlyAndMonthReport().setup();
 			new SetupAsthmaLateVisit().setup();  
@@ -154,10 +147,17 @@ public class CleanReportingTablesAndRegisterAllReports {
 	public static void registerCentralReports() throws Exception {
 			new SetupHIVResearchDataQualitySheet().setup();
 			new SetupHIVResearchExtractionSheet().setup();
+			new SetupIDProgramQuarterlyIndicatorReport().setup(); 
+			new SetupMonthlyCD4DeclineReport().setup();
+			new SetupMissingCD4Report().setup();
+			new SetupQuarterlyCrossSiteIndicatorByDistrictReport().setup();	
+			new SetupQuarterlyViralLoadReport().setup();
+			new SetupPMTCTFormCompletionSheet().setup();
+			new SetupRwandaPrimaryCareReport().setup();
     }
 	public static void registerSiteReports() throws Exception {
 			new SetupDataQualityIndicatorReport().setup();
-			new SetupMissingCD4Report().setup();
+			new SetupDataEntryDelayReport().setup();
     }
 	public static void registerOncologyReports() throws Exception {
 			new SetupOncologyTreatmentAdministrationPlan().setup();

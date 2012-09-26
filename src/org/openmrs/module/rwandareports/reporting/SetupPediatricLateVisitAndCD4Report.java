@@ -136,13 +136,13 @@ public class SetupPediatricLateVisitAndCD4Report {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Pediatric HIV Monthly Report");
-		h.purgeReportDefinition("Pediatric HIV ART Report");
+		h.purgeReportDefinition("HIV-Pedi Report-Monthly");
+		h.purgeReportDefinition("HIV-Pedi ART Medication Report");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Pediatric HIV Monthly Report");
+		reportDefinition.setName("HIV-Pedi Report-Monthly");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -157,7 +157,7 @@ public class SetupPediatricLateVisitAndCD4Report {
 	}
 	private ReportDefinition createReportDefinitionArtMedication() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Pediatric HIV ART Report");
+		reportDefinition.setName("HIV-Pedi ART Medication Report");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		

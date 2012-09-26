@@ -130,7 +130,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		properties.setProperty("hierarchyFields", "countyDistrict:District");
 		monthlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		monthlyRd.setName("Diabetes Monthly Indicator Report");
+		monthlyRd.setName("NCD-Diabetes Indicator Report-Monthly");
 		
 		monthlyRd.addDataSetDefinition(createMonthlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
@@ -142,7 +142,7 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		
 		quarterlyRd.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
 		
-		quarterlyRd.setName("Diabetes Quarterly Indicator Report");
+		quarterlyRd.setName("NCD-Diabetes Indicator Report-Quarterly");
 		
 		quarterlyRd.addDataSetDefinition(createQuarterlyLocationDataSet(),
 		    ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
@@ -187,8 +187,8 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Diabetes Quarterly Indicator Report");
-		h.purgeReportDefinition("Diabetes Monthly Indicator Report");
+		h.purgeReportDefinition("NCD-Diabetes Indicator Report-Quarterly");
+		h.purgeReportDefinition("NCD-Diabetes Indicator Report-Monthly");
 		
 	}
 	
@@ -1051,10 +1051,9 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		dsd.addColumn("A4QM3", "Total # of new patients with RDV in the month three", new Mapped(
 		        patientRDVMonthThreeIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")), "");
 		
-		dsd.addColumn(
-		    "B1N",
-		    "Pediatric: Of the new patients enrolled in the last quarter, number ≤15 years old at intake",
-		    new Mapped(patientsUnderFifteenCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
+		dsd.addColumn("B1N",
+		    "Pediatric: Of the new patients enrolled in the last quarter, number ≤15 years old at intake", new Mapped(
+		            patientsUnderFifteenCountIndicator, ParameterizableUtil.createParameterMappings("endDate=${endDate}")),
 		    "");
 		
 		dsd.addColumn("B2N", "Gender: Of the new patients enrolled in the last quarter, number male", new Mapped(
@@ -1482,9 +1481,12 @@ public class SetupDiabetesQuarterlyAndMonthReport {
 		metforminAndGlibenclimideConcepts.add(metformin);
 		metforminAndGlibenclimideConcepts.add(glibenclimide);
 		
-	//	diedState = DMProgram.getWorkflow(28).getState("PATIENT DIED");
+		//	diedState = DMProgram.getWorkflow(28).getState("PATIENT DIED");
 		
-		diedState=DMProgram.getWorkflowByName(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.DIABETE_TREATMENT_WORKFLOW)).getState(Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.PATIENT_DIED_STATE));
+		diedState = DMProgram.getWorkflowByName(
+		    Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.DIABETE_TREATMENT_WORKFLOW))
+		        .getState(
+		            Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.PATIENT_DIED_STATE));
 		
 		admitToHospital = gp.getConcept(GlobalPropertiesManagement.HOSPITAL_ADMITTANCE);
 		locOfHosp = gp.getConcept(GlobalPropertiesManagement.LOCATION_OF_HOSPITALIZATION);

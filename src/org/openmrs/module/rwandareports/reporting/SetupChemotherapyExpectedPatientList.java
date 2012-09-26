@@ -63,13 +63,13 @@ public class SetupChemotherapyExpectedPatientList {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Chemotherapy Expected Patient List");
+		h.purgeReportDefinition("ONC-Chemotherapy Expected Patient List");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Chemotherapy Expected Patient List");
+		reportDefinition.setName("ONC-Chemotherapy Expected Patient List");
 				
 		UpcomingChemotherapyCohortDefinition baseCohort = new UpcomingChemotherapyCohortDefinition();
 		baseCohort.setChemotherapyIndication(chemotherapy);
@@ -108,7 +108,7 @@ public class SetupChemotherapyExpectedPatientList {
 		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("sex"), new HashMap<String, Object>());		
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getDrugRegimenInformationParameterized("regimen", false), ParameterizableUtil.createParameterMappings("asOfDate=${endDate},untilDate=${endDate+6d}"));
-		dataSetDefinition.addColumn(RowPerPatientColumns.getRegimenDateInformationParameterized("regimenDate", "dd/MM/yyyy"), ParameterizableUtil.createParameterMappings("asOfDate=${endDate},untilDate=${endDate+6d}"));
+		dataSetDefinition.addColumn(RowPerPatientColumns.getRegimenDateInformationParameterized("regimenDate", "dd/MMM/yyyy"), ParameterizableUtil.createParameterMappings("asOfDate=${endDate},untilDate=${endDate+6d}"));
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getStateOfPatient("diagnosis", oncologyProgram, diagnosis, null), new HashMap<String, Object>());
 		

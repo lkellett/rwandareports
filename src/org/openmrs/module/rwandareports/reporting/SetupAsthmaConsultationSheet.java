@@ -84,13 +84,13 @@ public class SetupAsthmaConsultationSheet {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("Asthma Consultation Sheet");
+		h.purgeReportDefinition("NCD-Asthma Consultation Sheet");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Asthma Consultation Sheet");
+		reportDefinition.setName("NCD-Asthma Consultation Sheet");
 				
 		reportDefinition.addParameter(new Parameter("location", "Health Center", Location.class));	
 		reportDefinition.setBaseCohortDefinition(Cohorts.createParameterizedLocationCohort("At Location"),ParameterizableUtil.createParameterMappings("location=${location}"));
@@ -131,7 +131,7 @@ public class SetupAsthmaConsultationSheet {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextRDV", "yyyy/MM/dd", null), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MM-yyyy", null), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentReturnVisitDate("nextVisit", "dd-MMM-yyyy", null), new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getFirstNameColumn("givenName"), new HashMap<String, Object>());
 		
@@ -143,9 +143,9 @@ public class SetupAsthmaConsultationSheet {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("Sex"), new HashMap<String, Object>());		
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentPeakFlow("Last peak flow", "@ddMMMyy"), new HashMap<String, Object>());
+		dataSetDefinition.addColumn(RowPerPatientColumns.getMostRecentPeakFlow("Last peak flow", "dd-MMM-yyyy"), new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentAsthmaOrders("Regimen", "@ddMMMyy", new DrugDosageFrequencyFilter()),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentAsthmaOrders("Regimen", "dd-MMM-yyyy", new DrugDosageFrequencyFilter()),
 		    new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("Accompagnateur"), new HashMap<String, Object>());

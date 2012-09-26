@@ -112,8 +112,8 @@ public class SetupDataQualityIndicatorReport {
 			}
 		}
 
-		h.purgeReportDefinition("Data Quality Report By Site");
-		h.purgeReportDefinition("Data Quality Report For All Sites");
+		h.purgeReportDefinition("DQ-Data Quality Report By Site");
+		h.purgeReportDefinition("DQ-Data Quality Report For All Sites");
 	}
 
 	// DQ Report by Site
@@ -125,7 +125,7 @@ public class SetupDataQualityIndicatorReport {
 		rd.removeParameter(ReportingConstants.LOCATION_PARAMETER);
 		rd.addParameter(new Parameter("location", "Location", Location.class));
 
-		rd.setName("Data Quality Report By Site");
+		rd.setName("DQ-Data Quality Report By Site");
 
 		rd.setupDataSetDefinition();
 
@@ -152,7 +152,7 @@ public class SetupDataQualityIndicatorReport {
 		rdsites.removeParameter(ReportingConstants.START_DATE_PARAMETER);
 		rdsites.removeParameter(ReportingConstants.END_DATE_PARAMETER);
 		rdsites.removeParameter(ReportingConstants.LOCATION_PARAMETER);
-		rdsites.setName("Data Quality Report For All Sites");
+		rdsites.setName("DQ-Data Quality Report For All Sites");
 
 		rdsites.setupDataSetDefinition();
 

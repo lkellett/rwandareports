@@ -59,12 +59,12 @@ public class SetupPMTCTFormulaDistributionReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Formula Package Distribution");
+		h.purgeReportDefinition("HIV-PMTCT Formula Package Distribution");
 	}
 	
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Formula Package Distribution");
+		reportDefinition.setName("HIV-PMTCT Formula Package Distribution");
 		
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		

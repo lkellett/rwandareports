@@ -86,11 +86,11 @@ public class SetupPMTCTPregnancyMonthlyReport {
 				rs.purgeReportDesign(rd);
 			}
 		}
-		h.purgeReportDefinition("PMTCT Pregnancy Report");
+		h.purgeReportDefinition("HIV-PMTCT Pregnancy Report-Monthly");
 	}
 	private ReportDefinition createReportDefinition() {
 		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("PMTCT Pregnancy Report");
+		reportDefinition.setName("HIV-PMTCT Pregnancy Report-Monthly");
 		reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
 		
@@ -213,13 +213,13 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition3.addColumn(gender, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(gender, new HashMap<String, Object>());
 		
-		DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", "dd-MM-yyyy", "dd-MM-yyyy");
+		DateOfBirthShowingEstimation birthdate = RowPerPatientColumns.getDateOfBirth("Date of Birth", "dd-MMM-yyyy", "dd-MMM-yyyy");
 		dataSetDefinition1.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition2.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(birthdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(birthdate, new HashMap<String, Object>());
 		
-		MostRecentObservation cd4Countdate = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", "dd-MM-yyyy");
+		MostRecentObservation cd4Countdate = RowPerPatientColumns.getMostRecentCD4("Most recent CD4", "dd-MMM-yyyy");
 		dataSetDefinition2.addColumn(cd4Countdate, new HashMap<String, Object>());
 		dataSetDefinition3.addColumn(cd4Countdate, new HashMap<String, Object>());
 		dataSetDefinition4.addColumn(cd4Countdate, new HashMap<String, Object>());
@@ -230,10 +230,10 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		dataSetDefinition3.addColumn(CD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		dataSetDefinition4.addColumn(CD4InMonths, ParameterizableUtil.createParameterMappings("endDate=${endDate}"));
 		
-		MostRecentObservation weight = RowPerPatientColumns.getMostRecentWeight("Weight", "dd-MM-yyyy");
+		MostRecentObservation weight = RowPerPatientColumns.getMostRecentWeight("Weight", "dd-MMM-yyyy");
 		dataSetDefinition3.addColumn(weight, new HashMap<String, Object>());
 		
-		MostRecentObservation height = RowPerPatientColumns.getMostRecentHeight("Height", "dd-MM-yyyy");
+		MostRecentObservation height = RowPerPatientColumns.getMostRecentHeight("Height", "dd-MMM-yyyy");
 		dataSetDefinition3.addColumn(height, new HashMap<String, Object>());
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions bmi = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
@@ -246,11 +246,11 @@ public class SetupPMTCTPregnancyMonthlyReport {
 		bmi.setCalculator(bmiCalc);
 		dataSetDefinition3.addColumn(bmi, new HashMap<String, Object>());
 		
-		MostRecentObservation viralLoad = RowPerPatientColumns.getMostRecentViralLoad("Last viralLoad", "dd-MM-yyyy");
+		MostRecentObservation viralLoad = RowPerPatientColumns.getMostRecentViralLoad("Last viralLoad", "dd-MMM-yyyy");
 		dataSetDefinition4.addColumn(viralLoad, new HashMap<String, Object>());
 		
 		RecentEncounterType lastEncounterType = RowPerPatientColumns.getRecentEncounterType("Last visit type",
-			adultHivFlowsheetEncounter,"dd-MM-yyyy", new LastEncounterFilter());
+			adultHivFlowsheetEncounter,"dd-MMM-yyyy", new LastEncounterFilter());
 		dataSetDefinition1.addColumn(lastEncounterType, new HashMap<String, Object>());
 		
 		DateDiff lateVisitInMonth = RowPerPatientColumns.getDifferenceSinceLastEncounter(
