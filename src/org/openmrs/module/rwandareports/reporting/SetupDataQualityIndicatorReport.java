@@ -159,6 +159,10 @@ public class SetupDataQualityIndicatorReport {
 		createIndicatorsForReports(rdsites);
 		h.saveReportDefinition(rdsites);
 		createCustomWebRendererForSites(rdsites, "DataWebRenderer");
+		
+		rdsites.addDataSetDefinition(createObsDataSet(), ParameterizableUtil
+				.createParameterMappings("location=${location}"));
+		h.saveReportDefinition(rdsites);
 		return rdsites;
 
 	}
@@ -967,7 +971,7 @@ public class SetupDataQualityIndicatorReport {
 		reportDefinition
 				.addIndicator(
 						"19",
-						"Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer inform",
+						"Patients whose ART start date or 'on ART' workflow are before any programs began AND do not have a 'transfer in form",
 						patientsOnArtbeforeHivEnrollmentIndicator);
 		reportDefinition.addIndicator("20",
 				"Patients With Missing program enrollment start date",
