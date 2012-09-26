@@ -849,9 +849,7 @@ public class GlobalPropertiesManagement {
 	public final static String CHRONIC_RESPIRATORY_DISEASE_TREATMENT_DRUGS="reports.asthmaTreatmentConceptSet";
 	
 	public final static String HYPERTENSION_TREATMENT_DRUGS="reports.hypertensionTreatmentConceptSet";
-	
-	public final static String HYPERTENSION_MEDICATIONS ="reports.hypertensionMedications";
-	
+		
 	public final static String EPILEPSY_TREATMENT_DRUGS="reports.epilepsyTreatmentConceptSet";
 	
 	//Test concepts

@@ -220,7 +220,7 @@
 	
 	<globalProperty>
 		<property>reports.weightConcept</property>
-		<defaultValue>5089</defaultValue>
+		<defaultValue>3ce93b62-26fe-102b-80cb-0017a47871b2</defaultValue>
 		<description>
 			The concept id of the weight concept
 		</description>
@@ -228,7 +228,7 @@
 	
 	<globalProperty>
 		<property>reports.telephoneNumberConcept</property>
-		<defaultValue>1426</defaultValue>
+		<defaultValue>3cda3d7e-26fe-102b-80cb-0017a47871b2</defaultValue>
 		<description>
 			The concept id of the patient telephone number concept
 		</description>
@@ -787,7 +787,7 @@
 	
 	<globalProperty>
 		<property>reports.oncologyprogram</property>
-		<defaultValue>18</defaultValue>
+		<defaultValue>Oncology Program</defaultValue>
 		<description>Id for Oncology program</description>
 	</globalProperty>
 	
@@ -1931,15 +1931,7 @@
 		<description>
 			The concept id of all the Hypertension Treatment drug concept set 
 		</description>
-	    </globalProperty>	
-	    
-	     <globalProperty>
-		<property>reports.hypertensionMedications</property>
-		<defaultValue>6770</defaultValue>
-		<description>
-			The concept id of all the Hypertension Medications 
-		</description>
-	    </globalProperty>    
+	    </globalProperty>	 
 		
 		<globalProperty>
 		<property>reports.peakFlowAfterSalbutamolConcept</property>
@@ -2085,7 +2077,7 @@
 	    
 	    <globalProperty>
 		<property>reports.bsa</property>
-		<defaultValue>ee61975b-310a-4ca2-a21b-1f5b0167d03e</defaultValue>
+		<defaultValue>b7eb9d2f-0642-4984-8778-ba603e703a38</defaultValue>
 		<description>The concept id for calculated body surface area</description>
 	    </globalProperty>
 	    
