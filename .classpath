@@ -83,5 +83,7 @@
 	<classpathentry kind="lib" path="/openmrs-1.6.x/lib/antlr/antlr_2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/orderextension-api-1.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="src" path="/RowPerPatientReports"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.9.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-web-1.9.2-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

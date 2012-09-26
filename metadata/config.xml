@@ -2104,6 +2104,11 @@
 	    
 	<!-- end Epilepsy Consultation Sheet Report -->
 		
+	<globalProperty>
+		<property>reports.moduleVersion</property>
+		<defaultValue>2.2</defaultValue>
+		<description>The version id of the module</description>
+	</globalProperty>
 	
 		
 </module>

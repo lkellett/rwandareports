@@ -19,6 +19,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.reporting.report.ReportDesign;
+import org.openmrs.module.reporting.report.ReportRequest;
+import org.openmrs.module.reporting.report.ReportRequest.Status;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.service.ReportService;
@@ -86,6 +88,15 @@ public class CleanReportingTablesAndRegisterAllReports {
 		for (ReportDefinition reportDefinition : rDefs) {		
 			rds.purgeDefinition(reportDefinition);
         }
+		
+		for (ReportRequest request : rs.getReportRequests(null, null, null, Status.COMPLETED,Status.FAILED)) {
+			try {
+				rs.purgeReportRequest(request);
+			}
+			catch (Exception e) {
+				log.warn("Unable to delete old report request: " + request, e);
+			}
+		}
 		
 			
     }

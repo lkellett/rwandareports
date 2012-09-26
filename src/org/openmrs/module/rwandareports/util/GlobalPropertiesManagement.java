@@ -26,6 +26,10 @@ import org.openmrs.module.rwandareports.widget.AllLocation;
 
 public class GlobalPropertiesManagement {
 	
+	public GlobalPropertiesManagement()
+	{
+		Context.openSession();
+	}
 	
 	public Program getProgram(String globalPropertyName)
 	{

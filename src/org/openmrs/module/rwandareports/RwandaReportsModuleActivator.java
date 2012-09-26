@@ -13,46 +13,47 @@
  */
 package org.openmrs.module.rwandareports;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.Activator;
-import org.openmrs.module.ModuleException;
-import org.openmrs.module.reporting.report.definition.ReportDefinition;
-import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
-import org.openmrs.module.rwandareports.reporting.SetupAdultHIVConsultationSheet;
+import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.rwandareports.util.CleanReportingTablesAndRegisterAllReports;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class RwandaReportsModuleActivator implements Activator {
+public class RwandaReportsModuleActivator extends BaseModuleActivator {
 	
 	private static Log log = LogFactory.getLog(RwandaReportsModuleActivator.class);
 	
 	/**
 	 * @see org.openmrs.module.Activator#startup()
 	 */
-	public void startup() {
-		log.info("Starting Rwanda Report Module");
+	public void started() {
+		log.info("Starting Rwanda Report Module Config");
+		
 		try {
-			CleanReportingTablesAndRegisterAllReports.cleanTables();
-			CleanReportingTablesAndRegisterAllReports.registerReports();
+			String version = ModuleFactory.getModuleById("rwandareports").getVersion();
+			String oldversion = Context.getAdministrationService().getGlobalProperty("reports.moduleVersion");
+			if(!version.equals(oldversion)){
+				CleanReportingTablesAndRegisterAllReports.cleanTables();
+				CleanReportingTablesAndRegisterAllReports.registerReports();
+				Context.getAdministrationService().saveGlobalProperty(new GlobalProperty("reports.moduleVersion", version));
+			}
 		}
 		catch (Exception ex) {
 			log.error("One of reports has an error which blocks it and other reports to be registered");
 			ex.printStackTrace();
 		}
-		
 	}
 	
 	/**
 	 * @see org.openmrs.module.Activator#shutdown()
 	 */
-	public void shutdown() {
-		log.info("Stopping Rwanda Report Module");
+	public void stopped() {
+		log.info("Stopped Rwanda Report Module");
 	}
 	
 }
