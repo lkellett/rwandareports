@@ -842,7 +842,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		            .createParameterMappings("endDate=${endDate}")), "");
 		
 		//=======================================================================
-		//E3: Of total active patients with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit, % with next scheduled RDV visit 28 weeks or more past last visit date 
+		//E3: Of total active patients with ‘severe persistent’ or ‘severe uncontrolled’ asthma classification at last visit, % with next scheduled RDV visit 14 weeks or more past last visit date 
 		//=======================================================================		
 		SqlCohortDefinition patientsWithAsthmaClassificationObsAnswer = Cohorts
         .getPatientsWithObservationInFormBetweenStartAndEndDate("patientsWithAsthmaClassificationObsAnswer",
