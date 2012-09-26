@@ -65,41 +65,41 @@ public class HypertensionAlerts implements CustomCalculation {
 				}
 			}
 			
-			if(result.getName().equals("systolicLastTwo"))
-			{
-				AllObservationValuesResult systolicLastTwo = (AllObservationValuesResult)result;
-				
-				if(systolicLastTwo.getValue() != null && systolicLastTwo.getValue().size() > 1)
-				{
-					int increase = increaseBetweenTwoObs(systolicLastTwo.getValue());
-					if(increase >= 5)
-					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Last last 2 recorded systolic BP showed an increase of " + increase);
-					}
-				}
-			}
-			
-			if(result.getName().equals("diastolicLastTwo"))
-			{
-				AllObservationValuesResult diastolicLastTwo = (AllObservationValuesResult)result;
-				
-				if(diastolicLastTwo.getValue() != null && diastolicLastTwo.getValue().size() > 1)
-				{
-					int increase = increaseBetweenTwoObs(diastolicLastTwo.getValue());
-					if(increase >= 5)
-					{
-						if(alerts.length() > 0)
-						{
-							alerts.append(", ");
-						}
-						alerts.append("Last last 2 recorded diastolic BP showed an increase of " + increase);
-					}
-				}
-			}
+//			if(result.getName().equals("systolicLastTwo"))
+//			{
+//				AllObservationValuesResult systolicLastTwo = (AllObservationValuesResult)result;
+//				
+//				if(systolicLastTwo.getValue() != null && systolicLastTwo.getValue().size() > 1)
+//				{
+//					int increase = increaseBetweenTwoObs(systolicLastTwo.getValue());
+//					if(increase >= 5)
+//					{
+//						if(alerts.length() > 0)
+//						{
+//							alerts.append(", ");
+//						}
+//						alerts.append("Last last 2 recorded systolic BP showed an increase of " + increase);
+//					}
+//				}
+//			}
+//			
+//			if(result.getName().equals("diastolicLastTwo"))
+//			{
+//				AllObservationValuesResult diastolicLastTwo = (AllObservationValuesResult)result;
+//				
+//				if(diastolicLastTwo.getValue() != null && diastolicLastTwo.getValue().size() > 1)
+//				{
+//					int increase = increaseBetweenTwoObs(diastolicLastTwo.getValue());
+//					if(increase >= 5)
+//					{
+//						if(alerts.length() > 0)
+//						{
+//							alerts.append(", ");
+//						}
+//						alerts.append("Last last 2 recorded diastolic BP showed an increase of " + increase);
+//					}
+//				}
+//			}
 		}
 		
 		alert.setValue(alerts.toString().trim());

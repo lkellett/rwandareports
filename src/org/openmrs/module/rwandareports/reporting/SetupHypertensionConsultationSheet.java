@@ -122,30 +122,30 @@ public class SetupHypertensionConsultationSheet {
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getGender("Sex"), new HashMap<String, Object>());		
 		
-		MostRecentObservation systolic = RowPerPatientColumns.getMostRecentSystolicPB("systolic", "@ddMMMyy");
+		MostRecentObservation systolic = RowPerPatientColumns.getMostRecentSystolicPB("systolic", "dd-MMM-yy");
 		dataSetDefinition.addColumn(systolic, new HashMap<String, Object>());
 		
-		MostRecentObservation diastolic = RowPerPatientColumns.getMostRecentDiastolicPB("diastolic", "@ddMMMyy");
+		MostRecentObservation diastolic = RowPerPatientColumns.getMostRecentDiastolicPB("diastolic", "dd-MMM-yy");
 		dataSetDefinition.addColumn(diastolic, new HashMap<String, Object>());
 		
-		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentHypertensionOrders("Regimen", "@ddMMMyy", new DrugDosageFrequencyFilter()),
+		dataSetDefinition.addColumn(RowPerPatientColumns.getCurrentHypertensionOrders("Regimen", "dd-MMM-yy", new DrugDosageFrequencyFilter()),
 		    new HashMap<String, Object>());
 		
 		dataSetDefinition.addColumn(RowPerPatientColumns.getAccompRelationship("Accompagnateur"), new HashMap<String, Object>());
 		
 		
-		AllObservationValues allSystolicBP = RowPerPatientColumns.getAllObservationValues("systolicLastTwo", systolicBP, null, new LastTwoObsFilter(),
-		    null);
+		//AllObservationValues allSystolicBP = RowPerPatientColumns.getAllObservationValues("systolicLastTwo", systolicBP, null, new LastTwoObsFilter(),
+		//    null);
 		
-		AllObservationValues allDiastolicBP = RowPerPatientColumns.getAllObservationValues("diastolicLastTwo", diastolicBP, null, new LastTwoObsFilter(),
-		    null);
+		//AllObservationValues allDiastolicBP = RowPerPatientColumns.getAllObservationValues("diastolicLastTwo", diastolicBP, null, new LastTwoObsFilter(),
+		//    null);
 		
 		CustomCalculationBasedOnMultiplePatientDataDefinitions alert = new CustomCalculationBasedOnMultiplePatientDataDefinitions();
 		alert.setName("alert");
 		alert.addPatientDataToBeEvaluated(systolic, new HashMap<String, Object>());
 		alert.addPatientDataToBeEvaluated(diastolic, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(allSystolicBP, new HashMap<String, Object>());
-		alert.addPatientDataToBeEvaluated(allDiastolicBP, new HashMap<String, Object>());
+		//alert.addPatientDataToBeEvaluated(allSystolicBP, new HashMap<String, Object>());
+		//alert.addPatientDataToBeEvaluated(allDiastolicBP, new HashMap<String, Object>());
 		alert.setCalculator(new HypertensionAlerts());
 		dataSetDefinition.addColumn(alert, new HashMap<String, Object>());	
 		
