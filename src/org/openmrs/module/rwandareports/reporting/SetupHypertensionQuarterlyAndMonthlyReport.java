@@ -219,6 +219,29 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		
 		dsd.addColumn(patientVisitsToHypertensionClinicMonthlyIndicator);
 		
+		//==============================================================
+		// C2: % of Patient visits in the last quarter with documented BP
+		//==============================================================
+		SqlEncounterQuery patientVisitsWithDocumentedBP = new SqlEncounterQuery();
+		
+		patientVisitsWithDocumentedBP
+		.setQuery("select e.encounter_id from encounter e,obs o where (e.form_id="
+			+ rendevousForm.getFormId()
+			+ " or e.form_id="
+			+ DDBform.getFormId()
+			+ ") and o.encounter_id=e.encounter_id and o.concept_id="+systolicBP.getConceptId()+" and e.encounter_datetime>= :startDate and e.encounter_datetime<= :endDate and e.voided=0 group by e.encounter_datetime, e.patient_id");
+		patientVisitsWithDocumentedBP.setName("patientVisitsToHypertensionClinic");
+		patientVisitsWithDocumentedBP.addParameter(new Parameter("startDate", "startDate", Date.class));
+		patientVisitsWithDocumentedBP.addParameter(new Parameter("endDate", "endDate", Date.class));
+		
+		EncounterIndicator patientVisitsWithDocumentedBPIndicator = new EncounterIndicator();
+		patientVisitsWithDocumentedBPIndicator.setName("patientVisitsWithDocumentedBPIndicator");
+		patientVisitsWithDocumentedBPIndicator.setEncounterQuery(new Mapped<EncounterQuery>(
+				patientVisitsWithDocumentedBP, ParameterizableUtil
+				.createParameterMappings("endDate=${endDate},startDate=${startDate}")));
+		
+		dsd.addColumn(patientVisitsWithDocumentedBPIndicator);
+		
 	}
 	
 	//Create Quarterly Encounter Data set
@@ -1327,32 +1350,6 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    "B5",
 		    "Total # of new patients enrolled in the last month with Stage III HTN at intake (systolic BP ≥180) ",
 		    new Mapped(patientsWithSystolicBPGreaterThanOrEqualTo180Indicator, ParameterizableUtil
-		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
-		
-		//=======================================================
-		// C2: % of Patient visits in the last month with documented BP
-		//=======================================================
-		
-		SqlCohortDefinition patientsWithDocumentedBP = Cohorts.getPatientsWithObservationInFormBetweenStartAndEndDate(
-		    "patientsWithDocumentedBP", DDBAndRendezvousForms, systolicBP);
-		
-		CompositionCohortDefinition patientsWithHypertensionVisitAndDocumentedBP = new CompositionCohortDefinition();
-		patientsWithHypertensionVisitAndDocumentedBP.setName("patientsWithHypertensionVisitAndDocumentedBP");
-		patientsWithHypertensionVisitAndDocumentedBP.addParameter(new Parameter("startDate", "startDate", Date.class));
-		patientsWithHypertensionVisitAndDocumentedBP.addParameter(new Parameter("endDate", "endDate", Date.class));
-		patientsWithHypertensionVisitAndDocumentedBP.addSearch("1", patientsWithHypertensionVisit,
-		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-		patientsWithHypertensionVisitAndDocumentedBP.addSearch("2", patientsWithDocumentedBP, null);
-		patientsWithHypertensionVisitAndDocumentedBP.setCompositionString("1 AND 2");
-		
-		CohortIndicator patientsWithHypertensionVisitAndDocumentedBPIndicator = Indicators.newCountIndicator(
-		    "patientsWithHypertensionVisitAndDocumentedBPIndicator", patientsWithHypertensionVisitAndDocumentedBP,
-		    ParameterizableUtil.createParameterMappings("startDate=${startDate},endDate=${endDate}"));
-		
-		dsd.addColumn(
-		    "C2",
-		    "% of Patient visits in the last month with documented BP ",
-		    new Mapped(patientsWithHypertensionVisitAndDocumentedBPIndicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
 		//=======================================================
