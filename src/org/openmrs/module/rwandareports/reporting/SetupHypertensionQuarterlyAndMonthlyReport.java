@@ -940,7 +940,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 				new Mapped(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160Indicator, ParameterizableUtil
 						.createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 
-		SqlCohortDefinition patientOnRegimen = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("patientsOnRegime",
+		SqlCohortDefinition patientOnRegimen = Cohorts.getPatientsEverNotOnRegimen("patientsOnRegime",
 				hypertensionMedications);
 
 		CompositionCohortDefinition patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen = new CompositionCohortDefinition();
@@ -956,8 +956,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 						ParameterizableUtil.createParameterMappings("endDate=${onOrBefore},startDate=${onOrAfter}")));
 		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.getSearches().put(
 				"2",
-				new Mapped<CohortDefinition>(patientOnRegimen, ParameterizableUtil
-						.createParameterMappings("endDate=${onOrBefore}")));
+				new Mapped<CohortDefinition>(patientOnRegimen, null));
 		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.setCompositionString("1 AND (NOT 2)");
 
 		CohortIndicator patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator = Indicators.newCountIndicator(
@@ -1387,7 +1386,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		    new Mapped(patientsWithHypertensionVisitAndSystolicBPGreaterThanOrEqualTo160Indicator, ParameterizableUtil
 		            .createParameterMappings("startDate=${startDate},endDate=${endDate}")), "");
 		
-		SqlCohortDefinition patientOnRegimen = Cohorts.getPatientsOnCurrentRegimenBasedOnEndDate("patientsOnRegime",
+		SqlCohortDefinition patientOnRegimen = Cohorts.getPatientsEverNotOnRegimen("patientsOnRegime",
 		    hypertensionMedications);
 		
 		CompositionCohortDefinition patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen = new CompositionCohortDefinition();
@@ -1403,8 +1402,7 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		            ParameterizableUtil.createParameterMappings("endDate=${onOrBefore},startDate=${onOrAfter}")));
 		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.getSearches().put(
 		    "2",
-		    new Mapped<CohortDefinition>(patientOnRegimen, ParameterizableUtil
-		            .createParameterMappings("endDate=${onOrBefore}")));
+		    new Mapped<CohortDefinition>(patientOnRegimen, null));
 		patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimen.setCompositionString("1 AND (NOT 2)");
 		
 		CohortIndicator patientsWithHypertensionVisitAndNotOnAnyHypertensionRegimenIndicator = Indicators.newCountIndicator(
