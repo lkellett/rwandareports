@@ -97,6 +97,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 	
 	private Concept asthmaclassification;
 	
+	private Concept returnVisitDate;
+	
 	private Concept basicInhalerTrainingProvided;
 	
 	private Concept properInhalerTechnique;
@@ -854,7 +856,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
-		            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		
 		activeAndWithAsthmaClassificationObsAnswer.getSearches().put(
 		    "2",
@@ -878,6 +880,14 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		//===============
 		
+		SqlCohortDefinition patientswithRDV14WeeksOrMorePastLastVisitDate  = new SqlCohortDefinition();
+		patientswithRDV14WeeksOrMorePastLastVisitDate.setQuery("select last_rdv.person_id from (select person_id, value_datetime, obs_datetime, datediff(value_datetime,obs_datetime) from obs o, encounter e where o.encounter_id=e.encounter_id and e.encounter_type="
+				+ asthmaEncounterType.getId()
+				+ " and o.concept_id="
+				+ returnVisitDate.getConceptId()
+				+ " and datediff(o.value_datetime, o.obs_datetime) >= 98 order by o.value_datetime desc) as last_rdv group by last_rdv.person_id");
+		patientswithRDV14WeeksOrMorePastLastVisitDate.setName("patientswithRDV14WeeksOrMorePastLastVisitDate");
+		
 		CompositionCohortDefinition activeAndNotwithAsthmaVisit14WeeksPatients = new CompositionCohortDefinition();
 		activeAndNotwithAsthmaVisit14WeeksPatients.setName("activeAndNotwithAsthmaVisit14WeeksPatients");
 		activeAndNotwithAsthmaVisit14WeeksPatients.addParameter(new Parameter("onOrAfter", "onOrAfter", Date.class));
@@ -885,7 +895,7 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
 		    "1",
 		    new Mapped<CohortDefinition>(patientsWithAsthmaClassificationObsAnswer, ParameterizableUtil
-		            .createParameterMappings("endDate=${endDate},startDate=${startDate-3m}")));
+		            .createParameterMappings("endDate=${endDate},startDate=${startDate}")));
 		
 		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
 		    "2",
@@ -895,9 +905,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		
 		activeAndNotwithAsthmaVisit14WeeksPatients.getSearches().put(
 		    "3",
-		    new Mapped<CohortDefinition>(withAsthmaVisit, ParameterizableUtil
-		            .createParameterMappings("onOrBefore=${onOrBefore},onOrAfter=${onOrAfter+12m-14w}")));
-		activeAndNotwithAsthmaVisit14WeeksPatients.setCompositionString("1 AND 2 AND (NOT 3)");
+		    new Mapped<CohortDefinition>(patientswithRDV14WeeksOrMorePastLastVisitDate, null));
+		activeAndNotwithAsthmaVisit14WeeksPatients.setCompositionString("1 AND 2 AND 3");
 		
 		CohortIndicator activeAndNotwithAsthmaVisit14WeeksPatientsIndicator = Indicators
 		        .newCountIndicator("activeAndNotwithAsthmaVisit14WeeksPatients",
@@ -1183,6 +1192,8 @@ public class SetupAsthmaQuarterlyAndMonthReport {
 		asthmasClassificationAnswers.add(severePersistentAsthma);
 		
 		asthmasClassificationAnswers.add(severeUncontrolledAsthma);
+		
+		returnVisitDate = gp.getConcept(GlobalPropertiesManagement.RETURN_VISIT_DATE);
 		
 		
 	}
