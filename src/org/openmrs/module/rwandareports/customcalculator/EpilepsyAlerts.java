@@ -36,7 +36,7 @@ public class EpilepsyAlerts implements CustomCalculation {
 			if (result.getName().equals("RecentSeizure")) {
 				ObservationResult seizure = (ObservationResult)result;
 				
-				if(seizure.getValue() != null && seizure.getObs() != null && seizure.getObs().getValueNumeric() > 2)
+				if(seizure.getValue() != null && seizure.getObs() != null && seizure.getObs().getValueNumeric() >= 2)
 				{
 					if(alerts.length() > 0)
 					{
