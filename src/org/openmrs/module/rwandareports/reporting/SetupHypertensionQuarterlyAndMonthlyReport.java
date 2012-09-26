@@ -329,11 +329,11 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		SqlCohortDefinition patientsWithHypertensionVisit = new SqlCohortDefinition();
 		patientsWithHypertensionVisit.setQuery("select distinct patient_id from encounter where encounter_type="
 				+ hypertensionEncounterType.getId()
-				+ " and form_id="
+				+ " and (form_id="
 				+ rendevousForm.getFormId()
 				+ " or form_id="
 				+ DDBform.getFormId()
-				+ " and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
+				+ ") and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
 		patientsWithHypertensionVisit.setName("patientsWithHypertensionVisit");
 		patientsWithHypertensionVisit.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientsWithHypertensionVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
@@ -1261,11 +1261,11 @@ public class SetupHypertensionQuarterlyAndMonthlyReport {
 		SqlCohortDefinition patientsWithHypertensionVisit = new SqlCohortDefinition();
 		patientsWithHypertensionVisit.setQuery("select distinct patient_id from encounter where encounter_type="
 		        + hypertensionEncounterType.getId()
-		        + " and form_id="
+		        + " and (form_id="
 		        + rendevousForm.getFormId()
 	            + " or form_id="
 	            + DDBform.getFormId()
-		        + " and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
+		        + ") and encounter_datetime>= :startDate and encounter_datetime<= :endDate and voided=0");
 		patientsWithHypertensionVisit.setName("patientsWithHypertensionVisit");
 		patientsWithHypertensionVisit.addParameter(new Parameter("startDate", "startDate", Date.class));
 		patientsWithHypertensionVisit.addParameter(new Parameter("endDate", "endDate", Date.class));
