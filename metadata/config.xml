@@ -5,7 +5,7 @@
 	<!-- HIV ART Register Module Properties -->
 	<id>rwandareports</id>
 	<name>Rwanda Reports</name>
-	<version>2.3</version>
+	<version>2.4</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>PIH</author>
 	<description>Module to register reports for IMB Rwanda</description>

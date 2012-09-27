@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.context.UserContext;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.ReportRequest;
 import org.openmrs.module.reporting.report.ReportRequest.Status;
@@ -40,15 +41,12 @@ import org.openmrs.module.rwandareports.reporting.SetupEpilepsyLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupExposedClinicInfantMonthly;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchDataQualitySheet;
 import org.openmrs.module.rwandareports.reporting.SetupHIVResearchExtractionSheet;
-import org.openmrs.module.rwandareports.reporting.SetupHeartFailurereport;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionLateVisit;
 import org.openmrs.module.rwandareports.reporting.SetupHypertensionQuarterlyAndMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupIDProgramQuarterlyIndicatorReport;
 import org.openmrs.module.rwandareports.reporting.SetupMissingCD4Report;
 import org.openmrs.module.rwandareports.reporting.SetupMonthlyCD4DeclineReport;
-import org.openmrs.module.rwandareports.reporting.SetupNCDConsultationSheet;
-import org.openmrs.module.rwandareports.reporting.SetupNCDLateVisitandLTFUReport;
 import org.openmrs.module.rwandareports.reporting.SetupOncologyTreatmentAdministrationPlan;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTCombinedClinicMotherMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTFoodDistributionReport;
@@ -75,7 +73,8 @@ public class CleanReportingTablesAndRegisterAllReports {
 	
 	public static String classification= Context.getAdministrationService().getGlobalProperty(GlobalPropertiesManagement.REPORT_CLASSIFICATION);
 	
-	public static void cleanTables() throws Exception {		
+	public static void cleanTables() throws Exception {				
+	
 		
 		ReportService rs=Context.getService(ReportService.class);
 		List<ReportDesign> rDes=rs.getAllReportDesigns(true);		
@@ -119,6 +118,7 @@ public class CleanReportingTablesAndRegisterAllReports {
 	       else if(category.equalsIgnoreCase("CHW"))
 	    	   registerCHWReports();	       
         }
+			
 	}
 	public static void registerHIVReports() throws Exception {
 			////new SetupHivArtRegisterReport(false).setup();

@@ -2,9 +2,7 @@ package org.openmrs.module.rwandareports.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -18,18 +16,9 @@ import org.openmrs.ProgramWorkflow;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
-import org.openmrs.module.reporting.evaluation.parameter.ParameterizableUtil;
-import org.openmrs.module.reporting.report.definition.ReportDefinition;
-import org.openmrs.module.rwandareports.reporting.SetupQuarterlyViralLoadReport;
-import org.openmrs.module.rwandareports.widget.AllLocation;
 
 public class GlobalPropertiesManagement {
 	
-	public GlobalPropertiesManagement()
-	{
-		Context.openSession();
-	}
 	
 	public Program getProgram(String globalPropertyName)
 	{
