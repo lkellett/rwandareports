@@ -104,11 +104,11 @@ public class SetupAdultLateVisitAndCD4Report {
 		ReportDesign designp = h.createRowPerPatientXlsOverviewReportDesign(rdp, "AdultLateVisitAndCD4PreARTTemplate.xls",
 		    "XlsAdultLateVisitAndCD4PreARTTemplate", null);
 		
-		ReportDefinition artDecline = createReportDefinitionArtDecline();
+//		ReportDefinition artDecline = createReportDefinitionArtDecline();
 //		ReportDesign designa = h.createRowPerPatientXlsOverviewReportDesign(artDecline, "AdultLateVisitAndCD4DeclineTemplate.xls",
 //		    "XlsAdultLateVisitAndCD4DeclineTemplate", null);
 //		
-//		createDataSetDefinition(rd, rdp, artDecline);
+		createDataSetDefinition(rd, rdp);
 		
 		h.saveReportDefinition(rd);
 		h.saveReportDefinition(rdp);
@@ -177,19 +177,19 @@ public class SetupAdultLateVisitAndCD4Report {
 		return reportDefinition;
 	}
 	
-	private ReportDefinition createReportDefinitionArtDecline() {
-		ReportDefinition reportDefinition = new ReportDefinition();
-		reportDefinition.setName("Monthly Adult Art Decline");
-		
-		Properties properties = new Properties();
-		properties.setProperty("hierarchyFields", "countyDistrict:District");
-		reportDefinition.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
-		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		
-		return reportDefinition;
-	}
+//	private ReportDefinition createReportDefinitionArtDecline() {
+//		ReportDefinition reportDefinition = new ReportDefinition();
+//		reportDefinition.setName("Monthly Adult Art Decline");
+//		
+//		Properties properties = new Properties();
+//		properties.setProperty("hierarchyFields", "countyDistrict:District");
+//		reportDefinition.addParameter(new Parameter("location", "Location", AllLocation.class, properties));
+//		reportDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+//		
+//		return reportDefinition;
+//	}
 	
-	private void createDataSetDefinition(ReportDefinition art, ReportDefinition preArt, ReportDefinition artDecline) {
+	private void createDataSetDefinition(ReportDefinition art, ReportDefinition preArt) {
 		//====================================================================
 		//           Patients Dataset definitions
 		//====================================================================
@@ -722,14 +722,14 @@ public class SetupAdultLateVisitAndCD4Report {
 		preArt.addDataSetDefinition("PreARTBelow350CD4", dataSetDefinition5, mappings);
 		preArt.addDataSetDefinition("HIVLowBMI", dataSetDefinition6_1, mappings);
 		
-		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition();
-		ldsd.setName("ARTDecline");
-		ldsd.addBaseDefinition(dataSetDefinition9);
-		ldsd.addBaseDefinition(dataSetDefinition7);
-		ldsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
-		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
-		artDecline.addDataSetDefinition("dataSet", ldsd, mappings);
+//		LocationHierachyIndicatorDataSetDefinition ldsd = new LocationHierachyIndicatorDataSetDefinition();
+//		ldsd.setName("ARTDecline");
+//		ldsd.addBaseDefinition(dataSetDefinition9);
+//		ldsd.addBaseDefinition(dataSetDefinition7);
+//		ldsd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+//		ldsd.addParameter(new Parameter("endDate", "End Date", Date.class));
+//		ldsd.addParameter(new Parameter("location", "District", LocationHierarchy.class));
+		//artDecline.addDataSetDefinition("dataSet", ldsd, mappings);
 	}
 	
 	private void setupProperties() {
