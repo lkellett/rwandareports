@@ -34,6 +34,7 @@ import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyConsultatio
 import org.openmrs.module.rwandareports.reporting.SetupPMTCTPregnancyMonthlyReport;
 import org.openmrs.module.rwandareports.reporting.SetupPediHIVConsultationSheet;
 import org.openmrs.module.rwandareports.reporting.SetupPediatricLateVisitAndCD4Report;
+import org.openmrs.module.rwandareports.reporting.SetupPrimaryCareRegistrationReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyCrossSiteIndicatorByDistrictReport;
 import org.openmrs.module.rwandareports.reporting.SetupQuarterlyViralLoadReport;
 import org.openmrs.module.rwandareports.reporting.SetupRwandaPrimaryCareReport;
@@ -558,4 +559,16 @@ public class RwandaSetupReportsFormController {
 		return new ModelAndView(new RedirectView("rwandareports.form"));
 	}
 
+	//PrimaryCare Data
+	@RequestMapping("/module/rwandareports/register_PrimaryCareRegistrationData")
+	public ModelAndView registerPrimaryCareRegistrationData () throws Exception {
+		new SetupPrimaryCareRegistrationReport().setup();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
+	
+	@RequestMapping("/module/rwandareports/remove_PrimaryCareRegistrationData")
+	public ModelAndView removePrimaryCareRegistrationData() throws Exception {
+		new SetupPrimaryCareRegistrationReport().delete();
+		return new ModelAndView(new RedirectView("rwandareports.form"));
+	}
 }

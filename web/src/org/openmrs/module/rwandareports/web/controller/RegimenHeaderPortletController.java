@@ -63,7 +63,7 @@ public class RegimenHeaderPortletController extends PortletController {
 						List<ExtendedDrugOrder> members = regimen.getMembers();
 						for(ExtendedDrugOrder order: members)
 						{
-							if(order.getStartDate().after(compareDate.getTime()) && order.getRoute().equals(iv))
+							if(order.getStartDate().after(compareDate.getTime()) && order.getRoute() != null && order.getRoute().equals(iv))
 							{
 								regimens.add(regimen);
 								break;

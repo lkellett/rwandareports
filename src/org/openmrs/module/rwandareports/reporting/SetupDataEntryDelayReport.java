@@ -81,7 +81,7 @@ public class SetupDataEntryDelayReport {
 		Properties props = new Properties();
 		props.put(
 		    "repeatingSections",
-		    "sheet:1,dataset:dataSet|sheet:1,row:9,dataset:summary|sheet:1,row:15,dataset:Adult HIV Flowsheet|sheet:1,row:21,dataset:Pediatric HIV Flowsheet|sheet:1,row:27,dataset:ASTHMA VISIT|sheet:1,row:33,dataset:DIABETES VISIT|sheet:1,row:40,dataset:EPILEPSY VISIT|sheet:1,row:46,dataset:Heart Failure Flowsheet|sheet:1,row:52,dataset:HYPERTENSION VISIT|sheet:1,row:58,dataset:Inpatient Oncology|sheet:1,row:64,dataset:Outpatient Oncology|sheet:1,row:70,dataset:delayCases");
+		    "sheet:1,dataset:dataSet|sheet:1,row:9,dataset:summary|sheet:1,row:15,dataset:Adult HIV|sheet:1,row:21,dataset:Pediatric HIV|sheet:1,row:27,dataset:ASTHMA VISIT|sheet:1,row:33,dataset:DIABETES VISIT|sheet:1,row:40,dataset:EPILEPSY VISIT|sheet:1,row:46,dataset:Heart Failure|sheet:1,row:52,dataset:HYPERTENSION VISIT|sheet:1,row:58,dataset:Inpatient Oncology|sheet:1,row:64,dataset:Outpatient Oncology|sheet:1,row:70,dataset:delayCases");
 		
 	
 		
